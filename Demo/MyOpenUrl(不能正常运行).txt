@@ -1,0 +1,45 @@
+@echo off
+setlocal
+
+:: 从剪贴板中读取路径
+for /f "usebackq delims=" %%a in (`powershell -command "Get-Clipboard"`) do set "filepath=%%a"
+
+echo 完整的剪贴板路径: %filepath%
+
+pause
+
+:: 使用 PowerShell 提取 "Demo" 及其之后的部分
+for /f "delims=" %%b in ('
+    powershell -NoProfile -Command ^
+    "$s='%filepath%'; ^
+    $keyword='Demo\'; ^
+    $index = $s.IndexOf($keyword); ^
+    if ($index -ge 0) { ^
+        $substring = $s.Substring($index); ^
+        # 将反斜杠转换为正斜杠 ^
+        $substring -replace '\\', '/' ^
+    } else { ^
+        Write-Output '' ^
+    }"
+) do set "substring=%%b"
+
+:: 检查是否成功提取
+if "%substring%"=="" (
+    echo 未找到以 "Demo\" 开始的路径部分。
+    pause
+    exit /b 1
+)
+
+echo 提取的子路径: %substring%
+
+pause
+
+:: 拼接到指定的 URL
+set "final_url=https://scientific-github.5208818.xyz/%substring%"
+
+echo 拼接后的URL: %final_url%
+
+:: 你可以选择将结果复制到剪贴板
+:: powershell -command "Set-Clipboard -Value '%final_url%'"
+
+pause
