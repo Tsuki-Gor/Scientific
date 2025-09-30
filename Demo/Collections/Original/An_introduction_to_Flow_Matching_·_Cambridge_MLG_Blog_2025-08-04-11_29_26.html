@@ -1,0 +1,4669 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Doc2x-Export-Html-Result</title>
+        <style>
+            * {
+              padding: 0;
+              margin: 0;
+              box-sizing: border-box;
+            }
+             html {
+              line-height: 1.15; /* 1 */
+              -webkit-text-size-adjust: 100%; /* 2 */
+            }
+            body {
+              padding: 20px;
+              margin: 0;
+            }
+            main {
+              display: block;
+            }
+            h1 {
+              font-size: 2em;
+              margin: 0.67em 0;
+            }
+            hr {
+              box-sizing: content-box; /* 1 */
+              height: 0; /* 1 */
+              overflow: visible; /* 2 */
+            }
+            pre {
+              font-family: monospace, monospace; /* 1 */
+              font-size: 1em; /* 2 */
+            }
+            a {
+              background-color: transparent;
+            }
+            abbr[title] {
+              border-bottom: none; /* 1 */
+              text-decoration: underline; /* 2 */
+              text-decoration: underline dotted; /* 2 */
+            }
+            b,
+            strong {
+              font-weight: bolder;
+            }
+            code,
+            kbd,
+            samp {
+              font-family: monospace, monospace; /* 1 */
+              font-size: 1em; /* 2 */
+            }
+            small {
+              font-size: 80%;
+            }
+            sub,
+            sup {
+              font-size: 75%;
+              line-height: 0;
+              position: relative;
+              vertical-align: baseline;
+            }
+            sub {
+              bottom: -0.25em;
+            }
+            sup {
+              top: -0.5em;
+            }
+            img {
+              border-style: none;
+            }
+            button,
+            input,
+            optgroup,
+            select,
+            textarea {
+              font-family: inherit; /* 1 */
+              font-size: 100%; /* 1 */
+              line-height: 1.15; /* 1 */
+              margin: 0; /* 2 */
+            }
+            button,
+            input { /* 1 */
+              overflow: visible;
+            }
+            button,
+            select { /* 1 */
+              text-transform: none;
+            }
+            button,
+            [type="button"],
+            [type="reset"],
+            [type="submit"] {
+              -webkit-appearance: button;
+            }
+            button::-moz-focus-inner,
+            [type="button"]::-moz-focus-inner,
+            [type="reset"]::-moz-focus-inner,
+            [type="submit"]::-moz-focus-inner {
+              border-style: none;
+              padding: 0;
+            }
+            button:-moz-focusring,
+            [type="button"]:-moz-focusring,
+            [type="reset"]:-moz-focusring,
+            [type="submit"]:-moz-focusring {
+              outline: 1px dotted ButtonText;
+            }
+            fieldset {
+              padding: 0.35em 0.75em 0.625em;
+            }
+            legend {
+              box-sizing: border-box; /* 1 */
+              color: inherit; /* 2 */
+              display: table; /* 1 */
+              max-width: 100%; /* 1 */
+              padding: 0; /* 3 */
+              white-space: normal; /* 1 */
+            }
+            progress {
+              vertical-align: baseline;
+            }
+            textarea {
+              overflow: auto;
+            }
+            [type="checkbox"],
+            [type="radio"] {
+              box-sizing: border-box; /* 1 */
+              padding: 0; /* 2 */
+            }
+            [type="number"]::-webkit-inner-spin-button,
+            [type="number"]::-webkit-outer-spin-button {
+              height: auto;
+            }
+            [type="search"] {
+              -webkit-appearance: textfield; /* 1 */
+              outline-offset: -2px; /* 2 */
+            }
+            [type="search"]::-webkit-search-decoration {
+              -webkit-appearance: none;
+            }
+            ::-webkit-file-upload-button {
+              -webkit-appearance: button; /* 1 */
+              font: inherit; /* 2 */
+            }
+            details {
+              display: block;
+            }
+            summary {
+              display: list-item;
+            }
+            [hidden] {
+              display: none;
+            }
+             table {
+                border-collapse: collapse;
+                width: 100%;
+                margin-top: 20px;
+                margin-bottom: 20px;
+              }
+              table thead {
+                background-color: #e5e5e5;
+              }
+              table td {
+                padding: 8px;
+                /*background-color: #e5e5e5;*/
+                border: 1px solid #ccc; /* 可选，添加边框样式 */
+              }
+              table th {
+                padding: 8px;
+                /*background-color: #e5e5e5;*/
+                border: 1px solid #ccc; /* 可选，添加边框样式 */
+              }
+              h1, h2, h3, h4, h5, h6 {
+                margin-bottom: 20px;
+              }
+              p {
+                margin-top: 20px;
+                text-indent: 2em;
+                margin-bottom: 20px;
+              }
+        </style>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <style>
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-stretchy-h > * {
+  display: table-cell;
+  width: 0;
+}
+
+mjx-stretchy-h > * > mjx-c {
+  display: inline-block;
+  transform: scalex(1.0000001);
+}
+
+mjx-stretchy-h > * > mjx-c::before {
+  display: inline-block;
+  width: initial;
+}
+
+mjx-stretchy-h > mjx-ext {
+  /* IE */ overflow: hidden;
+  /* others */ overflow: clip visible;
+  width: 100%;
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c::before {
+  transform: scalex(500);
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c {
+  width: 0;
+}
+
+mjx-stretchy-h > mjx-beg > mjx-c {
+  margin-right: -.1em;
+}
+
+mjx-stretchy-h > mjx-end > mjx-c {
+  margin-left: -.1em;
+}
+
+mjx-stretchy-v {
+  display: inline-block;
+}
+
+mjx-stretchy-v > * {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-beg {
+  height: 0;
+}
+
+mjx-stretchy-v > mjx-end > mjx-c {
+  display: block;
+}
+
+mjx-stretchy-v > * > mjx-c {
+  transform: scaley(1.0000001);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+mjx-stretchy-v > mjx-ext {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  /* IE */ overflow: hidden;
+  /* others */ overflow: visible clip;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c::before {
+  width: initial;
+  box-sizing: border-box;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c {
+  transform: scaleY(500) translateY(.075em);
+  overflow: visible;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0px;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c22C5::before {
+  padding: 0.31em 0.278em 0 0;
+  content: "\22C5";
+}
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c31::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "1";
+}
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c32::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "2";
+}
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c33::before {
+  padding: 0.665em 0.5em 0.022em 0;
+  content: "3";
+}
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c34::before {
+  padding: 0.677em 0.5em 0 0;
+  content: "4";
+}
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c36::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "6";
+}
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c37::before {
+  padding: 0.676em 0.5em 0.022em 0;
+  content: "7";
+}
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c38::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "8";
+}
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c39::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "9";
+}
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c31::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "1";
+}
+
+mjx-c.mjx-c30::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "0";
+}
+
+</style>
+      </head>
+      <body style="padding: 40px;">
+        <h1>An introduction to Flow Matching <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="\cdot"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mo class="mjx-n"><mjx-c class="mjx-c22C5"></mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>⋅</mo></math></mjx-assistive-mml></mjx-container> Cambridge MLG Blog</h1><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h1>流匹配简介 <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="\cdot"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mo class="mjx-n"><mjx-c class="mjx-c22C5"></mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>⋅</mo></math></mjx-assistive-mml></mjx-container> 剑桥多模态学习小组博客</h1></div><p>Flow matching (FM) is a new generative modelling paradigm which is rapidly 66 gaining popularity in the ......</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>流匹配（Flow Matching，FM）是一种新兴的生成建模范式，正迅速获得......</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_0.jpg?x=113&#x26;y=589&#x26;w=1469&#x26;h=764&#x26;r=0"><!-- Media --><p>diffusion model generative modelling normalising flows</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>扩散模型 生成建模 归一化流</p></div><p>By Tor Fjelde, Emile Mathieu , Vincent Dutordoir</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>作者：Tor Fjelde, Emile Mathieu, Vincent Dutordoir</p></div><ol>
+<li>Introduction</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol>
+<li>引言</li>
+</ol></div><ol start="2">
+<li>Normalising Flows</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="2">
+<li>归一化流</li>
+</ol></div><ol>
+<li>Learning flow parameters by maximum likelihood</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol>
+<li>通过最大似然学习流参数</li>
+</ol></div><ol start="2">
+<li>Residual flow</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="2">
+<li>残差流</li>
+</ol></div><ol start="3">
+<li>Continuous time limit</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="3">
+<li>连续时间极限</li>
+</ol></div><ol start="3">
+<li>Flow matching</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="3">
+<li>流匹配</li>
+</ol></div><ol>
+<li>Conditional Flows</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol>
+<li>条件流</li>
+</ol></div><ol start="2">
+<li>Gaussian probability paths</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="2">
+<li>高斯概率路径</li>
+</ol></div><ol start="3">
+<li>But is CFM really all rainbows and unicorns?</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="3">
+<li>但条件流匹配（CFM）真的是完美无缺吗？</li>
+</ol></div><ol start="4">
+<li>Coupling</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="4">
+<li>耦合</li>
+</ol></div><ol start="4">
+<li>Quick Summary</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="4">
+<li>简要总结</li>
+</ol></div><ol start="5">
+<li>Citation</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="5">
+<li>引用</li>
+</ol></div><ol start="6">
+<li>Acknowledgments</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="6">
+<li>致谢</li>
+</ol></div><ol start="7">
+<li>References</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="7">
+<li>参考文献</li>
+</ol></div><p>Flow matching (FM) is a recent generative modelling paradigm which has rapidly been gaining popularity in the deep probabilistic ML community. Flow matching combines aspects from Continuous Normalising Flows (CNFs) and Diffusion Models (DMs), alleviating key issues both methods have. In this blogpost we' II cover the main ideas and unique properties of FM models starting from the basics.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>流匹配（Flow Matching，FM）是一种新兴的生成建模范式，近年来在深度概率机器学习社区迅速流行起来。流匹配结合了连续归一化流（Continuous Normalising Flows，CNFs）和扩散模型（Diffusion Models，DMs）的特点，缓解了两者的关键问题。在这篇博客中，我们将从基础开始，介绍FM模型的主要思想和独特性质。</p></div><h2>Generative Modelling</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>生成建模</h2></div><p>Let's assume we have data samples from a distribution of interest, whose density is unknown. We're interested in using these samples to learn a probabilistic model approximating. In particular, we want efficient generation of new samples (approximately) distributed from. This task is referred to as generative modelling.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>假设我们拥有来自某个感兴趣分布的数据样本，该分布的密度未知。我们希望利用这些样本学习一个概率模型来近似该分布。特别地，我们希望能够高效地生成新的样本，这些样本（近似地）服从该分布。这个任务被称为生成建模。</p></div><p>The advancement in generative modelling methods over the past decade has been nothing short of revolutionary. In 2012, Restricted Boltzmann Machines, then the leading generative model, were just about able to generate MNIST digits . Today, state-of-the-art methods are capable of generating high-quality images, audio and language, as well as model complex biological and physical systems. Unsurprisingly, these methods are now venturing into video generation .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>过去十年生成建模方法的进展堪称革命性。2012年，当时领先的生成模型受限玻尔兹曼机（Restricted Boltzmann Machines）仅能生成MNIST数字。如今，最先进的方法能够生成高质量的图像、音频和语言，并能模拟复杂的生物和物理系统。不出意外，这些方法现已开始涉足视频生成领域。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_1.jpg?x=115&#x26;y=1380&#x26;w=1462&#x26;h=852&#x26;r=0"><!-- Media --><p>Figure 1: Protein generated by RFDiffusion (Watson et al., 2023).</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图1：由RFDiffusion（Watson等，2023）生成的蛋白质结构。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_2.jpg?x=111&#x26;y=185&#x26;w=1470&#x26;h=1008&#x26;r=0"><p>Figure 2: Image from DALL-E 3 (Betker et al., 2023).</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图2：来自DALL-E 3（Betker等，2023）的图像。</p></div><!-- Media --><h2>Outline</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>大纲</h2></div><p>Flow Matching (FM) models are in nature most closely related to (Continuous) Normalising Flows (CNFs). Therefore, we start this blogpost by briefly recapping the core concepts behind CNFs. We then continue by discussing the difficulties of CNFs and how FM models address them.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>流匹配（FM）模型本质上与（连续）归一化流（CNFs）最为相关。因此，我们首先简要回顾CNFs的核心概念。随后讨论CNFs的难点以及FM模型如何解决这些问题。</p></div><p>Let be a continuously differentiable function which transforms elements of, with a continously differentiable inverse. Let be a density on and let be the density induced by the following sampling procedure</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>设为一个连续可微函数，将元素从映射到，且其逆映射也连续可微。设为上的密度，设为以下采样过程诱导的密度</p></div><p>which corresponds to transforming the samples of by the mapping. Using the change-of-variable rule we can compute the density of as</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>该过程对应通过映射变换的样本。利用变量替换法则，我们可以计算的密度为</p></div><p>where the last equality can be seen from the fact that and a simple application of the chain rule <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{1}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container> . The quantity is the Jacobian of the inverse map. It is a matrix of size containing. Depending on the task at hand, evaluation of likelihood or sampling, the formulation in or is preferred (Friedman, 1987; Chen &#x26; Gopinath, 2000).</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>最后的等式可由和链式法则的简单应用<mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{1}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container>得出。量是逆映射的雅可比矩阵，大小为，包含。根据具体任务（似然评估或采样），更倾向于使用或中的表达式（Friedman, 1987；Chen &#x26; Gopinath, 2000）。</p></div><ul>
+<li>Example: Transformation of 1D Gaussian variables by linear map</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>示例：通过线性映射变换一维高斯变量</li>
+</ul></div><p>Transforming a base distribution into another via a transformation is interesting, yet its direct application in generative modelling is limited. In generative modelling, the aim is to approximate a distribution using only the available samples. Therefore, this task requires the transformation to map samples from a "simple" distribution, such as, to approximately the data distribution. However, a straightforward linear transformation, as in the previous example, is inadequate due to the highly non-Gaussian nature of the data distribution. This brings us to a neural network as a flexible transformation. The key task then becomes optimising the neural net's parameters.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>通过变换将基础分布转化为另一分布是有趣的，但其在生成建模中的直接应用有限。生成建模的目标是仅利用可用样本来近似一个分布。因此，该任务要求变换将来自“简单”分布（如）的样本映射到数据分布的近似上。然而，由于数据分布高度非高斯，前述的简单线性变换不足以胜任。这就引入了神经网络作为灵活的变换工具。关键任务转为优化神经网络的参数。</p></div><h2>Learning flow parameters by maximum likelihood</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>通过最大似然学习流参数</h2></div><p>Let's denote the induced parametric density by the flow as .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>我们用流所诱导的参数化密度表示为 。</p></div><p>A natural optimisation objective for learning the parameters is to consider maximising the probability of the data under the model:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>学习参数的一个自然优化目标是考虑最大化模型下数据的概率：</p></div><p>Parameterising as a deep neural network leads to several constraints:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>将其参数化为深度神经网络会带来若干约束：</p></div><ul>
+<li>How do we enforce invertibility?</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>我们如何强制可逆性？</li>
+</ul></div><ul>
+<li>How do we compute its inverse?</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>我们如何计算其逆？</li>
+</ul></div><ul>
+<li>How do we compute the jacobian efficiently?</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>我们如何高效计算雅可比矩阵？</li>
+</ul></div><p>Designing flows therefore requires trading-off expressivity (of the flow and thus of the probabilistic model) with the above mentioned considerations so that the flow can be trained efficiently.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>因此，设计流需要在表达能力（流及概率模型的表达能力）与上述考虑之间权衡，以便流能够高效训练。</p></div><h2>Residual flow</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>残差流</h2></div><p>In particular, computing the determinant of the Jacobian is in general very expensive (as it would require automatic differentation passes in the flow) so we impose structure in <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{2}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>2</mn></mrow></msup></math></mjx-assistive-mml></mjx-container> .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>特别地，计算雅可比行列式通常非常昂贵（因为这需要在流中进行自动微分），所以我们在<mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{2}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>2</mn></mrow></msup></math></mjx-assistive-mml></mjx-container>中施加结构。</p></div><p>Full-rank residual (Behrmann et al., 2019; Chen et al., 2010)</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>全秩残差（Behrmann 等，2019；Chen 等，2010）</p></div><p>Expressive flows relying on a residual connection have been proposed as an interesting middle-ground between expressivity and efficient determinant estimation. They take the form:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>依赖残差连接的表达式流被提出作为表达能力与高效行列式估计之间的有趣折中。它们的形式为：</p></div><p>where unbiased estimate of the log likelihood can be obtained <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{3}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c33"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>3</mn></mrow></msup></math></mjx-assistive-mml></mjx-container> . As opposed to auto-regressive flows (Huang et al., 2018, Larochelle and Murray, 2011, Papamakarios et al., 2017), and low-rank residual normalising flows (Van Den Berg et al. 2018), the update in has full rank Jacobian, typically leading to more expressive transformations.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>其中可以获得对数似然的无偏估计<mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{3}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c33"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>3</mn></mrow></msup></math></mjx-assistive-mml></mjx-container>。与自回归流（Huang 等，2018；Larochelle 和 Murray，2011；Papamakarios 等，2017）及低秩残差归一化流（Van Den Berg 等，2018）不同，更新具有全秩雅可比矩阵，通常导致更具表达力的变换。</p></div><p>Figure 4: Jacobian structure of different normalising flows.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图4：不同归一化流的雅可比结构。</p></div><p>We can also compose such flows to get a new flow:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>我们也可以将此类流组合成新的流：</p></div><p>This can be a useful way to construct move expressive flows! The model's log-likelihood is then given by summing each flow's contribution</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>这是一种构建更具表达力流的有效方法！模型的对数似然由各流的贡献相加得到</p></div><p>with .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>其中 。</p></div><h2>Continuous time limit</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>连续时间极限</h2></div><p>As mentioned previously, residual flows are transformations of the form for some and Lipschitz residual connection. We can re-arrange this to get</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>如前所述，残差流是形如某个和Lipschitz残差连接的变换。我们可以重新排列得到</p></div><p>which is looking awfully similar to being a derivative. In fact, letting and taking the limit under certain conditions <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{4}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c34"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>4</mn></mrow></msup></math></mjx-assistive-mml></mjx-container> ,a composition of residual flows is given by an ordinary differential equation (ODE):</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>这看起来非常类似于导数。事实上，令并在某些条件下取极限<mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{4}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c34"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>4</mn></mrow></msup></math></mjx-assistive-mml></mjx-container>，残差流的复合由常微分方程（ODE）给出：</p></div><p>where the flow of the ODE is defined such that</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>其中ODE的流定义为</p></div><p>That is, maps initial condition to the ODE solution at time :</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>即将初始条件映射到时间点的ODE解：</p></div><h2>Continuous change-in-variables</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>连续变量变换</h2></div><p>Of course, this only defines the map ; for this to be a useful normalising flow, we still need to compute the log-abs-determinant of the Jacobian!</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>当然，这仅定义了映射；为了使其成为有用的归一化流，我们仍需计算雅可比行列式的对数绝对值！</p></div><p>As it turns out, the density induced by (or equivalently) can be computed via the following equation 5</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>事实证明，由（或等价地）诱导的密度可以通过以下方程5计算</p></div><p>This statement on the time-evolution of is generally known as the Transport Equation. We refer to as the probability path induced by.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>关于的时间演化的这一陈述通常称为输运方程（Transport Equation）。我们称为由诱导的概率路径。</p></div><p>Computing the total derivative (as also depends on) in log-space yields <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{6}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c36"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>6</mn></mrow></msup></math></mjx-assistive-mml></mjx-container></p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>在对数空间中计算全导数（也依赖于）得到<mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{6}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c36"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>6</mn></mrow></msup></math></mjx-assistive-mml></mjx-container></p></div><p>resulting in the log density</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>从而得到对数密度</p></div><p>Parameterising a vector field neural network therefore induces a parametric log-density</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>参数化一个向量场神经网络因此诱导了一个参数化的对数密度</p></div><p>In practice, to compute one can either solve both the time evolution of and its log density jointly</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>在实践中，为了计算，可以同时求解和其对数密度的时间演化</p></div><p>or solve only for and then use quadrature methods to estimate . Feeding this (joint) vector field to an adaptive step-size ODE solver allows us to control both the error in the sample and the error in the.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>或者仅求解，然后使用数值积分方法估计。将该（联合）向量场输入自适应步长ODE求解器，使我们能够同时控制样本误差和的误差。</p></div><p>One may legitimately wonder why should we bother with such time-continuous flows versus discrete residual flows. There are a couple of benefits:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>有人可能会合理地质疑，为什么我们要使用这种连续时间流而非离散残差流。这里有几个好处：</p></div><ol>
+<li>CNFs can be seen as an automatic way of choosing the number of residual flows to use, which would otherwise be a hyperparameter we would have to tune. In the time-continuous setting, we can choose an error threshold and the adapative solver would give us a the discretisation step size , effectively yielding steps. Using an explicit first order solver, each step is of the form , akin to a residual flow, where the residual connection parameters are shared for each discretisation step, since is amortised over , instead of having a different for each layer.</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol>
+<li>CNF（连续归一化流）可以看作是自动选择残差流数量的方法，否则这将是我们必须调节的超参数。在连续时间设置中，我们可以选择误差阈值，自适应求解器会给出离散化步长，有效地产生步数。使用显式一阶求解器，每一步形式为，类似于残差流，其中残差连接参数在每个离散步骤中共享，因为被摊销在上，而不是每层有不同的。</li>
+</ol></div><ol start="2">
+<li>In residual flows, during training we need to ensure that is Lipschitz; otherwise the resulting flow will not be invertible and thus not a valid normalising flow. With CNFs, we still require the vector field to be Lipschitz in , but we don't have to worry about exactly what this Lipschitz constant is, which is obviously much easier to satisfy and enforce in the neural architecture.</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="2">
+<li>在残差流中，训练时我们需要确保其是Lipschitz连续的；否则生成的流将不可逆，从而不构成有效的归一化流。对于连续正则流（CNFs），我们仍然要求向量场在中是Lipschitz连续的，但不必过于担心具体的Lipschitz常数，这显然更容易在神经网络架构中满足和强制执行。</li>
+</ol></div><p>Now that you know why CNFs are cool, let's have a look at what such a flow would be for a simple example.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>既然你已经知道了为什么CNFs很酷，我们来看看一个简单例子中的这种流是什么样的。</p></div><ul>
+<li>Example: Gaussian to a Gaussian (1D)</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>示例：高斯分布到高斯分布（1维）</li>
+</ul></div><h2>Training CNFs</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>CNFs的训练</h2></div><p>Similarly to any flows, CNFs can be trained by maximum log-likelihood</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>与任何流模型类似，CNFs可以通过最大对数似然进行训练</p></div><p>where the expectation is taken over the data distribution and is the parameteric distribution. This involves integrating the time-evolution of samples and log-likelihood , both terms being a function of the parametric vector field. This requires</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>其中期望是对数据分布取的， 是参数化分布。这涉及对样本和对数似然的时间演化进行积分，两个项均为参数化向量场的函数。这需要</p></div><ul>
+<li>A Expensive numerical ODE simulations at training time!</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>训练时进行昂贵的数值常微分方程（ODE）模拟！</li>
+</ul></div><ul>
+<li>A Estimators for the divergence to scale nicely with high dimension. <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{7}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c37"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>7</mn></mrow></msup></math></mjx-assistive-mml></mjx-container></li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>估计散度的估计器以便在高维下良好扩展。<mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{7}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c37"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>7</mn></mrow></msup></math></mjx-assistive-mml></mjx-container></li>
+</ul></div><p>CNFs are very expressive as they parametrise a large class of flows, and therefore of probability distributions. Yet training can be extremely slow due to the ODE integration at each iteration. One may wonder whether a 'simulation-free' , i.e. not requiring any integration, training procedure exists for training these CNFs.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>CNFs表达能力极强，因为它们参数化了大量的流及概率分布。然而，由于每次迭代都需进行ODE积分，训练可能非常缓慢。有人可能会想是否存在一种“无模拟”的训练方法，即不需要任何积分的训练程序来训练这些CNFs。</p></div><p>And that is exactly where Flow Matching (FM) comes in!</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>这正是流匹配（Flow Matching，FM）发挥作用的地方！</p></div><p>Flow matching is a simulation-free way to train CNF models where we directly formulate a regression objective w.r.t. the parametric vector field of the form</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>流匹配是一种无模拟的CNF训练方法，我们直接针对参数化向量场构建回归目标，形式为</p></div><p>In the equation above, would be a vector field inducing a probability path (or bridge) interpolating the reference to , i.e.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>在上述方程中， 是诱导概率路径（或桥接）从参考分布到 的向量场，即</p></div><p>In words: we're just performing regression on for all .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>换句话说：我们只是对所有 的 进行回归。</p></div><p>Of course, this requires knowledge of a valid, and if we already have access to, there's no point in learning an approximation in the first place! But as we will see in the next section, we can leverage this formulation to construct a useful target for witout having to compute explicitly.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>当然，这需要已知一个有效的 ，如果我们已经能访问它，根本没必要去学习一个近似！但正如我们将在下一节看到的，我们可以利用这个公式构造一个有用的目标 ，而无需显式计算 。</p></div><p>This is where Conditional Flow Matching (CFM) comes to the rescue.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>这就是条件流匹配（Conditional Flow Matching，CFM）派上用场的地方。</p></div><h2>Non-uniqueness of vector field</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>向量场的非唯一性</h2></div><p>We say a valid because there is no unique vector field ; there are indeed many valid choices for inducing maps as illustrated in the figure below. As we will see in what follows, in practice we have to pick a particular target , which has practical implications.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>我们说是有效的，因为不存在唯一的向量场；正如下图所示，确实存在许多有效的选择来诱导映射。正如我们接下来将看到的，实际上我们必须选择一个特定的目标，这具有实际意义。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_6.jpg?x=203&#x26;y=1014&#x26;w=1247&#x26;h=847&#x26;r=0"><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_7.jpg?x=195&#x26;y=88&#x26;w=1261&#x26;h=850&#x26;r=0"><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_7.jpg?x=209&#x26;y=1003&#x26;w=1243&#x26;h=844&#x26;r=0"><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_8.jpg?x=199&#x26;y=92&#x26;w=1248&#x26;h=849&#x26;r=0"><p>Figure 7: Different paths with the same endpoints marginals <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{8}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c38"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>8</mn></mrow></msup></math></mjx-assistive-mml></mjx-container> .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图7：具有相同端点边缘分布<mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{8}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c38"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>8</mn></mrow></msup></math></mjx-assistive-mml></mjx-container>的不同路径。</p></div><!-- Media --><h2>Conditional Flows</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>条件流</h2></div><p>First, let's remind ourselves that the transport equation relates a vector field to (the time evolution of) a probability path</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>首先，让我们回顾一下，输运方程将向量场与（概率路径的时间演化）联系起来</p></div><p>thus constructing or is equivalent. One key idea (Lipman et al., 2023 and Albergo &#x26; Vanden-Eijnden, 2022) is to express the probability path as a marginal over a joint involving a latent variable : . The term being a conditional probability path, satisfying some boundary conditions at and so that be a valid path interpolating between and. In addition, as opposed to the marginal , the conditional could be available in closed-form.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>因此构造或等价。一个关键思想（Lipman等，2023年；Albergo &#x26; Vanden-Eijnden，2022年）是将概率路径表示为涉及潜变量的联合分布的边缘：。其中项是条件概率路径，满足在和处的边界条件，从而成为在和之间插值的有效路径。此外，与边缘不同，条件概率路径可能有闭式表达式。</p></div><p>In particular, as we have access to data samples, it sounds pretty reasonable to condition on , leading to the following marginal probabilithy path</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>特别地，由于我们可以获得数据样本，基于条件的想法显得相当合理，从而得到以下边缘概率路径</p></div><p>In this setting, the conditional probability path needs to satisfy the boundary conditions</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>在此设置中，条件概率路径需要满足边界条件</p></div><p>with small, and for whatever reference we choose, typically something "simple" like, as illustrated in the figure below.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>其中很小，并且对于我们选择的任意参考，通常是类似的“简单”形式，如下图所示。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_9.jpg?x=106&#x26;y=96&#x26;w=1473&#x26;h=768&#x26;r=0"><p>Figure 8: Two conditional flows for two univariate Gaussians.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图8：两个单变量高斯分布的两个条件流。</p></div><!-- Media --><p>The conditional probability path also satisfies the transport equation with the conditional vector field :</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>条件概率路径也满足带有条件向量场的输运方程：</p></div><p>Lipman et al. (2023) introduced the notion of Conditional Flow Matching (CFM) by noticing that this conditional vector field can express the marginal vector of interest via the conditional probability path as</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>Lipman等（2023年）通过注意到该条件向量场可以通过条件概率路径表达感兴趣的边缘向量，提出了条件流匹配（Conditional Flow Matching，CFM）的概念：</p></div><p>To see why this the same the vector field as the one defined earlier, i.e. the one generating the (marginal) probability path, we need to show that the expression above for the marginal vector field satisfies the transport equation</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>为了说明这与之前定义的向量场相同，即生成（边缘）概率路径的向量场，我们需要证明上述边缘向量场表达式满足输运方程</p></div><p>Writing out the left-hand side, we have</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>展开左侧，我们得到</p></div><p>where in the we used and in the we used the expression of in .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>其中在中我们使用了，且在中我们使用了中表达的。</p></div><p>The relation between, and their induced densities are illustrated in the Figure 9 below. And since and are solutions corresponding to the vector fields and with, Figure 9 is equivalent to Figure 10, but note the difference in the expectation taken to go from compared to .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>路径、及其诱导的密度之间的关系如下面的图9所示。由于和是对应于向量场和的解，图9等价于图10，但注意从到的期望计算存在差异。</p></div><!-- Media --><!-- figureText: \( {p}_{0}\left( {x}_{0}\right) \) \( {p}_{0 \mid  1}\left( {{x}_{0} \mid  {x}_{1}}\right) \) \( {p}_{t \mid  1}\left( {{x}_{t} \mid  {x}_{1}}\right) \) --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_10.jpg?x=125&#x26;y=112&#x26;w=1432&#x26;h=812&#x26;r=0"><p>Figure 9: Diagram illustrating the relation between the paths, , and their induced marginal and conditional densities.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图9：说明路径、及其诱导的边缘和条件密度之间关系的示意图。</p></div><!-- figureText: \( {p}_{t \mid  1}\left( {{x}_{t} \mid  {x}_{1}}\right) \) --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_10.jpg?x=104&#x26;y=1164&#x26;w=1464&#x26;h=640&#x26;r=0"><p>Figure 10: Diagram illustrating the relation between the vector fields, , and their induced marginal and conditional densities.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图10：说明向量场、及其诱导的边缘和条件密度之间关系的示意图。</p></div><!-- Media --><h2>Gaussian to Gaussian (2D) using a conditional flow</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>使用条件流的高斯到高斯（二维）变换</h2></div><p>Let's try to gain some intuition behind and the relation between and. We do so by looking at the following scenario with unless otherwise specified. We' re effectively transforming a Gaussian to another Gaussian using a simple time-linear map, as illustrated in the following figure.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>让我们尝试理解及其之间的关系。除非另有说明，我们通过以下情景来探讨。我们实际上是使用一个简单的时间线性映射将一个高斯分布转换为另一个高斯分布，如下图所示。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_11.jpg?x=202&#x26;y=232&#x26;w=1250&#x26;h=855&#x26;r=0"><p>Figure 11: Example conditional paths of with .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图11：当 时的 条件路径示例。</p></div><!-- Media --><p>In the end, we' re really just interested in learning the marginal paths for initial points that are probable under, which we can then use to generate samples. In this simple example, we can obain closed-form expressions for corresponding to the conditional paths of, as visualised below.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>最终，我们真正感兴趣的是学习对初始点的边缘路径，这些初始点在 下是有较大概率的，然后我们可以用这些路径生成样本。在这个简单的例子中，我们可以获得对应于 条件路径的闭式表达式，如下所示。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_12.jpg?x=198&#x26;y=90&#x26;w=1254&#x26;h=853&#x26;r=0"><p>Figure 12: Example marginal paths of with .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图12：当 时的 边缘路径示例。</p></div><!-- Media --><p>With that in mind, let's pick a random initial point from, and then compare a MC estimator for at different values of along the path , i.e. we'll be looking at</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>考虑到这一点，我们从 中随机选取一个初始点，然后比较路径 上不同值处 的蒙特卡洛估计，即我们将观察</p></div><p>In practice we don't have access to the posterior , but in this specific setting we do have closed-form expressions for everything (Albergo &#x26; Vanden-Eijnden, 2022), and so we can visualise the marginal vector field and the conditional vector fields for all our "data" samples and see how they compare. This is shown in the figure below.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>实际上我们无法直接获得后验 ，但在这个特定设置下，我们对所有内容都有闭式表达式（Albergo &#x26; Vanden-Eijnden, 2022），因此我们可以可视化边缘向量场和所有“数据”样本的条件向量场，并比较它们。如下图所示。</p></div><!-- Media --><!-- figureText: \( {u}_{t}\left( x\right) \) vs. \( {u}_{t}\left( {x \mid  {x}_{1}}\right) \) at \( t = {0.11} \) 0 0 --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_13.jpg?x=195&#x26;y=91&#x26;w=1258&#x26;h=846&#x26;r=0"><!-- figureText: \( {u}_{t}\left( x\right) \) vs. \( {u}_{t}\left( {x \mid  {x}_{1}}\right) \) at \( t = {0.53} \) --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_13.jpg?x=198&#x26;y=993&#x26;w=1256&#x26;h=856&#x26;r=0"><p>Figure 13: Marginal vector field vs. conditional vector field for samples. Here and the two trajectories are according to the marginal vector field. Samples transparency is given by the IS weight .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图13：样本的边缘向量场与条件向量场对比。此处，且两条轨迹均根据边缘向量场绘制。样本透明度由重要性采样权重 决定。</p></div><!-- Media --><p>From the above figures, we can immediately see how for small, i.e. near 0 , the posterior is quite scattered so the marginalisation giving involves many equally likely data samples. In contrast, when increases and get closer to 1 , gets quite concentrated over much fewer samples .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>从上述图中，我们可以立即看到，当 较小时，即接近0时，后验分布较为分散，因此边缘化涉及许多同样可能的数据样本。相反，当 增大且接近1时， 后验分布在较少的样本上高度集中。</p></div><p>Moreover, equipped with the knowledge of, we can replace</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>此外，利用 对 的了解，我们可以替换</p></div><p>where, with an equivalent loss regressing the conditional vector field and marginalising instead:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>其中，使用等价的损失函数回归条件向量场并进行边缘化：</p></div><p>These losses are equivalent in the sense that</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>这些损失函数等价，具体表现为</p></div><p>which implies that we can use instead to train the parametric vector field. We defer the full proof to the footnote <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{9}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c39"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>9</mn></mrow></msup></math></mjx-assistive-mml></mjx-container> ,but show the key idea below. By developing the squared norm in both losses,we can easily show that the squared terms are equal or independent of . Let's develop the inner product term for and show that it is equal to the inner product of :</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>这意味着我们可以用 来训练参数化向量场。完整证明见脚注<mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{9}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c39"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>9</mn></mrow></msup></math></mjx-assistive-mml></mjx-container>，这里展示关键思路。通过展开两个损失中的平方范数项，我们可以轻松证明平方项相等或与 无关。下面展开 和 的内积项，证明其等于 的内积：</p></div><p>where in the we used the expression of in .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>其中在 中我们使用了 的表达式。</p></div><p>The benefit of the CFM loss is that once we define the conditional probability path , we can construct an unbiased Monte Carlo estimator of the objective using samples from the data target !</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>CFM损失的优势在于，一旦定义了条件概率路径 ，我们就可以利用来自数据目标的样本构建该目标的无偏蒙特卡洛估计！</p></div><p>This estimator can be efficiently computed as it involves an expectation over the joint, of the conditional vector field both being available as opposed to the marginal vector field which involves an expectation over the posterior .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>该估计量可以高效计算，因为它涉及对联合分布的期望，即条件向量场的期望，而非边缘向量场，其涉及对后验分布的期望。</p></div><p>We note that, as opposed to the log-likelihood maximisation loss of CNFs which does not put any preference over which vector field can be learned, the CFM loss does specify one via the choice of a conditional vector field, which will be regressed by the neural vector field.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>我们注意到，与CNFs（连续正规流）中对数似然最大化损失不偏好任何可学习的向量场不同，CFM（条件流模型）损失通过选择条件向量场明确指定了一个向量场，该向量场将由神经向量场回归。</p></div><h2>Gaussian probability paths</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>高斯概率路径</h2></div><p>Let's now look at practical example of conditional vector field and the corresponding probability path. Suppose we want conditional vector field which generates a path of Gaussians, i.e.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>现在让我们来看条件向量场及其对应概率路径的实际例子。假设我们想要一个生成高斯路径的条件向量场，即</p></div><p>for some mean and standard deviation .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>对于某个均值和标准差。</p></div><p>One conditional vector field inducing the above-defined conditional probability path is given by the following expression:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>诱导上述定义的条件概率路径的一个条件向量场由以下表达式给出：</p></div><p>as shown in the proof below.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>如下述证明所示。</p></div><p>Proof</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>证明</p></div><ul>
+<li>Example: Linear interpolation</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>示例：线性插值</li>
+</ul></div><p>A simple choice for the mean and std. is the linear interpolation for both, i.e.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>均值和标准差的一个简单选择是对两者进行线性插值，即</p></div><p>so that</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>使得</p></div><p>In addition, letting and for some, we' re back to the example from earlier.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>此外，令 且 对某些值，我们回到了之前的例子。</p></div><p>We can then plug this choice of and into to obtain the conditional vector field, writing to make our lives simpler,</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>然后我们可以将该选择的 和 代入 ，为了简化表达，我们写成</p></div><p>Below you can see the difference between (top figure) and (bottom figure) for pairs with and . The paths are coloured by the sign of the 2nd vector component of to more clearly highlight the difference between the marginal and conditional flows.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>下图展示了（上图）和（下图）在 和 取值对的差异。路径以 向量第二分量的符号着色，更清晰地突出边缘流和条件流之间的区别。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_15.jpg?x=199&#x26;y=433&#x26;w=1254&#x26;h=853&#x26;r=0"><p>Figure 14: Realizations of paths from to following conditional vector fields. Paths are highlighted by the sign of the 2nd vector component at time .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图14：从 到遵循条件向量场的路径实现。路径以 时间点 向量第二分量的符号高亮显示。</p></div><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_16.jpg?x=202&#x26;y=91&#x26;w=1250&#x26;h=850&#x26;r=0"><p>Figure 15: Paths from to following the true marginal vector field. Paths are highlighted by the sign of the 2nd vector component.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图15：从 到遵循真实边缘向量场的路径。路径以向量第二分量的符号高亮显示。</p></div><!-- Media --><h2>But is CFM really all rainbows and unicorns?</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>但条件流模型（CFM）真的是完美无缺的吗？</h2></div><p>Unfortunately not, no. There are two issues arising from crossing conditional paths. We will explain this just after, but now we stress that this leads to</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>遗憾的是，并非如此。交叉条件路径会引发两个问题。我们稍后会详细解释，但现在强调这会导致</p></div><ol>
+<li>Non-straight marginal paths ODE hard to integrate slow sampling at inference.</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol>
+<li>非直线边缘路径，常微分方程（ODE）难以积分，推理时采样速度慢。</li>
+</ol></div><ol start="2">
+<li>Many possible for a noised high CFM loss variance slow training convergence.</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="2">
+<li>噪声较大导致条件流模型（CFM）损失方差高，训练收敛缓慢。</li>
+</ol></div><p>To get a better understanding of what these two points above, let's revisit the example once more. As we see in the figures below, realizations of the conditional vector field, i.e. sampling from the process</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>为了更好地理解上述两点，让我们再次回顾这个例子。正如下图所示，条件向量场的实现，即从该过程采样</p></div><p>result in paths that are quite different from the marginal paths as illustrated in the figures below. by.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>会产生与边缘路径明显不同的路径，如下图所示。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_17.jpg?x=200&#x26;y=89&#x26;w=1254&#x26;h=854&#x26;r=0"><p>Figure 16: Realizations of conditional paths from for two different with conditional vector field given</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图16：来自两个不同条件的条件路径实现，条件向量场给定</p></div><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_17.jpg?x=196&#x26;y=1141&#x26;w=1257&#x26;h=855&#x26;r=0"><p>Figure 17: Paths from to following the true marginal vector field. Paths are highlighted by the sign of the 2nd vector component.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图17：遵循真实边缘向量场的路径。路径根据第二个向量分量的符号进行高亮显示。</p></div><!-- Media --><p>In particular, we can see that the marginal paths do not cross; this is indeed just the uniqueness property of ODE solutions. A realization of the conditional vector field also exhibits the "non-crossing paths" property, similar to the marginal flows, however paths corresponding to different realizations may intersect, as highlighted in the figure above.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>特别地，我们可以看到边缘路径不会相交；这正是常微分方程解的唯一性特性。条件向量场的一个实现同样表现出“路径不相交”的性质，类似于边缘流，但不同实现对应的路径可能会相交，如上图所示。</p></div><p>Consider two highlighted paths in the visualization of , with data samples and . When learning a parameterized vector field via stochastic gradient descent (SGD), we approximate the CFM loss as:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>考虑可视化中两个高亮路径，数据样本为 和 。当通过随机梯度下降（SGD）学习参数化向量场时，我们将条件流模型（CFM）损失近似为：</p></div><p>where, , and . We compute the gradient with respect to for a gradient step.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>其中， ， 和 。我们计算关于 的梯度以进行梯度更新。</p></div><p>In such a scenario, we're attempting to align with two different vector fields whose corresponding paths are impossible under the marginal vector field that we' re trying to learn! This fact can lead to increased variance in the gradient estimate, and thus slower convergence.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>在这种情况下，我们试图同时对齐两个不同的向量场，而这两个向量场对应的路径在我们试图学习的边缘向量场下是不可能存在的！这一事实会导致梯度估计的方差增加，从而使收敛速度变慢。</p></div><p>In slightly more complex scenarios, the situation becomes even more striking. Below we see a nice example from Liu et al. (2022) where our reference and target are two different mixture of Gaussians in 2D differing only by the sign of the mean in the x-component. Specifically,</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>在稍微复杂一些的场景中，情况更加显著。下面我们看到Liu等人（2022年）给出的一个很好的例子，其中我们的参考分布和目标分布是二维高斯混合模型，仅在x分量的均值符号上有所不同。具体地，</p></div><p>where we set , unless otherwise specified.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>除非另有说明，我们设定 。</p></div><p>Figure 18: Realizations of conditional paths following conditional vector field from. Paths are highlighted by the sign of the 2nd vector component.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图18：遵循条件向量场的条件路径实现。路径根据第二个向量分量的符号进行高亮显示。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_18.jpg?x=198&#x26;y=1348&#x26;w=1249&#x26;h=850&#x26;r=0"><!-- Media --><p>Figure 19: Realizations of marginal paths following the marginal vector field from. Paths are highlighted by the sign of the 2nd vector component.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图19：遵循边缘向量场的边缘路径实现。路径根据第二个向量分量的符号进行高亮显示。</p></div><p>Here we see that marginal paths (bottom figure) end up looking very different from the conditional paths (top figure). Indeed, at training time paths may intersect, whilst at sampling time they cannot (due to the uniqueness of the ODE solution). As such we see on the bottom plot that some (marginal) paths are quite curved and would therefore require a greater number of discretisation steps from the ODE solver during inference.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>这里我们看到边缘路径（底部图）最终看起来与条件路径（顶部图）非常不同。实际上，在训练时路径可能会相交，而在采样时由于ODE（常微分方程）解的唯一性，它们不能相交。因此，我们在底部图中看到一些（边缘）路径相当弯曲，因此在推理过程中ODE求解器需要更多的离散化步骤。</p></div><p>We can also see how this leads to a significant variance of the CFM loss estimate for in the figure below. More generally, samples from the reference distribution which are arbitrarily close to eachothers can be associated with either target modes, leading to high variance in the vector field regression loss.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>我们还可以看到这如何导致下图中CFM损失估计的显著方差。更一般地说，来自参考分布的样本如果彼此非常接近，可能会对应于任一目标模态，导致向量场回归损失的高方差。</p></div><!-- Media --><!-- figureText: \( {u}_{t}\left( x\right) \) vs. \( {u}_{t}\left( {x \mid  {x}_{1}}\right) \) at \( t = {0.53} \) --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_19.jpg?x=197&#x26;y=798&#x26;w=1256&#x26;h=852&#x26;r=0"><p>Figure 20: Realizations of conditional paths following the conditional vector field for .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图20：遵循条件向量场的条件路径实现。</p></div><!-- figureText: 0.00 0.25 0.50 0.75 1.00 t --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_20.jpg?x=202&#x26;y=89&#x26;w=1250&#x26;h=848&#x26;r=0"><p>Figure 21: Variance of conditional vector field over for both blue and red trajectories for .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图21：对于蓝色和红色轨迹，条件向量场在上的方差。</p></div><!-- Media --><p>An intuitive solution would be to associate data samples with reference samples which are close instead of some arbitrary pairing. We'll detail this idea next via the concept of couplings and optimal transport.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>一个直观的解决方案是将数据样本与相近的参考样本关联，而不是任意配对。接下来我们将通过耦合（couplings）和最优传输（optimal transport）的概念详细说明这一想法。</p></div><h2>Coupling</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>耦合</h2></div><p>So far we have constructed the vector field by conditioning and marginalising over data points. This is referred to as a one-sided conditioning, where the probability path is constructed by marginalising over :</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>到目前为止，我们通过对数据点进行条件化和边缘化构建了向量场。这被称为单边条件化，其中概率路径通过对 进行边缘化构建：</p></div><p>e.g. .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>例如 。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_20.jpg?x=105&#x26;y=1696&#x26;w=1472&#x26;h=217&#x26;r=0"><p>Figure 22: One sided interpolation. Source: Figure (2) in Albergo &#x26; Vanden-Eijnden (2022).</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图22：单边插值。来源：Albergo &#x26; Vanden-Eijnden (2022) 图（2）。</p></div><!-- Media --><p>Yet, more generally, we can consider conditioning and marginalising over latent variables, and minimising the following loss:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>然而，更一般地，我们可以考虑对潜变量进行条件化和边缘化，并最小化以下损失：</p></div><p>As suggested in Liu et al. (2023), Tong et al. (2023), Albergo &#x26; Vanden-Eijnden (2022) and Pooladian et al. (2023) one can condition on both endpoints of the process, referred as two-sided conditioning. The marginal probability path is defined as:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>正如Liu et al. (2023)、Tong et al. (2023)、Albergo &#x26; Vanden-Eijnden (2022)和Pooladian et al. (2023)所建议的，可以对过程的两个端点进行条件化，这称为双边条件化。边缘概率路径定义为：</p></div><p>The following boundary condition on : and is required so that the marginal has the proper conditions and .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>对 的以下边界条件是必要的： 和 ，以确保边缘具有适当的条件和 。</p></div><p>For instance, a deterministic linear interpolation gives and the simplest choice regarding the coupling is to consider independent samples: .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>例如，确定性的线性插值给出 ，关于耦合的最简单选择是考虑独立样本： 。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_21.jpg?x=106&#x26;y=586&#x26;w=1473&#x26;h=215&#x26;r=0"><!-- Media --><p>Figure 23: Two sided interpolation. Source: Figure (2) in Albergo &#x26; Vanden-Eijnden (2022).</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图23：双边插值。来源：Albergo &#x26; Vanden-Eijnden (2022) 图（2）。</p></div><p>One main advantage is that this allows for non Gaussian reference distribution. Choosing a standard normal as noise distribution we recover the same one-sided conditional probability path as earlier:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>一个主要优点是这允许非高斯参考分布。选择标准正态作为噪声分布，我们恢复了之前相同的单边条件概率路径：</p></div><h2>Optimal Transport (OT) coupling</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>最优传输（OT）耦合</h2></div><p>Now let's go back to the idea of not using an independent coupling (i.e. pairing) but instead to correlate pairs with a joint. Tong et al. (2023) and Pooladian et al. (2023) suggest using the optimal transport coupling</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>现在让我们回到不使用独立耦合（即配对），而是用联合分布关联成对样本的想法。Tong 等人（2023）和 Pooladian 等人（2023）建议使用最优传输耦合</p></div><p>which minimises the optimal transport (i.e. Wasserstein) cost (Monge, 1781, Peyré and Cuturi 2020). The OT coupling associates samples and such that the total distance is minimised.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>该耦合最小化最优传输（即 Wasserstein）代价（Monge, 1781，Peyré 和 Cuturi 2020）。最优传输耦合将样本关联起来，使得总距离最小化。</p></div><p>This OT coupling is illustrated in the right hand side of the figure below, adapted from Tong et al. (2023). In contrast to the middle figure which an independent coupling, the OT one does not have paths that cross. This leads to lower training variance and faster sampling <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{10}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c30"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>10</mn></mrow></msup></math></mjx-assistive-mml></mjx-container> .</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>下图右侧展示了该最优传输耦合，改编自 Tong 等人（2023）。与中间图中独立耦合不同，最优传输耦合不存在路径交叉现象。这带来了更低的训练方差和更快的采样<mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{10}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c30"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>10</mn></mrow></msup></math></mjx-assistive-mml></mjx-container>。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_22.jpg?x=198&#x26;y=87&#x26;w=1258&#x26;h=857&#x26;r=0"><p>Figure 24: One-sided conditioning (Lipman et al., 2022)</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图24：单边条件（Lipman 等人，2022）</p></div><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_22.jpg?x=199&#x26;y=1085&#x26;w=1258&#x26;h=854&#x26;r=0"><p>Figure 25: Two-sided conditioning (Tong et al., 2023)</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图25：双边条件（Tong 等人，2023）</p></div><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_23.jpg?x=199&#x26;y=92&#x26;w=1246&#x26;h=848&#x26;r=0"><!-- Media --><p>Figure 26: OT coupling (Tong et al., 2023)</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图26：最优传输耦合（Tong 等人，2023）</p></div><p>In practice, we cannot compute the optimal coupling between and, as algorithms solving this problem are only known for finite distributions. In fact, finding a map from to is the generative modelling problem that we are trying to solve in the first place!</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>实际上，我们无法计算和之间的最优耦合，因为解决该问题的算法仅适用于有限分布。事实上，寻找从到的映射正是我们试图解决的生成建模问题！</p></div><p>Tong et al. (2023) and Pooladian et al. (2023) propose to approximate the OT coupling by computing such optimal coupling only over each mini-batch of data and noise samples, coined mini-batch OT (Fatras et al., 2020). This is scalable as for finite collection of samples the OT problem can be computed with quadratic complexity via the Sinkhorn algorithm (Peyre and Cuturi, 2020). This results in a joint distribution over "inputs" and "outputs" such that the expected distance is (approximately) minimised. Finally, to construct a mini-batch from this which we can subsequently use for training, we can either compute the expectation wrt. by considering all pairs (in practice, this can often boil down to only needing to consider disjoint pairs <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{11}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>11</mn></mrow></msup></math></mjx-assistive-mml></mjx-container> ) or sample a new collection of training pairs with12.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>Tong 等人（2023）和 Pooladian 等人（2023）提出通过仅在每个小批量数据和噪声样本上计算最优耦合来近似最优传输耦合，称为小批量最优传输（mini-batch OT）（Fatras 等人，2020）。该方法具有可扩展性，因为对于有限样本集合，最优传输问题可通过 Sinkhorn 算法以二次复杂度计算（Peyré 和 Cuturi，2020）。这产生了“输入”和“输出”的联合分布，使得期望距离（近似）最小化。最后，为构造可用于训练的小批量，我们可以通过考虑所有配对计算关于的期望（实际上，通常只需考虑不相交的配对<mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{11}"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>11</mn></mrow></msup></math></mjx-assistive-mml></mjx-container>），或用12采样新的训练配对集合。</p></div><p>For example, we can apply this to the example from before, which almost completely removes the crossing paths behaviour described earlier, as can be seen in the figure below.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>例如，我们可以将其应用于之前的示例，几乎完全消除了前述的路径交叉行为，如下图所示。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_24.jpg?x=189&#x26;y=84&#x26;w=1270&#x26;h=1768&#x26;r=0"><p>Figure 27: with uniformly sampled pairings (left) and with OT pairings (right).</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图27：均匀采样配对（左）与最优传输配对（右）。</p></div><!-- Media --><p>We also observe similar behavior when applying this the more complex example, as can be seen in the figure below.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>在更复杂的示例中应用该方法时，我们也观察到了类似的行为，如下图所示。</p></div><!-- Media --><img src="https://cdn.noedgeai.com/bo_d1uu2o77aajc73bffipg_25.jpg?x=189&#x26;y=80&#x26;w=1272&#x26;h=1774&#x26;r=0"><p>Figure 28: with uniformly sampled pairings (left) and with OT pairings (right).</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>图28：均匀采样配对（左）与最优传输配对（右）。</p></div><!-- Media --><p>All in all, making use of mini-batch OT seems to be a strict improvement over the uniform sampling approach to constructing the mini-batch in the above examples and has been shown to improve practical performance in a wide range of applications (Tong et al., 2023; Klein et al., 2023).</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>总的来说，利用小批量最优传输相比上述示例中的均匀采样构造小批量方法是一种严格的改进，并已被证明在广泛应用中提升了实际性能（Tong 等人，2023；Klein 等人，2023）。</p></div><p>It's worth noting that in we only considered choosing the coupling such that we minimize the expected squared Euclidean distance. This works well in the examples and, but we could also replace squared Euclidean distance with some other distance metric when constructing the coupling . For example, if we were modeling molecules using CNFs, it might also make sense to pick such that and are also rotationally aligned as is done in the work of Klein et al. (2023).</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>值得注意的是，在中我们仅考虑选择耦合以最小化期望平方欧氏距离。这在示例中效果良好，但我们也可以在构造耦合时用其他距离度量替代平方欧氏距离。例如，在使用连续归一化流（CNFs）建模分子时，选择使和旋转对齐的耦合也是合理的，正如 Klein 等人（2023）的工作所示。</p></div><p>In short, we' ve shown that flow matching is an efficient approach to training continuous normalising flows (CNFs), by directly regressing over the vector field instead of explicitly training by maximum likelihood. This is enabled by constructing the target vector field as the marginalisation of simple conditional vector fields which (marginally) interpolate between the reference and data distribution, but crucially for which we can evaluate and integrate over time. A neural network parameterising the vector field can then be trained by regressing over these conditional vector fields. Similarly to CNFs, samples can be obtained at inference time by solving the ODE associated with the neural vector field.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>简而言之，我们展示了流匹配（flow matching）是一种高效训练连续归一化流（CNFs）的方法，通过直接对向量场进行回归，而非显式地通过最大似然训练。这得益于将目标向量场构造为简单条件向量场的边缘化，这些条件向量场（边缘上）在参考分布和数据分布之间插值，且关键是我们可以对其进行时间上的评估和积分。参数化向量场的神经网络随后可通过对这些条件向量场进行回归来训练。与 CNFs 类似，推理时可通过求解与神经向量场相关的常微分方程（ODE）获得样本。</p></div><p>In this post we have not talked about diffusion (i.e. score based) models on purpose as they are not necessary for understanding flow matching. Yet these are deeply related and even exactly the same in some settings. We are planning to explore these connections, along with generalisations in a follow-up post!</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>本文特意未讨论扩散（即基于得分的）模型，因为它们对理解流匹配并非必要。然而，这两者关系密切，甚至在某些设置下完全相同。我们计划在后续文章中探讨这些联系及其推广！</p></div><h2>Please cite us as:</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>请引用我们为：</h2></div><hr><p>@misc{mathieu2024flow,</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>@misc{mathieu2024flow,</p></div><pre><code>title = "An Introduction to Flow Matching",
+</code></pre><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><pre><code>title = "流匹配简介",
+</code></pre></div><pre><code>author = "Fjelde, Tor and Mathieu, Emile and Dutordoir, Vincent",
+</code></pre><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><pre><code>author = "Fjelde, Tor 和 Mathieu, Emile 以及 Dutordoir, Vincent",
+</code></pre></div><pre><code>journal = "https://mlg.eng.cam.ac.uk/blog/",
+</code></pre><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><pre><code>journal = "https://mlg.eng.cam.ac.uk/blog/",
+</code></pre></div><pre><code>year = "2024",
+</code></pre><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><pre><code>year = "2024",
+</code></pre></div><pre><code>month = "January",
+</code></pre><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><pre><code>month = "一月",
+</code></pre></div><pre><code>url = "https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html"
+</code></pre><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><pre><code>url = "https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html"
+</code></pre></div><p>}</p><hr><p>We deeply thank Michael Albergo, Valentin Debortoli and James Thornton for giving insightful feedback! And thank you to Andrew Foong for pointing out several typos and rendering issues!</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>我们衷心感谢Michael Albergo、Valentin Debortoli和James Thornton提供的深刻反馈！同时感谢Andrew Foong指出的若干错别字和排版问题！</p></div><ul>
+<li>Albergo, Michael S. &#x26; Vanden-Eijnden, Eric (2023) Building Normalizing Flows with Stochastic Interpolants .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Albergo, Michael S. &#x26; Vanden-Eijnden, Eric (2023) 利用随机插值构建归一化流（Normalizing Flows）。</li>
+</ul></div><ul>
+<li>Behrmann, Jens and Grathwohl, Will and Chen, Ricky T. Q. and Duvenaud, David and Jacobsen, Joern-Henrik (2019). Invertible Residual Networks .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Behrmann, Jens 和 Grathwohl, Will 以及 Chen, Ricky T. Q. 和 Duvenaud, David 以及 Jacobsen, Joern-Henrik (2019)。可逆残差网络（Invertible Residual Networks）。</li>
+</ul></div><ul>
+<li>Betker, James, Gabriel Goh, Li Jing, TimBrooks, Jianfeng Wang, Linjie Li, LongOuyang, JuntangZhuang, JoyceLee, YufeiGuo, WesamManassra, PrafullaDhariwal, CaseyChu, YunxinJiao and Aditya Ramesh (2023). Improving Image Generation with Better Captions .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Betker, James, Gabriel Goh, Li Jing, TimBrooks, Jianfeng Wang, Linjie Li, LongOuyang, JuntangZhuang, JoyceLee, YufeiGuo, WesamManassra, PrafullaDhariwal, CaseyChu, YunxinJiao 和 Aditya Ramesh (2023)。通过更优的图像描述提升图像生成质量。</li>
+</ul></div><ul>
+<li>Chen &#x26; Gopinath (2000). Gaussianization .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Chen &#x26; Gopinath (2000)。高斯化（Gaussianization）。</li>
+</ul></div><ul>
+<li>Chen &#x26; Lipman (2023). Riemannian Flow Matching on General Geometries .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Chen &#x26; Lipman (2023)。一般几何上的黎曼流匹配（Riemannian Flow Matching）。</li>
+</ul></div><ul>
+<li>Chen, Ricky T. Q. and Behrmann, Jens and Duvenaud, David K and Jacobsen, Joern-Henrik (2019). Residual flows for invertible generative modeling .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Chen, Ricky T. Q. 和 Behrmann, Jens 以及 Duvenaud, David K 和 Jacobsen, Joern-Henrik (2019)。用于可逆生成建模的残差流（Residual flows）。</li>
+</ul></div><ul>
+<li>De Bortoli, Mathieu &#x26; Hutchinson et al. (2022). Riemannian Score-Based Generative Modelling .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>De Bortoli, Mathieu &#x26; Hutchinson 等人 (2022)。基于黎曼评分的生成建模（Riemannian Score-Based Generative Modelling）。</li>
+</ul></div><ul>
+<li>Dupont, Doucet &#x26; Teh (2019). Augmented Neural Odes .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Dupont, Doucet &#x26; Teh (2019). 增强神经常微分方程（Augmented Neural Odes）。</li>
+</ul></div><ul>
+<li>Friedman (1987). Exploratory projection pursuit .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Friedman (1987). 探索性投影追踪（Exploratory projection pursuit）。</li>
+</ul></div><ul>
+<li>George Papamakarios, Theo Pavlakou, lain Murray (2018). Masked Autoregressive Flow for Density Estimation .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>George Papamakarios, Theo Pavlakou, Iain Murray (2018). 用于密度估计的掩码自回归流（Masked Autoregressive Flow）。</li>
+</ul></div><ul>
+<li>Huang, Chin-Wei and Krueger, David and Lacoste, Alexandre and Courville, Aaron (2018). Neural Autoregressive Flows .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Huang, Chin-Wei 和 Krueger, David 及 Lacoste, Alexandre 和 Courville, Aaron (2018). 神经自回归流（Neural Autoregressive Flows）。</li>
+</ul></div><ul>
+<li>Klein, Krämer &#x26; Noé (2023). Equivariant Flow Matching .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Klein, Krämer &#x26; Noé (2023). 等变流匹配（Equivariant Flow Matching）。</li>
+</ul></div><ul>
+<li>Lipman, Yaron and Chen, Ricky T. Q. and Ben-Hamu, Heli and Nickel, Maximilian and Le, Matt (2022). Flow Matching for Generative Modeling .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Lipman, Yaron 和 Chen, Ricky T. Q. 及 Ben-Hamu, Heli 和 Nickel, Maximilian 及 Le, Matt (2022). 用于生成建模的流匹配（Flow Matching for Generative Modeling）。</li>
+</ul></div><ul>
+<li>Liu, Xingchao and Gong, Chengyue and Liu, Qiang (2022). Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Liu, Xingchao 和 Gong, Chengyue 及 Liu, Qiang (2022). 流直且快：用校正流学习生成与传输数据（Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow）。</li>
+</ul></div><ul>
+<li>Monge, Gaspard (1781). Mémoire Sur La Théorie Des Déblais et Des Remblais.</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Monge, Gaspard (1781). 关于挖填理论的论文（Mémoire Sur La Théorie Des Déblais et Des Remblais）。</li>
+</ul></div><ul>
+<li>Peyré, Gabriel and Cuturi, Marco (2020). Computational Optimal Transport .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Peyré, Gabriel 和 Cuturi, Marco (2020). 计算最优传输（Computational Optimal Transport）。</li>
+</ul></div><ul>
+<li>Pooladian, Aram-Alexandre and {Ben-Hamu}, Heli and {Domingo-Enrich}, Carles and Amos, Brandon and Lipman, Yaron and Chen, Ricky T. Q. (2023). Multisample Flow Matching: Straightening Flows With Minibatch Couplings .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Pooladian, Aram-Alexandre 和 {Ben-Hamu}, Heli 和 {Domingo-Enrich}, Carles 和 Amos, Brandon 和 Lipman, Yaron 和 Chen, Ricky T. Q. (2023). 多样本流匹配：通过小批量耦合校正流（Multisample Flow Matching: Straightening Flows With Minibatch Couplings）。</li>
+</ul></div><ul>
+<li>Song, Sohl-Dickstein &#x26; Kingma et al. (2020). Score-Based Generative Modeling Through Stochastic Differential Equations .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Song, Sohl-Dickstein &#x26; Kingma 等 (2020). 通过随机微分方程的基于评分的生成建模（Score-Based Generative Modeling Through Stochastic Differential Equations）。</li>
+</ul></div><ul>
+<li>Tong, Alexander and Malkin, Nikolay and Fatras, Kilian and Atanackovic, Lazar and Zhang, Yanlei and Huguet, Guillaume and Wolf, Guy and Bengio, Yoshua (2023). Simulation-Free Schrodinger Bridges via Score and Flow Matching .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Tong, Alexander 和 Malkin, Nikolay 及 Fatras, Kilian 及 Atanackovic, Lazar 及 Zhang, Yanlei 及 Huguet, Guillaume 及 Wolf, Guy 及 Bengio, Yoshua (2023). 通过评分和流匹配实现无模拟薛定谔桥（Simulation-Free Schrodinger Bridges via Score and Flow Matching）。</li>
+</ul></div><ul>
+<li>Tong, Malkin &#x26; Huguet et al. (2023). Improving and Generalizing Flow-Based Generative Models With Minibatch Optimal Transport .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Tong, Malkin &#x26; Huguet 等 (2023). 通过小批量最优传输改进和推广基于流的生成模型（Improving and Generalizing Flow-Based Generative Models With Minibatch Optimal Transport）。</li>
+</ul></div><ul>
+<li>Watson, Joseph L. and Juergens, David and Bennett, Nathaniel R. and Trippe, Brian L. and Yim, Jason and Eisenach, Helen E. and Ahern, Woody and Borst, Andrew J. and Ragotte, Robert J. and Milles, Lukas F. and Wicky, Basile I. M. and Hanikel, Nikita and Pellock, Samuel J. and Courbet, Alexis and Sheffler, William and Wang, Jue and Venkatesh, Preetham and Sappington, Isaac and Torres, Susana V{'a}zquez and Lauko, Anna and De Bortoli, Valentin and Mathieu, Emile and Ovchinnikov, Sergey and Barzilay, Regina and Jaakkola, Tommi S. and DiMaio, Frank and Baek, Minkyung and Baker, David (2023). De Novo Design of Protein Structure and Function with RFdiffusion .</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>Watson, Joseph L. 和 Juergens, David 及 Bennett, Nathaniel R. 及 Trippe, Brian L. 及 Yim, Jason 及 Eisenach, Helen E. 及 Ahern, Woody 及 Borst, Andrew J. 及 Ragotte, Robert J. 及 Milles, Lukas F. 及 Wicky, Basile I. M. 及 Hanikel, Nikita 及 Pellock, Samuel J. 及 Courbet, Alexis 及 Sheffler, William 及 Wang, Jue 及 Venkatesh, Preetham 及 Sappington, Isaac 及 Torres, Susana V{á}zquez 及 Lauko, Anna 及 De Bortoli, Valentin 及 Mathieu, Emile 及 Ovchinnikov, Sergey 及 Barzilay, Regina 及 Jaakkola, Tommi S. 及 DiMaio, Frank 及 Baek, Minkyung 及 Baker, David (2023). 使用RFdiffusion进行蛋白质结构与功能的从头设计（De Novo Design of Protein Structure and Function with RFdiffusion）。</li>
+</ul></div><p>Published on 20 January 2024.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>发表于2024年1月20日。</p></div><p>全文完</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>全文完</p></div><p>本文由 简悦 SimpRead 转码,用以提升阅读体验,原文地址</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>本文由 简悦 SimpRead 转码，用以提升阅读体验，原文地址</p></div>
+      </body>
+    </html>
+  

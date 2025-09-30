@@ -1,0 +1,815 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Doc2x-Export-Html-Result</title>
+        <style>
+            * {
+              padding: 0;
+              margin: 0;
+              box-sizing: border-box;
+            }
+             html {
+              line-height: 1.15; /* 1 */
+              -webkit-text-size-adjust: 100%; /* 2 */
+            }
+            body {
+              padding: 20px 350px;
+              margin: 0;
+            }
+            main {
+              display: block;
+            }
+            h1 {
+              font-size: 2em;
+              margin: 0.67em 0;
+            }
+            hr {
+              box-sizing: content-box; /* 1 */
+              height: 0; /* 1 */
+              overflow: visible; /* 2 */
+            }
+            pre {
+              font-family: monospace, monospace; /* 1 */
+              font-size: 1em; /* 2 */
+            }
+            a {
+              background-color: transparent;
+            }
+            abbr[title] {
+              border-bottom: none; /* 1 */
+              text-decoration: underline; /* 2 */
+              text-decoration: underline dotted; /* 2 */
+            }
+            b,
+            strong {
+              font-weight: bolder;
+            }
+            code,
+            kbd,
+            samp {
+              font-family: monospace, monospace; /* 1 */
+              font-size: 1em; /* 2 */
+            }
+            small {
+              font-size: 80%;
+            }
+            sub,
+            sup {
+              font-size: 75%;
+              line-height: 0;
+              position: relative;
+              vertical-align: baseline;
+            }
+            sub {
+              bottom: -0.25em;
+            }
+            sup {
+              top: -0.5em;
+            }
+            img {
+              border-style: none;
+            }
+            button,
+            input,
+            optgroup,
+            select,
+            textarea {
+              font-family: inherit; /* 1 */
+              font-size: 100%; /* 1 */
+              line-height: 1.15; /* 1 */
+              margin: 0; /* 2 */
+            }
+            button,
+            input { /* 1 */
+              overflow: visible;
+            }
+            button,
+            select { /* 1 */
+              text-transform: none;
+            }
+            button,
+            [type="button"],
+            [type="reset"],
+            [type="submit"] {
+              -webkit-appearance: button;
+            }
+            button::-moz-focus-inner,
+            [type="button"]::-moz-focus-inner,
+            [type="reset"]::-moz-focus-inner,
+            [type="submit"]::-moz-focus-inner {
+              border-style: none;
+              padding: 0;
+            }
+            button:-moz-focusring,
+            [type="button"]:-moz-focusring,
+            [type="reset"]:-moz-focusring,
+            [type="submit"]:-moz-focusring {
+              outline: 1px dotted ButtonText;
+            }
+            fieldset {
+              padding: 0.35em 0.75em 0.625em;
+            }
+            legend {
+              box-sizing: border-box; /* 1 */
+              color: inherit; /* 2 */
+              display: table; /* 1 */
+              max-width: 100%; /* 1 */
+              padding: 0; /* 3 */
+              white-space: normal; /* 1 */
+            }
+            progress {
+              vertical-align: baseline;
+            }
+            textarea {
+              overflow: auto;
+            }
+            [type="checkbox"],
+            [type="radio"] {
+              box-sizing: border-box; /* 1 */
+              padding: 0; /* 2 */
+            }
+            [type="number"]::-webkit-inner-spin-button,
+            [type="number"]::-webkit-outer-spin-button {
+              height: auto;
+            }
+            [type="search"] {
+              -webkit-appearance: textfield; /* 1 */
+              outline-offset: -2px; /* 2 */
+            }
+            [type="search"]::-webkit-search-decoration {
+              -webkit-appearance: none;
+            }
+            ::-webkit-file-upload-button {
+              -webkit-appearance: button; /* 1 */
+              font: inherit; /* 2 */
+            }
+            details {
+              display: block;
+            }
+            summary {
+              display: list-item;
+            }
+            [hidden] {
+              display: none;
+            }
+             table {
+                border-collapse: collapse;
+                width: 100%;
+                margin-top: 20px;
+                margin-bottom: 20px;
+              }
+              table thead {
+                background-color: #e5e5e5;
+              }
+              table td {
+                padding: 8px;
+                /*background-color: #e5e5e5;*/
+                border: 1px solid #ccc; /* 可选，添加边框样式 */
+              }
+              table th {
+                padding: 8px;
+                /*background-color: #e5e5e5;*/
+                border: 1px solid #ccc; /* 可选，添加边框样式 */
+              }
+              h1, h2, h3, h4, h5, h6 {
+                margin-bottom: 20px;
+              }
+              p {
+                margin-top: 20px;
+                text-indent: 2em;
+                margin-bottom: 20px;
+              }
+        </style>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <style>
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mrow {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-stretchy-h > * {
+  display: table-cell;
+  width: 0;
+}
+
+mjx-stretchy-h > * > mjx-c {
+  display: inline-block;
+  transform: scalex(1.0000001);
+}
+
+mjx-stretchy-h > * > mjx-c::before {
+  display: inline-block;
+  width: initial;
+}
+
+mjx-stretchy-h > mjx-ext {
+  /* IE */ overflow: hidden;
+  /* others */ overflow: clip visible;
+  width: 100%;
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c::before {
+  transform: scalex(500);
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c {
+  width: 0;
+}
+
+mjx-stretchy-h > mjx-beg > mjx-c {
+  margin-right: -.1em;
+}
+
+mjx-stretchy-h > mjx-end > mjx-c {
+  margin-left: -.1em;
+}
+
+mjx-stretchy-v {
+  display: inline-block;
+}
+
+mjx-stretchy-v > * {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-beg {
+  height: 0;
+}
+
+mjx-stretchy-v > mjx-end > mjx-c {
+  display: block;
+}
+
+mjx-stretchy-v > * > mjx-c {
+  transform: scaley(1.0000001);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+mjx-stretchy-v > mjx-ext {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  /* IE */ overflow: hidden;
+  /* others */ overflow: visible clip;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c::before {
+  width: initial;
+  box-sizing: border-box;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c {
+  transform: scaleY(500) translateY(.075em);
+  overflow: visible;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0px;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://doc2x.noedgeai.com/ajax/libs/mathjax/v3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c5B::before {
+  padding: 0.75em 0.278em 0.25em 0;
+  content: "[";
+}
+
+mjx-c.mjx-c31::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "1";
+}
+
+mjx-c.mjx-c5D::before {
+  padding: 0.75em 0.278em 0.25em 0;
+  content: "]";
+}
+
+</style>
+      </head>
+      <body style="padding: 40px;">
+        <!-- Media --><!-- figureText: 2024 ICM Problem F: Reducing Illegal Wildlife Trade --><img src="https://cdn.noedgeai.com/bo_d1r9iaf7aajc73bf65mg_0.jpg?x=506&#x26;y=209&#x26;w=786&#x26;h=531&#x26;r=0"><!-- Media --><p>Illegal wildlife trade negatively impacts our environment and threatens global biodiversity. It is estimated to involve up to 26.5 billion US dollars per year and is considered to be the fourth largest of all global illegal trades. <mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{\left\lbrack  1\right\rbrack  }"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mrow><mjx-mo class="mjx-n"><mjx-c class="mjx-c5B"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c5D"></mjx-c></mjx-mo></mjx-mrow></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">[</mo><mn>1</mn><mo data-mjx-texclass="CLOSE">]</mo></mrow></mrow></msup></math></mjx-assistive-mml></mjx-container> You are to develop a data-driven 5-year project designed to make a notable reduction in illegal wildlife trade. Your goal is to convince a client to carry out your project. To do this, you must select both a client and an appropriate project for that client.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>非法野生动物贸易对我们的环境造成负面影响，威胁全球生物多样性。据估计，其年交易额高达265亿美元，被认为是全球第四大非法贸易。<mjx-container class="MathJax" jax="CHTML" style="position: relative;" data-latex="{}^{\left\lbrack  1\right\rbrack  }"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-texatom texclass="ORD"></mjx-texatom><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mrow><mjx-mo class="mjx-n"><mjx-c class="mjx-c5B"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c5D"></mjx-c></mjx-mo></mjx-mrow></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">[</mo><mn>1</mn><mo data-mjx-texclass="CLOSE">]</mo></mrow></mrow></msup></math></mjx-assistive-mml></mjx-container> 你需要开发一个为期五年的数据驱动项目，旨在显著减少非法野生动物贸易。你的目标是说服客户执行你的项目。为此，你必须选择一个客户及适合该客户的项目。</p></div><p>Your work should explore the following sub-questions:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>你的工作应探讨以下子问题：</p></div><ul>
+<li>Who is your client? What can that client realistically do? (In other words, your client should have the powers, resources, and interest needed to enact the project you propose.)</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>你的客户是谁？该客户现实中能做什么？（换言之，你的客户应具备实施你所提项目所需的权力、资源和兴趣。）</li>
+</ul></div><ul>
+<li>Explain why the project you developed is suitable for this client. What research, from published literature and from your own analyses, supports the selection of your proposed project? Using a data-driven analysis, how will you convince your client that this is a project they should undertake?</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>说明你所设计的项目为何适合该客户。有哪些已发表文献和你自己的分析支持你所提项目的选择？通过数据驱动的分析，你将如何说服客户这是他们应当执行的项目？</li>
+</ul></div><ul>
+<li>What additional powers and resources will your client need to carry out the project? (Remember to use assumptions, but also ground your work in reality as much as you are able.)</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>客户执行该项目还需要哪些额外的权力和资源？（请记得使用合理假设，同时尽可能使工作基于现实。）</li>
+</ul></div><ul>
+<li>If the project is carried out what will happen? In other words, what will the measurable impact on illegal wildlife trade be? What analysis did you do to determine this?</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>如果项目得以实施，会发生什么？换言之，对非法野生动物贸易的可量化影响将是什么？你做了哪些分析来确定这一点？</li>
+</ul></div><ul>
+<li>How likely is the project to reach the expected goal? Also, based on a contextualized sensitivity analysis, are there conditions or events that may disproportionately aid or harm the project's ability to reach its goal?</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>项目达到预期目标的可能性有多大？此外，基于情境化的敏感性分析，是否存在某些条件或事件可能显著促进或阻碍项目实现目标？</li>
+</ul></div><p>While you could limit your approach to illegal wildlife trade, you may also consider illegal wildlife trade as part of a larger complex system. Specifically, you could consider how other global efforts in other domains, e.g., efforts to curtail other forms of trafficking or efforts to reduce climate change coupled with efforts to curtail illegal wildlife trade, may be part of a complex system. This may create synergistic opportunities for unexpected actors in this domain.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>虽然你可以将方法局限于非法野生动物贸易，但也可以将其视为更大复杂系统的一部分。具体来说，你可以考虑其他领域的全球努力，例如遏制其他形式的贩运或减缓气候变化的努力，结合遏制非法野生动物贸易的行动，可能构成一个复杂系统。这可能为该领域中意想不到的参与者创造协同机会。</p></div><p>If you choose to leverage a complexity framework in your solution, be sure to justify your choice by discussing the benefits and drawbacks of this modeling decision.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>如果你选择在解决方案中利用复杂性框架，务必通过讨论该建模决策的利弊来证明你的选择。</p></div><p>Additionally, your team must submit a 1-page memo with key points for your client, highlighting your 5-year project proposal and why the project is right for them as a client (e.g., access to resources, part of their mandate, aligns with their mission statement, etc.).</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>此外，你的团队必须提交一页备忘录，向客户突出你的五年项目提案及其适合该客户的理由（例如，资源获取、职责范围、与使命声明的一致性等）。</p></div><p>The judges will specifically be looking for creativity in the selection of the client and in the selection and justification of appropriate modeling processes used throughout the analysis. They will also be looking for exposition that both (1) establishes strong connections between the client and the proposed project and (2) draws clear and direct ties between the data analysis and the design of the proposed project.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>评委将特别关注客户选择的创造性，以及在整个分析过程中所用适当建模流程的选择和论证。他们还将关注阐述内容，要求（1）建立客户与拟议项目之间的紧密联系，（2）明确且直接地将数据分析与项目设计联系起来。</p></div><p>Your PDF solution of no more than 25 pages total should include:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>你的PDF解决方案总页数不超过25页，应包括：</p></div><ul>
+<li>One-page summary sheet that clearly describes your approach to the problem and your most important conclusions from your analysis in the context of the problem.</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>一页摘要，清晰描述你对问题的解决方法及在问题背景下分析得出的最重要结论。</li>
+</ul></div><ul>
+<li>Table of Contents.</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>目录。</li>
+</ul></div><ul>
+<li>Your complete solution.</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>你的完整解决方案。</li>
+</ul></div><ul>
+<li>One-page memo to your client.</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>一页致客户的备忘录。</li>
+</ul></div><ul>
+<li>Reference List.</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>参考文献列表。</li>
+</ul></div><ul>
+<li>AI Use Report (if used). Note: There is no specific required minimum page length for a complete ICM submission. You may use up to 25 total pages for all your solution work and any additional information you want to include (for example: drawings, diagrams, calculations, tables). Partial solutions are accepted. We permit the careful use of AI such as ChatGPT, although it is not necessary to create a solution to this problem. If you choose to utilize a generative AI, you must follow the COMAP AI use policy. This will result in an additional AI use report that you must add to the end of your PDF solution file and does not count toward the 25 total page limit for your solution.</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>AI使用报告（如有使用）。注意：完整的ICM提交没有具体的最低页数要求。您可以使用最多25页来完成所有解题工作及任何额外信息（例如：图纸、图表、计算、表格）。接受部分解答。我们允许谨慎使用如ChatGPT等AI工具，尽管使用AI并非解决此问题的必要条件。如果您选择使用生成式AI，必须遵守COMAP的AI使用政策。这样会产生一份额外的AI使用报告，需添加在PDF解答文件末尾，且不计入25页总页数限制。</li>
+</ul></div><h2>References</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>参考文献</h2></div><p>[1] Wildlife Conservancy Society. (2021). Why Should we Care about Wildlife Trafficking? Retrieved from <a href="https://wildlifetrade.wcs.org/Wildlife-Trade/Why-should-we-care.aspx">https://wildlifetrade.wcs.org/Wildlife-Trade/Why-should-we-care.aspx</a></p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>[1] 野生动物保护协会（Wildlife Conservancy Society）。(2021)。我们为何应关注野生动物非法贸易？检索自 <a href="https://wildlifetrade.wcs.org/Wildlife-Trade/Why-should-we-care.aspx">https://wildlifetrade.wcs.org/Wildlife-Trade/Why-should-we-care.aspx</a></p></div><h2>Glossary</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>术语表</h2></div><p>Client: The actor who will be implementing the proposed project. They may be official actors (governmental or quasi-governmental) or unofficial actors (Non-Governmental Organizations).</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>客户：将实施所提议项目的主体。可能是官方主体（政府或准政府机构）或非官方主体（非政府组织）。</p></div><p>Illegal Wildlife Trade: smuggling, poaching, and capture or collection of endangered species, protected wildlife, or the derivatives/products of these species</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>非法野生动物贸易：走私、偷猎及捕获或采集濒危物种、受保护野生动物或这些物种的衍生物/制品。</p></div><h2>Use of Large Language Models and Generative AI Tools in COMAP Contests</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>COMAP竞赛中大型语言模型和生成式AI工具的使用</h2></div><p>This policy is motivated by the rise of large language models (LLMs) and generative AI assisted technologies. The policy aims to provide greater transparency and guidance to teams, advisors, and judges. This policy applies to all aspects of student work, from research and development of models (including code creation) to the written report. Since these emerging technologies are quickly evolving, COMAP will refine this policy as appropriate.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>本政策源于大型语言模型（LLMs）和生成式AI辅助技术的兴起。政策旨在为团队、指导老师和评委提供更高透明度和指导。该政策适用于学生工作的所有方面，从模型的研究与开发（包括代码编写）到书面报告。鉴于这些新兴技术快速发展，COMAP将适时调整本政策。</p></div><p>Teams must be open and honest about all their uses of AI tools. The more transparent a team and its submission are, the more likely it is that their work can be fully trusted, appreciated, and correctly used by others. These disclosures aid in understanding the development of intellectual work and in the proper acknowledgement of contributions. Without open and clear citations and references of the role of AI tools, it is more likely that questionable passages and work could be identified as plagiarism and disqualified.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>团队必须对所有AI工具的使用保持开放和诚实。团队及其提交内容越透明，其工作越可能被完全信任、认可并被他人正确使用。这些披露有助于理解知识成果的发展及正确承认贡献。若未公开明确引用AI工具的作用，相关内容更易被视为抄袭而被取消资格。</p></div><p>Solving the problems does not require the use of AI tools, although their responsible use is permitted. COMAP recognizes the value of LLMs and generative AI as productivity tools that can help teams in preparing their submission; to generate initial ideas for a structure, for example, or when summarizing, paraphrasing, language polishing etc. There are many tasks in model development where human creativity and teamwork is essential, and where a reliance on AI tools introduces risks. Therefore, we advise caution when using these technologies for tasks such as model selection and building, assisting in the creation of code, interpreting data and results of models, and drawing scientific conclusions.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>解决问题不要求必须使用AI工具，尽管允许负责任地使用。COMAP认可大型语言模型和生成式AI作为提高生产力的工具，可帮助团队准备提交材料；例如生成结构初稿、总结、改写、语言润色等。模型开发中许多任务需要人类创造力和团队协作，依赖AI工具存在风险。因此，我们建议在模型选择与构建、辅助代码编写、数据及模型结果解释、科学结论推导等任务中谨慎使用这些技术。</p></div><p>It is important to note that LLMs and generative AI have limitations and are unable to replace human creativity and critical thinking. COMAP advises teams to be aware of these risks if they choose to use LLMs:</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>需注意大型语言模型和生成式AI存在局限，无法替代人类创造力和批判性思维。COMAP建议团队若选择使用LLMs，应意识到以下风险：</p></div><ul>
+<li>Objectivity: Previously published content containing racist, sexist, or other biases can arise in LLM-generated text, and some important viewpoints may not be represented.</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>客观性：LLM生成文本可能包含先前发布内容中的种族歧视、性别歧视或其他偏见，且某些重要观点可能未被体现。</li>
+</ul></div><ul>
+<li>Accuracy: LLMs can 'hallucinate' i.e. generate false content, especially when used outside of their domain or when dealing with complex or ambiguous topics. They can generate content that is linguistically but not scientifically plausible, they can get facts wrong, and they have been shown to generate citations that don't exist. Some LLMs are only trained on content published before a particular date and therefore present an incomplete picture.</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>准确性：LLMs可能“幻觉”生成虚假内容，尤其在其领域外或处理复杂模糊话题时。它们可能生成语言上合理但科学上不成立的内容，事实错误，甚至生成不存在的引用。一些LLM仅训练于特定日期前的内容，因此呈现的信息不完整。</li>
+</ul></div><ul>
+<li>Contextual understanding: LLMs cannot apply human understanding to the context of a piece of text, especially when dealing with idiomatic expressions, sarcasm, humor, or metaphorical language. This can lead to errors or misinterpretations in the generated content.</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>语境理解：LLMs无法像人类一样理解文本语境，尤其是习语、讽刺、幽默或隐喻语言，可能导致生成内容出现错误或误解。</li>
+</ul></div><ul>
+<li>Training data: LLMs require a large amount of high-quality training data to achieve optimal performance. In some domains or languages, however, such data may not be readily available, thus limiting the usefulness of any output.</li>
+</ul><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ul>
+<li>训练数据：LLMs需大量高质量训练数据以达到最佳性能，但某些领域或语言中此类数据可能难以获得，限制了输出的有效性。</li>
+</ul></div><h2>Guidance for teams</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>团队指导</h2></div><h2>Teams are required to:</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>团队须遵守以下要求：</h2></div><ol>
+<li>Clearly indicate the use of LLMs or other AI tools in their report, including which model was used and for what purpose. Please use inline citations and the reference section. Also append the Report on Use of AI (described below) after your 25-page solution.</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol>
+<li>在报告中明确指出使用了大型语言模型（LLMs）或其他人工智能工具，包括所用模型及其用途。请使用文内引用和参考文献部分。同时，在25页解决方案报告后附上“人工智能使用报告”（如下所述）。</li>
+</ol></div><ol start="2">
+<li>Verify the accuracy, validity, and appropriateness of the content and any citations generated by language models and correct any errors or inconsistencies.</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="2">
+<li>核实语言模型生成内容及引用的准确性、有效性和适当性，纠正任何错误或不一致之处。</li>
+</ol></div><ol start="3">
+<li>Provide citation and references, following guidance provided here. Double-check citations to ensure they are accurate and are properly referenced.</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="3">
+<li>提供引用和参考文献，遵循此处提供的指导。仔细核对引用，确保其准确且引用得当。</li>
+</ol></div><ol start="4">
+<li>Be conscious of the potential for plagiarism since LLMs may reproduce substantial text from other sources. Check the original sources to be sure you are not plagiarizing someone else's work.</li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="4">
+<li>注意潜在的抄袭风险，因为大型语言模型可能会复制大量其他来源的文本。请核查原始资料，确保未侵犯他人作品。</li>
+</ol></div><p>COMAP will take appropriate action when we identify submissions likely prepared with undisclosed use of such tools.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>当COMAP发现提交作品可能未经披露使用此类工具时，将采取适当措施。</p></div><h2>Citation and Referencing Directions</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>引用和参考文献指导</h2></div><p>Think carefully about how to document and reference whatever tools the team may choose to use. A variety of style guides are beginning to incorporate policies for the citation and referencing of AI tools. Use inline citations and list all AI tools used in the reference section of your 25-page solution.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>请认真考虑如何记录和引用团队可能使用的任何工具。多种风格指南已开始纳入人工智能工具的引用政策。请使用文内引用，并在25页解决方案的参考文献部分列出所有使用的人工智能工具。</p></div><p>Whether or not a team chooses to use AI tools, the main solution report is still limited to 25 pages. If a team chooses to utilize AI, following the end of your report, add a new section titled Report on Use of AI. This new section has no page limit and will not be counted as part of the 25-page solution.</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>无论团队是否选择使用人工智能工具，主报告仍限于25页。如使用人工智能，请在报告末尾新增“人工智能使用报告”章节。该章节无页数限制，且不计入25页内。</p></div><p>Examples (this is not exhaustive - adapt these examples to your situation):</p><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><p>示例（非详尽，需根据实际情况调整）：</p></div><h2>Report on Use of AI</h2><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><h2>人工智能使用报告</h2></div><ol>
+<li>OpenAI ChatGPT (Nov 5, 2023 version, ChatGPT-4) Query1: <insert the="" exact="" wording="" you="" input="" into="" ai="" tool=""> Output: <insert the="" complete="" output="" from="" ai="" tool=""></insert></insert></li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol>
+<li>OpenAI ChatGPT（2023年11月5日版本，ChatGPT-4）查询1：&#x3C;插入输入给AI工具的准确措辞> 输出：&#x3C;插入AI工具的完整输出></li>
+</ol></div><ol start="2">
+<li>OpenAI Ernie (Nov 5, 2023 version, Ernie 4.0) Query1: <insert the="" exact="" wording="" of="" any="" subsequent="" input="" into="" ai="" tool=""> Output: <insert the="" complete="" output="" from="" second="" query=""></insert></insert></li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="2">
+<li>OpenAI Ernie（2023年11月5日版本，Ernie 4.0）查询1：&#x3C;插入对AI工具的后续输入的准确措辞> 输出：&#x3C;插入第二次查询的完整输出></li>
+</ol></div><ol start="3">
+<li>Github CoPilot (Feb 3, 2024 version) Query1: <insert the="" exact="" wording="" you="" input="" into="" ai="" tool=""> Output: <insert the="" complete="" output="" from="" ai="" tool=""></insert></insert></li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="3">
+<li>Github CoPilot（2024年2月3日版本）查询1：&#x3C;插入输入给AI工具的准确措辞> 输出：&#x3C;插入AI工具的完整输出></li>
+</ol></div><ol start="4">
+<li>Google Bard (Feb 2, 2024 version) Query: <insert the="" exact="" wording="" of="" your="" query=""> Output: <insert the="" complete="" output="" from="" ai="" tool=""></insert></insert></li>
+</ol><div style="background-color: rgb(240, 240, 240); padding: 2px 8px; border-radius: 4px; margin: 8px 0px; visibility: visible;"><ol start="4">
+<li>Google Bard（2024年2月2日版本）查询：&#x3C;插入查询的准确措辞> 输出：&#x3C;插入AI工具的完整输出></li>
+</ol></div>
+      </body>
+    </html>
+  
