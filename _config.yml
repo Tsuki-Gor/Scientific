@@ -1,0 +1,18 @@
+# _config.yml
+defaults:
+  - scope:
+      path: "Demo/Collections_MD/v2/"
+    values:
+      render_with_liquid: false
+
+# 你这个报错来自 Jekyll 的 Liquid 模板解析：Typora 导出的 Markdown 里出现了 {{18} 这样的片段，被当成 Liquid 变量开头解析，但没有用 }} 正确关闭，于是构建直接中断。
+# 日志里已经点名了出错文件与行号（第 141 行）：
+# 路径：Demo/Collections_MD/v2/NewPicLink/2024-A_Survey_on_Large_Language_Model_based_Autonomous_Agents_2025-10-06-11_39_03_NewPicLink.md
+# 触发内容就在这段数学公式里（画像模块段落）：$\left\lbrack  {{18},{19}}\right\rbrack$。
+# 核心原因：{{ ... }} 是 Liquid 的变量插值语法，Jekyll 会在 Markdown → HTML 之前先处理 Liquid；而你本意只是想在 TeX 数学环境里写引用编号，结果被 Jekyll 抢先解析了。
+
+# 方案 A（推荐，最省事）：对该目录关闭 Liquid 渲染
+
+# 在站点根目录的 _config.yml 添加默认配置，让该目录下的 .md 仅当作 Markdown 处理，不跑 Liquid：
+
+# 这是 Jekyll 的一等配置项，GitHub Pages（jekyll 3.10）支持。生效后，仍然会把 Markdown 转成 HTML，但不再解析 {{ ... }}，因此数学公式里的双花括号不再触发 Liquid。
