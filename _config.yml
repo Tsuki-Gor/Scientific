@@ -1,9 +1,7 @@
 # _config.yml
-defaults:
-  - scope:
-      path: "Demo/Collections_MD/v2/"
-    values:
-      render_with_liquid: false
+# 从 Jekyll 构建过程中排除指定的文件和文件夹
+exclude:
+  - Demo//Collections_MD/v2/
 
 # 你这个报错来自 Jekyll 的 Liquid 模板解析：Typora 导出的 Markdown 里出现了 {{18} 这样的片段，被当成 Liquid 变量开头解析，但没有用 }} 正确关闭，于是构建直接中断。
 # 日志里已经点名了出错文件与行号（第 141 行）：
@@ -16,3 +14,23 @@ defaults:
 # 在站点根目录的 _config.yml 添加默认配置，让该目录下的 .md 仅当作 Markdown 处理，不跑 Liquid：
 
 # 这是 Jekyll 的一等配置项，GitHub Pages（jekyll 3.10）支持。生效后，仍然会把 Markdown 转成 HTML，但不再解析 {{ ... }}，因此数学公式里的双花括号不再触发 Liquid。
+
+# defaults:
+#   - scope:
+#       path: "Demo/Collections_MD/v2/"
+#     values:
+#       render_with_liquid: false
+
+# 但是这个方案A不Work，修改为现在的方案。
+
+# render_with_liquid: false 这个设置的作用是告诉 Jekyll：“在处理这个文件时，不要渲染里面的 Liquid 标签（也就是 {{...}}）”。然而，问题在于 Jekyll 在决定是否要渲染之前，会先对整个文件进行一次预扫描和解析。正是在这个预扫描阶段，它就发现了 {{18} 这种不符合 Liquid 语法的片段，并立即抛出错误，根本没有机会应用您设置的 render_with_liquid: false 规则。
+
+# 简单来说，您的配置告诉 Jekyll “不要运行代码”，但 Jekyll 在看到代码的第一眼就发现它“语法不通”，直接报错退出了。
+
+# 这样修改的原理：
+
+# exclude: 是 Jekyll 配置中一个非常直接的指令。
+
+# - Demo/ 告诉 Jekyll 在构建网站时，完全跳过 Demo 这个文件夹以及里面的所有内容。
+
+# 因为整个文件夹都被忽略了，所以 Jekyll 根本不会去扫描那个导致错误的 Markdown 文件，也就不会再出现 Liquid syntax error 的错误。
