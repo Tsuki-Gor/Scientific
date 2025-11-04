@@ -1,0 +1,1943 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'><style type='text/css'>html {overflow-x: initial !important;}</style>
+<style type='text/css'  id="style-base">:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+.mac-os-11 { --title-bar-height: 28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, "Segoe UI Emoji", "SF Pro", sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5 { white-space: pre-wrap; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p *, #write.first-line-indent svg * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; position: relative; }
+#write svg h1, #write svg h2, #write svg h3, #write svg h4, #write svg h5, #write svg h6, #write svg p { position: static; white-space: nowrap; overflow: visible; }
+foreignobject { overflow: visible; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+li p { orphans: 1; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+thead, tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+svg { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; border-color: transparent !important; padding-top: 0px !important; padding-bottom: 0px !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  #write > p:nth-child(1) { margin-top: 0px; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+  figure { overflow-x: visible; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.reversefootnote { font-family: ui-monospace, sans-serif; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background: inherit; }
+.mermaid-svg { margin: auto; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex: 2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; overflow-wrap: anywhere; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.42857rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left: 28px solid transparent; border-right: 28px solid transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right: 8px solid transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+mjx-container { break-inside: avoid; }
+.md-alert.md-alert-note { border-left-color: rgb(9, 105, 218); }
+.md-alert.md-alert-important { border-left-color: rgb(130, 80, 223); }
+.md-alert.md-alert-warning { border-left-color: rgb(154, 103, 0); }
+.md-alert.md-alert-tip { border-left-color: rgb(31, 136, 61); }
+.md-alert.md-alert-caution { border-left-color: rgb(207, 34, 46); }
+.md-alert { padding: 0px 1em; margin-bottom: 16px; color: inherit; border-left: 0.25em solid rgb(0, 0, 0); }
+.md-alert-text-note { color: rgb(9, 105, 218); }
+.md-alert-text-important { color: rgb(130, 80, 223); }
+.md-alert-text-warning { color: rgb(154, 103, 0); }
+.md-alert-text-tip { color: rgb(31, 136, 61); }
+.md-alert-text-caution { color: rgb(207, 34, 46); }
+.md-alert-text { font-size: 0.9rem; font-weight: 700; }
+.md-alert-text svg { fill: currentcolor; position: relative; top: 0.125em; margin-right: 1ch; overflow: visible; }
+.md-alert-text-container::after { content: attr(data-text); text-transform: capitalize; pointer-events: none; margin-right: 1ch; }
+
+</style>
+<style type='text/css'  id="style-theme_css">
+:root {
+  /* == 字体设置 == */
+  /* 基准字体 */
+  /* 备选：Times, "Times New Roman" */
+  --base-Latin-font: "Latin Modern Roman", "Latin Modern Roman 10", Times;
+  --base-Chinese-font: "家族宋", "宋体-简", "华文宋体", "Noto Serif CJK SC";
+  --base-font-size: 9.5pt;
+  /* 引言字体 */
+  --quote-font: "Latin Modern Roman", "Latin Modern Roman 10", Times,
+    "Times New Roman", "华文仿宋";
+  /* em单位为一个正文字符（--base-font-size）大小，
+  例如，如果您设置 --base-font-size 为 9.5pt，那么 1.05em = 1.05*9.5pt ≈ 10pt。下面的标题字体等设置也遵循该规则。
+  这样，您就可以仅通过调整基准字体大小，而动态对其他元素大小做出调整。
+  当然，您也可以直接设置以pt或px为单位的数值，将元素的大小固定下来，如 --quote-font-size: 10pt; */
+  --quote-font-size: 1.05em;
+  /* 代码字体（代码中的中文会调用 ui-font） */
+  /* "Courier New" 从 Windows 3.1 起成为 Windows 官方提供的字体 */
+  /* "Consolas" 从 Windows Vista 起成为 Windows 官方提供的字体 */
+  --code-font: "Latin Modern Mono", "Latin Modern Mono 10", "Consolas", "Courier New";
+  /* 侧边栏字体 */
+  --ui-font: "阿里巴巴普惠体 2.0", "微软雅黑";
+  /* source mode 字体 */
+  /* 默认调用 code-font 和 ui-font */
+  --sourceMode-font: "SF Mono", "阿里巴巴普惠体 2.0", "微软雅黑";
+  /* 目录字体 */
+  /* 默认调用 base-font */
+  --toc-font: "";
+  /* 默认调用 base-font-size */
+  --toc-font-size: "";
+  /* 公式字体 */
+  --math-font-size: 1em;
+  /* 表格字体 */
+  /* 默认调用 heading-font */
+  --table-title-font: "";
+  /* 默认调用 base-font */
+  --table-font: "";
+  /* 标题字体（总设置） */
+  --heading-Latin-font: var(--base-Latin-font);
+  --heading-Chinese-font: "华文黑体";
+  /* 标题字体分别设置 */
+  /* 大标题（h1）字体 */
+  --title-Chinese-font: "华文黑体";
+  --title-font-size: 1.9em;
+  /* h2字体 */
+  --h2-Chinese-font: "华文黑体";
+  --h2-font-size: 1.5em;
+  /* h3字体 */
+  --h3-Chinese-font: "华文黑体";
+  --h3-font-size: 1.25em;
+  /* h4字体 */
+  --h4-Chinese-font: "华文楷体";
+  --h4-font-size: 1.15em;
+  /* h5字体 */
+  --h5-Chinese-font: "华文仿宋";
+  --h5-font-size: 1.10em;
+  /* h6字体 */
+  --h6-Chinese-font: "华文仿宋";
+  --h6-font-size: 1.05em;
+  /* 粗体样式设置 */
+  /* 加粗风格时使用的字重；400等同于 normal，700等同于 bold，900等同于 heavy */
+  --strong-weight: 900;
+  /* 基础行距 */
+  --base-line-height: 1.618em;
+  /* == 页面设置 == */
+  /* 打印页边距 */
+  --set-margin: 1.8cm 2cm 1.2cm 2cm !important;
+  /* == 控制设置 == */
+  /* 目录中是否显示一级标题 */
+  --toc-show-title: none;
+  /* == 颜色设置 == */
+  /* 超链接颜色 */
+  --link-color-light: #2E67D3;
+  --link-color-dark: #8bb1f9;
+  /* == 二级标题强制分页 == */
+  /* 默认值为 auto */
+  /* 更改为 page 启用强制分页 */
+  --page-break-before-h2: auto;
+}
+
+body {
+  padding: 0 !important;
+  margin: 0 !important;
+  /* counter-reset: tableHead 0 imgHead 0; */
+}
+
+@media print {
+  #write {
+    padding: 0 !important;
+  }
+  h2 {
+    break-before: var(--page-break-before-h2);
+  }
+  h2:first-of-type {
+    break-before: avoid-page;
+  }
+  @page {
+    margin: 1.8cm 2cm 1.2cm 2cm !important; /* 页边距 */
+  }
+}
+#write {
+  font-family: var(--base-Latin-font), var(--base-Chinese-font), serif;
+  font-size: var(--base-font-size);
+  /* A4标准宽度 */
+  max-width: 21cm;
+  background-color: white;
+  /* column-count: 2;
+    column-gap: 25px;
+    column-width: 8cm; 
+    display: inline-block; */
+  /* 这里可以试分栏的，但确实不适合实现 */
+}
+#write .md-math-block,
+#write .md-rawblock,
+#write p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+#write p {
+  text-align: left;
+  line-height: var(--base-line-height);
+}
+#write a {
+  color: var(--link-color-light);
+}
+
+hr {
+  border-top: solid 1px #ddd;
+  margin-top: 1.8em;
+  margin-bottom: 1.8em;
+}
+
+img {
+  /* 避免图片在导出时被断开 */
+  break-inside: avoid-page;
+}
+
+strong {
+  font-weight: var(--strong-weight);
+}
+
+@media screen {
+  #write {
+    padding: var(--set-margin);
+    /* 添加一个淡蓝色的边框 */
+    /* border: 0.8px solid #AAC ; */
+    /* 页边阴影 */
+    box-shadow: 0 0 24px 12px #cccccc;
+  }
+}
+.MathJax {
+  font-size: var(--math-font-size);
+}
+
+/* typora 编写模式 */
+#typora-source {
+  font-family: var(--sourceMode-font), var(--code-font), var(--ui-font), monospace;
+  line-height: 2em;
+}
+
+/* 侧边大纲标题 */
+.sidebar-content {
+  counter-reset: outline-h1 outline-h2 outline-h3 outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h1 {
+  counter-reset: outline-h2 outline-h3 outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h2 {
+  counter-reset: outline-h3 outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h2 .outline-label:before {
+  counter-increment: outline-h2;
+  content: counter(outline-h2) " ";
+}
+.sidebar-content .outline-h3 {
+  counter-reset: outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h3 .outline-label:before {
+  counter-increment: outline-h3;
+  content: counter(outline-h2) "." counter(outline-h3) "  ";
+}
+.sidebar-content .outline-h4 {
+  counter-reset: outline-h5 outline-h6;
+}
+.sidebar-content .outline-h4 .outline-label:before {
+  counter-increment: outline-h4;
+  content: counter(outline-h2) "." counter(outline-h3) "." counter(outline-h4) "  ";
+}
+.sidebar-content .outline-h5 {
+  counter-reset: outline-h6;
+}
+.sidebar-content .outline-h5 .outline-label:before {
+  counter-increment: outline-h5;
+  content: counter(outline-h2) "." counter(outline-h3) "." counter(outline-h4) "." counter(outline-h5) "  ";
+}
+
+.sidebar-content {
+  /* 侧边栏的字体修改 */
+  font-family: var(--ui-font);
+  list-style: none;
+}
+
+/* 元数据（如 YAML front matter）的背景框 */
+pre.md-meta-block {
+  background: #cccccc;
+  padding: 1.4em;
+  font-family: var(--code-font), var(--ui-font), monospace;
+  font-size: 0.8em;
+}
+
+#write > h3.md-focus:before,
+#write > h4.md-focus:before,
+#write > h5.md-focus:before,
+#write > h6.md-focus:before,
+h3.md-focus:before,
+h4.md-focus:before,
+h5.md-focus:before,
+h6.md-focus:before {
+  color: inherit;
+  border: inherit;
+  border-radius: inherit;
+  position: inherit;
+  left: initial;
+  float: none;
+  top: initial;
+  font-size: inherit;
+  padding-left: inherit;
+  padding-right: inherit;
+  vertical-align: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+#write {
+  counter-reset: heading-h2 heading-h3 heading-h4 heading-h5 heading-h6;
+}
+#write h1,
+#write h2,
+#write h3,
+#write h4,
+#write h5,
+#write h6 {
+  font-weight: bold;
+  break-after: avoid-page !important;
+}
+#write h1 {
+  font-family: var(--heading-Latin-font), var(--title-Chinese-font), serif;
+  text-align: center;
+  column-span: all;
+  font-size: var(--title-font-size);
+}
+#write h2 {
+  font-family: var(--heading-Latin-font), var(--h2-Chinese-font), serif;
+  font-size: var(--h2-font-size);
+}
+#write h3 {
+  font-family: var(--heading-Latin-font), var(--h3-Chinese-font), serif;
+  font-size: var(--h3-font-size);
+  line-height: var(--h3-font-size);
+}
+#write h4 {
+  font-family: var(--heading-Latin-font), var(--h4-Chinese-font), serif;
+  font-size: var(--h4-font-size);
+  line-height: var(--h4-font-size);
+}
+#write h5 {
+  font-family: var(--heading-Latin-font), var(--h5-Chinese-font), serif;
+  font-size: var(--h5-font-size);
+  line-height: var(--h5-font-size);
+}
+#write h6 {
+  font-family: var(--heading-Latin-font), var(--h6-Chinese-font), serif;
+  font-size: var(--h6-font-size);
+  /* 没有写错，为了避免行距太小才这么写 */
+  line-height: var(--h5-font-size);
+}
+#write h1 {
+  counter-set: heading-h2 0 heading-h3 0 heading-h4 0 heading-h5 0 heading-h6 0;
+}
+#write h2 {
+  counter-set: heading-h3 0 heading-h4 0 heading-h5 0 heading-h6 0;
+}
+#write h3 {
+  counter-set: heading-h4 0 heading-h5 0 heading-h6 0;
+}
+#write h4 {
+  counter-set: heading-h5 0 heading-h6 0;
+}
+#write h5 {
+  counter-set: heading-h6 0;
+}
+#write h2:before, h2.md-focus.md-heading:before {
+  content: counter(heading-h2);
+  counter-increment: heading-h2;
+  margin-right: 1.2em;
+}
+
+#write h3:before, h3.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3);
+  counter-increment: heading-h3;
+  margin-right: 1.2em;
+}
+
+#write h4:before, h4.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3) "." counter(heading-h4);
+  counter-increment: heading-h4;
+  margin-right: 1.2em;
+}
+
+#write h5:before, h5.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3) "." counter(heading-h4) "." counter(heading-h5);
+  counter-increment: heading-h5;
+  margin-right: 1.2em;
+}
+
+#write h6:before, h6.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3) "." counter(heading-h4) "." counter(heading-h5) "." counter(heading-h6);
+  counter-increment: heading-h6;
+  margin-right: 1.2em;
+}
+
+/* 参考文献（脚注）块，在 Typora 中的样式 */
+.md-def-footnote {
+  display: flex;
+  position: relative;
+  font-size: 0.95em;
+  opacity: 1;
+  margin: 0;
+}
+.md-def-footnote:not(:first-child), .md-def-footnote + *:not(.md-def-footnote) {
+  margin-top: 1em;
+}
+.md-def-footnote + .md-def-footnote {
+  margin-top: 0.5em;
+}
+.md-def-footnote .md-def-name {
+  font-weight: inherit;
+  padding: 0;
+  flex-shrink: 0;
+  width: 3em;
+  margin-inline-start: -1ch;
+  white-space: nowrap;
+  text-align: left;
+}
+.md-def-footnote .md-def-name:before {
+  content: "［";
+  position: static;
+  color: inherit;
+}
+.md-def-footnote .md-def-name:after {
+  content: "］";
+  position: static;
+  color: inherit;
+}
+.md-def-footnote .md-reverse-footnote-area {
+  display: none;
+}
+.md-def-footnote:hover .md-reverse-footnote-area {
+  position: absolute;
+  right: -6px;
+  display: inline;
+}
+
+/* 参考文献（脚注）块，在导出 HTML 或 PDF 时的样式（导出后的 HTML tag 和 Typora 中的 HTML tag 不一致） */
+.footnotes-area {
+  padding-inline-start: 2.5em;
+}
+.footnotes-area hr {
+  display: none;
+}
+.footnotes-area .footnote-line {
+  color: var(--text-color);
+  font-size: 0.95em;
+  margin-top: 0.5em;
+}
+.footnotes-area .footnote-line *:not(.md-fn-count) {
+  display: inline-block;
+  vertical-align: top;
+}
+.footnotes-area .footnote-line span.md-fn-count {
+  font-weight: inherit;
+  padding: 0;
+  margin-inline-start: -3em;
+  white-space: nowrap;
+  display: inline-block;
+  width: 2.5em;
+}
+.footnotes-area .footnote-line span.md-fn-count:before {
+  content: "［";
+  position: static;
+  color: inherit;
+}
+.footnotes-area .footnote-line span.md-fn-count:after {
+  content: "］";
+  position: static;
+  color: inherit;
+}
+.footnotes-area .footnote-line a.reversefootnote {
+  display: none;
+}
+
+/* 参考文献（脚注）上标 */
+sup.md-footnote {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+}
+sup.md-footnote a {
+  color: inherit !important;
+}
+sup.md-footnote:not(.md-expand) {
+  margin-inline: -0.44em;
+}
+sup.md-footnote:not(.md-expand):before {
+  content: "［";
+}
+sup.md-footnote:not(.md-expand):after {
+  content: "］";
+}
+
+/* 无序列表 */
+#write ul {
+  list-style: disc;
+}
+#write ul ul {
+  /*list-style: circle;*/
+  /* 请勿删除“–”后的空格, 他们对缩进有一定影响, 下同 */
+  list-style: "–   ";
+}
+#write ul ul ul {
+  list-style: "◦  ";
+}
+
+/* 有序列表 */
+#write ol {
+  list-style: decimal;
+}
+#write ol ol {
+  counter-reset: liist;
+  list-style: none;
+}
+#write ol ol > li {
+  counter-increment: liist;
+  position: relative;
+}
+#write ol ol > li::before {
+  content: "(" counter(liist, lower-alpha) ")";
+  position: absolute;
+  left: -1.8em;
+}
+#write ol ol ol {
+  counter-reset: liiist;
+  list-style: none;
+  margin: 0;
+}
+#write ol ol ol > li {
+  counter-increment: liiist;
+  position: relative;
+}
+#write ol ol ol > li::before {
+  content: counter(liiist, lower-roman) ".";
+  align-self: flex-end;
+  position: absolute;
+  left: -4.5em;
+  /* -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;*/
+  /* 为了让项目编号是重新用句点对齐而不是左对齐 */
+  width: 4em;
+  text-align: right;
+}
+
+#write ol,
+#write ul {
+  padding-inline-start: 2em;
+}
+
+#write li {
+  position: relative;
+}
+#write li + li,
+#write ul + ol > li,
+#write ol + ul > li,
+#write li > ul > li,
+#write li > ol > li {
+  margin-top: -0.8em;
+}
+
+/* task列表 */
+.md-task-list-item > input {
+  margin-top: 0.42em;
+  margin-left: -1.5em;
+  width: 1em !important;
+  height: 1em !important;
+}
+
+#write table {
+  /* 三线表第一条线宽度 */
+  border-top: 1.2pt solid;
+  /* 三线表第二条线宽度 */
+  border-bottom: 1.2pt solid;
+  font-family: var(--table-font), var(--base-Latin-font), var(--base-Chinese-font), serif;
+  /* font-size: var(--base-font-size); */
+  text-align: center;
+  break-inside: avoid-page;
+  border-spacing: 6px;
+  /* 自动布局表格宽度，如果有时内容太紧建议直接加空格吧，我自己看不惯和页面等宽的大表格 */
+  width: auto;
+  /* 使表格默认居中；虽然这个代码不好，但好像没别的实现办法 */
+  margin: 0 auto;
+}
+#write table td {
+  padding: 2px;
+}
+#write table tr {
+  padding: 2px;
+}
+#write th {
+  padding: 0px 6px;
+}
+#write thead {
+  /* 表格标题（首行）样式 */
+  /* 三线表表头的线 */
+  border-bottom: 0.5pt solid;
+  font-family: var(--table-title-font), var(--heading-Latin-font), var(--heading-Chinese-font), serif !important;
+  /* font-size: var(--base-font-size); */
+  font-weight: var(--strong-weight);
+}
+
+/* 一个>的引言仅为两字符缩进，使用>>的引言为传统引言样式，具有左竖线、左缩进 */
+blockquote {
+  font-style: normal;
+  font-family: var(--quote-font), var(--base-Latin-font), var(--base-Chinese-font), -apple-system, serif;
+  font-size: var(--quote-font-size);
+  /* 文字离左边框的距离 */
+  padding-left: 2em;
+  padding-right: 2em;
+  /* 左边框离页面边的距离 */
+  margin-left: 0;
+}
+
+blockquote blockquote {
+  border-left: 4px solid hsl(0, 0%, 70%);
+  padding-left: calc(2ch - 4px);
+  padding-right: 0;
+  margin-left: -4px;
+  border-radius: 0;
+}
+
+/* 行内代码 */
+code {
+  font-family: var(--code-font), var(--ui-font), monospace;
+}
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code,
+p code,
+li code {
+  color: rgb(60, 112, 198);
+  background-color: #fefefe;
+  /* 阴影 */
+  box-shadow: 0 0 1px 1px #c8d3df;
+  font-family: var(--code-font), var(--ui-font), monospace;
+  box-sizing: border-box;
+  border-right: 0px;
+  margin: 0 2px 0 2px;
+  padding: 0 2px 0 2px;
+  /* 圆角 */
+  border-radius: 2px 2px 2px 2px;
+}
+
+/* 代码块样式 */
+.md-fences,
+.CodeMirror pre,
+.CodeMirror-wrap {
+  /* padding: 10px; */
+  font-size: 1em;
+}
+
+.CodeMirror-code pre,
+.CodeMirror-sizer {
+  font-family: var(--code-font), var(--ui-font), monospace;
+}
+
+/* 目录 */
+.md-toc {
+  font-size: var(--toc-font-size);
+}
+
+.md-toc-content {
+  margin-left: 2em;
+  /* 修复缺失上级标题时无法递增 */
+  counter-reset: toc-h2 toc-h3 toc-h4 toc-h5 toc-h6;
+  break-after: page;
+}
+
+.md-toc-inner {
+  margin-left: 0 !important;
+  color: var(--text-color) !important;
+}
+
+.md-toc-item {
+  color: var(--text-color) !important;
+}
+
+/* 目录标题内容属性 */
+.md-toc-h2,
+.md-toc-h3,
+.md-toc-h4,
+.md-toc-h5,
+.md-toc-h6 {
+  font-size: var(--toc-font-size);
+  font-family: var(--toc-font), var(--base-Latin-font), var(--base-Chinese-font), serif;
+}
+
+.md-toc-h2 {
+  font-weight: var(--strong-weight);
+}
+
+/* 目录标题前 */
+.md-toc-content .md-toc-h1 {
+  display: var(--toc-show-title);
+  counter-set: toc-h2 0 toc-h3 0 toc-h4 0 toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h2 {
+  counter-set: toc-h3 0 toc-h4 0 toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h3 {
+  counter-set: toc-h4 0 toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h4 {
+  counter-set: toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h5 {
+  counter-set: toc-h6 0;
+}
+.md-toc-content .md-toc-h2:before {
+  counter-increment: toc-h2;
+  content: counter(toc-h2);
+  margin-right: 1em;
+  font-weight: var(--strong-weight);
+}
+.md-toc-content .md-toc-h3:before {
+  counter-increment: toc-h3;
+  content: counter(toc-h2) "." counter(toc-h3);
+  margin-left: 1.5em;
+  margin-right: 0.5em;
+}
+.md-toc-content .md-toc-h4:before {
+  counter-increment: toc-h4;
+  content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4);
+  margin-left: 3.5em;
+  margin-right: 0.5em;
+}
+.md-toc-content .md-toc-h5:before {
+  counter-increment: toc-h5;
+  content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4) "." counter(toc-h5);
+  margin-left: 5.5em;
+  margin-right: 0.5em;
+}
+.md-toc-content .md-toc-h6:before {
+  counter-increment: toc-h6;
+  content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4) "." counter(toc-h5) "." counter(toc-h6);
+  margin-left: 7.5em;
+  margin-right: 0.5em;
+}
+</style>
+<style type='text/css'  id="style-mathjax">
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG2"] path[data-c], mjx-container[jax="SVG2"] use[data-c] {
+  stroke-width: 3;
+}
+
+g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+.MathJax g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+</style>
+<style type='text/css'  id="style-mathjax-ni">mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+							stroke-width: 0;
+						}</style>
+<style type='text/css'  id="style-lp">ol, ul {padding-left: 40px}</style>
+
+<title>2025-GUI_Agents_with_Foundation_Models_2025-11-04-12_00_48_NewPicLink</title>
+</head>
+<body class='typora-export os-windows typora-export-show-outline typora-export-collapse-outline'><div class='typora-export-content'>
+<div class="typora-export-sidebar"><div class="outline-content"><li class="outline-item-wrapper outline-h1 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#gui-agents-with-foundation-models-a-comprehensive-survey">GUI Agents with Foundation Models: A Comprehensive Survey</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h1"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#基于基础模型的gui代理全面综述">基于基础模型的GUI代理：全面综述</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#abstract">Abstract</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#摘要">摘要</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#1-introduction">1 Introduction</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#1-引言">1 引言</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#2-gui-agent-data-resources">2 GUI Agent Data Resources</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#2-gui代理数据资源">2 GUI代理数据资源</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#3-mllm-based-gui-agent">3 (M)LLM-based GUI Agent</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#3-基于多模态大型语言模型mllm的gui代理">3 基于（多模态）大型语言模型((M)LLM)的GUI代理</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#31-mllm-based-gui-agent-framework">3.1 (M)LLM-based GUI Agent Framework</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#31-基于多模态大型语言模型的gui代理框架">3.1 基于（多模态）大型语言模型的GUI代理框架</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#32-mllm-based-gui-agent-taxonomy">3.2 (M)LLM-based GUI Agent Taxonomy</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#32-基于多模态大语言模型mllm的gui代理分类">3.2 基于(多模态)大语言模型((M)LLM)的GUI代理分类</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#gui-agents-with-different-input-modality">GUI Agents with Different Input modality</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#具有不同输入模态的gui代理">具有不同输入模态的GUI代理</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#gui-agents-with-different-learning-mode">GUI Agents with Different Learning Mode</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#不同学习模式的gui代理">不同学习模式的GUI代理</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#4-industrial-applications-of-mllm-based-gui-agents">4 Industrial Applications of (M)LLM-Based GUI Agents</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#4-基于多模态llm的gui代理的工业应用">4 基于（多模态）LLM的GUI代理的工业应用</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#5-challenges">5 Challenges</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#5-个挑战">5 个挑战</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#6-conclusion">6 Conclusion</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#6-结论">6 结论</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#references">References</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#参考文献">参考文献</a></div><ul class="outline-children"></ul></li></ul></li></div></div><div id='write'  class=''><h1 id='gui-agents-with-foundation-models-a-comprehensive-survey'><span>GUI Agents with Foundation Models: A Comprehensive Survey</span></h1><h1 id='基于基础模型的gui代理全面综述'><span>基于基础模型的GUI代理：全面综述</span></h1><p><span>Shuai Wang </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Weiwen Liu </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Jingxuan Chen </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Yuqi Zhou </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-94-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-94-TEX-N-32"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>2</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{2}</script><span> , Weinan Gan </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Xingshan Zeng </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Yuhan Che </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Shuai Yu </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Xinlong Hao </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Kun Shao </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Bin Wang </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Chuhan Wu </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Yasheng Wang </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Ruiming Tang </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> , Jianye Hao </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script>
+<span>王帅 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，刘伟文 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，陈景轩 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，周宇琦 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-94-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-94-TEX-N-32"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>2</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{2}</script><span>，甘伟南 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，曾兴山 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，车宇涵 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，余帅 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，郝新龙 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，邵坤 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，王斌 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，吴楚涵 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，王亚胜 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，唐瑞明 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span>，郝建业 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script></p><p><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> Huawei Noah’s Ark Lab </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-94-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-94-TEX-N-32"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>2</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{2}</script><span> Renmin University of China</span>
+<mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-86-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-86-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{1}</script><span> 华为诺亚方舟实验室 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.988ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 436.6 833.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-94-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-94-TEX-N-32"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mn>2</mn></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{2}</script><span> 中国人民大学</span></p><p><span>{</span><span>wangshuai231, liuweiwen8</span><span>}</span><span>@huawei.com</span>
+<span>{</span><span>wangshuai231, liuweiwen8</span><span>}</span><span>@huawei.com</span></p><h2 id='abstract'><span>Abstract</span></h2><h2 id='摘要'><span>摘要</span></h2><p><span>Recent advances in foundation models, particularly Large Language Models (LLMs) and Multimodal Large Language Models (MLLMs), have facilitated the development of intelligent agents capable of performing complex tasks. By leveraging the ability of (M)LLMs to process and interpret Graphical User Interfaces (GUIs), these agents can autonomously execute user instructions, simulating human-like interactions such as clicking and typing. This survey consolidates recent research on (M)LLM-based GUI agents, highlighting key innovations in data resources, frameworks, and applications. We begin by reviewing representative datasets and benchmarks, followed by an overview of a generalized, unified framework that encapsulates the essential components of prior studies, supported by a detailed taxonomy. Additionally, we explore relevant commercial applications. Drawing insights from existing work, we identify key challenges and propose future research directions. We hope this survey will inspire further advancements in the field of (M)LLM-based GUI agents.</span>
+<span>近年来，基础模型，特别是大型语言模型（LLMs）和多模态大型语言模型（MLLMs）的进展，推动了能够执行复杂任务的智能代理的发展。通过利用（M）LLMs处理和理解图形用户界面（GUI）的能力，这些代理能够自主执行用户指令，模拟类似人类的交互行为，如点击和输入。本文综述了基于（M）LLM的GUI代理的最新研究，重点介绍了数据资源、框架和应用方面的关键创新。我们首先回顾了代表性的数据集和基准测试，随后概述了一个通用统一的框架，涵盖了以往研究的核心组成部分，并辅以详细的分类法。此外，我们还探讨了相关的商业应用。基于现有工作，我们识别了主要挑战并提出了未来的研究方向。希望本综述能激发基于（M）LLM的GUI代理领域的进一步发展。</span></p><h2 id='1-introduction'><span>1 Introduction</span></h2><h2 id='1-引言'><span>1 引言</span></h2><p><span>Graphical User Interfaces (GUIs) are the primary medium through which humans interact with digital devices. From mobile phones to websites, people engage with GUIs daily, and well-designed GUI agents can significantly enhance the user experience. Thus, research on GUI agents has been extensive. However, traditional rule-based and reinforcement learning-based methods struggle with tasks requiring humanlike interactions [Liu et al., 2018], limiting their applicability.</span>
+<span>图形用户界面（GUI）是人类与数字设备交互的主要媒介。从手机到网站，人们每天都在使用GUI，而设计良好的GUI代理能够显著提升用户体验。因此，GUI代理的研究一直十分广泛。然而，传统的基于规则和强化学习的方法在需要类人交互的任务中表现不佳[Liu et al., 2018]，限制了其应用范围。</span></p><p><span>Recent advancements in Large Language Models (LLMs) and Multimodal Large Language Models (MLLMs) have significantly enhanced their capabilities in language understanding and cognitive processing [Achiam et al., 2024; Touvron et al., 2023; Yang et al., 2024a]. With improved natural language comprehension and enhanced reasoning abilities, (M)LLM-based agents can now effectively interpret and utilize human language, formulate detailed plans, and execute complex tasks. These breakthroughs provide new opportunities for researchers to address challenges previously considered highly difficult, such as automating tasks within GUIs.</span>
+<span>大型语言模型（LLMs）和多模态大型语言模型（MLLMs）的最新进展显著提升了它们在语言理解和认知处理方面的能力[Achiam et al., 2024; Touvron et al., 2023; Yang et al., 2024a]。凭借改进的自然语言理解和增强的推理能力，基于（M）LLM的代理现已能够有效解读和利用人类语言，制定详细计划并执行复杂任务。这些突破为研究者提供了新的机遇，以解决此前被认为极具挑战性的任务，如GUI内的自动化操作。</span></p><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2025/11/2025_11_04__12_23_00_f4e47e.jpg"/></p><p>&nbsp;</p><p><span>Figure 1: The foundational aspects and goals of GUI agents.</span>
+<span>图1：GUI代理的基础方面与目标。</span></p><p><span>As shown in Figure 2, recent studies on GUI agents illustrate a shift from simple Transformer-based models to (M)LLM-based agentic frameworks. Their capabilities have expanded from single-modality interactions to multimodal processing, making them increasingly relevant to commercial applications. Given these advancements, we believe it is timely to systematically analyze the development trends of GUI agents, particularly from an application perspective.</span>
+<span>如图2所示，近期关于GUI代理的研究显示出从简单的基于Transformer的模型向（M）LLM驱动的代理框架的转变。其能力已从单一模态交互扩展到多模态处理，使其在商业应用中日益重要。鉴于这些进展，我们认为现在正是系统分析GUI代理发展趋势，特别是从应用角度出发的合适时机。</span></p><p><span>This paper aims to provide a structured overview of the latest and influential work in the field of GUI agents. As depicted in Figure 1, we focus on the foundational aspects and goals of GUI agents. Data resources, such as user instructions, User Interface (UI) screenshots, and behavior traces, drive the design of GUI agents [Rawles et al., 2023; Lu et al., 2024a]. Frameworks define the underlying algorithms and models that enable intelligent decision-making [Li et al., 2024b; Wang et al., 2024a; Zhu et al., 2024]. Applications represent the optimized and practical goals [Lai et al., 2024; Liu et al., 2024]. The current state of these aspects reflects the maturity of the field and highlights future research priorities.</span>
+<span>本文旨在提供GUI代理领域最新且有影响力工作的结构化综述。如图1所示，我们聚焦于GUI代理的基础方面和目标。数据资源，如用户指令、用户界面（UI）截图和行为轨迹，驱动了GUI代理的设计[Rawles et al., 2023; Lu et al., 2024a]。框架定义了支持智能决策的底层算法和模型[Li et al., 2024b; Wang et al., 2024a; Zhu et al., 2024]。应用则代表了优化后的实际目标[Lai et al., 2024; Liu et al., 2024]。这些方面的现状反映了该领域的成熟度，并突显了未来的研究重点。</span></p><p><span>To this end, we organize this survey around three key areas: Data Resources, Frameworks, and Applications. The main contributions of this paper are: 1) a comprehensive summary of existing research and a detailed review of current data sources, providing a useful guide for newcomers to the field; 2) a unified and generalized GUI agent framework with clearly defined and categorized functional components to facilitate a structured review; 3) an analysis of trends in both research and commercial applications of GUI agents.</span>
+<span>为此，我们围绕三个关键领域组织本综述：数据资源、框架和应用。本文的主要贡献包括：1）对现有研究的全面总结及当前数据源的详细回顾，为该领域新手提供有益指导；2）提出一个统一且通用的GUI代理框架，明确划分和分类功能组件，便于结构化评述；3）分析GUI代理在研究和商业应用中的发展趋势。</span></p><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2025/11/2025_11_04__12_23_00_046635.jpg"/></p><p>&nbsp;</p><p><span>Figure 2: Illustration of the growth trend in the field of GUI agents with foundation models.</span>
+<span>图2：基于基础模型的GUI代理领域增长趋势示意。</span></p><h2 id='2-gui-agent-data-resources'><span>2 GUI Agent Data Resources</span></h2><h2 id='2-gui代理数据资源'><span>2 GUI代理数据资源</span></h2><p><span>Recent research has focused on developing datasets and benchmarks to train and evaluate the capabilities of (M)LLM-based GUI agents. A variety of datasets are available for training GUI agents. These agents employ different approaches to interact with environments. Additionally, multiple methods have been proposed for evaluation.</span>
+<span>近期研究集中于开发数据集和基准测试，以训练和评估基于（多模态）大型语言模型（(M)LLM）GUI代理的能力。现有多种数据集可用于训练GUI代理，这些代理采用不同的方法与环境交互。此外，还提出了多种评估方法。</span></p><p><span>Dataset: Common datasets for training GUI agents typically contain natural language instructions that describe task goals, along with demonstration trajectories that include screenshots and action pairs. A pioneering work in this area is PIXELHELP [Li et al., 2020], which introduces a new class of problems focused on translating natural language instructions into actions on mobile user interfaces. In recent years, Android in the Wild [Rawles et al., 2023] has created a dataset featuring a variety of single-step and multi-step tasks. Aimed at advancing GUI navigation agent research, Android-In-The-Zoo [Zhang et al., 2024b] introduces a benchmark dataset with chained action reasoning annotations.</span>
+<span>数据集：用于训练GUI代理的常见数据集通常包含描述任务目标的自然语言指令，以及包括截图和动作对的演示轨迹。该领域的开创性工作是PIXELHELP [Li et al., 2020]，其引入了一类新问题，聚焦于将自然语言指令转化为移动用户界面上的操作。近年来，Android in the Wild [Rawles et al., 2023]创建了涵盖多种单步和多步任务的数据集。为推动GUI导航代理研究，Android-In-The-Zoo [Zhang et al., 2024b]引入了带有链式动作推理注释的基准数据集。</span></p><p><span>Insight-UI [Shen et al., 2024] automatically constructs a GUI pre-training dataset that simulates multiple platforms across 312,000 domains. To assess model performance both within and beyond the scope of training data, AndroidCon-trol [Li et al., 2024a] includes demonstrations of daily tasks along with both high- and low-level human-generated instructions. The scope of mobile control datasets is further extended from single-application to cross-application scenarios by GUI-Odyssey [Lu et al., 2024a].</span>
+<span>Insight-UI [Shen et al., 2024]自动构建了一个模拟跨312,000个领域多平台的GUI预训练数据集。为了评估模型在训练数据内外的表现，AndroidControl [Li et al., 2024a]包含了日常任务的演示以及高低层次的人类生成指令。GUI-Odyssey [Lu et al., 2024a]进一步将移动控制数据集的范围从单应用扩展到跨应用场景。</span></p><p><span>Most of the aforementioned datasets are primarily limited to English and image-based tasks. However, UGIF Dataset [Venkatesh et al., 2024] covers eight languages, Mobile3M [Wu et al., 2024] focuses on Chinese, and GUI-WORLD [Chen et al., 2024a] includes video annotations, expanding the dataset landscape for broader multilingual and multimodal research.</span>
+<span>上述大多数数据集主要限于英语和基于图像的任务。然而，UGIF Dataset [Venkatesh et al., 2024]涵盖八种语言，Mobile3M [Wu et al., 2024]专注于中文，GUI-WORLD [Chen et al., 2024a]包含视频注释，拓展了多语言和多模态研究的数据集格局。</span></p><p><span>Environment: GUI agents require environments for task execution, which can be broadly categorized into three types. The first category is static environments, where the environment remains fixed as it was when developed. Agents in this category operate within predefined datasets without the ability to create new states.</span>
+<span>环境：GUI代理需要环境来执行任务，环境大致可分为三类。第一类是静态环境，环境保持开发时的固定状态。此类代理在预定义数据集中操作，无法创建新状态。</span></p><p><span>In contrast, the second and third categories involve dynamic environments, where new outcomes can emerge during agent execution. The key distinction between these categories lies in whether the dynamic environment is simulated or realistic. Simulations of real-world environments require additional implementation but are often cleaner and free of distractions, such as pop-ups and advertisements. We-bArena [Zhou et al., 2023] implements a versatile website covering e-commerce, social forums, collaborative software development, and content management. Similarly, GUI Testing Arena [Zhao et al., 2024] provides a standardized environment for testing GUI agents, including defect injection.</span>
+<span>相比之下，第二类和第三类涉及动态环境，代理执行过程中可能产生新结果。这两类的关键区别在于动态环境是模拟的还是现实的。现实环境的模拟需要额外实现，但通常更简洁，无弹窗和广告等干扰。WebArena [Zhou et al., 2023]实现了涵盖电商、社交论坛、协同软件开发和内容管理的多功能网站。类似地，GUI Testing Arena [Zhao et al., 2024]提供了用于测试GUI代理的标准化环境，包括缺陷注入。</span></p><p><span>For realistic environments, agents interact directly with web or mobile platforms as human users do, better reflecting real-world conditions. SPA-Bench [Chen et al., 2024b] encompasses tasks that involve both system and third-party mobile applications, supporting single-app and cross-app scenarios in both English and Chinese.</span>
+<span>对于现实环境，代理直接像人类用户一样与网页或移动平台交互，更真实地反映现实条件。SPA-Bench [Chen et al., 2024b]涵盖系统及第三方移动应用任务，支持单应用和跨应用场景，包含英语和中文。</span></p><p><span>Evaluation: Another critical component of GUI agent datasets is the evaluation of agent performance. The most common and important metric is success rate, which measures how effectively an agent completes tasks. Additional metrics, such as efficiency, are sometimes considered as well.</span>
+<span>评估：GUI代理数据集的另一个关键组成部分是代理性能的评估。最常用且重要的指标是成功率，用以衡量代理完成任务的有效性。有时也会考虑效率等附加指标。</span></p><p><span>Evaluation methods are often closely tied to the environment type. In static environments, action matching is a widely used method that compares an agent&#39;s executed action sequence with a human demonstration (e.g., Rawles et al. [2023], Li et al. [2024a]). However, a major limitation of action matching is its inability to account for multiple successful execution paths, leading to false negatives when evaluating agent performance.</span>
+<span>评估方法通常与环境类型密切相关。在静态环境中，动作匹配是一种广泛使用的方法，通过将代理执行的动作序列与人类演示进行比较（如Rawles et al. [2023]，Li et al. [2024a]）。然而，动作匹配的主要局限在于无法考虑多条成功执行路径，导致评估代理性能时出现假阴性。</span></p><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2025/11/2025_11_04__12_23_00_3e2bd2.jpg"/></p><p>&nbsp;</p><p><span>Figure 3: A comprehensive taxonomy of (M)LLM-based GUI Agents: frameworks, modality, and learning paradigms.</span>
+<span>图3：（多模态）大型语言模型((M)LLM)基础的GUI代理的全面分类：框架、模态和学习范式。</span></p><p><span>Evaluating dynamic environments, whether simulated or realistic, presents additional challenges due to their uncertain conditions. Evaluation methods can range from fully human-dependent to semi-automated and fully automated approaches. Human evaluations require manual verification, making them non-reusable. In AppAgent [Li et al., 2024b] and MobileAgent [Ding, 2024], human evaluators assess whether each agent-executed task was successful. Semiautomated evaluations involve human-developed validation logic that can be reused for different execution trajectories of the same task. For example, WebArena [Zhou et al., 2023] and AndroidWorld [Rawles et al., 2024] incorporate handcrafted validation functions for task completion. Fully automated evaluations eliminate human involvement by relying on models for success detection. SPA-Bench [Chen et al., 2024b], for instance, employs MLLMs for evaluating task completion. Although reducing human labor is crucial for large-scale evaluation, balancing efficiency with accuracy remains a key research challenge.</span>
+<span>评估动态环境（无论是模拟还是现实）因其不确定性条件而面临额外挑战。评估方法可从完全依赖人工到半自动和全自动不等。人工评估需手动验证，无法复用。在AppAgent [Li et al., 2024b]和MobileAgent [Ding, 2024]中，人工评估者判断每个代理执行的任务是否成功。半自动评估涉及人工开发的验证逻辑，可复用于同一任务的不同执行轨迹。例如，WebArena [Zhou et al., 2023]和AndroidWorld [Rawles et al., 2024]包含手工编写的任务完成验证函数。全自动评估则通过模型检测成功，消除人工参与。SPA-Bench [Chen et al., 2024b]采用多模态大型语言模型(MLLM)评估任务完成情况。尽管减少人工劳动对大规模评估至关重要，但如何在效率与准确性之间取得平衡仍是关键研究挑战。</span></p><h2 id='3-mllm-based-gui-agent'><span>3 (M)LLM-based GUI Agent</span></h2><h2 id='3-基于多模态大型语言模型mllm的gui代理'><span>3 基于（多模态）大型语言模型((M)LLM)的GUI代理</span></h2><p><span>With the human-like capabilities of (M)LLMs, GUI agents aim to handle various tasks to meet users&#39; needs. Organizing the frameworks of GUI agents and designing methods to optimize their performance is crucial to unlocking the full potential of (M)LLMs. As shown in Figure 3, we summarize a generalized Framework and discuss its components in relation to existing works in Section 3.1. Building on this foundation, we then review recent influential Methods for constructing and optimizing GUI agents, categorizing them with an exhaustive taxonomy in Section 3.2.</span>
+<span>凭借类人能力的（多模态）大型语言模型（(M)LLMs），图形用户界面（GUI）代理旨在处理各种任务以满足用户需求。组织GUI代理的框架并设计优化其性能的方法，对于充分发挥（M）LLMs的潜力至关重要。如图3所示，我们总结了一个通用框架，并在第3.1节中结合现有工作讨论其组成部分。在此基础上，我们在第3.2节回顾了构建和优化GUI代理的最新重要方法，并通过详尽的分类法对其进行归类。</span></p><h3 id='31-mllm-based-gui-agent-framework'><span>3.1 (M)LLM-based GUI Agent Framework</span></h3><h3 id='31-基于多模态大型语言模型的gui代理框架'><span>3.1 基于（多模态）大型语言模型的GUI代理框架</span></h3><p><span>The goal of GUI agents is to automatically control a device to complete tasks defined by the user. Typically, GUI agents take a user&#39;s query and the device&#39;s UI status as inputs and generate a series of human-like actions to achieve the tasks.</span>
+<span>GUI代理的目标是自动控制设备以完成用户定义的任务。通常，GUI代理以用户查询和设备的UI状态作为输入，生成一系列类人的操作以实现任务。</span></p><p><span>As shown in Figure 4, we present a generalized (M)LLM-based GUI agent framework, consisting of five components: GUI Perceiver, Task Planner, Decision Maker, Memory Retriever, and Executor. Many variations of this framework exist. For instance, Wang et al. [2024a] proposes a multi-agent GUI control framework comprising a planning agent, a decision agent, and a reflection agent to tackle navigation challenges in mobile device operations. This approach shares functional similarities with our proposed framework. A follow-up study by Wang et al. [2025] further disentangles high-level planning from low-level action decisions by employing dedicated agents and introduces memory-based self-evolution to enhance performance.</span>
+<span>如图4所示，我们提出了一个通用的基于（多模态）大型语言模型的GUI代理框架，包含五个组成部分：GUI感知器、任务规划器、决策者、记忆检索器和执行器。该框架存在多种变体。例如，Wang等人[2024a]提出了一个多代理GUI控制框架，包括规划代理、决策代理和反思代理，以解决移动设备操作中的导航难题。该方法在功能上与我们提出的框架相似。Wang等人[2025]的后续研究通过专用代理进一步区分了高层规划与低层动作决策，并引入基于记忆的自我进化机制以提升性能。</span></p><p><span>GUI Perceiver: To effectively complete a device task, a GUI agent should accurately interpret user input and detect changes in the device&#39;s UI. Although language models excel in understanding user intent [Touvron et al., 2023; Achiam et al., 2024], navigating device UIs requires a reliable visual perception model to understand GUIs.</span>
+<span>GUI感知器：为了有效完成设备任务，GUI代理应准确解读用户输入并检测设备UI的变化。尽管语言模型在理解用户意图方面表现出色[Touvron等，2023；Achiam等，2024]，但导航设备UI需要可靠的视觉感知模型来理解图形用户界面。</span></p><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2025/11/2025_11_04__12_23_00_ea1e92.jpg"/></p><p>&nbsp;</p><p><span>Figure 4: (M)LLM-based GUI agents: the generalized framework and key technologies.</span>
+<span>图4：（多模态）大型语言模型驱动的GUI代理：通用框架及关键技术。</span></p><p><span>A GUI Perceiver appears explicitly or implicitly in GUI agent frameworks. For agents based on single-modal LLMs [Wen et al., 2023a; Wen et al., 2023b; Li et al., 2020], a GUI Perceiver is usually an explicit module of the frameworks. However, for agents with multi-modal LLMs [Hong et al., 2024; Zhang et al., 2023; Wang et al., 2024b], UI perception is seen as a capability of the model itself.</span>
+<span>GUI感知器在GUI代理框架中显式或隐式存在。对于基于单模态大型语言模型的代理[Wen等，2023a；Wen等，2023b；Li等，2020]，GUI感知器通常是框架中的显式模块。然而，对于具备多模态大型语言模型的代理[Hong等，2024；Zhang等，2023；Wang等，2024b]，UI感知被视为模型自身的能力。</span></p><p><span>UI perception is also an important problem in GUI agent research, some work [You et al., 2024; Zhang et al., 2021; Lu et al., 2024b] focuses on understanding and processing UIs, rather than building the agent. For example, Pix2struct [Lee et al., 2023a] employs a ViT-based image-encoder-text-decoder architecture, which pre-trains on Screenshot-HTML data pairs and fine-tunes for specific tasks. This method has shown strong performance in web-based visual comprehension tasks. Screen2words [Wang et al., 2021] is a novel approach that encapsulates a UI screen into a coherent language representation, which is based on a transformer encoder-decoder architecture to process UIs and generate the representation. To address the defects of purely vision-based screen parsing methods, Ge et al. [2024] introduces Iris, a visual agent for GUI understanding, addressing challenges related to architectural limitations for heterogeneous GUI information and annotation bias in GUI training via two innovations: An information-sensitive architecture to prioritize high-density UI regions via edge detection, and a dual-learning strategy that refines visual/functional knowledge iteratively using unlabeled data, reducing annotation dependence.</span>
+<span>UI感知也是GUI代理研究中的重要问题，一些工作[You等，2024；Zhang等，2021；Lu等，2024b]专注于理解和处理UI，而非构建代理。例如，Pix2struct[Lee等，2023a]采用基于ViT的图像编码器-文本解码器架构，在截图-HTML数据对上进行预训练，并针对特定任务进行微调。该方法在基于网页的视觉理解任务中表现优异。Screen2words[Wang等，2021]是一种新颖方法，将UI屏幕封装为连贯的语言表示，基于Transformer编码器-解码器架构处理UI并生成表示。为解决纯视觉屏幕解析方法的缺陷，Ge等人[2024]提出了Iris，一种用于GUI理解的视觉代理，通过两项创新应对异构GUI信息的架构限制和GUI训练中的标注偏差：一种信息敏感架构通过边缘检测优先处理高密度UI区域；一种双重学习策略利用无标注数据迭代优化视觉与功能知识，减少对标注的依赖。</span></p><p><span>Task Planner: The GUI agent should effectively decompose complex tasks, often employing a Chain-of-Thought (CoT) approach. Due to the complexity of tasks, recent studies [Zhang et al., 2024a; Wang et al., 2024a] introduce an additional module to support more detailed planning.</span>
+<span>任务规划器：GUI代理应有效分解复杂任务，通常采用链式思维（Chain-of-Thought, CoT）方法。鉴于任务复杂性，近期研究[Zhang等，2024a；Wang等，2024a]引入额外模块以支持更细致的规划。</span></p><p><span>Throughout the GUI agent&#39;s process, plans may adapt dynamically based on decision feedback, typically achieved through a ReAct-style. For instance, Zhang et al. [2023] uses on-screen observations to enhance the CoT for improved decision-making, while Wang et al. [2024a] develops a reflection agent that provides feedback to refine plans.</span>
+<span>在GUI代理的执行过程中，计划可能基于决策反馈动态调整，通常通过ReAct风格实现。例如，Zhang等人[2023]利用屏幕观察增强CoT以改进决策，而Wang等人[2024a]开发了反思代理，提供反馈以优化计划。</span></p><p><span>Decision Maker: A Decision Maker provides the next operation(s) to control a device. Most studies [Lu et al., 2024a; Zhang et al., 2024a; Wen et al., 2024] define a set of UI-related actions—such as click, text, and scroll—as a basic action space. In a more complicated case, Ding [2024] encapsulates a sequence of actions to create Standard Operating Procedures(SOPs) to guide further operations.</span>
+<span>决策者：决策者负责提供下一步操作以控制设备。大多数研究[Lu等，2024a；Zhang等，2024a；Wen等，2024]定义了一组与UI相关的基本动作，如点击、输入文本和滚动，作为基本动作空间。在更复杂的情况下，Ding[2024]将一系列动作封装为标准操作流程（Standard Operating Procedures, SOPs），以指导后续操作。</span></p><p><span>As the power of GUI agents improves, the granularity of operations becomes more refined. Recent work has progressed from element-level operations [Zhang et al., 2023; Wang et al., 2024b] to coordinate-level controls [Wang et al., 2024a; Hong et al., 2024].</span>
+<span>随着GUI代理能力的提升，操作的粒度变得更加细化。近期的研究已从元素级操作[Zhang et al., 2023; Wang et al., 2024b]发展到坐标级控制[Wang et al., 2024a; Hong et al., 2024]。</span></p><p><span>Executor: An Executor maps outputs to the relevant environments. While most studies use Android Debug Bridge (ADB) to control real devices [Li et al., 2024b; Wang et al., 2024a], Rawles et al. [2024] develops a simulator to access additional UI-related information.</span>
+<span>执行器（Executor）：执行器将输出映射到相关环境。尽管大多数研究使用Android调试桥（Android Debug Bridge, ADB）来控制真实设备[Li et al., 2024b; Wang et al., 2024a]，Rawles et al. [2024]开发了一个模拟器以访问更多与UI相关的信息。</span></p><p><span>Memory Retriever: A Memory Retriever is designed as an additional source of information to help agents perform tasks more effectively [Wang et al., 2024c].</span>
+<span>记忆检索器（Memory Retriever）：记忆检索器被设计为额外的信息来源，帮助代理更有效地执行任务[Wang et al., 2024c]。</span></p><p><span>GUI agents&#39; memory is typically divided into internal and external categories. Internal memory [Lu et al., 2024a] consists of prior actions, screenshots, and system states during execution, while external memory [Zhang et al., 2023; Ding, 2024] includes knowledge and rules related to the UI or task, providing additional inputs for the agent.</span>
+<span>GUI代理的记忆通常分为内部和外部两类。内部记忆[Lu et al., 2024a]包括先前的操作、截图和执行过程中的系统状态，而外部记忆[Zhang et al., 2023; Ding, 2024]则包含与UI或任务相关的知识和规则，为代理提供额外输入。</span></p><h3 id='32-mllm-based-gui-agent-taxonomy'><span>3.2 (M)LLM-based GUI Agent Taxonomy</span></h3><h3 id='32-基于多模态大语言模型mllm的gui代理分类'><span>3.2 基于(多模态)大语言模型((M)LLM)的GUI代理分类</span></h3><p><span>Consequently, this paper classifies existing work with the difference of input modality and learning mode in Figure 3.</span>
+<span>因此，本文根据输入模态和学习模式的差异，在图3中对现有工作进行了分类。</span></p><h2 id='gui-agents-with-different-input-modality'><span>GUI Agents with Different Input modality</span></h2><h2 id='具有不同输入模态的gui代理'><span>具有不同输入模态的GUI代理</span></h2><p><span>LLM-based GUI Agents: With the limited multimodal capability, earlier GUI agents [Lee et al., 2023b; Li et al., 2020; Ma et al., 2023; Lai et al., 2024; Putta et al., 2024; Nakano et al., 2021; Nakano et al., 2021] often require a GUI perceiver to convert GUI screens into text-based inputs.</span>
+<span>基于大语言模型（LLM）的GUI代理：由于多模态能力有限，早期的GUI代理[Lee et al., 2023b; Li et al., 2020; Ma et al., 2023; Lai et al., 2024; Putta et al., 2024; Nakano et al., 2021]通常需要GUI感知器将GUI界面转换为基于文本的输入。</span></p><p><span>So, parsing and grounding the GUI screens is the first step. For instance, Li et al. [2020] transforms the screen into a series of object descriptions and applies a transformer-based action mapping. The problem definitions and datasets have spurred further research. You et al. [2024] proposes a series of referring and grounding tasks, which provide valuable insights into the pre-training of GUIs. Lu et al. [2024b] proposes a screen parsing framework incorporating the local semantics of functionality with interactable region detection for better UI understanding and element grounding.</span>
+<span>因此，解析和定位GUI界面是第一步。例如，Li et al. [2020]将界面转换为一系列对象描述，并应用基于Transformer的动作映射。问题定义和数据集推动了进一步研究。You et al. [2024]提出了一系列指代和定位任务，为GUI的预训练提供了宝贵见解。Lu et al. [2024b]提出了一个屏幕解析框架，结合功能的局部语义和可交互区域检测，以实现更好的UI理解和元素定位。</span></p><p><span>Afterward, LLMs are used as the core of the agents. Wen et al. [2024] further converts GUI screenshots into a simplified HTML representation for compatibility with the LLMs. By combining GUI representation with app-specific knowledge, they build Auto-Droid, a GUI agent based on online GPT and on-device Vicuna. In the field of web automation, LASER [Ma et al., 2023] navigates web environments purely through text, treating web navigation as state-space exploration to enable flexible state transitions and error recovery. Similarly, AutoWebGLM [Lai et al., 2024] processes HTML text data without visual inputs, refining webpage structures to preserve key information for ChatGLM3-6B. Agent Q [Putta et al., 2024] further extends this paradigm by relying solely on HTML DOM text for reasoning and decision-making, emphasizing language models for planning and action execution. WebGPT [Nakano et al., 2021], a fine-tuned GPT-3 model, uses text-based web browsing (processing HTML content) to collect information via commands like searching and clicking. It generates answers supported by references and is optimized using human feedback and rejection sampling.</span>
+<span>随后，LLM被用作代理的核心。Wen et al. [2024]进一步将GUI截图转换为简化的HTML表示，以兼容LLM。通过结合GUI表示与应用特定知识，他们构建了基于在线GPT和设备端Vicuna的GUI代理Auto-Droid。在网页自动化领域，LASER[Ma et al., 2023]纯文本导航网页环境，将网页导航视为状态空间探索，实现灵活的状态转换和错误恢复。类似地，AutoWebGLM[Lai et al., 2024]处理HTML文本数据，无需视觉输入，优化网页结构以保留关键信息供ChatGLM3-6B使用。Agent Q[Putta et al., 2024]进一步扩展了这一范式，仅依赖HTML DOM文本进行推理和决策，强调语言模型在规划和执行动作中的作用。WebGPT[Nakano et al., 2021]是一个微调的GPT-3模型，使用基于文本的网页浏览（处理HTML内容）通过搜索和点击等命令收集信息，生成带有参考支持的答案，并通过人类反馈和拒绝采样进行优化。</span></p><p><span>MLLM-based GUI Agents: Recent studies [Wang et al., 2024a; Bai et al., 2021; Zhang et al., 2023; Kim et al., 2023] utilize the multimodal capabilities of advanced (M)LLMs to improve GUI comprehension and task execution.</span>
+<span>基于多模态大语言模型（MLLM）的GUI代理：近期研究[Wang et al., 2024a; Bai et al., 2021; Zhang et al., 2023; Kim et al., 2023]利用先进(M)LLM的多模态能力提升GUI理解和任务执行效果。</span></p><p><span>Leveraging the visual understanding capabilities of MLLMs, recent studies [Wang et al., 2024a; Li and Li, 2023; Bai et al., 2021; Zhu et al., 2024; Qin et al., 2025] explore end-to-end frameworks for GUI device control. For example, Spotlight [Li and Li, 2023] proposes a Vision-Language model framework, pre-trained on Web/mobile data and fine-tuned for UI tasks. This model greatly improves the ability to understand UIs. By combining screenshots with a user focus as input, Spotlight outperforms previous methods on multiple UI understanding tasks, showing verified gains in downstream tasks. Likewise, VUT [Li et al., 2021] is proposed for GUI understanding and multi-modal UI input modeling, using two Transformers: one for encoding and fusing image, structural, and language inputs, and the other for linking three task heads to complete five distinct UI modeling tasks and learn downstream multiple tasks end-to-end. Experiments show that VUT&#39;s multi-task learning framework can achieve state-of-the-art (SOTA) performance on UI modeling tasks. UIbert [Bai et al., 2021] focuses on heterogeneous GUI features and considers that the multi-modal information in the GUI is self-aligned. UIbert is a transformer-based joint image-text model, which is pre-trained in large-scale unlabeled GUI data to learn the feature representation of UI elements. Zhu et al. [2024] presents a two-level agent structure for executing complex and dynamic GUI tasks. Moba&#39;s Global Agent handles high-level planning, while the Local Agent selects actions for sub-tasks, streamlining the decision-making process with improved efficiency. UI-TARS [Qin et al., 2025] navigates interfaces through screenshots, enabling human-like interactions via keyboard and mouse. Leveraging a large-scale GUI dataset, it achieves context-aware UI understanding and precise captioning.</span>
+<span>利用多模态大语言模型（MLLMs）的视觉理解能力，近期研究[Wang et al., 2024a; Li and Li, 2023; Bai et al., 2021; Zhu et al., 2024; Qin et al., 2025]探索了用于图形用户界面（GUI）设备控制的端到端框架。例如，Spotlight [Li and Li, 2023]提出了一个视觉-语言模型框架，在网络/移动数据上预训练并针对UI任务进行微调。该模型大幅提升了对UI的理解能力。通过结合带有用户关注点的截图作为输入，Spotlight在多项UI理解任务中优于以往方法，并在下游任务中验证了性能提升。同样，VUT [Li et al., 2021]被提出用于GUI理解和多模态UI输入建模，采用两个Transformer：一个用于编码和融合图像、结构和语言输入，另一个用于连接三个任务头以完成五个不同的UI建模任务，并端到端学习多个下游任务。实验表明，VUT的多任务学习框架在UI建模任务上可实现最先进（SOTA）性能。UIbert [Bai et al., 2021]聚焦于异构GUI特征，认为GUI中的多模态信息是自对齐的。UIbert是基于Transformer的图文联合模型，在大规模无标签GUI数据上预训练，以学习UI元素的特征表示。Zhu et al. [2024]提出了一个两级代理结构，用于执行复杂且动态的GUI任务。Moba的全局代理负责高层规划，而本地代理选择子任务的动作，简化决策过程并提升效率。UI-TARS [Qin et al., 2025]通过截图导航界面，实现类似人类的键盘和鼠标交互。利用大规模GUI数据集，它实现了上下文感知的UI理解和精准的描述生成。</span></p><p><span>To enhance performance, some studies [Zhang et al., 2023; Rawles et al., 2024] utilize additional invisible meta-data. For instance, AndroidWorld [Rawles et al., 2024] establishes a fully functional Android environment with real-world tasks, serving as a benchmark for evaluating GUI agents. They propose M3A, a zero-shot prompting agent that uses Set-of-Marks as input. Experiments with M3A variants assess how different input modalities—text, screenshots, and accessibility trees-affect GUI agent performance. Yang et al. [2024b] proposes a framework incorporating dynamic action history with both textual and interleaved text-image formats, which allows it to ground elements more effectively for dynamic, multi-step scenarios.</span>
+<span>为提升性能，一些研究[Zhang et al., 2023; Rawles et al., 2024]利用了额外的隐形元数据。例如，AndroidWorld [Rawles et al., 2024]构建了一个功能完备的Android环境，包含真实任务，作为评估GUI代理的基准。他们提出了M3A，一种零样本提示代理，使用标记集（Set-of-Marks）作为输入。通过对M3A不同变体的实验，评估了文本、截图和辅助功能树等不同输入模态对GUI代理性能的影响。Yang et al. [2024b]提出了一个框架，结合动态动作历史，采用文本和交错文本-图像格式，使其能更有效地定位元素，适用于动态多步骤场景。</span></p><h2 id='gui-agents-with-different-learning-mode'><span>GUI Agents with Different Learning Mode</span></h2><h2 id='不同学习模式的gui代理'><span>不同学习模式的GUI代理</span></h2><p><span>Prompting-based GUI Agents: Prompting is an effective approach to building agents with minimal extra computational overhead. Given the diversity of GUIs and tasks, numerous studies [Zhang et al., 2023; Li et al., 2024b; Wang et al., 2024a; Wen et al., 2023b; Xie et al., 2024; Zhang et al., 2024a; He et al., 2024a] use prompting to create GUI agents, adopting CoT or ReAct styles.</span>
+<span>基于提示的GUI代理：提示是一种构建代理的有效方法，几乎不增加额外计算开销。鉴于GUI和任务的多样性，众多研究[Zhang et al., 2023; Li et al., 2024b; Wang et al., 2024a; Wen et al., 2023b; Xie et al., 2024; Zhang et al., 2024a; He et al., 2024a]采用提示技术创建GUI代理，使用链式思维（CoT）或反应式（ReAct）风格。</span></p><p><span>Recent studies use prompting to build and simulate the functions of GUI agent components. For example, Yan et al. [2023] introduces MM-Navigator, which utilizes GPT-4V for zero-shot GUI understanding and navigation. For the first time, this work demonstrates the significant potential of LLMs, particularly GPT-4V, for zero-shot GUI tasks. Manual evaluations show that MM-Navigator achieves impressive performance in generating reasonable action descriptions and single-step instructions for iOS tasks. Additionally, Wen et al. [2023b] presents DroidBot-GPT, which summarizes the app&#39;s status, past actions, and tasks into a prompt, using Chat-GPT to choose the next action. Beyond mobile applications, prompting-based approaches have also been widely adopted in web-based GUI agents. Zheng et al. [2024] proposes See-Act, a GPT-4V-based generalist web agent. With screenshots as input, SeeAct generates action descriptions and converts them into executable actions with designed action grounding techniques. OpenAgents [Xie et al., 2024] leverages prompts to guide browser extensions in executing tasks such as web navigation and form filling, operating purely on the reasoning capabilities of LLMs without additional training. Similarly, WebVoyager [He et al., 2024a] integrates visual and textual information from screenshots and web pages, using prompts to interpret UI elements and execute interactions like clicking and typing. UFO [Zhang et al., 2024a] dynamically generates task plans and executes actions through prompting, allowing it to generalize across diverse web tasks without requiring task-specific adaptations.</span>
+<span>近期研究利用提示构建和模拟GUI代理组件的功能。例如，Yan et al. [2023]提出了MM-Navigator，利用GPT-4V实现零样本GUI理解和导航。该工作首次展示了大型语言模型（LLMs），尤其是GPT-4V，在零样本GUI任务中的巨大潜力。人工评估显示，MM-Navigator在生成合理的动作描述和iOS任务的单步指令方面表现出色。此外，Wen et al. [2023b]提出了DroidBot-GPT，将应用状态、历史动作和任务总结为提示，利用Chat-GPT选择下一步动作。除了移动应用，基于提示的方法也被广泛应用于基于网页的GUI代理。Zheng et al. [2024]提出了See-Act，一种基于GPT-4V的通用网页代理。以截图为输入，See-Act生成动作描述，并通过设计的动作定位技术将其转化为可执行动作。OpenAgents [Xie et al., 2024]利用提示引导浏览器扩展执行网页导航和表单填写等任务，完全依赖LLMs的推理能力，无需额外训练。类似地，WebVoyager [He et al., 2024a]整合截图和网页的视觉及文本信息，利用提示解释UI元素并执行点击、输入等交互。UFO [Zhang et al., 2024a]通过提示动态生成任务计划并执行动作，使其能在多样化网页任务中泛化，无需针对特定任务调整。</span></p><p><span>Table 1: Overview of (M)LLM-Based GUI Agents.</span>
+<span>表1：（多模态）大语言模型（MLLM）基础的GUI代理概览。</span></p><table><tr><td>Model Name</td><td>Category</td><td>GUI Perceiver</td><td>Learning Method</td><td>Base Model</td><td>Scenarios</td></tr><tr><td colspan="6">Prompting-based</td></tr><tr><td>PaLM [Wang et al., 2023]</td><td>Single Step</td><td>HTML</td><td>Few-shot prompting</td><td>PaLM</td><td>Mobile</td></tr><tr><td>MM-Navigator [Yan et al., 2023]</td><td>Single Step</td><td>Screenshot</td><td>Zero-shot prompting</td><td>GPT-4V</td><td>Mobile</td></tr><tr><td>MemoDroid [Lee et al., 2023b]</td><td>End-to-End</td><td>HTML</td><td>Few-shot prompting</td><td>ChatGPT/GPT-4V</td><td>Mobile/Desktop</td></tr><tr><td>AutoTask [Pan et al., 2023]</td><td>End-to-End</td><td>Screenshot/API</td><td>Zero-shot prompting</td><td>GPT-4V</td><td>Mobile</td></tr><tr><td>AppAgent [Zhang et al., 2023]</td><td>End-to-End</td><td>Screenshot</td><td>Exploration-based/In-context learning</td><td>GPT4V</td><td>Mobile</td></tr><tr><td>DroidBot-GPT [Wen et al., 2023b]</td><td>End-to-End</td><td>Screenshot</td><td>Zero-shot prompting</td><td>ChatGPT</td><td>Mobile</td></tr><tr><td>Mobile-Agent-V2 [Wang et al., 2024a]</td><td>End-to-End</td><td>Screenshot</td><td>Zero-shot prompting</td><td>GPT4V</td><td>Mobile</td></tr><tr><td>SeeAct [Zheng et al., 2024]</td><td>End-to-End</td><td>Screenshot/HTML</td><td>Few-shot prompting</td><td>GPT-4V</td><td>Web</td></tr><tr><td>Mobile-Agent-E [Wang et al., 2025]</td><td>End-to-End</td><td>Screenshot</td><td>Zero-shot prompting</td><td>GPT-4o/Claude-3.5-Sonnet/Gemini-1.5-pro</td><td>Mobile</td></tr><tr><td colspan="6">Learning-based</td></tr><tr><td>Spotlight [Li and Li, 2023]</td><td>UI modeling</td><td>Screenshot</td><td>Pretrain/SFT</td><td>ViT</td><td>Mobile/Web</td></tr><tr><td>Pix2Struct [Lee et al., 2023a]</td><td>UI modeling</td><td>Screenshot</td><td>Pretrain/SFT</td><td>ViT</td><td>Web</td></tr><tr><td>VUT [Li et al., 2021]</td><td>UI modeling</td><td>Screenshot</td><td>SFT</td><td>Transformer</td><td>Mobile/Web</td></tr><tr><td>Screen Recognition [Zhang et al., 2021]</td><td>UI modeling</td><td>Screenshot</td><td>SFT</td><td>Faster R-CNN</td><td>Mobile</td></tr><tr><td>Screen2Words [Wang et al., 2021]</td><td>UI modeling</td><td>Screenshot</td><td>SFT</td><td>Transformer</td><td>Mobile</td></tr><tr><td>Aria-UI [Yang et al., 2024b]</td><td>UI modeling</td><td>Screenshot</td><td>Pretrain/SFT</td><td>Aria</td><td>Mobile/Web/Desktop</td></tr><tr><td>Ferret-UI [You et al., 2024]</td><td>UI modeling</td><td>Screenshot</td><td>Pretrain/SFT</td><td>Ferret</td><td>Mobile</td></tr><tr><td>AutoDroiá Twen et al., 2024]</td><td>End-to-End</td><td>HTML</td><td>Exploration-based/SFT</td><td>Vicuna-7B</td><td>Mobile</td></tr><tr><td>Seq2Act [Li et al., 2020]</td><td>End-to-End</td><td>Texts</td><td>Supervised learning</td><td>Transformer</td><td>Mobile</td></tr><tr><td>Meta-GUI [Sun et al., 2022]</td><td>End-to-End</td><td>Screenshot/XML</td><td>Supervised learning</td><td>Transformer</td><td>Mobile</td></tr><tr><td>Agent Q [Putta et al., 2024]</td><td>End-to-End</td><td>Screenshot/DOM</td><td>RL/BC Training</td><td>Transformer</td><td>Web</td></tr><tr><td>WebGUM [Furuta et al., 2024]</td><td>End-to-End</td><td>Screenshot/HTML</td><td>SFT</td><td>Flan-T5</td><td>Web</td></tr><tr><td>CogAgent [Hong et al., 2024]</td><td>End-to-End</td><td>Screenshot</td><td>SFT</td><td>CogVLM</td><td>Mobile/Desktop</td></tr><tr><td>MobileVLM [Wu et al., 2024]</td><td>End-to-End</td><td>XML/Screenshot</td><td>Pretrain/SFT</td><td>Owen-VL-Chat</td><td>Mobile</td></tr><tr><td>WebGPT [Nakano et al., 2021]</td><td>End-to-End</td><td>Texts</td><td>SFT</td><td>GPT-3</td><td>Web</td></tr><tr><td>AutoGLM [Liu et al., 2024]</td><td>End-to-End</td><td>Screenshot/HTML</td><td>Pretrain/SFT/RL</td><td>ChatGLM</td><td>Mobile/Web</td></tr><tr><td>OdysseyAgent [Lu et al., 2024a]</td><td>End-to-End</td><td>Screenshot</td><td>SFT</td><td>Qwen-VL</td><td>Mobile</td></tr></table>
+<table><tbody><tr><td>模型名称</td><td>类别</td><td>GUI感知器</td><td>学习方法</td><td>基础模型</td><td>应用场景</td></tr><tr><td colspan="6">基于提示</td></tr><tr><td>PaLM [Wang et al., 2023]</td><td>单步</td><td>HTML</td><td>少量示例提示</td><td>PaLM</td><td>移动端</td></tr><tr><td>MM-Navigator [Yan et al., 2023]</td><td>单步</td><td>截图</td><td>零样本提示</td><td>GPT-4V</td><td>移动端</td></tr><tr><td>MemoDroid [Lee et al., 2023b]</td><td>端到端</td><td>HTML</td><td>少量示例提示</td><td>ChatGPT/GPT-4V</td><td>移动端/桌面端</td></tr><tr><td>AutoTask [Pan et al., 2023]</td><td>端到端</td><td>截图/API</td><td>零样本提示</td><td>GPT-4V</td><td>移动端</td></tr><tr><td>AppAgent [Zhang et al., 2023]</td><td>端到端</td><td>截图</td><td>基于探索/上下文学习</td><td>GPT4V</td><td>移动端</td></tr><tr><td>DroidBot-GPT [Wen et al., 2023b]</td><td>端到端</td><td>截图</td><td>零样本提示</td><td>ChatGPT</td><td>移动端</td></tr><tr><td>Mobile-Agent-V2 [Wang et al., 2024a]</td><td>端到端</td><td>截图</td><td>零样本提示</td><td>GPT4V</td><td>移动端</td></tr><tr><td>SeeAct [Zheng et al., 2024]</td><td>端到端</td><td>截图/HTML</td><td>少量示例提示</td><td>GPT-4V</td><td>网页</td></tr><tr><td>Mobile-Agent-E [Wang et al., 2025]</td><td>端到端</td><td>截图</td><td>零样本提示</td><td>GPT-4o/Claude-3.5-Sonnet/Gemini-1.5-pro</td><td>移动端</td></tr><tr><td colspan="6">基于学习</td></tr><tr><td>Spotlight [Li and Li, 2023]</td><td>界面建模</td><td>截图</td><td>预训练/微调(SFT)</td><td>ViT</td><td>移动端/网页</td></tr><tr><td>Pix2Struct [Lee et al., 2023a]</td><td>界面建模</td><td>截图</td><td>预训练/微调(SFT)</td><td>ViT</td><td>网页</td></tr><tr><td>VUT [Li et al., 2021]</td><td>界面建模</td><td>截图</td><td>微调(SFT)</td><td>Transformer</td><td>移动端/网页</td></tr><tr><td>屏幕识别 [Zhang et al., 2021]</td><td>界面建模</td><td>截图</td><td>微调(SFT)</td><td>Faster R-CNN</td><td>移动端</td></tr><tr><td>Screen2Words [Wang et al., 2021]</td><td>界面建模</td><td>截图</td><td>微调(SFT)</td><td>Transformer</td><td>移动端</td></tr><tr><td>Aria-UI [Yang et al., 2024b]</td><td>界面建模</td><td>截图</td><td>预训练/微调(SFT)</td><td>Aria</td><td>移动端/网页/桌面端</td></tr><tr><td>Ferret-UI [You et al., 2024]</td><td>界面建模</td><td>截图</td><td>预训练/微调(SFT)</td><td>Ferret</td><td>移动端</td></tr><tr><td>AutoDroiá Twen et al., 2024]</td><td>端到端</td><td>HTML</td><td>基于探索/微调(SFT)</td><td>Vicuna-7B</td><td>移动端</td></tr><tr><td>Seq2Act [Li et al., 2020]</td><td>端到端</td><td>文本</td><td>监督学习</td><td>Transformer</td><td>移动端</td></tr><tr><td>Meta-GUI [Sun et al., 2022]</td><td>端到端</td><td>截图/XML</td><td>监督学习</td><td>Transformer</td><td>移动端</td></tr><tr><td>Agent Q [Putta et al., 2024]</td><td>端到端</td><td>截图/DOM</td><td>强化学习/行为克隆训练</td><td>Transformer</td><td>网页</td></tr><tr><td>WebGUM [Furuta et al., 2024]</td><td>端到端</td><td>截图/HTML</td><td>微调(SFT)</td><td>Flan-T5</td><td>网页</td></tr><tr><td>CogAgent [Hong 等, 2024]</td><td>端到端</td><td>截图</td><td>微调(SFT)</td><td>CogVLM</td><td>移动端/桌面端</td></tr><tr><td>MobileVLM [Wu 等, 2024]</td><td>端到端</td><td>XML/截图</td><td>预训练/微调(SFT)</td><td>Owen-VL-Chat</td><td>移动端</td></tr><tr><td>WebGPT [Nakano 等, 2021]</td><td>端到端</td><td>文本</td><td>微调(SFT)</td><td>GPT-3</td><td>网页</td></tr><tr><td>AutoGLM [Liu 等, 2024]</td><td>端到端</td><td>截图/HTML</td><td>预训练/微调/强化学习</td><td>ChatGLM</td><td>移动端/网页</td></tr><tr><td>OdysseyAgent [Lu 等, 2024a]</td><td>端到端</td><td>截图</td><td>微调(SFT)</td><td>Qwen-VL</td><td>移动端</td></tr></tbody></table><p><span>Some studies enable the GUI agent to fully leverage external knowledge through prompting to complete GUI tasks.</span>
+<span>一些研究通过提示使GUI代理能够充分利用外部知识来完成GUI任务。</span></p><p><span>AppAgent [Zhang et al., 2023] proposes a multi-modal agent framework to simulate human-like mobile phone operations. The framework is divided into two phases: Exploration, where agents explore applications and document their operations, and Deployment, where these documents guide the agent in observing, thinking, acting, and summarizing tasks. This is the first work to claim human-like GUI automation capabilities. AppAgent V2 [Li et al., 2024b] further improves GUI parsing, document generation, and prompt integration by incorporating optical character recognition (OCR) and detection tools, moving beyond the limitations of off-the-shelf parsers for UI element identification. Wang et al. [2023] uses a pure in-context learning method to implement interaction between LLMs and mobile UIs. The method divides the conversations between agents and users into four categories from the originator and designs a series of structural CoT prompting to adapt an LLM to execute mobile UI tasks. MobileGPT [Lee et al., 2023b] emulates the cognitive processes of human use of applications to enhance the LLM-based agent with a human-like app memory. MobileGPT uses a random explorer to explore and generate screen-related subtasks on many apps and save them as app memory. During the execution, the related memory is recalled to complete tasks. SFT-based GUI Agents: Supervised fine-tuning (SFT) allows (M)LLMs to adapt to specific domains and perform customized tasks with high efficiency. Recent studies on GUI agents [Wen et al., 2023a; Furuta et al., 2024; Niu et al., 2024; He et al., 2024b; Kil et al., 2024] demonstrate the benefits of SFT for GUI agents to process new modal inputs, learn specific procedures, or execute specialized tasks.</span>
+<span>AppAgent [Zhang et al., 2023] 提出了一种多模态代理框架，以模拟类人手机操作。该框架分为两个阶段：探索阶段，代理探索应用并记录其操作；部署阶段，利用这些文档指导代理进行观察、思考、行动和总结任务。这是首个声称具备类人GUI自动化能力的工作。AppAgent V2 [Li et al., 2024b] 通过引入光学字符识别（OCR）和检测工具，进一步提升了GUI解析、文档生成和提示整合，突破了现成解析器在UI元素识别上的局限。Wang et al. [2023] 采用纯上下文学习方法实现大型语言模型（LLMs）与移动UI的交互。该方法将代理与用户的对话从发起者角度划分为四类，并设计了一系列结构化链式推理（CoT）提示，使LLM能够执行移动UI任务。MobileGPT [Lee et al., 2023b] 模拟人类使用应用的认知过程，增强基于LLM的代理，赋予其类人应用记忆。MobileGPT使用随机探索器在多个应用上探索并生成与屏幕相关的子任务，保存为应用记忆。执行时调用相关记忆以完成任务。基于监督微调（SFT）的GUI代理：监督微调使（多模态）LLMs能够适应特定领域并高效执行定制任务。近期关于GUI代理的研究 [Wen et al., 2023a; Furuta et al., 2024; Niu et al., 2024; He et al., 2024b; Kil et al., 2024] 展示了SFT在处理新模态输入、学习特定流程或执行专业任务方面的优势。</span></p><p><span>For instance, Furuta et al. [2024] proposes WebGUM for web navigation. WebGUM is jointly fine-tuned with an instruction-optimized language model and a vision encoder, incorporating temporal and local perceptual capabilities. The evaluation results on MiniWoB show that WebGUM outperforms GPT-4-based agents. Zhang and Zhang [2023] introduces Auto-UI, a multimodal solution combining an image-language encoder-decoder architecture with a Chain of Actions policy, fine-tuned on the AitW dataset. This Chain of Actions captures intermediate previous action histories and future action plans. Yang et al. [2024b] proposes a data-centric pipeline to generate high-quality generalization data from publicly available data. This data is used to fine-tune the VLM for diverse instructions in various environments. Xu et al. [2024] introduces a two-stage training paradigm for AGU-VIS. In the first stage, the agent learns visual representations of GUI components through self-supervised learning. In the second stage, it fine-tunes interactive tasks using reinforcement learning, enabling efficient autonomous GUI interaction. On computer-based environments, ScreenAgent [Niu et al., 2024] fine-tunes the ScreenAgent dataset, mapping screenshots to action sequences. It operates via VNC, following a planning-acting-reflecting framework inspired by Kolb&#39;s experiential learning. PC-Agent [He et al., 2024b] employs a multi-agent architecture, fine-tuning a planning agent on cognitive trajectories collected via PC Tracker, enabling it to model human cognitive patterns. Additionally, Kil et al. [2024] fine-tunes DeBERTa for element ranking and Flan-T5 for action prediction, incorporating visual signals to enhance web navigation.</span>
+<span>例如，Furuta et al. [2024] 提出用于网页导航的WebGUM。WebGUM与指令优化语言模型和视觉编码器联合微调，融合了时间和局部感知能力。在MiniWoB上的评测结果显示，WebGUM优于基于GPT-4的代理。Zhang和Zhang [2023] 引入Auto-UI，一种结合图像-语言编码解码架构与动作链策略的多模态解决方案，在AitW数据集上微调。该动作链捕捉了中间的历史动作和未来动作计划。Yang et al. [2024b] 提出数据中心化流程，从公开数据生成高质量泛化数据，用于微调视觉语言模型（VLM），以适应多环境下的多样化指令。Xu et al. [2024] 引入AGU-VIS的两阶段训练范式。第一阶段，代理通过自监督学习掌握GUI组件的视觉表示；第二阶段，利用强化学习微调交互任务，实现高效自主GUI交互。在基于计算机的环境中，ScreenAgent [Niu et al., 2024] 微调ScreenAgent数据集，将截图映射为动作序列。其通过VNC操作，遵循受Kolb体验学习启发的规划-执行-反思框架。PC-Agent [He et al., 2024b] 采用多代理架构，基于PC Tracker收集的认知轨迹微调规划代理，使其能够模拟人类认知模式。此外，Kil et al. [2024] 微调DeBERTa用于元素排序，微调Flan-T5用于动作预测，结合视觉信号提升网页导航性能。</span></p><p><span>In summary, we provide a systematic overview of recent influential research on (M)LLM-based GUI agents. We address their goal formulations, input perceptions, and learning paradigms, as shown in Table 1</span>
+<span>总之，我们系统性地综述了近期基于（多模态）LLM的GUI代理的影响力研究，涵盖其目标设定、输入感知和学习范式，如表1所示。</span></p><h2 id='4-industrial-applications-of-mllm-based-gui-agents'><span>4 Industrial Applications of (M)LLM-Based GUI Agents</span></h2><h2 id='4-基于多模态llm的gui代理的工业应用'><span>4 基于（多模态）LLM的GUI代理的工业应用</span></h2><p><span>GUI agents have been widely used in industrial settings, such as mobile assistants and search agents, demonstrating significant commercial value and potential.</span>
+<span>GUI代理已广泛应用于工业领域，如移动助手和搜索代理，展现出显著的商业价值和潜力。</span></p><p><span>Google Assistant for Android: By saying phrases like &quot;Hey Google, start a run on Example App,&quot; users can use Google Assistant for Android to launch apps, perform tasks, and access content. App Actions, powered by built-in intents (BIIs), enhance app functionality by integrating with Google Assistant. This enables users to navigate apps and access features through voice queries, which the Assistant interprets to display the desired screen or widget.</span>
+<span>Android版Google Assistant：用户通过说“嘿Google，在示例应用上开始跑步”等语句，可以使用Android版Google Assistant启动应用、执行任务和访问内容。由内置意图（BIIs）驱动的App Actions增强了应用功能，使其能与Google Assistant集成。用户通过语音查询导航应用并访问功能，助手解析后展示所需的界面或控件。</span></p><p><span>Apple Intelligence: Apple Intelligence is the suite of AI-powered features and services developed by Apple. This includes technologies such as machine learning, natural language processing, and computer vision that power features like Siri, facial recognition, and photo organization. Apple also integrates AI into its hardware and software ecosystem to improve device performance and user experience. Their focus on privacy means that much of this AI processing happens on-device, ensuring that user data remains secure.</span>
+<span>Apple Intelligence：Apple Intelligence是苹果开发的一套AI驱动功能和服务，包括机器学习、自然语言处理和计算机视觉等技术，支持Siri、面部识别和照片整理等功能。苹果还将AI集成到其硬件和软件生态系统中，以提升设备性能和用户体验。其注重隐私，许多AI处理在设备端完成，确保用户数据安全。</span></p><p><span>New Bing: Microsoft&#39;s search engine is designed to offer users a more intuitive, efficient, and comprehensive search experience. Leveraging cutting-edge artificial intelligence and machine learning technologies, New Bing goes beyond traditional keyword searches to understand the context and intent behind user queries. With New Bing as an example, the LLM-based deep search engine is also an important form of GUI agents.</span>
+<span>New Bing：微软的搜索引擎旨在为用户提供更直观、高效且全面的搜索体验。利用尖端的人工智能和机器学习技术，New Bing超越了传统的关键词搜索，能够理解用户查询背后的上下文和意图。以New Bing为例，基于大型语言模型（LLM）的深度搜索引擎也是图形用户界面（GUI）代理的重要形式。</span></p><p><span>Anthropic Computer Use: Anthropic&#39;s &quot;Computer Use&quot; feature enables Claude to interact with tools and manipulate a desktop environment. By understanding and executing commands, Computer-Using Agent(CUA) can perform the necessary actions to complete tasks, much like a human.</span>
+<span>Anthropic计算机使用：Anthropic的“计算机使用”功能使Claude能够与工具交互并操作桌面环境。通过理解和执行命令，计算机使用代理（CUA）能够像人类一样执行完成任务所需的操作。</span></p><p><span>OpenAI Operator: OpenAI recently introduced Operator, an AI agent capable of autonomously performing tasks using its own browser. This agent leverages the CUA model, which combines GPT-4o&#39;s vision capabilities with advanced reasoning through reinforcement learning. Operator can interpret screenshots and interact with GUIs—such as buttons, menus, and text fields—just as humans do. This development marks a significant advancement in AI capabilities, enabling more efficient and autonomous interactions with digital interfaces.</span>
+<span>OpenAI操作员：OpenAI最近推出了Operator，一种能够自主使用自身浏览器执行任务的AI代理。该代理采用了CUA模型，结合了GPT-4o的视觉能力和通过强化学习实现的高级推理。Operator能够解读截图并与图形用户界面（如按钮、菜单和文本框）交互，方式与人类相同。这一发展标志着AI能力的重大进步，使得与数字界面的交互更加高效和自主。</span></p><p><span>Microsoft Copilot: An AI tool in Microsoft 365 apps for productivity with GPT-based suggestions, task automation, and content generation. Enhances workflows, creativity, and decision-making with real-time insights.</span>
+<span>微软Copilot：微软365应用中的一款AI工具，基于GPT提供建议、任务自动化和内容生成，提升工作流程、创造力和决策能力，提供实时洞察。</span></p><p><span>AutoGLM: AutoGLM [Liu et al., 2024] is designed for autonomous mission completion via GUIs on platforms like phones and the web. Its Android capability allows it to understand user instructions autonomously without manual input, enabling it to handle complex tasks such as ordering takeout, editing comments, shopping, and summarizing articles.</span>
+<span>AutoGLM：AutoGLM [Liu et al., 2024]旨在通过手机和网页等平台上的图形用户界面自主完成任务。其安卓功能使其能够自主理解用户指令，无需人工输入，从而处理复杂任务，如订外卖、编辑评论、购物和文章摘要。</span></p><p><span>MagicOS 9.0 YOYO: An advanced assistant with four main features: natural language and vision processing, user behavior learning, intent recognition and decision-making, and seamless app integration. It understands user habits to autonomously fulfill requests, such as ordering coffee through voice commands, by navigating apps and services.</span>
+<span>MagicOS 9.0 YOYO：一款先进助手，具备四大核心功能：自然语言与视觉处理、用户行为学习、意图识别与决策，以及无缝应用集成。它理解用户习惯，能够自主完成请求，例如通过语音命令点咖啡，自动导航应用和服务。</span></p><h2 id='5-challenges'><span>5 Challenges</span></h2><h2 id='5-个挑战'><span>5 个挑战</span></h2><p><span>Due to the rapid development of this field, we summarize several key research questions that require urgent attention:</span>
+<span>鉴于该领域的快速发展，我们总结了几个亟需关注的关键研究问题：</span></p><p><span>Personalized GUI Agents: Due to the personal nature of user devices, GUI agents inherently interact with personalized information. As an example, users may commute from home to work during weekdays, while walking to their favorite restaurants and cafes on weekends. The integration of personalized information would clearly enhance the user experience with GUI agents. As the capabilities of (M)LLMs continue to improve, personalized GUI agents have become a priority. Effectively collecting and utilizing personal information to deliver a more intelligent experience for users is an essential topic for future research and applications.</span>
+<span>个性化GUI代理：由于用户设备的个人属性，GUI代理天然涉及个性化信息。例如，用户在工作日可能从家到公司通勤，而周末则步行前往喜欢的餐厅和咖啡馆。整合个性化信息显然能提升GUI代理的用户体验。随着（M）LLM能力的持续提升，个性化GUI代理已成为优先发展方向。有效收集和利用个人信息，为用户提供更智能的体验，是未来研究和应用的重要课题。</span></p><p><span>Security of GUI Agents: GUI devices play a crucial role in modern life, making the idea of allowing GUI agents to take control a significant concern for users. For instance, improper operations in financial apps could lead to substantial financial losses, while inappropriate comments on social media apps could damage one&#39;s reputation and privacy. Ensuring that GUI agents are not only highly efficient and capable of generalizing but also uphold user-specific security and provide transparency about their actions is an urgent research challenge. This is a critical issue, as it directly impacts the viability of applying GUI agents in real-world scenarios.</span>
+<span>GUI代理的安全性：GUI设备在现代生活中扮演关键角色，允许GUI代理控制设备的想法令用户高度关注。例如，金融应用中的不当操作可能导致重大经济损失，社交媒体应用中的不当评论可能损害声誉和隐私。确保GUI代理不仅高效且具备泛化能力，同时维护用户特定的安全性并对其行为保持透明，是一项紧迫的研究挑战。这一问题至关重要，直接影响GUI代理在现实场景中的应用可行性。</span></p><p><span>Inference Efficiency: Humans are highly sensitive to GUI response time, which significantly impacts the user experience. Current (M)LLM-based GUI agents still face notable drawbacks with inference latency. Additionally, communication delay is also an important consideration in real-world applications. As a result, efficient device-cloud collaboration strategies and effective device-side (M)LLM research will become critical areas of focus in the future.</span>
+<span>推理效率：人类对GUI响应时间极为敏感，这对用户体验有显著影响。目前基于（M）LLM的GUI代理在推理延迟方面仍存在明显不足。此外，通信延迟也是现实应用中的重要考量。因此，高效的设备-云协作策略和有效的设备端（M）LLM研究将成为未来的关键关注点。</span></p><h2 id='6-conclusion'><span>6 Conclusion</span></h2><h2 id='6-结论'><span>6 结论</span></h2><p><span>In this paper, we provide a comprehensive review of the rapidly evolving field of (M)LLM-based GUI Agents. The review is organized into three main perspectives: Data Resources, Frameworks, and Applications. Additionally, we present a detailed taxonomy that connects existing research and highlights key techniques. We also discuss several challenges and propose potential future directions for GUI Agents that leverage foundation models.</span>
+<span>本文全面回顾了快速发展的基于（M）LLM的GUI代理领域。综述从数据资源、框架和应用三个主要视角展开，此外还提出了一个详细的分类体系，连接现有研究并突出关键技术。我们还讨论了若干挑战，并提出了利用基础模型的GUI代理未来可能的发展方向。</span></p><h2 id='references'><span>References</span></h2><h2 id='参考文献'><span>参考文献</span></h2><p><span>[Achiam et al., 2024] Josh Achiam, Steven Adler, et al. Gpt- 4 technical report, 2024.</span>
+<span>[Achiam et al., 2024] Josh Achiam, Steven Adler等。Gpt-4技术报告，2024年。</span></p><p><span>[Bai et al., 2021] Chen Bai, Xiaoyu Zang, Yan Xu, Srinivas Sunkara, Abhinav Rastogi, and Jieshan Chen. Uibert: Learning generic multimodal representations for ui understanding, 2021.</span>
+<span>[Bai et al., 2021] 陈白、臧晓宇、徐岩、Srinivas Sunkara、Abhinav Rastogi和陈杰山。Uibert：用于UI理解的通用多模态表示学习，2021年。</span></p><p><span>[Chen et al., 2024a] Dongping Chen, Yue Huang, Siyuan Wu, et al. Gui-world: A dataset for gui-oriented multimodal llm-based agents. arXiv preprint arXiv:2406.10819, 2024.</span>
+<span>[Chen 等, 2024a] 陈东平, 黄越, 吴思远 等. Gui-world: 面向图形用户界面(GUI)的多模态大语言模型(LLM)代理数据集. arXiv 预印本 arXiv:2406.10819, 2024.</span></p><p><span>[Chen et al., 2024b] Jingxuan Chen, Derek Yuen, Bin Xie, et al. Spa-bench: A comprehensive benchmark for smart-phone agent evaluation. In NeurIPS 2024 Workshop on Open-World Agents, 2024.</span>
+<span>[Chen 等, 2024b] 陈景轩, Derek Yuen, 谢斌 等. Spa-bench: 智能手机代理评估的综合基准. 载于 NeurIPS 2024 开放世界代理研讨会, 2024.</span></p><p><span>[Ding, 2024] Tinghe Ding. Mobileagent: enhancing mobile control via human-machine interaction and sop integration. arXiv preprint arXiv:2401.04124, 2024.</span>
+<span>[Ding, 2024] 丁廷和. Mobileagent: 通过人机交互和标准操作程序(SOP)集成增强移动控制. arXiv 预印本 arXiv:2401.04124, 2024.</span></p><p><span>[Furuta et al., 2024] Hiroki Furuta, Kuang-Huei Lee, Ofir Nachum, et al. Multimodal web navigation with instruction-finetuned foundation models. In ICLR, 2024.</span>
+<span>[Furuta 等, 2024] 古田浩树, 李光辉, Ofir Nachum 等. 基于指令微调基础模型的多模态网页导航. 载于 ICLR, 2024.</span></p><p><span>[Ge et al., 2024] Zhiqi Ge, Juncheng Li, Xinglei Pang, et al. Iris: Breaking gui complexity with adaptive focus and self-refining. arXiv preprint arXiv:2412.10342, 2024.</span>
+<span>[Ge 等, 2024] 葛志奇, 李俊成, 庞兴磊 等. Iris: 通过自适应聚焦与自我优化破解图形用户界面复杂性. arXiv 预印本 arXiv:2412.10342, 2024.</span></p><p><span>[He et al., 2024a] Hongliang He, Wenlin Yao, Kaixin Ma, et al. Webvoyager: Building an end-to-end web agent with large multimodal models. arXiv preprint arXiv:2401.13919, 2024.</span>
+<span>[He 等, 2024a] 何洪亮, 姚文林, 马凯鑫 等. Webvoyager: 利用大型多模态模型构建端到端网页代理. arXiv 预印本 arXiv:2401.13919, 2024.</span></p><p><span>[He et al., 2024b] Yanheng He, Jiahe Jin, Shijie Xia, et al. Pc agent: While you sleep, ai works-a cognitive journey into digital world. arXiv preprint arXiv:2412.17589, 2024.</span>
+<span>[He 等, 2024b] 何彦恒, 金佳禾, 夏世杰 等. PC代理: 当你沉睡时，人工智能在数字世界中认知探索. arXiv 预印本 arXiv:2412.17589, 2024.</span></p><p><span>[Hong et al., 2024] Wenyi Hong, Weihan Wang, Qingsong Lv, et al. Cogagent: A visual language model for gui agents. In CVPR, pages 14281-14290, 2024.</span>
+<span>[Hong 等, 2024] 洪文怡, 王伟涵, 吕庆松 等. Cogagent: 面向图形用户界面代理的视觉语言模型. 载于 CVPR, 页码 14281-14290, 2024.</span></p><p><span>[Kil et al., 2024] Jihyung Kil, Chan Hee Song, Boyuan Zheng, Xiang Deng, Yu Su, and Wei-Lun Chao. Dual-view visual contextualization for web navigation. In CVPR, pages 14445-14454, 2024.</span>
+<span>[Kil 等, 2024] 吉炯, 宋灿熙, 郑博远, 邓翔, 苏宇, 赵伟伦. 双视角视觉上下文用于网页导航. 载于 CVPR, 页码 14445-14454, 2024.</span></p><p><span>[Kim et al., 2023] Geunwoo Kim, Pierre Baldi, and Stephen McAleer. Language models can solve computer tasks. In NIPS, pages 39648-39677, 2023.</span>
+<span>[Kim 等, 2023] 金根宇, Pierre Baldi, Stephen McAleer. 语言模型能够解决计算机任务. 载于 NIPS, 页码 39648-39677, 2023.</span></p><p><span>[Lai et al., 2024] Hanyu Lai, Xiao Liu, Iat Long Iong, et al. Autowebglm: A large language model-based web navigating agent. In SIGKDD, pages 5295-5306, 2024.</span>
+<span>[Lai 等, 2024] 赖涵宇, 刘晓, Iat Long Iong 等. Autowebglm: 基于大型语言模型的网页导航代理. 载于 SIGKDD, 页码 5295-5306, 2024.</span></p><p><span>[Lee et al., 2023a] Kenton Lee, Mandar Joshi, Iulia Raluca Turc, et al. Pix2struct: Screenshot parsing as pretraining for visual language understanding. In ICML, pages 18893- 18912, 2023.</span>
+<span>[Lee 等, 2023a] Kenton Lee, Mandar Joshi, Iulia Raluca Turc 等. Pix2struct: 将截图解析作为视觉语言理解的预训练. 载于 ICML, 页码 18893-18912, 2023.</span></p><p><span>[Lee et al., 2023b] Sunjae Lee, Junyoung Choi, Jungjae Lee, et al. Explore, select, derive, and recall: Augmenting llm with human-like memory for mobile task automation. arXiv preprint arXiv:2312.03003, 2023.</span>
+<span>[Lee 等, 2023b] Sunjae Lee, Junyoung Choi, Jungjae Lee 等. 探索、选择、推导与回忆: 以类人记忆增强大语言模型实现移动任务自动化. arXiv 预印本 arXiv:2312.03003, 2023.</span></p><p><span>[Li and Li, 2023] Gang Li and Yang Li. Spotlight: Mobile ui understanding using vision-language models with a focus. In ICLR, 2023.</span>
+<span>[Li 和 Li, 2023] 李刚, 李洋. Spotlight: 利用视觉语言模型聚焦移动用户界面理解. 载于 ICLR, 2023.</span></p><p><span>[Li et al., 2020] Yang Li, Jiacong He, Xin Zhou, Yuan Zhang, and Jason Baldridge. Mapping natural language instructions to mobile ui action sequences. In </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="4.957ex" height="1.67ex" role="img" focusable="false" viewBox="0 -716 2191 738" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.05ex;"><defs><path id="MJX-1913-TEX-I-1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z"></path><path id="MJX-1913-TEX-I-1D436" d="M50 252Q50 367 117 473T286 641T490 704Q580 704 633 653Q642 643 648 636T656 626L657 623Q660 623 684 649Q691 655 699 663T715 679T725 690L740 705H746Q760 705 760 698Q760 694 728 561Q692 422 692 421Q690 416 687 415T669 413H653Q647 419 647 422Q647 423 648 429T650 449T651 481Q651 552 619 605T510 659Q484 659 454 652T382 628T299 572T226 479Q194 422 175 346T156 222Q156 108 232 58Q280 24 350 24Q441 24 512 92T606 240Q610 253 612 255T628 257Q648 257 648 248Q648 243 647 239Q618 132 523 55T319 -22Q206 -22 128 53T50 252Z"></path><path id="MJX-1913-TEX-I-1D43F" d="M228 637Q194 637 192 641Q191 643 191 649Q191 673 202 682Q204 683 217 683Q271 680 344 680Q485 680 506 683H518Q524 677 524 674T522 656Q517 641 513 637H475Q406 636 394 628Q387 624 380 600T313 336Q297 271 279 198T252 88L243 52Q243 48 252 48T311 46H328Q360 46 379 47T428 54T478 72T522 106T564 161Q580 191 594 228T611 270Q616 273 628 273H641Q647 264 647 262T627 203T583 83T557 9Q555 4 553 3T537 0T494 -1Q483 -1 418 -1T294 0H116Q32 0 32 10Q32 17 34 24Q39 43 44 45Q48 46 59 46H65Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Q285 635 228 637Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><use data-c="1D434" xlink:href="#MJX-1913-TEX-I-1D434"></use></g><g data-mml-node="mi" transform="translate(750,0)"><use data-c="1D436" xlink:href="#MJX-1913-TEX-I-1D436"></use></g><g data-mml-node="mi" transform="translate(1510,0)"><use data-c="1D43F" xlink:href="#MJX-1913-TEX-I-1D43F"></use></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="ORD"><mi>A</mi><mi>C</mi><mi>L</mi></mrow></math></mjx-assistive-mml></mjx-container><script type="math/tex">{ACL}</script><span> , pages 8198-8210, 2020.</span>
+<span>[Li 等, 2020] 李洋, 何家聪, 周鑫, 张远, Jason Baldridge. 将自然语言指令映射为移动用户界面操作序列. 载于 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="4.957ex" height="1.67ex" role="img" focusable="false" viewBox="0 -716 2191 738" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.05ex;"><defs><path id="MJX-1913-TEX-I-1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z"></path><path id="MJX-1913-TEX-I-1D436" d="M50 252Q50 367 117 473T286 641T490 704Q580 704 633 653Q642 643 648 636T656 626L657 623Q660 623 684 649Q691 655 699 663T715 679T725 690L740 705H746Q760 705 760 698Q760 694 728 561Q692 422 692 421Q690 416 687 415T669 413H653Q647 419 647 422Q647 423 648 429T650 449T651 481Q651 552 619 605T510 659Q484 659 454 652T382 628T299 572T226 479Q194 422 175 346T156 222Q156 108 232 58Q280 24 350 24Q441 24 512 92T606 240Q610 253 612 255T628 257Q648 257 648 248Q648 243 647 239Q618 132 523 55T319 -22Q206 -22 128 53T50 252Z"></path><path id="MJX-1913-TEX-I-1D43F" d="M228 637Q194 637 192 641Q191 643 191 649Q191 673 202 682Q204 683 217 683Q271 680 344 680Q485 680 506 683H518Q524 677 524 674T522 656Q517 641 513 637H475Q406 636 394 628Q387 624 380 600T313 336Q297 271 279 198T252 88L243 52Q243 48 252 48T311 46H328Q360 46 379 47T428 54T478 72T522 106T564 161Q580 191 594 228T611 270Q616 273 628 273H641Q647 264 647 262T627 203T583 83T557 9Q555 4 553 3T537 0T494 -1Q483 -1 418 -1T294 0H116Q32 0 32 10Q32 17 34 24Q39 43 44 45Q48 46 59 46H65Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Q285 635 228 637Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><use data-c="1D434" xlink:href="#MJX-1913-TEX-I-1D434"></use></g><g data-mml-node="mi" transform="translate(750,0)"><use data-c="1D436" xlink:href="#MJX-1913-TEX-I-1D436"></use></g><g data-mml-node="mi" transform="translate(1510,0)"><use data-c="1D43F" xlink:href="#MJX-1913-TEX-I-1D43F"></use></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="ORD"><mi>A</mi><mi>C</mi><mi>L</mi></mrow></math></mjx-assistive-mml></mjx-container><script type="math/tex">{ACL}</script><span>, 页码 8198-8210, 2020.</span></p><p><span>[Li et al., 2021] Yang Li, Gang Li, Xin Zhou, Mostafa De-hghani, and Alexey Gritsenko. Vut: Versatile ui transformer for multi-modal multi-task user interface modeling. arXiv preprint arXiv:2112.05692, 2021.</span>
+<span>[Li 等, 2021] 李洋, 李刚, 周鑫, Mostafa Dehghani, Alexey Gritsenko. VUT: 多模态多任务用户界面建模的多功能用户界面变换器. arXiv 预印本 arXiv:2112.05692, 2021.</span></p><p><span>[Li et al., 2024a] Wei Li, William Bishop, Alice Li, et al. On the effects of data scale on computer control agents. arXiv preprint arXiv:2406.03679, 2024.</span>
+<span>[Li et al., 2024a] 李伟，威廉·毕晓普，爱丽丝·李 等。数据规模对计算机控制代理影响的研究。arXiv 预印本 arXiv:2406.03679，2024年。</span></p><p><span>[Li et al., 2024b] Yanda Li, Chi Zhang, Wanqi Yang, et al. Appagent v2: Advanced agent for flexible mobile interactions. arXiv preprint arXiv:2408.11824, 2024.</span>
+<span>[Li et al., 2024b] 李艳达，张驰，杨万琦 等。Appagent v2：用于灵活移动交互的高级代理。arXiv 预印本 arXiv:2408.11824，2024年。</span></p><p><span>[Liu et al., 2018] Evan Zheran Liu, Kelvin Guu, Panupong Pasupat, Tianlin Shi, and Percy Liang. Reinforcement learning on web interfaces using workflow-guided exploration. In ICLR, 2018.</span>
+<span>[Liu et al., 2018] 刘泽然，Kelvin Guu，潘普蓬·帕苏帕特，石天林，梁珀西。基于工作流引导探索的网页界面强化学习。发表于 ICLR，2018年。</span></p><p><span>[Liu et al., 2024] Xiao Liu, Bo Qin, Dongzhu Liang, et al. Autoglm: Autonomous foundation agents for guis. arXiv preprint arXiv:2411.00820, 2024.</span>
+<span>[Liu et al., 2024] 刘晓，秦博，梁东竹 等。AutoGLM：面向图形用户界面（GUI）的自主基础代理。arXiv 预印本 arXiv:2411.00820，2024年。</span></p><p><span>[Lu et al., 2024a] Quanfeng Lu, Wenqi Shao, Zitao Liu, et al. Gui odyssey: A comprehensive dataset for cross-app gui navigation on mobile devices. arXiv preprint arXiv:2406.08451, 2024.</span>
+<span>[Lu et al., 2024a] 陆全峰，邵文琦，刘子涛 等。GUI Odyssey：面向移动设备跨应用GUI导航的综合数据集。arXiv 预印本 arXiv:2406.08451，2024年。</span></p><p><span>[Lu et al., 2024b] Yadong Lu, Jianwei Yang, Yelong Shen, and Ahmed Awadallah. Omniparser for pure vision based gui agent. arXiv preprint arXiv:2408.00203, 2024.</span>
+<span>[Lu et al., 2024b] 陆亚东，杨建伟，沈业龙，Ahmed Awadallah。Omniparser：基于纯视觉的GUI代理。arXiv 预印本 arXiv:2408.00203，2024年。</span></p><p><span>[Ma et al., 2023] Kaixin Ma, Hongming Zhang, Hongwei Wang, Xiaoman Pan, and Dong Yu. Laser: Llm agent with state-space exploration for web navigation. In NeurIPS Workshop, 2023.</span>
+<span>[Ma et al., 2023] 马凯新，张宏明，王宏伟，潘晓曼，余东。LASER：结合状态空间探索的语言模型（LLM）代理用于网页导航。发表于 NeurIPS 研讨会，2023年。</span></p><p><span>[Nakano et al., 2021] Reiichiro Nakano, Jacob Hilton, Suchir Balaji, et al. Webgpt: Browser-assisted question-answering with human feedback. arXiv preprint arXiv:2112.09332, 2021.</span>
+<span>[Nakano et al., 2021] 中野礼一郎，雅各布·希尔顿，Suchir Balaji 等。WebGPT：基于浏览器辅助的人类反馈问答系统。arXiv 预印本 arXiv:2112.09332，2021年。</span></p><p><span>[Niu et al., 2024] Runliang Niu, Jindong Li, Shiqi Wang, et al. Screenagent: A vision language model-driven computer control agent. arXiv preprint arXiv:2402.07945, 2024.</span>
+<span>[Niu et al., 2024] 牛润良，李金东，王世奇 等。ScreenAgent：基于视觉语言模型的计算机控制代理。arXiv 预印本 arXiv:2402.07945，2024年。</span></p><p><span>[Pan et al., 2023] Lihang Pan, Bowen Wang, Chun Yu, Yux-uan Chen, Xiangyu Zhang, and Yuanchun Shi. Au-totask: Executing arbitrary voice commands by exploring and learning from mobile gui. arXiv preprint arXiv:2312.16062, 2023.</span>
+<span>[Pan et al., 2023] 潘立航，王博文，余春，陈宇轩，张翔宇，史元春。AutoTask：通过探索和学习移动GUI执行任意语音命令。arXiv 预印本 arXiv:2312.16062，2023年。</span></p><p><span>[Putta et al., 2024] Pranav Putta, Edmund Mills, Naman Garg, et al. Agent q: Advanced reasoning and learning for autonomous ai agents. arXiv preprint arXiv:2408.07199, 2024.</span>
+<span>[Putta et al., 2024] 普拉纳夫·普塔，埃德蒙·米尔斯，纳曼·加格 等。Agent Q：面向自主AI代理的高级推理与学习。arXiv 预印本 arXiv:2408.07199，2024年。</span></p><p><span>[Qin et al., 2025] Yujia Qin, Yining Ye, Junjie Fang, et al. Ui-tars: Pioneering automated gui interaction with native agents. arXiv preprint arXiv:2501.12326, 2025.</span>
+<span>[Qin et al., 2025] 秦宇佳，叶一宁，方俊杰 等。UI-TARS：开创性的原生代理自动化GUI交互。arXiv 预印本 arXiv:2501.12326，2025年。</span></p><p><span>[Rawles et al., 2023] Christopher Rawles, Alice Li, Daniel Rodriguez, Oriana Riva, and Timothy P Lillicrap. An-droidinthewild: A large-scale dataset for android device control. In NIPS Datasets and Benchmarks Track, 2023.</span>
+<span>[Rawles et al., 2023] 克里斯托弗·罗尔斯，爱丽丝·李，丹尼尔·罗德里格斯，奥里亚娜·里瓦，蒂莫西·P·利利克拉普。AndroidInTheWild：面向安卓设备控制的大规模数据集。发表于 NIPS 数据集与基准赛道，2023年。</span></p><p><span>[Rawles et al., 2024] Christopher Rawles, Sarah Clincke-maillie, Yifan Chang, et al. Androidworld: A dynamic benchmarking environment for autonomous agents. arXiv preprint arXiv:2405.14573, 2024.</span>
+<span>[Rawles et al., 2024] 克里斯托弗·罗尔斯，Sarah Clincke-Maillie，张一凡 等。AndroidWorld：面向自主代理的动态基准测试环境。arXiv 预印本 arXiv:2405.14573，2024年。</span></p><p><span>[Shen et al., 2024] Huawen Shen, Chang Liu, Gengluo Li, et al. Falcon-ui: Understanding gui before following user instructions. arXiv preprint arXiv:2412.09362, 2024.</span>
+<span>[Shen et al., 2024] 沈华文，刘畅，李耿洛 等。Falcon-UI：在执行用户指令前理解GUI。arXiv 预印本 arXiv:2412.09362，2024年。</span></p><p><span>[Sun et al., 2022] Liangtai Sun, Xingyu Chen, Lu Chen, Tianle Dai, Zichen Zhu, and Kai Yu. Meta-gui: Towards multi-modal conversational agents on mobile gui. In EMNLP, pages 6699-6712, 2022.</span>
+<span>[Sun et al., 2022] 孙良泰，陈星宇，陈璐，戴天乐，朱子辰，余凯。Meta-GUI：迈向移动GUI上的多模态对话代理。发表于 EMNLP，页码 6699-6712，2022年。</span></p><p><span>[Touvron et al., 2023] Hugo Touvron, Thibaut Lavril, Gautier Izacard, et al. Llama: Open and efficient foundation language models. arXiv preprint arXiv:2302.13971, 2023.</span>
+<span>[Touvron 等, 2023] Hugo Touvron, Thibaut Lavril, Gautier Izacard 等. Llama：开放且高效的基础语言模型. arXiv 预印本 arXiv:2302.13971, 2023.</span></p><p><span>[Venkatesh et al., 2024] Sagar Gubbi Venkatesh, Partha Talukdar, and Srini Narayanan. Ugif-dataset: A new dataset for cross-lingual, cross-modal sequential actions on the ui. In Findings of NAACL, pages 1390-1399, 2024.</span>
+<span>[Venkatesh 等, 2024] Sagar Gubbi Venkatesh, Partha Talukdar, Srini Narayanan. Ugif-dataset：用于跨语言、跨模态用户界面顺序动作的新数据集. 发表在 NAACL 研究成果, 页码 1390-1399, 2024.</span></p><p><span>[Wang et al., 2021] Bryan Wang, Gang Li, Xin Zhou, Zhourong Chen, Tovi Grossman, and Yang Li. Screen2words: Automatic mobile ui summarization with multimodal learning. In UIST, pages 498-510, 2021.</span>
+<span>[Wang 等, 2021] Bryan Wang, Gang Li, Xin Zhou, Zhourong Chen, Tovi Grossman, Yang Li. Screen2words：基于多模态学习的自动移动界面摘要生成. 发表在 UIST, 页码 498-510, 2021.</span></p><p><span>[Wang et al., 2023] Bryan Wang, Gang Li, and Yang Li. Enabling conversational interaction with mobile ui using large language models. In CHI, pages 1-17, 2023.</span>
+<span>[Wang 等, 2023] Bryan Wang, Gang Li, Yang Li. 利用大型语言模型实现移动界面的对话式交互. 发表在 CHI, 页码 1-17, 2023.</span></p><p><span>[Wang et al., 2024a] Junyang Wang, Haiyang Xu, Haitao Jia, et al. Mobile-agent-v2: Mobile device operation assistant with effective navigation via multi-agent collaboration. In NIPS, 2024.</span>
+<span>[Wang 等, 2024a] Junyang Wang, Haiyang Xu, Haitao Jia 等. Mobile-agent-v2：通过多智能体协作实现高效导航的移动设备操作助手. 发表在 NIPS, 2024.</span></p><p><span>[Wang et al., 2024b] Junyang Wang, Haiyang Xu, Jiabo Ye, et al. Mobile-agent: Autonomous multi-modal mobile device agent with visual perception. arXiv preprint arXiv:2401.16158, 2024.</span>
+<span>[Wang 等, 2024b] Junyang Wang, Haiyang Xu, Jiabo Ye 等. Mobile-agent：具备视觉感知的自主多模态移动设备代理. arXiv 预印本 arXiv:2401.16158, 2024.</span></p><p><span>[Wang et al., 2024c] Lei Wang, Chen Ma, Xueyang Feng, et al. A survey on large language model based autonomous agents. FCS, 18(6):186345, 2024.</span>
+<span>[Wang 等, 2024c] Lei Wang, Chen Ma, Xueyang Feng 等. 基于大型语言模型的自主智能体综述. FCS, 18(6):186345, 2024.</span></p><p><span>[Wang et al., 2025] Zhenhailong Wang, Haiyang Xu, Jun-yang Wang, et al. Mobile-agent-e: Self-evolving mobile assistant for complex tasks. arXiv preprint arXiv:2501.11733, 2025.</span>
+<span>[Wang 等, 2025] Zhenhailong Wang, Haiyang Xu, Jun-yang Wang 等. Mobile-agent-e：面向复杂任务的自我进化移动助手. arXiv 预印本 arXiv:2501.11733, 2025.</span></p><p><span>[Wen et al., 2023a] Hao Wen, Yuanchun Li, Guohong Liu, et al. Empowering LLM to use Smartphone for Intelligent Task Automation. arXiv preprint arXiv:2308.15272, 2023.</span>
+<span>[Wen 等, 2023a] Hao Wen, Yuanchun Li, Guohong Liu 等. 赋能大型语言模型使用智能手机实现智能任务自动化. arXiv 预印本 arXiv:2308.15272, 2023.</span></p><p><span>[Wen et al., 2023b] Hao Wen, Hongming Wang, Jiaxuan Liu, and Yuanchun Li. Droidbot-gpt: Gpt-powered ui automation for android. arXiv preprint arXiv:2304.07061, 2023.</span>
+<span>[Wen 等, 2023b] Hao Wen, Hongming Wang, Jiaxuan Liu, Yuanchun Li. Droidbot-gpt：基于 GPT 的安卓界面自动化工具. arXiv 预印本 arXiv:2304.07061, 2023.</span></p><p><span>[Wen et al., 2024] Hao Wen, Yuanchun Li, Guohong Liu, et al. Autodroid: Llm-powered task automation in android. In MobiCom, pages 543-557, 2024.</span>
+<span>[Wen 等, 2024] Hao Wen, Yuanchun Li, Guohong Liu 等. Autodroid：基于大型语言模型的安卓任务自动化. 发表在 MobiCom, 页码 543-557, 2024.</span></p><p><span>[Wu et al., 2024] Qinzhuo Wu, Weikai Xu, Wei Liu, et al. Mobilevlm: A vision-language model for better intra-and inter-ui understanding. In EMNLP, pages 10231-10251, 2024.</span>
+<span>[Wu 等, 2024] Qinzhuo Wu, Weikai Xu, Wei Liu 等. Mobilevlm：提升界面内外理解的视觉语言模型. 发表在 EMNLP, 页码 10231-10251, 2024.</span></p><p><span>[Xie et al., 2024] Tianbao Xie, Fan Zhou, et al. Openagents: An open platform for language agents in the wild. In ICLR 2024 Workshop on Large Language Model (LLM) Agents, 2024.</span>
+<span>[Xie 等, 2024] Tianbao Xie, Fan Zhou 等. Openagents：面向实际应用的开放语言智能体平台. 发表在 ICLR 2024 大型语言模型（LLM）智能体研讨会, 2024.</span></p><p><span>[Xu et al., 2024] Yiheng Xu, Zekun Wang, Junli Wang, et al. Aguvis: Unified pure vision agents for autonomous gui interaction. arXiv preprint arXiv:2412.04454, 2024.</span>
+<span>[Xu 等, 2024] Yiheng Xu, Zekun Wang, Junli Wang 等. Aguvis：统一的纯视觉智能体实现自主图形界面交互. arXiv 预印本 arXiv:2412.04454, 2024.</span></p><p><span>[Yan et al., 2023] An Yan, Zhengyuan Yang, Wanrong Zhu, et al. Gpt-4v in wonderland: Large multimodal models for zero-shot smartphone gui navigation. arXiv preprint arXiv:2311.07562, 2023.</span>
+<span>[Yan 等, 2023] An Yan, Zhengyuan Yang, Wanrong Zhu 等. GPT-4V 奇境：用于零样本智能手机图形界面导航的大型多模态模型. arXiv 预印本 arXiv:2311.07562, 2023.</span></p><p><span>[Yang et al., 2024a] An Yang, Baosong Yang, et al. Qwen2 technical report, 2024.</span>
+<span>[Yang 等, 2024a] An Yang, Baosong Yang 等. Qwen2 技术报告, 2024.</span></p><p><span>[Yang et al., 2024b] Yuhao Yang, Yue Wang, Dongxu Li, et al. Aria-ui: Visual grounding for gui instructions. arXiv preprint arXiv:2412.16256, 2024.</span>
+<span>[Yang 等, 2024b] Yuhao Yang, Yue Wang, Dongxu Li 等. Aria-ui：用于图形用户界面指令的视觉定位。arXiv 预印本 arXiv:2412.16256, 2024.</span></p><p><span>[You et al., 2024] Keen You, Haotian Zhang, Eldon Schoop, et al. Ferret-ui: Grounded mobile ui understanding with multimodal llms. In ECCV, pages 240-255, 2024.</span>
+<span>[You 等, 2024] Keen You, Haotian Zhang, Eldon Schoop 等. Ferret-ui：基于多模态大语言模型的移动界面理解。发表于 ECCV, 页码 240-255, 2024.</span></p><p><span>[Zhang and Zhang, 2023] Zhuosheng Zhang and Aston Zhang. You only look at screens: Multimodal chain-of-action agents. arXiv preprint arXiv:2309.11436, 2023.</span>
+<span>[Zhang 和 Zhang, 2023] Zhuosheng Zhang 和 Aston Zhang. 你只需看屏幕：多模态动作链代理。arXiv 预印本 arXiv:2309.11436, 2023.</span></p><p><span>[Zhang et al., 2021] Xiaoyi Zhang, Lilian De Greef, Amanda Swearngin, et al. Screen recognition: Creating accessibility metadata for mobile applications from pixels. In CHI, pages 1-15, 2021.</span>
+<span>[Zhang 等, 2021] Xiaoyi Zhang, Lilian De Greef, Amanda Swearngin 等. 屏幕识别：从像素创建移动应用的无障碍元数据。发表于 CHI, 页码 1-15, 2021.</span></p><p><span>[Zhang et al., 2023] Chi Zhang, Zhao Yang, Jiaxuan Liu, et al. AppAgent: Multimodal Agents as Smartphone Users. arXiv preprint arXiv:2312.13771, 2023.</span>
+<span>[Zhang 等, 2023] Chi Zhang, Zhao Yang, Jiaxuan Liu 等. AppAgent：作为智能手机用户的多模态代理。arXiv 预印本 arXiv:2312.13771, 2023.</span></p><p><span>[Zhang et al., 2024a] Chaoyun Zhang, Liqun Li, Shilin He, et al. Ufo: A ui-focused agent for windows os interaction. arXiv preprint arXiv:2402.07939, 2024.</span>
+<span>[Zhang 等, 2024a] Chaoyun Zhang, Liqun Li, Shilin He 等. UFO：面向 Windows 操作系统交互的界面代理。arXiv 预印本 arXiv:2402.07939, 2024.</span></p><p><span>[Zhang et al., 2024b] Jiwen Zhang, Jihao Wu, Yihua Teng, et al. Android in the zoo: Chain-of-action-thought for gui agents. arXiv preprint arXiv:2403.02713, 2024.</span>
+<span>[Zhang 等, 2024b] Jiwen Zhang, Jihao Wu, Yihua Teng 等. Android 动物园：用于图形用户界面代理的动作-思考链。arXiv 预印本 arXiv:2403.02713, 2024.</span></p><p><span>[Zhao et al., 2024] Kangjia Zhao, Jiahui Song, Leigang Sha, et al. Gui testing arena: A unified benchmark for advancing autonomous gui testing agent. arXiv preprint arXiv:2412.18426, 2024.</span>
+<span>[Zhao 等, 2024] Kangjia Zhao, Jiahui Song, Leigang Sha 等. GUI 测试竞技场：推进自主 GUI 测试代理的统一基准。arXiv 预印本 arXiv:2412.18426, 2024.</span></p><p><span>[Zheng et al., 2024] Boyuan Zheng, Boyu Gou, Jihyung Kil, Huan Sun, and Yu Su. Gpt-4v (ision) is a generalist web agent, if grounded. arXiv preprint arXiv:2401.01614, 2024.</span>
+<span>[Zheng 等, 2024] Boyuan Zheng, Boyu Gou, Jihyung Kil, Huan Sun 和 Yu Su. GPT-4V（视觉）是一个通用的网络代理，前提是有定位支持。arXiv 预印本 arXiv:2401.01614, 2024.</span></p><p><span>[Zhou et al., 2023] Shuyan Zhou, Frank F Xu, Hao Zhu, et al. Webarena: A realistic web environment for building autonomous agents. In ICLR, 2023.</span>
+<span>[Zhou 等, 2023] Shuyan Zhou, Frank F Xu, Hao Zhu 等. Webarena：构建自主代理的真实网络环境。发表于 ICLR, 2023.</span></p><p><span>[Zhu et al., 2024] Zichen Zhu, Hao Tang, Yansi Li, et al. Moba: A two-level agent system for efficient mobile task automation. arXiv preprint arXiv:2410.13757, 2024.</span>
+<span>[Zhu 等, 2024] Zichen Zhu, Hao Tang, Yansi Li 等. MOBA：高效移动任务自动化的两级代理系统。arXiv 预印本 arXiv:2410.13757, 2024.</span></p></div></div>
+
+<script>(function(){function e(e,n,i){document.addEventListener(e,function(e){if(!e.defaultPrevented)for(var t=e.target;t&&t!=this;t=t.parentNode)if(t.matches(n)){!1===i.call(t,e)&&(e.preventDefault(),e.stopPropagation());break}},!1)}var t=document.body.parentElement,i=[],r=null,o=document.body.classList.contains("typora-export-collapse-outline");function a(){return t.scrollTop}e("click",".outline-expander",function(e){var t=this.closest(".outline-item-wrapper").classList;return t.contains("outline-item-open")?t.remove("outline-item-open"):t.add("outline-item-open"),u(),!1}),e("click",".outline-item",function(e){var t=this.querySelector(".outline-label");location.hash="#"+t.getAttribute("href"),o&&((t=this.closest(".outline-item-wrapper").classList).contains("outline-item-open")||t.add("outline-item-open"),d(),t.add("outline-item-active"))});function s(){var e=a();r=null;for(var t=0;t<i.length&&i[t][1]-e<60;t++)r=i[t]}function n(){c=setTimeout(function(){var n;i=[],n=a(),document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(e=>{var t=e.getAttribute("id");i.push([t,n+e.getBoundingClientRect().y])}),s(),u()},300)}var l,c,d=function(){document.querySelectorAll(".outline-item-active").forEach(e=>e.classList.remove("outline-item-active")),document.querySelectorAll(".outline-item-single.outline-item-open").forEach(e=>e.classList.remove("outline-item-open"))},u=function(){if(r&&(d(),t=document.querySelector('.outline-label[href="#'+(CSS.escape?CSS.escape(r[0]):r[0])+'"]')))if(o){var e=t.closest(".outline-item-open>ul>.outline-item-wrapper");if(e)e.classList.add("outline-item-active");else{for(var t,n=(t=t.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper");n;)n=(t=n).parentElement.closest(".outline-item-wrapper");t.classList.add("outline-item-active")}}else t.closest(".outline-item-wrapper").classList.add("outline-item-active")};window.addEventListener("scroll",function(e){l&&clearTimeout(l),l=setTimeout(function(){s(),u()},300)});window.addEventListener("resize",function(e){c&&clearTimeout(c),n()}),n()})();</script><style>
+/* ===== Typora Enhancer (safe-only hotkeys + tiny tools tab + light progress info + gallery non-overlap) ===== */
+
+/* 顶部阅读进度条 */
+#ty-progress {
+  position: fixed; z-index: 9999; top: 0; left: 0; height: 3px; width: 100%;
+  background: linear-gradient(to right, #4da3ff, #7c4dff);
+  transform-origin: 0 50%; transform: scaleX(0); pointer-events: none;
+}
+/* 进度信息：仅 百分比 / 已读时间（弱遮挡 + 不拦截鼠标） */
+#ty-progress-info{
+  position: fixed; top: 6px; right: 6px; z-index: 10000;
+  font: 12px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  color:#fff; background: rgba(0,0,0,.25);
+  padding: 2px 6px; border-radius: 7px; backdrop-filter: saturate(120%) blur(1.5px);
+  user-select: none; pointer-events: none;
+}
+#ty-progress-info b{ font-weight:600 }
+
+/* 右下功能栏 */
+#ty-tools {
+  position: fixed; z-index: 9999; right: 18px; bottom: 24px; display: flex; gap: 10px; flex-direction: column;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  transition: transform .25s ease, opacity .2s ease;
+}
+.ty-btn {
+  background: rgba(0,0,0,.7); color: #fff; border-radius: 10px; padding: 8px 10px;
+  font-size: 12px; cursor: pointer; user-select: none; backdrop-filter: saturate(120%) blur(2px);
+  transition: transform .15s ease, background .2s ease;
+}
+.ty-btn:hover { transform: translateY(-1px); background: rgba(0,0,0,.82); }
+.ty-btn[hidden] { display: none !important; }
+
+/* 工具栏收起时隐藏，仅保留“抽屉拉手” */
+body.ty-tools-collapsed #ty-tools{ opacity:0; pointer-events:none; transform: translateX(18px); }
+
+/* 抽屉拉手：超小、仅图标，避免与工具栏重叠 */
+#ty-tools-tab{
+  --tab-size: 28px;
+  position: fixed; right: 2px; bottom: 26px; z-index: 10001;
+  width: var(--tab-size); height: var(--tab-size); display: grid; place-items: center;
+  background: rgba(0,0,0,.65); color:#fff; font-size: 16px;
+  border-radius: 50%; cursor: pointer; user-select:none;
+  transform: translateX(40%); transition: background .2s ease, transform .2s ease, opacity .2s ease;
+  backdrop-filter: saturate(120%) blur(2px);
+}
+#ty-tools-tab:hover{ background: rgba(0,0,0,.8); }
+#ty-tools-tab .ico{ line-height: 1; font-weight: 600; }
+
+/* 标题锚点（左侧“#”） */
+#write h1,#write h2,#write h3,#write h4,#write h5,#write h6{ position:relative; }
+.ty-anchor {
+  position:absolute; left:-1.2em; top:50%; transform:translateY(-50%);
+  opacity:0; text-decoration:none; color:#999; font-weight:600; font-size:.9em;
+  padding:0 .2em; border-radius:4px;
+}
+#write h1:hover .ty-anchor,#write h2:hover .ty-anchor,#write h3:hover .ty-anchor,
+#write h4:hover .ty-anchor,#write h5:hover .ty-anchor,#write h6:hover .ty-anchor{ opacity:1 }
+@media (max-width:768px){ .ty-anchor{ left:auto; right:-.8em } }
+
+/* 复制提示气泡 */
+.ty-tip {
+  position:absolute; left:-1.2em; top:0; transform: translate(-10%, -120%);
+  background: rgba(0,0,0,.8); color: #fff; padding: 3px 8px; border-radius: 6px;
+  font-size: 12px; white-space: nowrap; pointer-events: none; opacity: 0;
+}
+@media (max-width:768px){ .ty-tip{ left:auto; right:-.8em; transform: translate(10%,-120%) }}
+
+/* 大纲高亮 */
+.outline-content .active,
+.outline-content .active > .outline-item,
+.outline-content a.active { color: #2a72ff; }
+
+/* 简单收起侧栏：仅隐藏 */
+body.ty-outline-hidden .typora-export-sidebar{ display:none !important; }
+
+/* ========= 图片灯箱（含左侧缩略条、非重叠布局） ========= */
+#ty-lightbox {
+  /* 预留左侧缩略条安全区，避免与大图/按钮重叠 */
+  --lb-strip-w: 108px; /* 左侧缩略条宽度（含边距） */
+  position: fixed; inset: 0; background: rgba(0,0,0,.92); display: none; z-index: 9998;
+  padding-left: calc(var(--lb-strip-w) + 12px);
+}
+#ty-lightbox.open { display: flex; align-items: center; justify-content: center; }
+.ty-lb-img { max-width: calc(92vw - var(--lb-strip-w)); max-height: 86vh; }
+.ty-lb-cap { position: fixed; bottom: 64px; left: 50%; transform: translateX(-50%); color: #ddd; font-size: 13px; }
+
+/* 画廊控制按钮（左箭头避开缩略条） */
+.ty-lb-prev, .ty-lb-next, .ty-lb-close {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.12); color: #fff; border-radius: 50%; width: 40px; height: 40px;
+  display: grid; place-items: center; font-size: 18px; cursor: pointer; user-select: none;
+}
+.ty-lb-prev:hover, .ty-lb-next:hover, .ty-lb-close:hover { background: rgba(255,255,255,.18); }
+.ty-lb-prev { left: calc(var(--lb-strip-w) + 24px); }
+.ty-lb-next { right: 24px; } 
+.ty-lb-close { right: 24px; top: 24px; transform: none; }
+
+/* 画廊顶部序号 */
+#ty-lb-count{
+  position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+  color:#eee; background: rgba(0,0,0,.35); padding: 4px 10px;
+  border-radius: 8px; font: 12px/1.3 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+}
+
+/* 画廊底部动作区 */
+#ty-lb-actions{
+  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px; background: rgba(0,0,0,.35); padding: 8px 10px; border-radius: 12px;
+}
+.ty-act-btn{
+  background: rgba(255,255,255,.16); color:#fff; border-radius: 8px; padding: 6px 10px;
+  font-size: 12px; cursor: pointer; user-select: none; border: 1px solid rgba(255,255,255,.18);
+}
+.ty-act-btn:hover{ background: rgba(255,255,255,.22); }
+
+/* 画廊左侧缩略图条（不与大图重叠） */
+#ty-lb-strip{
+  position: fixed; left: 12px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 8px; max-height: 80vh; overflow: auto; padding-right: 4px;
+  width: var(--lb-strip-w);
+}
+.ty-thumb{
+  position: relative; width: 96px; height: 68px; object-fit: cover; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,.25); cursor: pointer; opacity: .9; background: #111;
+}
+.ty-thumb:hover{ opacity: 1; }
+.ty-thumb.active{ outline: 2px solid #7c4dff; opacity: 1; }
+.ty-thumb::after{
+  content: attr(data-idx); position: absolute; left: 4px; top: 2px;
+  font: 10px/1.1 system-ui,-apple-system,"Segoe UI"; background: rgba(0,0,0,.55); color:#fff;
+  padding: 1px 4px; border-radius: 4px;
+}
+
+/* —— 快速帮助浮层 —— */
+#ty-help-overlay{
+  position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; z-index: 10000;
+}
+#ty-help-overlay.open{ display: flex; align-items: center; justify-content: center; }
+.ty-help-dialog{
+  position: relative; width: min(720px, 92vw); max-height: 84vh; overflow: auto;
+  background: #fff; color: #222; border-radius: 12px; padding: 18px 20px;
+  box-shadow: 0 12px 36px rgba(0,0,0,.25);
+  font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+}
+.ty-help-dialog h3{ margin: 0 0 6px; font-size: 20px; }
+.ty-help-dialog h4{ margin: 14px 0 6px; font-size: 15px; color: #444; }
+.ty-help-dialog code, .ty-help-dialog kbd{
+  background: #f4f6f8; border: 1px solid #e5e8eb; border-radius: 6px; padding: 2px 6px; font-size: 12px;
+}
+.ty-help-close{
+  position: absolute; right: 10px; top: 8px; width: 34px; height: 34px;
+  display: grid; place-items: center; border-radius: 8px; cursor: pointer;
+  background: #f2f3f5; color: #444; font-size: 16px; user-select: none;
+}
+.ty-help-close:hover{ background: #e9eaee; }
+.ty-help-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width:680px){
+  /* 小屏缩窄缩略条并自动适配左侧安全区 */
+  #ty-lightbox{ --lb-strip-w: 80px; padding-left: calc(var(--lb-strip-w) + 8px); }
+  .ty-thumb{ width: 72px; height: 52px; }
+  .ty-lb-prev{ left: calc(var(--lb-strip-w) + 16px) }
+}
+
+/* —— 可视化注释（由 HTML 注释生成） —— */
+.ty-cmt{
+  display: inline-block; max-width: 100%;
+  background: #fffbe6; border: 1px solid #ffe58f; color: #333;
+  border-radius: 8px; padding: 4px 8px; margin: 2px 4px; vertical-align: baseline;
+  font-size: 12px; line-height: 1.5; box-shadow: 0 1px 0 rgba(0,0,0,.03);
+}
+.ty-cmt::before{
+  content: "注释"; font-weight: 600; color: #ad6800;
+  margin-right: .5em; padding: 1px 6px; border-radius: 6px;
+  background: #fff1b8; border: 1px solid #ffe58f;
+}
+body.ty-cmt-hidden .ty-cmt{ display: none !important; }
+
+/* 文中图片跳回高亮动画（保留） */
+@keyframes ty-img-flash{
+  0%{ box-shadow: 0 0 0 0 rgba(124,77,255,.0) }
+  50%{ box-shadow: 0 0 0 6px rgba(124,77,255,.3) }
+  100%{ box-shadow: 0 0 0 0 rgba(124,77,255,0) }
+}
+.ty-img-flash{ animation: ty-img-flash 1.2s ease-out 1; border-radius: 6px; }
+</style>
+
+<div id="ty-progress"></div>
+<div id="ty-progress-info" aria-live="polite">进度 <b>0.0%</b> ｜ 已读 <b>00:00</b></div>
+
+<!-- 工具栏抽屉拉手（仅图标，默认收起） -->
+<div id="ty-tools-tab" title="展开工具栏">
+  <span class="ico">≡</span>
+</div>
+
+<div id="ty-tools" aria-label="Page tools">
+  <div class="ty-btn" id="ty-outline" title="收起/展开左侧大纲（O）">收起/展开大纲（O）</div>
+  <div class="ty-btn" id="ty-top" title="回到顶部（T）">回到顶部（T）</div>
+  <div class="ty-btn" id="ty-urlmode" title="切换复制链接样式（当前：原文）
+快捷键：U 循环；Alt+1 原文，Alt+2 %编码，Alt+3 富文本片段">链接样式：原文</div>
+  <div class="ty-btn" id="ty-copyfmt" title="切换复制格式（当前：URL）
+快捷键：M 切换；Alt+U URL，Alt+M Markdown" hidden="">复制为：URL</div>
+  <div class="ty-btn" id="ty-expand" hidden="" title="大纲一键展开（E）">展开全部（E）</div>
+  <div class="ty-btn" id="ty-collapse" hidden="" title="大纲一键收起（R）">收起全部（R）</div>
+  <div class="ty-btn" id="ty-help" title="快速帮助（H）">帮助 / 快捷键（H）</div>
+  <div class="ty-btn" id="ty-comments" title="显示/隐藏注释（C）">隐藏注释（C）</div>
+</div>
+
+<!-- 图片灯箱 -->
+<div id="ty-lightbox" aria-modal="true" role="dialog">
+  <!-- 左侧缩略图条 -->
+  <div id="ty-lb-strip"></div>
+
+  <!-- 顶部序号 -->
+  <div id="ty-lb-count"></div>
+
+  <img class="ty-lb-img" alt="">
+  <div class="ty-lb-cap"></div>
+
+  <!-- 底部动作按钮 -->
+  <div id="ty-lb-actions">
+    <div class="ty-act-btn" id="ty-lb-copy" title="复制图片链接">复制图片链接</div>
+    <div class="ty-act-btn" id="ty-lb-fmt" title="切换复制格式（URL / Markdown）">复制为：URL</div>
+    <div class="ty-act-btn" id="ty-lb-jump" title="跳转到文中该图片位置">跳转到文中</div>
+  </div>
+
+  <div class="ty-lb-prev">‹</div>
+  <div class="ty-lb-next">›</div>
+  <div class="ty-lb-close">✕</div>
+</div>
+
+<!-- 快速帮助浮层（保持不变） -->
+<div id="ty-help-overlay" role="dialog" aria-modal="true" aria-label="快速帮助">
+  <div class="ty-help-dialog">
+    <div class="ty-help-close" id="ty-help-close" title="关闭（Esc）">✕</div>
+    <h3>快速帮助</h3>
+    <div class="ty-help-grid">
+      <div>
+        <h4>当前模式</h4>
+        <p>链接样式：<b id="ty-help-cur-urlmode">—</b></p>
+        <p>复制为：<b id="ty-help-cur-copyfmt">—</b></p>
+      </div>
+      <div>
+        <h4>常用操作</h4>
+        <p><kbd>#</kbd> 图标：复制段落链接 / 片段</p>
+        <p>收起/展开大纲：<kbd>O</kbd>；回到顶部：<kbd>T</kbd></p>
+        <p>显示/隐藏注释：<kbd>C</kbd></p>
+      </div>
+    </div>
+    <h4>链接样式</h4>
+    <ul>
+      <li><b>原文</b>：<code>#段落</code>（<kbd>Alt</kbd>+<kbd>1</kbd>）</li>
+      <li><b>%编码</b>：<code>#%E6%AE%B5%E8%90%BD</code>（<kbd>Alt</kbd>+<kbd>2</kbd>）</li>
+      <li><b>富文本片段</b>（HTML 片段）（<kbd>Alt</kbd>+<kbd>3</kbd>）</li>
+      <li>循环切换：<kbd>U</kbd></li>
+    </ul>
+    <h4>复制格式（仅“原文 / %编码”可用）</h4>
+    <ul>
+      <li>设为 <b>URL</b>：<kbd>Alt</kbd>+<kbd>U</kbd></li>
+      <li>设为 <b>Markdown</b>：<kbd>Alt</kbd>+<kbd>M</kbd></li>
+      <li>二者切换：<kbd>M</kbd></li>
+    </ul>
+    <h4>大纲与导航</h4>
+    <ul>
+      <li>展开全部：<kbd>E</kbd>；收起全部：<kbd>R</kbd></li>
+      <li>滚动时自动高亮并展开对应大纲分支</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(()=> {
+  const $  = (s, r=document)=>r.querySelector(s);
+  const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+
+  const write       = $('#write') || document.body;
+  const outlineRoot = $('.outline-content');
+
+  /* ========== 0) 工具栏抽屉：默认收起（仅图标按钮，避免重叠） ========== */
+  const TOOLS_KEY = 'ty_tools_opened';
+  const toolsTab  = $('#ty-tools-tab');
+  function setToolsOpen(open){
+    document.body.classList.toggle('ty-tools-collapsed', !open);
+    toolsTab.title = open ? '收起工具栏' : '展开工具栏';
+    toolsTab.querySelector('.ico').textContent = open ? '×' : '≡';
+  }
+  setToolsOpen(localStorage.getItem(TOOLS_KEY) === '1');
+  toolsTab.addEventListener('click', ()=>{
+    const nextOpen = document.body.classList.contains('ty-tools-collapsed');
+    setToolsOpen(nextOpen);
+    localStorage.setItem(TOOLS_KEY, nextOpen ? '1' : '0');
+  });
+
+  /* ========== 1) 图片路径自动纠偏（图床通常不会触发） ========== */
+  (function fixLocalImages(){
+    const imgs = $$('img', write);
+    const folders = ['.', 'assets', 'images', 'image', 'img', 'pics', '资源'];
+    imgs.forEach(img=>{
+      if (img.dataset && img.dataset.src && !img.src) img.src = img.dataset.src;
+      try {
+        const u = img.getAttribute('src') || '';
+        if (u && !/^https?:/i.test(u)) {
+          const d = decodeURI(u);
+          const parts = d.split(/[/\\]/);
+          const file  = parts.pop();
+          if (file) {
+            parts.push(encodeURIComponent(file));
+            const enc = parts.join('/');
+            if (enc !== u) img.src = enc;
+          }
+        }
+      } catch(e){}
+      img.addEventListener('error', ()=>{
+        const original = img.getAttribute('data-src') || img.getAttribute('src') || '';
+        const baseName = (original.split('?')[0]||'').split(/[\\/]/).pop();
+        if (!baseName) return;
+        const tried = new Set((img.dataset.tyTried||'').split('|').filter(Boolean));
+        for (const folder of folders){
+          const guess = (folder === '.') ? `./${baseName}` : `./${folder}/${baseName}`;
+          if (tried.has(guess)) continue;
+          tried.add(guess); img.dataset.tyTried = Array.from(tried).join('|'); img.src = guess; return;
+        }
+      });
+    });
+  })();
+
+  /* ========== 2) 顶部阅读进度条 + 信息（百分比/时间） ========== */
+  const bar = $('#ty-progress');
+  const info = $('#ty-progress-info');
+  const startAnchor = { t0: null };
+  function fmtTime(sec){
+    sec = Math.max(0, Math.floor(sec));
+    const m = Math.floor(sec/60), s = sec%60;
+    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }
+  function updateProgress(){
+    const st = document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const sh = document.documentElement.scrollHeight || document.body.scrollHeight || 1;
+    const max = Math.max(1, sh - window.innerHeight);
+    const p = Math.min(1, st / max);
+    bar.style.transform = 'scaleX(' + p + ')';
+    const now = performance.now();
+    if (startAnchor.t0 == null && st > 8) startAnchor.t0 = now;
+    const pct = (p*100).toFixed(1);
+    const elapsed = startAnchor.t0 ? (now - startAnchor.t0)/1000 : 0;
+    info.innerHTML = `进度 <b>${pct}%</b> ｜ 已读 <b>${fmtTime(elapsed)}</b>`;
+  }
+  updateProgress();
+  addEventListener('scroll', updateProgress, { passive:true });
+  addEventListener('resize', updateProgress);
+
+  /* ========== 3) 左侧大纲开合（保持） ========== */
+  $('#ty-outline').addEventListener('click', ()=>{
+    const hide = !document.body.classList.contains('ty-outline-hidden');
+    document.body.classList.toggle('ty-outline-hidden', hide);
+    document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline');
+  });
+  $('#ty-top').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+  /* ========== 4) 链接样式 & 复制格式（保持） ========== */
+  const MODE_KEY = 'ty_url_mode';        // raw / encoded / rich
+  const FMT_KEY  = 'ty_copy_fmt';        // url / md
+  let urlMode = (localStorage.getItem(MODE_KEY) || 'raw');
+  if (!['raw','encoded','rich'].includes(urlMode)) urlMode = 'raw';
+  let copyFmt = (localStorage.getItem(FMT_KEY)  || 'url');
+
+  const btnUrlMode = $('#ty-urlmode');
+  const btnCopyFmt = $('#ty-copyfmt');
+
+  function urlModeLabel(m){ return m==='encoded' ? '%编码' : (m==='rich' ? '富文本片段' : '原文'); }
+  function renderHelp(){
+    $('#ty-help-cur-urlmode').textContent = urlModeLabel(urlMode);
+    $('#ty-help-cur-copyfmt').textContent = (urlMode === 'rich') ? '（富文本片段下不适用）' : (copyFmt === 'md' ? 'Markdown' : 'URL');
+  }
+  function updateUrlModeButton(){
+    const label = urlModeLabel(urlMode);
+    btnUrlMode.textContent = '链接样式：' + label;
+    btnUrlMode.title = '切换复制链接样式（当前：' + label + '）\n快捷键：U 循环；Alt+1 原文，Alt+2 %编码，Alt+3 富文本片段';
+    btnCopyFmt.hidden = (urlMode === 'rich');
+    renderHelp();
+  }
+  function updateCopyFmtButton(){
+    btnCopyFmt.textContent = '复制为：' + (copyFmt==='md' ? 'Markdown' : 'URL');
+    btnCopyFmt.title = '切换复制格式（当前：' + (copyFmt==='md' ? 'Markdown' : 'URL') + '）\n快捷键：M 切换；Alt+U URL，Alt+M Markdown';
+    renderHelp();
+  }
+  function baseURL(){ return (location.href.split('#')[0] || location.href); }
+  function buildURL(id, encoded=false){
+    return baseURL() + '#' + (encoded ? encodeURIComponent(id) : id);
+  }
+  function setUrlMode(mode){
+    if (!['raw','encoded','rich'].includes(mode)) return;
+    urlMode = mode; localStorage.setItem(MODE_KEY, urlMode); updateUrlModeButton();
+  }
+  function setCopyFmt(fmt){
+    if (!['url','md'].includes(fmt)) return;
+    copyFmt = fmt; localStorage.setItem(FMT_KEY, copyFmt); updateCopyFmtButton();
+  }
+  btnUrlMode.addEventListener('click', ()=>{ setUrlMode(urlMode==='raw' ? 'encoded' : (urlMode==='encoded' ? 'rich' : 'raw')); });
+  btnCopyFmt.addEventListener('click', ()=>{ setCopyFmt(copyFmt==='url' ? 'md' : 'url'); });
+  updateUrlModeButton(); updateCopyFmtButton();
+
+  /* ========== 5) 一键展开/收起所有层级（保持） ========== */
+  const btnExpand = $('#ty-expand'), btnCollapse = $('#ty-collapse');
+  if (outlineRoot){ btnExpand.hidden = false; btnCollapse.hidden = false; }
+  const allWrappers = ()=> $$('.outline-item-wrapper', outlineRoot);
+  function expandAll(){ allWrappers().forEach(w=> w.classList.add('outline-item-open')); document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline'); }
+  function collapseAll(){ allWrappers().forEach(w=> w.classList.remove('outline-item-open')); document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline'); }
+  btnExpand.addEventListener('click', expandAll);
+  btnCollapse.addEventListener('click', collapseAll);
+
+  /* ========== 6) 大纲节点点击（保持） ========== */
+  if (outlineRoot){
+    outlineRoot.addEventListener('click', (e)=>{
+      const expander = e.target.closest('.outline-expander');
+      if (expander){
+        e.preventDefault();
+        const w = expander.closest('.outline-item-wrapper');
+        if (w) w.classList.toggle('outline-item-open');
+        return;
+      }
+      const label = e.target.closest('.outline-label');
+      if (label && !label.closest('a')){
+        const w = label.closest('.outline-item-wrapper');
+        if (w) w.classList.toggle('outline-item-open');
+      }
+    });
+  }
+
+  /* ========== 7) 文本工具：干净标题；从文件名推断论文标题（保持） ========== */
+  function getCleanHeadingText(h){
+    const clone = h.cloneNode(true);
+    clone.querySelectorAll('.ty-anchor,.ty-tip').forEach(n=> n.remove());
+    return (clone.textContent || '').replace(/\s+/g,' ').trim();
+  }
+  function filenameDerivedTitle(){
+    const name = decodeURIComponent((location.pathname.split('/').pop()||'').replace(/\.[^.]+$/,''));
+    const noTs = name.replace(/([_-])\d{4}-\d{2}-\d{2}(?:([_-])\d{2}\2\d{2}\2\d{2})?$/,'');
+    const underscoresToSpace = noTs.replace(/_/g,' ').trim();
+    const m = underscoresToSpace.match(/^(\d{4})[ _-]+(.*)$/);
+    if (m) {
+      const year = m[1]; const rest = (m[2]||'').trim();
+      return year + (rest ? '-' + rest : '');
+    }
+    return underscoresToSpace;
+  }
+
+  /* ========== 8) 标题锚点复制（三种样式 + 两种格式）（保持） ========== */
+  const used = new Set();
+  function slugify(text){
+    const base = text.toLowerCase().trim()
+      .replace(/[\u2000-\u206F\u2E00-\u2E7F'!"#$%&()*+,./:;<=>?@\[\]\\^_`{|}~]/g,'')
+      .replace(/\s+/g,'-') || 'section';
+    let s = base, i=2; while(used.has(s)) s = base + '-' + (i++); used.add(s); return s;
+  }
+
+  const idToItem = new Map();
+  if(outlineRoot){
+    const links = $$('a[href^="#"]', outlineRoot);
+    links.forEach(a=>{
+      const raw = a.getAttribute('href').slice(1);
+      const id1 = raw, id2 = decodeURIComponent(raw);
+      const li = a.closest('.outline-item-wrapper') || a.closest('.outline-item') || a;
+      idToItem.set(id1, li); idToItem.set(id2, li);
+    });
+  }
+  function outlinePathFor(id, fallbackTitle){
+    if(!outlineRoot) return fallbackTitle || '';
+    const node = idToItem.get(id);
+    if(!node) return fallbackTitle || '';
+    let w = node.closest('.outline-item-wrapper') || node, parts=[];
+    while (w && w !== outlineRoot){
+      const label = w.querySelector(':scope > .outline-item .outline-label') || w.querySelector('.outline-label');
+      const txt = label ? label.textContent.trim().replace(/\s+/g,' ') : '';
+      if (txt) parts.push(txt);
+      w = w.parentElement && w.parentElement.closest ? w.parentElement.closest('.outline-item-wrapper') : null;
+    }
+    parts = parts.reverse();
+    return parts.join(' / ');
+  }
+  function buildRichSnippet(headingId, headingText){
+    const rawURL = buildURL(headingId, false);
+    const encURL = buildURL(headingId, true);
+    const docTitle = filenameDerivedTitle();
+    const path = outlinePathFor(headingId, headingText);
+    return [
+`- <p style="background-color: rgb(255, 240, 243); color: black;">${docTitle}</p>`,
+`- <p style="background-color: rgb(255, 248, 230); color: black;">${path}</p>`,
+`- \`${headingText}\``,
+'',
+`<div style="background-color: rgb(245, 240, 255); border: 1px solid rgb(217, 195, 250); padding: 9px 14px; border-radius: 5px;">`,
+`中文路径锚点 <a href="${rawURL}"><b>${headingText}</b></a> 。`,
+`</div>`,
+`<div style="background-color: rgb(240, 255, 244); border: 1px solid rgb(183, 235, 201); padding: 8px 12px; border-radius: 3px;">`,
+`URL编码锚点 <a href="${encURL}"><b>${headingText}</b></a> 。`,
+`</div>`
+].join('\n');
+  }
+
+  const heads = $$('#write h1,#write h2,#write h3,#write h4,#write h5,#write h6');
+  heads.forEach(h=>{
+    if(!h.id || !h.id.trim()) h.id = slugify(getCleanHeadingText(h));
+
+    const a   = document.createElement('a');
+    const tip = document.createElement('span');
+    a.className = 'ty-anchor'; a.textContent = '#'; a.href = '#' + h.id; a.title = '复制此段落链接';
+    tip.className = 'ty-tip'; tip.textContent = '已复制段落链接';
+
+    a.addEventListener('click', async (e)=>{
+      e.preventDefault();
+      const titleText = getCleanHeadingText(h);
+      let copyText = '';
+
+      if (urlMode === 'rich') {
+        copyText = buildRichSnippet(h.id, titleText);
+        tip.textContent = '已复制片段';
+      } else {
+        const urlRaw = (urlMode === 'encoded') ? buildURL(h.id, true) : buildURL(h.id, false);
+        if (copyFmt === 'md') {
+          copyText = `[${titleText}](${urlRaw})`;
+          tip.textContent = '已复制 Markdown 链接';
+        } else {
+          copyText = urlRaw;
+          tip.textContent = '已复制段落链接';
+        }
+      }
+
+      try{ await navigator.clipboard.writeText(copyText); }
+      catch{
+        const ta=document.createElement('textarea'); ta.value=copyText;
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+      history.replaceState(null,'','#'+h.id);
+      tip.style.opacity='1'; clearTimeout(tip._t); tip._t=setTimeout(()=> tip.style.opacity='0', 1000);
+    });
+
+    h.insertBefore(a, h.firstChild);
+    h.appendChild(tip);
+  });
+
+  /* ========== 9) ScrollSpy：滚动高亮 + 自动展开（保持） ========== */
+  let activeId = null;
+  function ensureOpenFor(id){
+    const node = idToItem.get(id); if(!node) return;
+    let w = node.closest('.outline-item-wrapper') || node;
+    while (w && w !== outlineRoot){
+      w.classList.add('outline-item-open');
+      w = w.parentElement && w.parentElement.closest ? w.parentElement.closest('.outline-item-wrapper') : null;
+    }
+  }
+  function setActive(id){
+    if(!outlineRoot || !id || id===activeId) return;
+    activeId = id;
+    outlineRoot.querySelectorAll('.active').forEach(el=> el.classList.remove('active'));
+    const el = idToItem.get(id);
+    if(el){
+      el.classList.add('active');
+      const link = el.querySelector('a[href="#'+CSS.escape(id)+'"]');
+      if(link) link.classList.add('active');
+      ensureOpenFor(id);
+      el.scrollIntoView && el.scrollIntoView({block:'nearest'});
+    }
+  }
+  function updateActiveByScroll(){
+    const y = window.scrollY + 120;
+    let cur = heads.length ? heads[0].id : null;
+    for (const h of heads){ if(h.offsetTop <= y) cur = h.id; else break; }
+    setActive(cur);
+  }
+  updateActiveByScroll();
+  addEventListener('scroll', updateActiveByScroll, { passive:true });
+  addEventListener('resize', updateActiveByScroll);
+
+  /* ========== 10) 图片灯箱（缩略图点击不跳文；预留安全区防重叠） ========== */
+  const lb = $('#ty-lightbox'), lbImg = $('.ty-lb-img', lb), lbCap = $('.ty-lb-cap', lb);
+  const prevBtn = $('.ty-lb-prev', lb), nextBtn = $('.ty-lb-next', lb), closeBtn = $('.ty-lb-close', lb);
+  const lbCount = $('#ty-lb-count'), lbStrip = $('#ty-lb-strip');
+  const lbCopy  = $('#ty-lb-copy'),  lbFmt   = $('#ty-lb-fmt'),   lbJump = $('#ty-lb-jump');
+
+  const IMG_FMT_KEY = 'ty_img_copy_fmt'; // url / md
+  let imgCopyFmt = (localStorage.getItem(IMG_FMT_KEY) || 'url');
+  function setImgCopyFmt(fmt){
+    if (!['url','md'].includes(fmt)) return;
+    imgCopyFmt = fmt; localStorage.setItem(IMG_FMT_KEY, fmt);
+    lbFmt.textContent = '复制为：' + (fmt==='md'?'Markdown':'URL');
+  }
+  setImgCopyFmt(imgCopyFmt);
+
+  let list=[], idx=-1, thumbsBuilt=false;
+
+  function collectImages(){
+    list = $$('#write img').filter(img=>{
+      const w = img.naturalWidth || img.clientWidth;
+      const h = img.naturalHeight || img.clientHeight;
+      return (w*h) >= (48*48);
+    });
+  }
+  function buildThumbs(){
+    lbStrip.innerHTML = '';
+    list.forEach((el,i)=>{
+      const t = document.createElement('img');
+      t.className = 'ty-thumb';
+      const src = el.getAttribute('data-src') || el.currentSrc || el.src;
+      t.src = src; t.alt=''; t.loading='lazy';
+      t.setAttribute('data-idx', (i+1));
+      // 点击缩略图：在画廊内切换到该图（不跳出）
+      t.addEventListener('click', ()=> showAt(i));
+      lbStrip.appendChild(t);
+    });
+    thumbsBuilt = true;
+  }
+  function updateThumbActive(){
+    const thumbs = $$('.ty-thumb', lbStrip);
+    thumbs.forEach(t=> t.classList.remove('active'));
+    const cur = thumbs[idx]; if (cur) cur.classList.add('active');
+  }
+  function showAt(i){
+    if(i<0 || i>=list.length) return;
+    idx=i;
+    const el=list[idx];
+    const src = el.getAttribute('data-src') || el.currentSrc || el.src;
+    const cap = el.getAttribute('alt') || el.title || '';
+    lbImg.src=src; lbImg.alt=cap; lbCap.textContent=cap;
+    lbCount.textContent = (idx+1) + ' / ' + list.length;
+    updateThumbActive();
+    lb.classList.add('open'); document.body.style.overflow='hidden';
+  }
+  function close(){ lb.classList.remove('open'); document.body.style.overflow=''; lbImg.src=''; lbImg.alt=''; }
+  function prev(){ showAt((idx-1+list.length)%list.length); }
+  function next(){ showAt((idx+1)%list.length); }
+
+  // 文中点击图片 → 打开画廊（并构建缩略条）
+  write.addEventListener('click', (e)=>{
+    const target = e.target.closest && e.target.closest('img');
+    if(!target) return;
+    e.preventDefault();
+    collectImages();
+    if (!thumbsBuilt) buildThumbs();
+    const i = list.indexOf(target);
+    if(i>=0) showAt(i);
+  });
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+  closeBtn.addEventListener('click', close);
+  lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+  document.addEventListener('keydown', (e)=>{
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    if(e.key==='ArrowLeft') prev();
+    if(e.key==='ArrowRight') next();
+  });
+
+  // 复制图片链接（URL / Markdown）
+  lbCopy.addEventListener('click', async ()=>{
+    if(idx<0 || idx>=list.length) return;
+    const el = list[idx];
+    const src = el.getAttribute('data-src') || el.currentSrc || el.src;
+    const txt = (imgCopyFmt==='md') ? `![](${src})` : src;
+    try{ await navigator.clipboard.writeText(txt); lbCopy.textContent='已复制'; setTimeout(()=> lbCopy.textContent='复制图片链接', 900); }
+    catch{
+      const ta=document.createElement('textarea'); ta.value=txt;
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      lbCopy.textContent='已复制'; setTimeout(()=> lbCopy.textContent='复制图片链接', 900);
+    }
+  });
+  lbFmt.addEventListener('click', ()=> setImgCopyFmt(imgCopyFmt==='url' ? 'md' : 'url'));
+  // 跳回文中
+  lbJump.addEventListener('click', ()=>{
+    if(idx<0 || idx>=list.length) return;
+    const el = list[idx];
+    close();
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.classList.add('ty-img-flash');
+    setTimeout(()=> el.classList.remove('ty-img-flash'), 1300);
+  });
+
+  /* ========== 11) 帮助浮层（保持） ========== */
+  const helpOverlay = $('#ty-help-overlay');
+  const helpClose   = $('#ty-help-close');
+  const helpBtn     = $('#ty-help');
+  function openHelp(){
+    renderHelp();
+    helpOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeHelp(){
+    helpOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  helpBtn.addEventListener('click', openHelp);
+  helpClose.addEventListener('click', closeHelp);
+  helpOverlay.addEventListener('click', (e)=>{ if(e.target === helpOverlay) closeHelp(); });
+
+  /* ========== 12) 快捷键（白名单：仅单键 & Alt 组合；其它全部放行） ========== */
+  document.addEventListener('keydown', (e)=>{
+    const tag = (e.target && e.target.tagName || '').toLowerCase();
+    const inEditable = !!(e.target && (e.target.isContentEditable || /^(input|textarea|select)$/i.test(tag)));
+    if (inEditable) return;
+
+    if (e.getModifierState && (e.getModifierState('AltGraph') || e.getModifierState('OS'))) return;
+
+    const k    = (e.key || '').toLowerCase();
+    const code = e.code || '';
+
+    // Alt-only 组合：Alt+1/2/3/U/M
+    if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+      if (code==='Digit1' || code==='Numpad1' || k==='1') { e.preventDefault(); setUrlMode('raw');     return; }
+      if (code==='Digit2' || code==='Numpad2' || k==='2') { e.preventDefault(); setUrlMode('encoded'); return; }
+      if (code==='Digit3' || code==='Numpad3' || k==='3') { e.preventDefault(); setUrlMode('rich');    return; }
+      if (!btnCopyFmt.hidden && code==='KeyU') { e.preventDefault(); setCopyFmt('url'); return; }
+      if (!btnCopyFmt.hidden && code==='KeyM') { e.preventDefault(); setCopyFmt('md');  return; }
+      return;
+    }
+
+    // 包含 Ctrl/Cmd/Shift 的组合：放行
+    if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+
+    // 单键白名单
+    const SINGLE = new Set(['o','t','e','r','u','m','c','h']);
+    if (SINGLE.has(k)) {
+      e.preventDefault();
+      if (k==='o') $('#ty-outline')?.click();
+      else if (k==='t') $('#ty-top')?.click();
+      else if (k==='e') $('#ty-expand')?.click();
+      else if (k==='r') $('#ty-collapse')?.click();
+      else if (k==='u') $('#ty-urlmode')?.click();
+      else if (k==='m' && !btnCopyFmt.hidden) $('#ty-copyfmt')?.click();
+      else if (k==='c') $('#ty-comments')?.click();
+      else if (k==='h') openHelp();
+      return;
+    }
+
+    // Esc 仅在帮助打开时拦截
+    if (k==='escape' && helpOverlay.classList.contains('open')) { e.preventDefault(); closeHelp(); }
+  });
+
+  /* ========== 13) 将 HTML 注释转为可见元素 + 开关（保持） ========== */
+  const btnComments = $('#ty-comments');
+  let tyCmtInited = false;
+  function injectCommentsOnce(){
+    if (tyCmtInited) return;
+    tyCmtInited = true;
+    const walker = document.createTreeWalker(write, NodeFilter.SHOW_COMMENT, null, false);
+    const nodes = [];
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) nodes.push(n);
+
+    nodes.forEach(cmt=>{
+      const txt = (cmt.data || '').trim();
+      if (!txt) return;
+      const span = document.createElement('span');
+      span.className = 'ty-cmt';
+      span.textContent = txt;
+      cmt.parentNode && cmt.parentNode.insertBefore(span, cmt);
+    });
+    if (!write.querySelector('.ty-cmt')) btnComments.hidden = true;
+  }
+  injectCommentsOnce();
+  document.body.classList.remove('ty-cmt-hidden');
+  btnComments.textContent = '隐藏注释（C）';
+  btnComments.title = '显示/隐藏注释（C）';
+  btnComments.addEventListener('click', ()=>{
+    injectCommentsOnce();
+    const hide = !document.body.classList.contains('ty-cmt-hidden');
+    document.body.classList.toggle('ty-cmt-hidden', hide);
+    btnComments.textContent = hide ? '显示注释（C）' : '隐藏注释（C）';
+  });
+})();
+</script></body>
+</html>

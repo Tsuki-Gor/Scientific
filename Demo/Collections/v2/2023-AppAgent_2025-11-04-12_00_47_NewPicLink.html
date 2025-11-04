@@ -1,0 +1,1906 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'><style type='text/css'>html {overflow-x: initial !important;}</style>
+<style type='text/css'  id="style-base">:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+.mac-os-11 { --title-bar-height: 28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, "Segoe UI Emoji", "SF Pro", sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5 { white-space: pre-wrap; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p *, #write.first-line-indent svg * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; position: relative; }
+#write svg h1, #write svg h2, #write svg h3, #write svg h4, #write svg h5, #write svg h6, #write svg p { position: static; white-space: nowrap; overflow: visible; }
+foreignobject { overflow: visible; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+li p { orphans: 1; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+thead, tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+svg { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; border-color: transparent !important; padding-top: 0px !important; padding-bottom: 0px !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  #write > p:nth-child(1) { margin-top: 0px; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+  figure { overflow-x: visible; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.reversefootnote { font-family: ui-monospace, sans-serif; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background: inherit; }
+.mermaid-svg { margin: auto; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex: 2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; overflow-wrap: anywhere; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.42857rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left: 28px solid transparent; border-right: 28px solid transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right: 8px solid transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+mjx-container { break-inside: avoid; }
+.md-alert.md-alert-note { border-left-color: rgb(9, 105, 218); }
+.md-alert.md-alert-important { border-left-color: rgb(130, 80, 223); }
+.md-alert.md-alert-warning { border-left-color: rgb(154, 103, 0); }
+.md-alert.md-alert-tip { border-left-color: rgb(31, 136, 61); }
+.md-alert.md-alert-caution { border-left-color: rgb(207, 34, 46); }
+.md-alert { padding: 0px 1em; margin-bottom: 16px; color: inherit; border-left: 0.25em solid rgb(0, 0, 0); }
+.md-alert-text-note { color: rgb(9, 105, 218); }
+.md-alert-text-important { color: rgb(130, 80, 223); }
+.md-alert-text-warning { color: rgb(154, 103, 0); }
+.md-alert-text-tip { color: rgb(31, 136, 61); }
+.md-alert-text-caution { color: rgb(207, 34, 46); }
+.md-alert-text { font-size: 0.9rem; font-weight: 700; }
+.md-alert-text svg { fill: currentcolor; position: relative; top: 0.125em; margin-right: 1ch; overflow: visible; }
+.md-alert-text-container::after { content: attr(data-text); text-transform: capitalize; pointer-events: none; margin-right: 1ch; }
+
+</style>
+<style type='text/css'  id="style-theme_css">
+:root {
+  /* == 字体设置 == */
+  /* 基准字体 */
+  /* 备选：Times, "Times New Roman" */
+  --base-Latin-font: "Latin Modern Roman", "Latin Modern Roman 10", Times;
+  --base-Chinese-font: "家族宋", "宋体-简", "华文宋体", "Noto Serif CJK SC";
+  --base-font-size: 9.5pt;
+  /* 引言字体 */
+  --quote-font: "Latin Modern Roman", "Latin Modern Roman 10", Times,
+    "Times New Roman", "华文仿宋";
+  /* em单位为一个正文字符（--base-font-size）大小，
+  例如，如果您设置 --base-font-size 为 9.5pt，那么 1.05em = 1.05*9.5pt ≈ 10pt。下面的标题字体等设置也遵循该规则。
+  这样，您就可以仅通过调整基准字体大小，而动态对其他元素大小做出调整。
+  当然，您也可以直接设置以pt或px为单位的数值，将元素的大小固定下来，如 --quote-font-size: 10pt; */
+  --quote-font-size: 1.05em;
+  /* 代码字体（代码中的中文会调用 ui-font） */
+  /* "Courier New" 从 Windows 3.1 起成为 Windows 官方提供的字体 */
+  /* "Consolas" 从 Windows Vista 起成为 Windows 官方提供的字体 */
+  --code-font: "Latin Modern Mono", "Latin Modern Mono 10", "Consolas", "Courier New";
+  /* 侧边栏字体 */
+  --ui-font: "阿里巴巴普惠体 2.0", "微软雅黑";
+  /* source mode 字体 */
+  /* 默认调用 code-font 和 ui-font */
+  --sourceMode-font: "SF Mono", "阿里巴巴普惠体 2.0", "微软雅黑";
+  /* 目录字体 */
+  /* 默认调用 base-font */
+  --toc-font: "";
+  /* 默认调用 base-font-size */
+  --toc-font-size: "";
+  /* 公式字体 */
+  --math-font-size: 1em;
+  /* 表格字体 */
+  /* 默认调用 heading-font */
+  --table-title-font: "";
+  /* 默认调用 base-font */
+  --table-font: "";
+  /* 标题字体（总设置） */
+  --heading-Latin-font: var(--base-Latin-font);
+  --heading-Chinese-font: "华文黑体";
+  /* 标题字体分别设置 */
+  /* 大标题（h1）字体 */
+  --title-Chinese-font: "华文黑体";
+  --title-font-size: 1.9em;
+  /* h2字体 */
+  --h2-Chinese-font: "华文黑体";
+  --h2-font-size: 1.5em;
+  /* h3字体 */
+  --h3-Chinese-font: "华文黑体";
+  --h3-font-size: 1.25em;
+  /* h4字体 */
+  --h4-Chinese-font: "华文楷体";
+  --h4-font-size: 1.15em;
+  /* h5字体 */
+  --h5-Chinese-font: "华文仿宋";
+  --h5-font-size: 1.10em;
+  /* h6字体 */
+  --h6-Chinese-font: "华文仿宋";
+  --h6-font-size: 1.05em;
+  /* 粗体样式设置 */
+  /* 加粗风格时使用的字重；400等同于 normal，700等同于 bold，900等同于 heavy */
+  --strong-weight: 900;
+  /* 基础行距 */
+  --base-line-height: 1.618em;
+  /* == 页面设置 == */
+  /* 打印页边距 */
+  --set-margin: 1.8cm 2cm 1.2cm 2cm !important;
+  /* == 控制设置 == */
+  /* 目录中是否显示一级标题 */
+  --toc-show-title: none;
+  /* == 颜色设置 == */
+  /* 超链接颜色 */
+  --link-color-light: #2E67D3;
+  --link-color-dark: #8bb1f9;
+  /* == 二级标题强制分页 == */
+  /* 默认值为 auto */
+  /* 更改为 page 启用强制分页 */
+  --page-break-before-h2: auto;
+}
+
+body {
+  padding: 0 !important;
+  margin: 0 !important;
+  /* counter-reset: tableHead 0 imgHead 0; */
+}
+
+@media print {
+  #write {
+    padding: 0 !important;
+  }
+  h2 {
+    break-before: var(--page-break-before-h2);
+  }
+  h2:first-of-type {
+    break-before: avoid-page;
+  }
+  @page {
+    margin: 1.8cm 2cm 1.2cm 2cm !important; /* 页边距 */
+  }
+}
+#write {
+  font-family: var(--base-Latin-font), var(--base-Chinese-font), serif;
+  font-size: var(--base-font-size);
+  /* A4标准宽度 */
+  max-width: 21cm;
+  background-color: white;
+  /* column-count: 2;
+    column-gap: 25px;
+    column-width: 8cm; 
+    display: inline-block; */
+  /* 这里可以试分栏的，但确实不适合实现 */
+}
+#write .md-math-block,
+#write .md-rawblock,
+#write p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+#write p {
+  text-align: left;
+  line-height: var(--base-line-height);
+}
+#write a {
+  color: var(--link-color-light);
+}
+
+hr {
+  border-top: solid 1px #ddd;
+  margin-top: 1.8em;
+  margin-bottom: 1.8em;
+}
+
+img {
+  /* 避免图片在导出时被断开 */
+  break-inside: avoid-page;
+}
+
+strong {
+  font-weight: var(--strong-weight);
+}
+
+@media screen {
+  #write {
+    padding: var(--set-margin);
+    /* 添加一个淡蓝色的边框 */
+    /* border: 0.8px solid #AAC ; */
+    /* 页边阴影 */
+    box-shadow: 0 0 24px 12px #cccccc;
+  }
+}
+.MathJax {
+  font-size: var(--math-font-size);
+}
+
+/* typora 编写模式 */
+#typora-source {
+  font-family: var(--sourceMode-font), var(--code-font), var(--ui-font), monospace;
+  line-height: 2em;
+}
+
+/* 侧边大纲标题 */
+.sidebar-content {
+  counter-reset: outline-h1 outline-h2 outline-h3 outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h1 {
+  counter-reset: outline-h2 outline-h3 outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h2 {
+  counter-reset: outline-h3 outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h2 .outline-label:before {
+  counter-increment: outline-h2;
+  content: counter(outline-h2) " ";
+}
+.sidebar-content .outline-h3 {
+  counter-reset: outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h3 .outline-label:before {
+  counter-increment: outline-h3;
+  content: counter(outline-h2) "." counter(outline-h3) "  ";
+}
+.sidebar-content .outline-h4 {
+  counter-reset: outline-h5 outline-h6;
+}
+.sidebar-content .outline-h4 .outline-label:before {
+  counter-increment: outline-h4;
+  content: counter(outline-h2) "." counter(outline-h3) "." counter(outline-h4) "  ";
+}
+.sidebar-content .outline-h5 {
+  counter-reset: outline-h6;
+}
+.sidebar-content .outline-h5 .outline-label:before {
+  counter-increment: outline-h5;
+  content: counter(outline-h2) "." counter(outline-h3) "." counter(outline-h4) "." counter(outline-h5) "  ";
+}
+
+.sidebar-content {
+  /* 侧边栏的字体修改 */
+  font-family: var(--ui-font);
+  list-style: none;
+}
+
+/* 元数据（如 YAML front matter）的背景框 */
+pre.md-meta-block {
+  background: #cccccc;
+  padding: 1.4em;
+  font-family: var(--code-font), var(--ui-font), monospace;
+  font-size: 0.8em;
+}
+
+#write > h3.md-focus:before,
+#write > h4.md-focus:before,
+#write > h5.md-focus:before,
+#write > h6.md-focus:before,
+h3.md-focus:before,
+h4.md-focus:before,
+h5.md-focus:before,
+h6.md-focus:before {
+  color: inherit;
+  border: inherit;
+  border-radius: inherit;
+  position: inherit;
+  left: initial;
+  float: none;
+  top: initial;
+  font-size: inherit;
+  padding-left: inherit;
+  padding-right: inherit;
+  vertical-align: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+#write {
+  counter-reset: heading-h2 heading-h3 heading-h4 heading-h5 heading-h6;
+}
+#write h1,
+#write h2,
+#write h3,
+#write h4,
+#write h5,
+#write h6 {
+  font-weight: bold;
+  break-after: avoid-page !important;
+}
+#write h1 {
+  font-family: var(--heading-Latin-font), var(--title-Chinese-font), serif;
+  text-align: center;
+  column-span: all;
+  font-size: var(--title-font-size);
+}
+#write h2 {
+  font-family: var(--heading-Latin-font), var(--h2-Chinese-font), serif;
+  font-size: var(--h2-font-size);
+}
+#write h3 {
+  font-family: var(--heading-Latin-font), var(--h3-Chinese-font), serif;
+  font-size: var(--h3-font-size);
+  line-height: var(--h3-font-size);
+}
+#write h4 {
+  font-family: var(--heading-Latin-font), var(--h4-Chinese-font), serif;
+  font-size: var(--h4-font-size);
+  line-height: var(--h4-font-size);
+}
+#write h5 {
+  font-family: var(--heading-Latin-font), var(--h5-Chinese-font), serif;
+  font-size: var(--h5-font-size);
+  line-height: var(--h5-font-size);
+}
+#write h6 {
+  font-family: var(--heading-Latin-font), var(--h6-Chinese-font), serif;
+  font-size: var(--h6-font-size);
+  /* 没有写错，为了避免行距太小才这么写 */
+  line-height: var(--h5-font-size);
+}
+#write h1 {
+  counter-set: heading-h2 0 heading-h3 0 heading-h4 0 heading-h5 0 heading-h6 0;
+}
+#write h2 {
+  counter-set: heading-h3 0 heading-h4 0 heading-h5 0 heading-h6 0;
+}
+#write h3 {
+  counter-set: heading-h4 0 heading-h5 0 heading-h6 0;
+}
+#write h4 {
+  counter-set: heading-h5 0 heading-h6 0;
+}
+#write h5 {
+  counter-set: heading-h6 0;
+}
+#write h2:before, h2.md-focus.md-heading:before {
+  content: counter(heading-h2);
+  counter-increment: heading-h2;
+  margin-right: 1.2em;
+}
+
+#write h3:before, h3.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3);
+  counter-increment: heading-h3;
+  margin-right: 1.2em;
+}
+
+#write h4:before, h4.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3) "." counter(heading-h4);
+  counter-increment: heading-h4;
+  margin-right: 1.2em;
+}
+
+#write h5:before, h5.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3) "." counter(heading-h4) "." counter(heading-h5);
+  counter-increment: heading-h5;
+  margin-right: 1.2em;
+}
+
+#write h6:before, h6.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3) "." counter(heading-h4) "." counter(heading-h5) "." counter(heading-h6);
+  counter-increment: heading-h6;
+  margin-right: 1.2em;
+}
+
+/* 参考文献（脚注）块，在 Typora 中的样式 */
+.md-def-footnote {
+  display: flex;
+  position: relative;
+  font-size: 0.95em;
+  opacity: 1;
+  margin: 0;
+}
+.md-def-footnote:not(:first-child), .md-def-footnote + *:not(.md-def-footnote) {
+  margin-top: 1em;
+}
+.md-def-footnote + .md-def-footnote {
+  margin-top: 0.5em;
+}
+.md-def-footnote .md-def-name {
+  font-weight: inherit;
+  padding: 0;
+  flex-shrink: 0;
+  width: 3em;
+  margin-inline-start: -1ch;
+  white-space: nowrap;
+  text-align: left;
+}
+.md-def-footnote .md-def-name:before {
+  content: "［";
+  position: static;
+  color: inherit;
+}
+.md-def-footnote .md-def-name:after {
+  content: "］";
+  position: static;
+  color: inherit;
+}
+.md-def-footnote .md-reverse-footnote-area {
+  display: none;
+}
+.md-def-footnote:hover .md-reverse-footnote-area {
+  position: absolute;
+  right: -6px;
+  display: inline;
+}
+
+/* 参考文献（脚注）块，在导出 HTML 或 PDF 时的样式（导出后的 HTML tag 和 Typora 中的 HTML tag 不一致） */
+.footnotes-area {
+  padding-inline-start: 2.5em;
+}
+.footnotes-area hr {
+  display: none;
+}
+.footnotes-area .footnote-line {
+  color: var(--text-color);
+  font-size: 0.95em;
+  margin-top: 0.5em;
+}
+.footnotes-area .footnote-line *:not(.md-fn-count) {
+  display: inline-block;
+  vertical-align: top;
+}
+.footnotes-area .footnote-line span.md-fn-count {
+  font-weight: inherit;
+  padding: 0;
+  margin-inline-start: -3em;
+  white-space: nowrap;
+  display: inline-block;
+  width: 2.5em;
+}
+.footnotes-area .footnote-line span.md-fn-count:before {
+  content: "［";
+  position: static;
+  color: inherit;
+}
+.footnotes-area .footnote-line span.md-fn-count:after {
+  content: "］";
+  position: static;
+  color: inherit;
+}
+.footnotes-area .footnote-line a.reversefootnote {
+  display: none;
+}
+
+/* 参考文献（脚注）上标 */
+sup.md-footnote {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+}
+sup.md-footnote a {
+  color: inherit !important;
+}
+sup.md-footnote:not(.md-expand) {
+  margin-inline: -0.44em;
+}
+sup.md-footnote:not(.md-expand):before {
+  content: "［";
+}
+sup.md-footnote:not(.md-expand):after {
+  content: "］";
+}
+
+/* 无序列表 */
+#write ul {
+  list-style: disc;
+}
+#write ul ul {
+  /*list-style: circle;*/
+  /* 请勿删除“–”后的空格, 他们对缩进有一定影响, 下同 */
+  list-style: "–   ";
+}
+#write ul ul ul {
+  list-style: "◦  ";
+}
+
+/* 有序列表 */
+#write ol {
+  list-style: decimal;
+}
+#write ol ol {
+  counter-reset: liist;
+  list-style: none;
+}
+#write ol ol > li {
+  counter-increment: liist;
+  position: relative;
+}
+#write ol ol > li::before {
+  content: "(" counter(liist, lower-alpha) ")";
+  position: absolute;
+  left: -1.8em;
+}
+#write ol ol ol {
+  counter-reset: liiist;
+  list-style: none;
+  margin: 0;
+}
+#write ol ol ol > li {
+  counter-increment: liiist;
+  position: relative;
+}
+#write ol ol ol > li::before {
+  content: counter(liiist, lower-roman) ".";
+  align-self: flex-end;
+  position: absolute;
+  left: -4.5em;
+  /* -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;*/
+  /* 为了让项目编号是重新用句点对齐而不是左对齐 */
+  width: 4em;
+  text-align: right;
+}
+
+#write ol,
+#write ul {
+  padding-inline-start: 2em;
+}
+
+#write li {
+  position: relative;
+}
+#write li + li,
+#write ul + ol > li,
+#write ol + ul > li,
+#write li > ul > li,
+#write li > ol > li {
+  margin-top: -0.8em;
+}
+
+/* task列表 */
+.md-task-list-item > input {
+  margin-top: 0.42em;
+  margin-left: -1.5em;
+  width: 1em !important;
+  height: 1em !important;
+}
+
+#write table {
+  /* 三线表第一条线宽度 */
+  border-top: 1.2pt solid;
+  /* 三线表第二条线宽度 */
+  border-bottom: 1.2pt solid;
+  font-family: var(--table-font), var(--base-Latin-font), var(--base-Chinese-font), serif;
+  /* font-size: var(--base-font-size); */
+  text-align: center;
+  break-inside: avoid-page;
+  border-spacing: 6px;
+  /* 自动布局表格宽度，如果有时内容太紧建议直接加空格吧，我自己看不惯和页面等宽的大表格 */
+  width: auto;
+  /* 使表格默认居中；虽然这个代码不好，但好像没别的实现办法 */
+  margin: 0 auto;
+}
+#write table td {
+  padding: 2px;
+}
+#write table tr {
+  padding: 2px;
+}
+#write th {
+  padding: 0px 6px;
+}
+#write thead {
+  /* 表格标题（首行）样式 */
+  /* 三线表表头的线 */
+  border-bottom: 0.5pt solid;
+  font-family: var(--table-title-font), var(--heading-Latin-font), var(--heading-Chinese-font), serif !important;
+  /* font-size: var(--base-font-size); */
+  font-weight: var(--strong-weight);
+}
+
+/* 一个>的引言仅为两字符缩进，使用>>的引言为传统引言样式，具有左竖线、左缩进 */
+blockquote {
+  font-style: normal;
+  font-family: var(--quote-font), var(--base-Latin-font), var(--base-Chinese-font), -apple-system, serif;
+  font-size: var(--quote-font-size);
+  /* 文字离左边框的距离 */
+  padding-left: 2em;
+  padding-right: 2em;
+  /* 左边框离页面边的距离 */
+  margin-left: 0;
+}
+
+blockquote blockquote {
+  border-left: 4px solid hsl(0, 0%, 70%);
+  padding-left: calc(2ch - 4px);
+  padding-right: 0;
+  margin-left: -4px;
+  border-radius: 0;
+}
+
+/* 行内代码 */
+code {
+  font-family: var(--code-font), var(--ui-font), monospace;
+}
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code,
+p code,
+li code {
+  color: rgb(60, 112, 198);
+  background-color: #fefefe;
+  /* 阴影 */
+  box-shadow: 0 0 1px 1px #c8d3df;
+  font-family: var(--code-font), var(--ui-font), monospace;
+  box-sizing: border-box;
+  border-right: 0px;
+  margin: 0 2px 0 2px;
+  padding: 0 2px 0 2px;
+  /* 圆角 */
+  border-radius: 2px 2px 2px 2px;
+}
+
+/* 代码块样式 */
+.md-fences,
+.CodeMirror pre,
+.CodeMirror-wrap {
+  /* padding: 10px; */
+  font-size: 1em;
+}
+
+.CodeMirror-code pre,
+.CodeMirror-sizer {
+  font-family: var(--code-font), var(--ui-font), monospace;
+}
+
+/* 目录 */
+.md-toc {
+  font-size: var(--toc-font-size);
+}
+
+.md-toc-content {
+  margin-left: 2em;
+  /* 修复缺失上级标题时无法递增 */
+  counter-reset: toc-h2 toc-h3 toc-h4 toc-h5 toc-h6;
+  break-after: page;
+}
+
+.md-toc-inner {
+  margin-left: 0 !important;
+  color: var(--text-color) !important;
+}
+
+.md-toc-item {
+  color: var(--text-color) !important;
+}
+
+/* 目录标题内容属性 */
+.md-toc-h2,
+.md-toc-h3,
+.md-toc-h4,
+.md-toc-h5,
+.md-toc-h6 {
+  font-size: var(--toc-font-size);
+  font-family: var(--toc-font), var(--base-Latin-font), var(--base-Chinese-font), serif;
+}
+
+.md-toc-h2 {
+  font-weight: var(--strong-weight);
+}
+
+/* 目录标题前 */
+.md-toc-content .md-toc-h1 {
+  display: var(--toc-show-title);
+  counter-set: toc-h2 0 toc-h3 0 toc-h4 0 toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h2 {
+  counter-set: toc-h3 0 toc-h4 0 toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h3 {
+  counter-set: toc-h4 0 toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h4 {
+  counter-set: toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h5 {
+  counter-set: toc-h6 0;
+}
+.md-toc-content .md-toc-h2:before {
+  counter-increment: toc-h2;
+  content: counter(toc-h2);
+  margin-right: 1em;
+  font-weight: var(--strong-weight);
+}
+.md-toc-content .md-toc-h3:before {
+  counter-increment: toc-h3;
+  content: counter(toc-h2) "." counter(toc-h3);
+  margin-left: 1.5em;
+  margin-right: 0.5em;
+}
+.md-toc-content .md-toc-h4:before {
+  counter-increment: toc-h4;
+  content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4);
+  margin-left: 3.5em;
+  margin-right: 0.5em;
+}
+.md-toc-content .md-toc-h5:before {
+  counter-increment: toc-h5;
+  content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4) "." counter(toc-h5);
+  margin-left: 5.5em;
+  margin-right: 0.5em;
+}
+.md-toc-content .md-toc-h6:before {
+  counter-increment: toc-h6;
+  content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4) "." counter(toc-h5) "." counter(toc-h6);
+  margin-left: 7.5em;
+  margin-right: 0.5em;
+}
+</style>
+<style type='text/css'  id="style-mathjax">
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG2"] path[data-c], mjx-container[jax="SVG2"] use[data-c] {
+  stroke-width: 3;
+}
+
+g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+.MathJax g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+</style>
+<style type='text/css'  id="style-mathjax-ni">mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+							stroke-width: 0;
+						}</style>
+<style type='text/css'  id="style-lp">ol, ul {padding-left: 40px}</style>
+
+<title>2023-AppAgent_2025-11-04-12_00_47_NewPicLink</title>
+</head>
+<body class='typora-export os-windows typora-export-show-outline typora-export-collapse-outline'><div class='typora-export-content'>
+<div class="typora-export-sidebar"><div class="outline-content"><li class="outline-item-wrapper outline-h1 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#appagent-multimodal-agents-as-smartphone-users">AppAgent: Multimodal Agents as Smartphone Users</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h1"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#appagent作为智能手机用户的多模态代理">AppAgent：作为智能手机用户的多模态代理</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#abstract">Abstract</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#摘要">摘要</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#1-introduction">1 Introduction</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#1-引言">1 引言</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#2-related-work">2 Related Work</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#2-相关工作">2 相关工作</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#21-large-language-models">2.1 Large language models</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#21-大型语言模型">2.1 大型语言模型</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#22-llms-as-agents">2.2 LLMs as agents</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#22-作为代理的大型语言模型">2.2 作为代理的大型语言模型</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#3-method">3 Method</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#3-方法">3 方法</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#31-environment-and-action-space">3.1 Environment and Action Space</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#31-环境与动作空间">3.1 环境与动作空间</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#32-exploration-phase">3.2 Exploration Phase</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#32-探索阶段">3.2 探索阶段</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#33-deployment-phase">3.3 Deployment Phase</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#33-部署阶段">3.3 部署阶段</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#4-experiments">4 Experiments</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#4-实验">4 实验</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#41-experimental-setup">4.1 Experimental Setup</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#41-实验设置">4.1 实验设置</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#42-design-and-analysis">4.2 Design and Analysis</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#42-设计与分析">4.2 设计与分析</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#43-case-study">4.3 Case Study</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#43-案例研究">4.3 案例研究</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#5-conclusion">5 Conclusion</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#5-结论">5 结论</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#references">References</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#参考文献">参考文献</a></div><ul class="outline-children"></ul></li></ul></li></div></div><div id='write'  class=''><h1 id='appagent-multimodal-agents-as-smartphone-users'><span>AppAgent: Multimodal Agents as Smartphone Users</span></h1><h1 id='appagent作为智能手机用户的多模态代理'><span>AppAgent：作为智能手机用户的多模态代理</span></h1><p><span>Chi Zhang* Zhao Yang* Jiaxuan Liu* Yucheng Han Xin Chen</span>
+<span>张驰* 杨钊* 刘佳轩* 韩宇成 陈鑫</span></p><p><span>Zebiao Huang Bin Fu Gang </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="3.853ex" height="2.08ex" role="img" focusable="false" viewBox="0 -908.6 1703 919.6" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.025ex;"><defs><path id="MJX-729-TEX-N-59" d="M518 0Q497 3 374 3Q253 3 232 0H221V46H254Q313 47 321 58Q324 62 324 167V273L221 446Q117 620 114 623Q106 631 91 634T31 637H11V683H20Q29 680 148 680Q273 680 294 683H305V637H287Q239 636 236 621Q236 619 321 475L407 332L483 460Q502 492 527 534Q563 594 563 604Q563 632 517 637H508V683H517H525Q533 683 545 683T571 682T600 681T626 681Q695 681 731 683H738V637H723Q640 633 613 588Q612 587 517 427L425 273V169V95Q425 66 428 59T444 49Q459 46 506 46H528V0H518Z"></path><path id="MJX-729-TEX-N-75" d="M383 58Q327 -10 256 -10H249Q124 -10 105 89Q104 96 103 226Q102 335 102 348T96 369Q86 385 36 385H25V408Q25 431 27 431L38 432Q48 433 67 434T105 436Q122 437 142 438T172 441T184 442H187V261Q188 77 190 64Q193 49 204 40Q224 26 264 26Q290 26 311 35T343 58T363 90T375 120T379 144Q379 145 379 161T380 201T380 248V315Q380 361 370 372T320 385H302V431Q304 431 378 436T457 442H464V264Q464 84 465 81Q468 61 479 55T524 46H542V0Q540 0 467 -5T390 -11H383V58Z"></path><path id="MJX-729-TEX-N-2020" d="M182 675Q195 705 222 705Q234 705 243 700T253 691T263 675L262 655Q262 620 252 549T240 454V449Q250 451 288 461T346 472T377 461T389 431Q389 417 379 404T346 390Q327 390 288 401T243 412H240V405Q245 367 250 339T258 301T261 274T263 225Q263 124 255 -41T239 -213Q236 -216 222 -216H217Q206 -216 204 -212T200 -186Q199 -175 199 -168Q181 38 181 225Q181 265 182 280T191 327T204 405V412H201Q196 412 157 401T98 390Q76 390 66 403T55 431T65 458T98 472Q116 472 155 462T205 449Q204 452 204 460T201 490T193 547Q182 619 182 655V675Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><use data-c="59" xlink:href="#MJX-729-TEX-N-59"></use><use data-c="75" xlink:href="#MJX-729-TEX-N-75" transform="translate(750,0)"></use></g></g></g></g><g data-mml-node="TeXAtom" transform="translate(1339,410.1) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mo"><use data-c="2020" xlink:href="#MJX-729-TEX-N-2020"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="ORD"><mi data-mjx-auto-op="false">Yu</mi></mrow></mrow></mrow><mrow data-mjx-texclass="ORD"><mo>†</mo></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{\mathrm{{Yu}}}^{ \dagger  }</script>
+<span>黄泽彪 傅斌 钢 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="3.853ex" height="2.08ex" role="img" focusable="false" viewBox="0 -908.6 1703 919.6" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.025ex;"><defs><path id="MJX-729-TEX-N-59" d="M518 0Q497 3 374 3Q253 3 232 0H221V46H254Q313 47 321 58Q324 62 324 167V273L221 446Q117 620 114 623Q106 631 91 634T31 637H11V683H20Q29 680 148 680Q273 680 294 683H305V637H287Q239 636 236 621Q236 619 321 475L407 332L483 460Q502 492 527 534Q563 594 563 604Q563 632 517 637H508V683H517H525Q533 683 545 683T571 682T600 681T626 681Q695 681 731 683H738V637H723Q640 633 613 588Q612 587 517 427L425 273V169V95Q425 66 428 59T444 49Q459 46 506 46H528V0H518Z"></path><path id="MJX-729-TEX-N-75" d="M383 58Q327 -10 256 -10H249Q124 -10 105 89Q104 96 103 226Q102 335 102 348T96 369Q86 385 36 385H25V408Q25 431 27 431L38 432Q48 433 67 434T105 436Q122 437 142 438T172 441T184 442H187V261Q188 77 190 64Q193 49 204 40Q224 26 264 26Q290 26 311 35T343 58T363 90T375 120T379 144Q379 145 379 161T380 201T380 248V315Q380 361 370 372T320 385H302V431Q304 431 378 436T457 442H464V264Q464 84 465 81Q468 61 479 55T524 46H542V0Q540 0 467 -5T390 -11H383V58Z"></path><path id="MJX-729-TEX-N-2020" d="M182 675Q195 705 222 705Q234 705 243 700T253 691T263 675L262 655Q262 620 252 549T240 454V449Q250 451 288 461T346 472T377 461T389 431Q389 417 379 404T346 390Q327 390 288 401T243 412H240V405Q245 367 250 339T258 301T261 274T263 225Q263 124 255 -41T239 -213Q236 -216 222 -216H217Q206 -216 204 -212T200 -186Q199 -175 199 -168Q181 38 181 225Q181 265 182 280T191 327T204 405V412H201Q196 412 157 401T98 390Q76 390 66 403T55 431T65 458T98 472Q116 472 155 462T205 449Q204 452 204 460T201 490T193 547Q182 619 182 655V675Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><use data-c="59" xlink:href="#MJX-729-TEX-N-59"></use><use data-c="75" xlink:href="#MJX-729-TEX-N-75" transform="translate(750,0)"></use></g></g></g></g><g data-mml-node="TeXAtom" transform="translate(1339,410.1) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mo"><use data-c="2020" xlink:href="#MJX-729-TEX-N-2020"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="ORD"><mi data-mjx-auto-op="false">Yu</mi></mrow></mrow></mrow><mrow data-mjx-texclass="ORD"><mo>†</mo></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{\mathrm{{Yu}}}^{ \dagger  }</script></p><p><span>Tencent</span>
+<span>腾讯</span></p><p><span>{</span><span>johnczhang, jayzyang, jiaxuanliu, yuchenghan, shingxchen, zebiaohuang, brianfu, skicyyu</span><span>}</span><span>@tencent.com </span><a href='https://appagent-official.github.io/' target='_blank' class='url'>https://appagent-official.github.io/</a>
+<span>{</span><span>johnczhang, jayzyang, jiaxuanliu, yuchenghan, shingxchen, zebiaohuang, brianfu, skicyyu</span><span>}</span><span>@tencent.com </span><a href='https://appagent-official.github.io/' target='_blank' class='url'>https://appagent-official.github.io/</a></p><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2025/11/2025_11_04__12_15_54_3b99e4.jpg"/></p><p>&nbsp;</p><p><span>Figure 1: Diverse applications of our multimodal agent framework for smartphone App operation. We evaluate the effectiveness of our agent model on 50 tasks across 10 different Apps, highlighting its adaptability and effectiveness in a real-world context.</span>
+<span>图1：我们多模态代理框架在智能手机应用操作中的多样化应用。我们在10个不同应用中评估了该代理模型在50个任务上的有效性，突出其在真实环境中的适应性和效果。</span></p><h2 id='abstract'><span>Abstract</span></h2><h2 id='摘要'><span>摘要</span></h2><p><span>Recent advancements in large language models (LLMs) have led to the creation of intelligent agents capable of performing complex tasks. This paper introduces a novel LLM-based multimodal agent framework designed to operate smartphone applications. Our framework enables the agent to operate smartphone applica-</span>
+<span>近年来大型语言模型（LLMs）的进步催生了能够执行复杂任务的智能代理。本文提出了一种基于LLM的新型多模态代理框架，旨在操作智能手机应用。我们的框架使代理能够通过简化的动作空间操作手机应用，模拟人类的点击和滑动等交互方式。</span></p><p><span>tions through a simplified action space, mimicking human-like interactions such as tapping and swiping. This novel approach bypasses the need for system back-end access, thereby broadening its applicability across diverse apps. Central to our agent&#39;s functionality is its innovative learning method. The agent learns to navigate and use new apps either through autonomous exploration or by observing human demonstrations. This process generates</span>
+<span>这一创新方法绕过了系统后端访问的需求，从而拓宽了其在多样化应用中的适用性。代理功能的核心是其创新的学习方法。代理通过自主探索或观察人类示范学习导航和使用新应用。这一过程生成</span></p><hr /><p>&nbsp;</p><p><span>*Equal contributions.</span>
+<span>*同等贡献。</span></p><p><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.898ex" height="1.949ex" role="img" focusable="false" viewBox="0 -861.5 397 861.5" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-142-TEX-N-2020" d="M182 675Q195 705 222 705Q234 705 243 700T253 691T263 675L262 655Q262 620 252 549T240 454V449Q250 451 288 461T346 472T377 461T389 431Q389 417 379 404T346 390Q327 390 288 401T243 412H240V405Q245 367 250 339T258 301T261 274T263 225Q263 124 255 -41T239 -213Q236 -216 222 -216H217Q206 -216 204 -212T200 -186Q199 -175 199 -168Q181 38 181 225Q181 265 182 280T191 327T204 405V412H201Q196 412 157 401T98 390Q76 390 66 403T55 431T65 458T98 472Q116 472 155 462T205 449Q204 452 204 460T201 490T193 547Q182 619 182 655V675Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mo"><use data-c="2020" xlink:href="#MJX-142-TEX-N-2020"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mo>†</mo></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{ \dagger  }</script><span> Corresponding Author.</span>
+<mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="0.898ex" height="1.949ex" role="img" focusable="false" viewBox="0 -861.5 397 861.5" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: 0px;"><defs><path id="MJX-142-TEX-N-2020" d="M182 675Q195 705 222 705Q234 705 243 700T253 691T263 675L262 655Q262 620 252 549T240 454V449Q250 451 288 461T346 472T377 461T389 431Q389 417 379 404T346 390Q327 390 288 401T243 412H240V405Q245 367 250 339T258 301T261 274T263 225Q263 124 255 -41T239 -213Q236 -216 222 -216H217Q206 -216 204 -212T200 -186Q199 -175 199 -168Q181 38 181 225Q181 265 182 280T191 327T204 405V412H201Q196 412 157 401T98 390Q76 390 66 403T55 431T65 458T98 472Q116 472 155 462T205 449Q204 452 204 460T201 490T193 547Q182 619 182 655V675Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"></g><g data-mml-node="TeXAtom" transform="translate(33,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mo"><use data-c="2020" xlink:href="#MJX-142-TEX-N-2020"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow data-mjx-texclass="ORD"></mrow><mrow data-mjx-texclass="ORD"><mo>†</mo></mrow></msup></math></mjx-assistive-mml></mjx-container><script type="math/tex">{}^{ \dagger  }</script><span> 通讯作者。</span></p><hr /><p>&nbsp;</p><p><span>a knowledge base that the agent refers to for executing complex tasks across different applications. To demonstrate the practicality of our agent, we conducted extensive testing over 50 tasks in 10 different applications, including social media, email, maps, shopping, and sophisticated image editing tools. The results affirm our agent&#39;s proficiency in handling a diverse array of high-level tasks.</span>
+<span>一个知识库，代理据此执行跨不同应用的复杂任务。为展示代理的实用性，我们在包括社交媒体、电子邮件、地图、购物及高级图像编辑工具等10个应用中进行了50个任务的广泛测试。结果证明了代理处理多样高阶任务的能力。</span></p><h2 id='1-introduction'><span>1 Introduction</span></h2><h2 id='1-引言'><span>1 引言</span></h2><p><span>The emergence of large language models (LLMs), such as ChatGPT (OpenAI, 2021) and GPT-4 (Ope-nAI, 2023), marks a significant milestone in the field of artificial intelligence and natural language processing. These advanced models represent a fundamental change in how machines understand and generate human language, exhibiting a level of sophistication and versatility previously unattainable. One of the most exciting developments in this field is the capability of LLMs to function not just as language processors, but as agents capable of performing complex tasks. This evolution is evident in initiatives such as AutoGPT (Yang et al., 2023a) and MetaGPT (Hong et al., 2023), which showcase the practical applications of LLMs in tasks requiring advanced cognitive functions like reasoning, planning, and collaboration. The significance of these developments cannot be overstated, as they extend the utility of LLMs beyond simple language tasks, revolutionizing various aspects of technology and daily life.</span>
+<span>大型语言模型（LLMs）的出现，如ChatGPT（OpenAI，2021）和GPT-4（OpenAI，2023），标志着人工智能和自然语言处理领域的重要里程碑。这些先进模型代表了机器理解和生成自然语言方式的根本变革，展现出前所未有的复杂性和多功能性。该领域最令人振奋的发展之一是LLMs不仅作为语言处理器，还能作为执行复杂任务的代理。这一演进在AutoGPT（Yang等，2023a）和MetaGPT（Hong等，2023）等项目中得以体现，展示了LLMs在推理、规划和协作等高级认知功能任务中的实际应用。这些发展意义重大，扩展了LLMs在简单语言任务之外的应用，革新了技术和日常生活的多个方面。</span></p><p><span>However, a key limitation of these LLM-based agents has been their reliance solely on text-based information. This restriction has historically curtailed their perception and interaction with their environment. The introduction of models equipped with vision capabilities, such as the latest iteration of GPT-4, marks a pivotal breakthrough. By integrating the ability to process and interpret visual information, these models can now understand aspects of their surroundings that are difficult or impossible to convey through text alone. This extended capability enables LLMs to interpret context, recognize patterns, and respond to visual cues, thus providing a more holistic and interactive experience with the world.</span>
+<span>然而，这些基于LLM的代理的一个关键限制是它们仅依赖文本信息。这一限制历来限制了它们对环境的感知和交互。配备视觉能力的模型的引入，如最新版本的GPT-4，标志着一个关键突破。通过整合处理和解释视觉信息的能力，这些模型现在能够理解文本难以或无法传达的环境细节。这种扩展能力使LLMs能够解读上下文、识别模式并响应视觉线索，从而提供更全面和互动的世界体验。</span></p><p><span>In our work, we focus on building a multimodal agent leveraging the vision capabilities of multimodal large language models to undertake tasks previously unachievable by text-only agents. In particular, we explore an interesting but challenging application that builds an agent to operate any smartphone application (App) in the mobile operating system. Our approach differs significantly from existing intelligent phone assistants like Siri, which operate through system back-end access and function calls. Instead, our agent interacts with smartphone apps in a human-like manner, using low-level operations such as tapping and swiping on the graphical user interface (GUI). The proposed agent offers multiple advantages. Firstly, it eliminates the need for system back-end access, making our agent universally applicable across various applications. Additionally, this approach enhances security and privacy, as the agent does not require deep system integration. Furthermore, by operating on the GUI level, our agent can adapt to changes in app interfaces and updates, ensuring long-term applicability and flexibility.</span>
+<span>在本研究中，我们专注于构建利用多模态大型语言模型视觉能力的多模态代理，以完成文本代理无法实现的任务。特别地，我们探索了一个有趣且具挑战性的应用——构建一个能够操作移动操作系统中任意智能手机应用（App）的代理。我们的方法与现有智能手机助手如Siri显著不同，后者通过系统后端访问和函数调用操作。相反，我们的代理以类人方式通过点击和滑动等低级操作与手机应用的图形用户界面（GUI）交互。所提代理具有多重优势。首先，它无需系统后端访问，使代理在各种应用中通用。此外，该方法提升了安全性和隐私性，因为代理不需深度系统集成。再者，通过在GUI层面操作，代理能适应应用界面和更新的变化，确保长期适用性和灵活性。</span></p><p><span>However, creating a multimodal agent capable of operating diverse smartphone apps presents significant challenges. Existing research indicates that adapting current models for embodied tasks necessitates extensive training data, and collecting a large dataset of app demonstrations for training is a formidable task. Moreover, different apps have unique GUIs with varying icon meanings and operational logic, and it remains uncertain whether these adapted models can effectively generalize to unseen apps.</span>
+<span>然而，创建一个能够操作多种智能手机应用的多模态代理面临重大挑战。现有研究表明，将现有模型适配于具身任务需要大量训练数据，而收集大量应用演示数据用于训练是一项艰巨的任务。此外，不同应用具有独特的图形用户界面（GUI），图标含义和操作逻辑各异，尚不确定这些适配后的模型能否有效泛化到未见过的应用。</span></p><p><span>In this paper, we introduce a multimodal agent framework aimed at operating any smartphone app like human users. The learning of our framework involves an exploration phase where the agent interacts autonomously with apps through a set of pre-defined actions and learns from their outcomes. These interactions are documented, which assists the agent in navigating and operating the apps. This learning process can be accelerated by observing a few human demonstrations. Following this exploratory phase, the agent can operate the app by consulting the constructed document based on its current state, eliminating the need to adapt the parameters of the LLMs or collect extensive training data for each app.</span>
+<span>本文提出了一种多模态代理框架，旨在像人类用户一样操作任何智能手机应用。该框架的学习过程包括一个探索阶段，代理通过一组预定义动作自主与应用交互，并从交互结果中学习。这些交互被记录下来，帮助代理导航和操作应用。通过观察少量人类演示，可以加速该学习过程。探索阶段结束后，代理可根据其当前状态查阅构建的文档来操作应用，无需调整大型语言模型（LLM）的参数或为每个应用收集大量训练数据。</span></p><p><span>To validate its effectiveness, we tested our agent on 50 tasks across 10 different apps, ranging from social media and messaging to email, maps, shopping, and even complex image editing apps. Both quantitative results and user studies underscore the advantages of our design, particularly its adaptability, user-friendliness, and efficient learning and</span>
+<span>为了验证其有效性，我们在10个不同应用上测试了代理的50个任务，涵盖社交媒体、消息、电子邮件、地图、购物，甚至复杂的图像编辑应用。定量结果和用户研究均强调了我们设计的优势，特别是其适应性、用户友好性以及高效的学习和</span></p><p><span>operating capabilities across a wide range of applications. This underlines the potential of our agent as a versatile and effective tool in the realm of smartphone app operation.</span>
+<span>操作能力，适用于广泛的应用场景。这凸显了我们的代理作为智能手机应用操作领域多功能且高效工具的潜力。</span></p><p><span>In summary, this paper makes the following contributions:</span>
+<span>总之，本文的主要贡献包括：</span></p><ul><li><p><span>We open-source a multimodal agent framework, focusing on operating smartphone applications with our developed action space.</span></p></li><li><p><span>我们开源了一个多模态代理框架，重点是通过我们开发的动作空间操作智能手机应用。</span></p></li></ul><ul><li><p><span>We propose an innovative exploration strategy, which enables the agent to learn to use novel apps.</span></p></li><li><p><span>我们提出了一种创新的探索策略，使代理能够学习使用新颖的应用。</span></p></li></ul><ul><li><p><span>Through extensive experiments across multiple apps, we validate the advantages of our framework, demonstrating its potential in the realm of AI-assisted smartphone app operation.</span></p></li><li><p><span>通过在多个应用上的大量实验，我们验证了框架的优势，展示了其在AI辅助智能手机应用操作领域的潜力。</span></p></li></ul><h2 id='2-related-work'><span>2 Related Work</span></h2><h2 id='2-相关工作'><span>2 相关工作</span></h2><h3 id='21-large-language-models'><span>2.1 Large language models</span></h3><h3 id='21-大型语言模型'><span>2.1 大型语言模型</span></h3><p><span>The development of ChatGPT (OpenAI, 2021) and GPT-4 (OpenAI, 2023) represents a crucial advancement in natural language processing. Unlike earlier large language models (LLMs), these new models (Touvron et al., 2023a,b; Zeng et al., 2022; Taori et al., 2023; Zheng et al., 2023) enable multi-round conversations and have the impressive ability to follow complex instructions. The integration of vision capabilities in GPT-4V (Yang et al., 2023b) is a further milestone, enabling the language model to process and interpret visual data. This addition has broadened the scope of potential AI applications, allowing GPT-4 to undertake diverse tasks such as problem-solving, logical reasoning, tool usage, API calls, and coding. Recent studies (Yang et al., 2023c; Yan et al., 2023) have shown that GPT-4V can understand various types of images, including simple user interfaces (UIs) in popular smartphone apps. However, challenges arise when the apps are new and their UIs are less typical, which highlights a major problem that our work aims to address. Among open-source efforts from the industry and research community, the LLaMA series (Touvron et al., 2023a,b) are the most popular equivalents and have been fine-tuned to acquire conversational abilities, employing a decoder-only architecture similar to ChatGPT (Taori et al., 2023; Zheng et al., 2023). Building upon LLaMA, many multimodal LLMs, such as LLaVA (Liu et al.,</span>
+<span>ChatGPT（OpenAI，2021）和GPT-4（OpenAI，2023）的发展标志着自然语言处理领域的重要进展。与早期大型语言模型（LLMs）不同，这些新模型（Touvron等，2023a,b；Zeng等，2022；Taori等，2023；Zheng等，2023）支持多轮对话，并具备遵循复杂指令的强大能力。GPT-4V（Yang等，2023b）中视觉能力的集成是又一里程碑，使语言模型能够处理和理解视觉数据。这一扩展拓宽了AI应用的范围，使GPT-4能够执行诸如问题解决、逻辑推理、工具使用、API调用和编程等多样任务。近期研究（Yang等，2023c；Yan等，2023）表明，GPT-4V能够理解多种类型的图像，包括流行智能手机应用中的简单用户界面（UI）。然而，当应用较新且其UI不典型时，仍存在挑战，这正是我们工作旨在解决的主要问题。在业界和研究社区的开源努力中，LLaMA系列（Touvron等，2023a,b）是最受欢迎的同类模型，经过微调以获得对话能力，采用与ChatGPT类似的仅解码器架构（Taori等，2023；Zheng等，2023）。基于LLaMA，许多多模态大型语言模型，如LLaVA（Liu等，</span></p><p><span>2023b,a), ChartLlama (Han et al., 2023), and Sta-bleLLaVA (Li et al., 2023), also demonstrate vision understanding capabilities akin to those of GPT-4V. Nevertheless, a performance gap persists between these open-source models and GPT-4V, suggesting potential areas for further development.</span>
+<span>2023b,a）、ChartLlama（Han等，2023）和StableLLaVA（Li等，2023），也展示了类似于GPT-4V的视觉理解能力。然而，这些开源模型与GPT-4V之间仍存在性能差距，表明未来仍有改进空间。</span></p><h3 id='22-llms-as-agents'><span>2.2 LLMs as agents</span></h3><h3 id='22-作为代理的大型语言模型'><span>2.2 作为代理的大型语言模型</span></h3><p><span>The use of LLMs as agents for executing complex tasks has gained increasing attention. Initiatives like AutoGPT (Yang et al., 2023a), Hug-gingGPT (Shen et al., 2023), and MetaGPT (Hong et al., 2023) illustrate this trend, and many projects demonstrate impressive capabilities, moving beyond basic language tasks to engaging in activities requiring higher cognitive functions, such as software development (Qian et al., 2023; Chen et al., 2021) and gaming (FAIR et al., 2022; Park et al., 2023; Xu et al., 2023). In this context, Yao et al. (Yao et al., 2023) introduce an innovative approach that synergizes reasoning and acting in LLMs, significantly enhancing their decision-making and interactive capabilities. LLM-based agents are designed to utilize the advanced language and reasoning skills of LLMs to interact with and manipulate their environment (Liu et al., 2023c; Gur et al., 2023; Xie et al., 2023). This includes performing tasks that require understanding context, making decisions, and learning from interactions (Xi et al., 2023; Hu and Shu, 2023). Such agents are pivotal in applications where human-like cognitive abilities are essential.</span>
+<span>将大型语言模型（LLMs）作为执行复杂任务的代理的应用日益受到关注。诸如AutoGPT（Yang等，2023a）、HuggingGPT（Shen等，2023）和MetaGPT（Hong等，2023）等项目体现了这一趋势，许多研究展示了令人印象深刻的能力，超越了基础语言任务，参与需要更高认知功能的活动，如软件开发（Qian等，2023；Chen等，2021）和游戏（FAIR等，2022；Park等，2023；Xu等，2023）。在此背景下，Yao等（Yao等，2023）提出了一种创新方法，将推理与行动在大型语言模型中协同，显著提升了其决策和交互能力。基于大型语言模型的代理旨在利用其先进的语言和推理技能与环境进行交互和操作（Liu等，2023c；Gur等，2023；Xie等，2023），包括执行需要理解上下文、做出决策及从交互中学习的任务（Xi等，2023；Hu和Shu，2023）。此类代理在需要类人认知能力的应用中具有关键作用。</span></p><p><span>The emergence of multimodal LLM agents (Wang et al., 2023; Furuta et al., 2023; Brohan et al., 2022, 2023; Reed et al., 2022), capable of processing various inputs including text, images, audio, and video, has further broadened the scope of LLM applications. This versatility is particularly beneficial for LLM-based agents, enabling them to interact more effectively with their environment and complete more complex tasks, be it completing household tasks in a physical world (Ahn et al., 2022), generating 3D assets via procedural tool use (Sun et al., 2023), or mastering over 600 tasks across different domains at the same time (Reed et al., 2022). Our research contributes to this area by focusing on an agent designed to operate smartphone applications. This agent&#39;s ability to interpret screenshots from the operating system demonstrates its flexibility and adaptability, making it a valuable tool in a wide</span>
+<span>多模态大型语言模型代理的出现（Wang等，2023；Furuta等，2023；Brohan等，2022，2023；Reed等，2022），能够处理包括文本、图像、音频和视频在内的多种输入，进一步拓宽了大型语言模型的应用范围。这种多样性对基于大型语言模型的代理尤为有利，使其能够更有效地与环境交互并完成更复杂的任务，无论是在物理世界中完成家务（Ahn等，2022）、通过程序化工具生成三维资产（Sun等，2023），还是同时掌握600多项跨领域任务（Reed等，2022）。我们的研究聚焦于设计一个能够操作智能手机应用的代理。该代理解读操作系统截图的能力展示了其灵活性和适应性，使其成为广泛应用中的宝贵工具。</span></p><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2025/11/2025_11_04__12_15_54_0d93f4.jpg"/></p><p>&nbsp;</p><p><span>Figure 2: Overview of our multimodal agent framework designed to operate smartphone applications. The figure illustrates the two-phase approach of our framework. In the exploration phase, the agent interacts with a smartphone application and learns from their outcomes to create a comprehensive reference document. In the deployment phase, the agent utilizes the information compiled in this document to operate and navigate the apps effectively.</span>
+<span>图2：我们设计的用于操作智能手机应用的多模态代理框架概览。图中展示了框架的两阶段方法。在探索阶段，代理与智能手机应用交互并从结果中学习，以创建详尽的参考文档。在部署阶段，代理利用该文档中汇总的信息，有效地操作和导航应用程序。</span></p><p><span>range of applications.</span>
+<span>广泛的应用领域。</span></p><h2 id='3-method'><span>3 Method</span></h2><h2 id='3-方法'><span>3 方法</span></h2><p><span>This section details the methodology behind our innovative multimodal agent framework. This framework enables an agent to interact with smartphone applications in a manner akin to human behavior. We first describe the experimental environment and action space, which are foundational elements of our system. Next, we discuss the exploration phase, where the agent learns app functionalities either through autonomous interactions or by observing human demonstrations. Finally, we outline the deployment phase, explaining how the agent applies its acquired knowledge to execute high-level tasks.</span>
+<span>本节详细介绍我们创新多模态代理框架的方法论。该框架使代理能够以类似人类的方式与智能手机应用交互。我们首先描述实验环境和动作空间，这些是系统的基础要素。接着讨论探索阶段，代理通过自主交互或观察人类示范学习应用功能。最后，概述部署阶段，说明代理如何应用所获知识执行高级任务。</span></p><h3 id='31-environment-and-action-space'><span>3.1 Environment and Action Space</span></h3><h3 id='31-环境与动作空间'><span>3.1 环境与动作空间</span></h3><p><span>Experimental Environment: Our experimental environment is built on a command-line interface (CLI), allowing the agent to interact with smart-phone apps. We chose the Android operating system for our experiments. The agent receives two key inputs: a real-time screenshot showing the app&#39;s interface and an XML file detailing the interactive elements. To enhance the agent&#39;s ability to identify and interact with these elements seamlessly, we assign each element a unique identifier. These identifiers are derived either from the resource ID in the XML file (if provided) or are constructed by combining the class name, size, and content of the element. These elements are overlaid as semi-transparent numbers on the screenshot.</span>
+<span>实验环境：我们的实验环境基于命令行界面（CLI），允许代理与智能手机应用交互。实验选用Android操作系统。代理接收两个关键输入：显示应用界面的实时截图和描述交互元素的XML文件。为增强代理识别和操作这些元素的能力，我们为每个元素分配唯一标识符。该标识符来源于XML文件中的资源ID（若有），否则通过组合元素的类名、大小和内容构建。这些元素以半透明数字形式覆盖在截图上。</span></p><p><span>This helps the agent to interact accurately without needing to specify exact positions on the screen and enhances the agent&#39;s precision in controlling the phone.</span>
+<span>这帮助代理准确交互，无需指定屏幕上的精确位置，提升了代理对手机的控制精度。</span></p><p><span>Action Space: Our agent&#39;s action space mirrors common human interactions with smartphones: taps and swipes. We designed four basic functions:</span>
+<span>动作空间：代理的动作空间模拟人类与智能手机的常见交互：点击和滑动。我们设计了四个基本功能：</span></p><ul><li><p><span>Tap(element : int) : This function simulates a tap on the UI element numbered on the screen. For example, tap(5) would tap the element labeled &#39;5&#39;.</span></p></li><li><p><span>Tap(element : int) ：该功能模拟对屏幕上编号的UI元素的点击。例如，tap(5)表示点击标记为“5”的元素。</span></p></li></ul><ul><li><p><span>Long_press(element : int) : This function emulates a long press (for 1 second) on a UI element.</span></p></li><li><p><span>Long_press(element : int) ：该功能模拟对UI元素的长按（持续1秒）。</span></p></li></ul><ul><li><p><span>Swipe ( element : int, direction : str, dist : str): It allows the agent to swipe on an element in a specified direction (up, down, left, right) and distance (short, medium, long). For instance, swipe(21, &quot;up&quot;, &quot;medium&quot;) would swipe up on element &#39;21&#39; for a medium distance.</span></p></li><li><p><span>Swipe(element : int, direction : str, dist : str)：允许代理在指定方向（上、下、左、右）和距离（短、中、长）上对元素进行滑动。例如，swipe(21, &quot;up&quot;, &quot;medium&quot;)表示对编号为“21”的元素向上滑动中等距离。</span></p></li></ul><ul><li><p><span>Text(text : str) : To bypass inefficient virtual keyboard typing, this function inputs text directly into an input field when a virtual keyboard is visible. For example, text(&quot;Hello, world!&quot;) inputs the string &quot;Hello, world!&quot;.</span></p></li><li><p><span>Text(text : str) : 为绕过低效的虚拟键盘输入，当虚拟键盘可见时，该函数直接将文本输入到输入框中。例如，text(&quot;Hello, world!&quot;) 会输入字符串“Hello, world!”。</span></p></li></ul><ul><li><p><span>Back() : A system-level function that helps the agent return to the previous UI page, especially useful for exiting irrelevant pages.</span></p></li><li><p><span>Back() : 一个系统级函数，帮助代理返回到上一个界面，特别适用于退出无关页面。</span></p></li></ul><ul><li><p><span>Exit() : A specialized function is employed to conclude processes, typically invoked upon successful task completion.</span></p></li><li><p><span>Exit() : 一个专用函数，用于结束进程，通常在任务成功完成时调用。</span></p></li></ul><p><span>These predefined actions are designed to simplify the agent&#39;s interactions, particularly by eliminating the need for precise screen coordinates, which can pose challenges for language models in accurately predicting.</span>
+<span>这些预定义动作旨在简化代理的交互，尤其是避免对精确屏幕坐标的依赖，因为语言模型在准确预测坐标时存在挑战。</span></p><h3 id='32-exploration-phase'><span>3.2 Exploration Phase</span></h3><h3 id='32-探索阶段'><span>3.2 探索阶段</span></h3><p><span>Exploring by autonomous interactions. The Exploration Phase is central to our framework. Here, the agent learns about the functionalities and features of smartphone apps through trial and error. In this phase, the agent is assigned a task and starts interacting autonomously with the UI elements. It uses different actions and observes the resulting changes in the app interface to understand how it works. The agent, driven by a large language model, attempts to figure out the functions of UI elements and the effects of specific actions by analyzing screenshots before and after each action. This information is compiled into a document that records the effects of actions applied to different elements. When a UI element is acted upon multiple times, the agent will update the document based on past documents and current observations to improve quality. To make exploration more efficient, the agent stops further exploring UI elements if the current UI page seems unrelated to the main tasks of the app, like advertisement pages. In such cases, it uses the Android system&#39;s Back() function to return to the previous UI page. Compared with random exploration, such as Depth-First Search and Breadth-First Search, this goal-oriented exploration approach ensures that the agent focuses on elements crucial for the effective operation of the app. The agent also utilizes the LLM&#39;s existing knowledge about user interfaces to improve exploration efficiency. The exploration stops when the agent completes the assigned task.</span>
+<span>通过自主交互进行探索。探索阶段是我们框架的核心。在此阶段，代理通过反复试验学习智能手机应用的功能和特性。代理被分配任务后，开始自主与界面元素交互，使用不同动作并观察应用界面的变化以理解其工作原理。由大型语言模型驱动的代理，通过分析每次动作前后的截图，尝试推断界面元素的功能及特定动作的效果。相关信息被整理成文档，记录不同元素上动作的影响。当某个界面元素被多次操作时，代理会基于历史文档和当前观察更新文档以提升质量。为提高探索效率，若当前界面页面与应用主要任务无关（如广告页面），代理会停止进一步探索，使用Android系统的Back()函数返回上一界面。相比随机探索（如深度优先搜索和广度优先搜索），这种目标导向的探索方法确保代理聚焦于应用有效运行的关键元素。代理还利用大型语言模型对用户界面的既有知识提升探索效率。探索在代理完成分配任务时结束。</span></p><p><span>Exploring by watching demos. An alternative and often more effective exploration method involves the agent observing human demonstrations. These demonstrations provide the agent with examples of efficient app usage, especially for understanding complex functionalities that might be challenging to discover through autonomous interactions. In this method, a human user operates the apps while the agent observes, recording only the elements and actions employed by the human.</span>
+<span>通过观看演示进行探索。另一种通常更有效的探索方法是代理观察人类演示。这些演示为代理提供了高效使用应用的示例，尤其有助于理解通过自主交互难以发现的复杂功能。在此方法中，人类用户操作应用，代理观察并仅记录人类使用的元素和动作。</span></p><p><span>This strategy narrows down the exploration space and prevents the agent from engaging with irrelevant app pages, making it a more streamlined and efficient approach compared to autonomous interactions.</span>
+<span>该策略缩小了探索空间，避免代理进入无关应用页面，使其比自主交互更简洁高效。</span></p><h3 id='33-deployment-phase'><span>3.3 Deployment Phase</span></h3><h3 id='33-部署阶段'><span>3.3 部署阶段</span></h3><p><span>Following the exploration phase, the agent is well-equipped to execute complex tasks based on its accrued experience. The agent adheres to a step-by-step approach when given a task, with each step encompassing access to a screenshot of the current UI and a dynamically generated document detailing the functions of UI elements and the actions&#39; effects on the current UI page. The prompts also provide detailed explanations of all available actions. In each step, the agent is first tasked with providing its observations of the current UI, followed by articulating its thought process concerning the task and current observations. Subsequently, the agent proceeds to execute actions by invoking available functions. After each action, the agent summarizes the interaction history and the actions taken during the current step. This information is incorporated into the next prompt, which provides the agent with a form of memory. This meticulous approach enhances the reliability and interpretability of the agent&#39;s actions, thereby facilitating more informed decision-making. The deployment phase stops when the agent determines that the task has been accomplished, at which point it can exit the process by taking the Exit() action.</span>
+<span>探索阶段结束后，代理积累了丰富经验，能够执行复杂任务。代理在执行任务时遵循逐步方法，每一步包括获取当前界面的截图和动态生成的文档，文档详细描述界面元素功能及动作对当前界面的影响。提示中还提供所有可用动作的详细说明。每一步，代理首先提供对当前界面的观察，然后阐述其对任务和当前观察的思考过程，随后通过调用可用函数执行动作。每次动作后，代理总结交互历史和当前步骤中采取的动作，将信息纳入下一次提示，为代理提供记忆支持。这种细致方法提升了代理动作的可靠性和可解释性，促进更明智的决策。部署阶段在代理判断任务完成时结束，此时可通过Exit()动作退出流程。</span></p><h2 id='4-experiments'><span>4 Experiments</span></h2><h2 id='4-实验'><span>4 实验</span></h2><p><span>In this section, we will present our evaluation of the multimodal agent framework through a combination of quantitative and qualitative experiments. Our primary goal is to assess the agent&#39;s performance and its ability to operate a diverse set of smartphone applications effectively.</span>
+<span>本节将通过定量和定性实验评估多模态代理框架。我们的主要目标是评估代理的性能及其有效操作多样智能手机应用的能力。</span></p><h3 id='41-experimental-setup'><span>4.1 Experimental Setup</span></h3><h3 id='41-实验设置'><span>4.1 实验设置</span></h3><p><span>To comprehensively evaluate our method, we construct a benchmark that includes 10 popular applications, each serving various purposes. These applications include Google Maps, Twitter, Telegram, YouTube, Spotify, Yelp, Gmail, TEMU, Clock, and Lightroom. We have intentionally chosen this diverse set of apps to test the agent&#39;s adaptability across various functions and interfaces. In particular, to gain a more comprehensive insight into the</span>
+<span>为全面评估我们的方法，我们构建了包含10款流行应用的基准测试，这些应用涵盖多种用途。包括Google Maps（谷歌地图）、Twitter、Telegram、YouTube、Spotify、Yelp、Gmail、TEMU、Clock（时钟）和Lightroom。我们有意选择这组多样化应用，以测试代理在不同功能和界面上的适应能力。特别是，为了获得更全面的洞察，</span></p><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2025/11/2025_11_04__12_15_54_6d2026.jpg"/></p><p>&nbsp;</p><p><span>Figure 3: Qualitative Task Evaluation Across Three Apps. This figure presents qualitative results for three distinct tasks conducted on Google Maps, Gmail, and Lightroom. It showcases AppAgent&#39;s ability to accurately perceive, reason, and execute tasks, demonstrating its competence in various application contexts. Due to space constraints, some less critical details have been omitted from the description.</span>
+<span>图3：三款应用的定性任务评估。该图展示了在Google Maps、Gmail和Lightroom上进行的三项不同任务的定性结果，体现了AppAgent准确感知、推理和执行任务的能力，展示其在多种应用场景中的胜任力。由于篇幅限制，描述中省略了一些次要细节。</span></p><p><span>vision capabilities of our agent, we conducted an in-depth case study using Adobe Lightroom, an image-editing application. This specific case study allowed us to evaluate the agent&#39;s proficiency in handling visual tasks and its ability to interpret and manipulate images within the app. For the exploration phase, we capped the maximum number of steps at 40. During testing, we limited the maximum number of steps to 10. For these experiments, we utilized the state-of-the-art multimodal large language model, GPT-4. GPT-4 is equipped to process interleaved image-and-text inputs effectively. This unique capability enables our agent to interpret and interact with both visual and textual information seamlessly within the applications.</span>
+<span>为了评估我们代理的视觉能力，我们使用图像编辑应用Adobe Lightroom进行了深入的案例研究。该案例研究使我们能够评估代理处理视觉任务的熟练度及其在应用内解释和操作图像的能力。在探索阶段，我们将最大步骤数限制为40步。测试阶段则将最大步骤数限制为10步。实验中，我们采用了最先进的多模态大型语言模型GPT-4。GPT-4能够有效处理交错的图像与文本输入。这一独特能力使我们的代理能够在应用中无缝解读并交互视觉与文本信息。</span></p><h3 id='42-design-and-analysis'><span>4.2 Design and Analysis</span></h3><h3 id='42-设计与分析'><span>4.2 设计与分析</span></h3><p><span>Baselines. To comprehensively evaluate our multimodal agent framework, we considered various design choices and their impact on performance. We conducted experiments using different configurations to provide valuable insights into the agent&#39;s behavior. We started with GPT-4 without any reference documents during testing and examined its performance both with the raw action API and our simplified action space. Next, we explored different ways to generate guiding documents for the agent. These included documents generated through autonomous exploration, watching human demonstrations, and the manually crafted document as an oracle benchmark.</span>
+<span>基线方法。为了全面评估我们的多模态代理框架，我们考虑了多种设计选择及其对性能的影响。通过不同配置的实验，我们获得了关于代理行为的宝贵见解。首先，我们在测试时使用不带任何参考文档的GPT-4，考察其在原始动作API和我们简化动作空间下的表现。随后，我们探索了为代理生成指导文档的不同方式，包括通过自主探索生成的文档、观看人类示范生成的文档，以及作为基准的手工制作文档。</span></p><p><span>To effectively compare the performance of different methods, we employed three key metrics:</span>
+<span>为了有效比较不同方法的性能，我们采用了三个关键指标：</span></p><table><tr><td>Method</td><td>Document</td><td>Action Space</td><td>SR↑</td><td>Reward ↑</td><td>Avg. Steps</td></tr><tr><td rowspan="2">GPT4 (Baseline)</td><td>None</td><td>Raw</td><td>2.2%</td><td>0.6</td><td>4.0</td></tr><tr><td>None</td><td>Ours</td><td>48.9%</td><td>3.5</td><td>6.9</td></tr><tr><td rowspan="3">AppAgent</td><td>Auto. Exploration</td><td>Ours</td><td>73.3%</td><td>5.1</td><td>4.4</td></tr><tr><td>Watching Demos</td><td>Ours</td><td>84.4%</td><td>4.7</td><td>5.1</td></tr><tr><td>Manually Crafted</td><td>Ours</td><td>95.6%</td><td>5.5</td><td>5.5</td></tr></table>
+<table><tbody><tr><td>方法</td><td>文档</td><td>动作空间</td><td>成功率↑</td><td>奖励↑</td><td>平均步数</td></tr><tr><td rowspan="2">GPT4（基线）</td><td>无</td><td>原始</td><td>2.2%</td><td>0.6</td><td>4.0</td></tr><tr><td>无</td><td>我们的</td><td>48.9%</td><td>3.5</td><td>6.9</td></tr><tr><td rowspan="3">应用代理</td><td>自动探索</td><td>我们的</td><td>73.3%</td><td>5.1</td><td>4.4</td></tr><tr><td>观看演示</td><td>我们的</td><td>84.4%</td><td>4.7</td><td>5.1</td></tr><tr><td>手工设计</td><td>我们的</td><td>95.6%</td><td>5.5</td><td>5.5</td></tr></tbody></table><p><span>Table 1: Evaluating Design Choices in AppAgent Performance. This table contrasts different design elements within AppAgent. Key findings include: our custom-developed action space surpasses the raw action space in efficiency; the exploration phase, incorporating both autonomous interaction and observation of human demonstrations, significantly enhances agent performance; and the auto-generated documentation yields outcomes on par with those derived from manually crafted documents.</span>
+<span>表1：AppAgent性能设计选择评估。该表对AppAgent中的不同设计元素进行了对比。主要发现包括：我们自定义开发的动作空间在效率上优于原始动作空间；探索阶段结合自主交互和人类示范观察，显著提升了代理性能；自动生成的文档效果与手工制作的文档相当。</span></p><table><tr><td>Method</td><td>Document</td><td>Action Space</td><td>Avg. Rank $\downarrow$</td><td>Num. Tools</td></tr><tr><td>GPT4 (Baseline)</td><td>None</td><td>Ours</td><td>2.30</td><td>2.4</td></tr><tr><td rowspan="2">AppAgent</td><td>Watching Demos</td><td>Ours</td><td>1.95</td><td>5.8</td></tr><tr><td>Manually Crafted</td><td>Ours</td><td>1.75</td><td>4.0</td></tr></table>
+<table><tbody><tr><td>方法</td><td>文档</td><td>动作空间</td><td>平均排名 $\downarrow$</td><td>工具数量</td></tr><tr><td>GPT4（基线）</td><td>无</td><td>我们的</td><td>2.30</td><td>2.4</td></tr><tr><td rowspan="2">应用代理</td><td>观看演示</td><td>我们的</td><td>1.95</td><td>5.8</td></tr><tr><td>手工制作</td><td>我们的</td><td>1.75</td><td>4.0</td></tr></tbody></table><p><span>Table 2: Case study on image editing tasks with Lightroom App. We conduct a user study to rank the image editing results of different methods. Our agents produce better results than the GPT-4 baseline.</span>
+<span>表2：使用Lightroom应用进行图像编辑任务的案例研究。我们进行了用户研究，对不同方法的图像编辑结果进行排名。我们的代理产生的结果优于GPT-4基线。</span></p><p><span>Successful Rate (SR): This metric measures the average rate at which the agent successfully completes tasks within an app. If the agent fails to finish the task in 10 steps, it is considered a failure.</span>
+<span>成功率（SR）：该指标衡量代理在应用内成功完成任务的平均比例。如果代理在10步内未完成任务，则视为失败。</span></p><p><span>Reward: To provide a more fine-grained measurement, we developed a reward model to assess performance. For each task within an app, we scored different UI pages. The closer the UI page was to the objective, the higher the score received. This means that even if the agent failed to complete the task, it would still receive credit based on its final state.</span>
+<span>奖励：为了提供更细粒度的评估，我们开发了一个奖励模型来衡量性能。对于应用内的每个任务，我们对不同的UI页面进行了评分。UI页面越接近目标，得分越高。这意味着即使代理未能完成任务，也会根据其最终状态获得相应的积分。</span></p><p><span>Average Steps: We also reported the average number of steps required to successfully finish tasks across the selected applications.</span>
+<span>平均步骤数：我们还报告了在所选应用中成功完成任务所需的平均步骤数。</span></p><p><span>Results. The comparison of our experimental results is presented in Table 1. We report the average performance of 45 tasks on 9 of the 10 previously described apps. Notably, we excluded Lightroom from this evaluation, as assessing task completion in this application presented inherent ambiguities. As demonstrated, our simplified action space significantly improves the performance of the GPT-4 baseline. Our observations indicate that LLM struggles with producing accurate xy coordinates, while our simplified action space eliminates this challenging requirement. Additionally, documents generated through autonomous exploration and observ-</span>
+<span>结果。我们的实验结果比较见表1。我们报告了之前描述的10个应用中9个应用上45个任务的平均表现。值得注意的是，我们排除了Lightroom的评估，因为该应用中任务完成的评估存在固有的模糊性。如所示，我们简化的动作空间显著提升了GPT-4基线的性能。观察表明，大型语言模型（LLM）在生成准确的xy坐标方面存在困难，而我们简化的动作空间消除了这一挑战。此外，通过自主探索和观察人类演示生成的文档证明了其高效性。</span></p><p><span>ing human demonstrations proved to be highly effective. Their results consistently outperformed the GPT-4 baseline and are comparable to the results of human-written documents, which highlights the efficacy of our design in enhancing the agent&#39;s performance across a diverse set of applications.</span>
+<span>其结果持续优于GPT-4基线，并且与人工编写的文档结果相当，凸显了我们设计在提升代理在多样化应用中表现的有效性。</span></p><p><span>Qualitative results. In Fig. 3, we provide examples showcasing the agent&#39;s execution process for various tasks. This qualitative analysis serves to demonstrate the agent&#39;s capacity to accurately perceive, reason, and act in response to given tasks. For a more comprehensive understanding of our agent&#39;s capabilities, please refer to our project page, which includes additional demonstration videos.</span>
+<span>定性结果。在图3中，我们展示了代理执行各种任务的过程示例。该定性分析旨在展示代理准确感知、推理和响应任务的能力。欲全面了解代理能力，请参阅我们的项目页面，其中包含更多演示视频。</span></p><h3 id='43-case-study'><span>4.3 Case Study</span></h3><h3 id='43-案例研究'><span>4.3 案例研究</span></h3><p><span>To gain deeper insights into the vision capabilities of our agent, we conducted an extensive case study using Adobe Lightroom, an image-editing application. This specific case study allowed us to evaluate the agent&#39;s proficiency in handling visual tasks, which was previously impossible for text-only agent models. Lightroom, as an image-editing app with various editing tools, demands a wide range of operations, such as selecting appropriate tools and manipulating image parameters. This case study provides a robust evaluation of the agent&#39;s overall capabilities. Additionally, the open-ended nature of image editing tasks allows us to</span>
+<span>为了深入了解代理的视觉能力，我们使用图像编辑应用Adobe Lightroom进行了广泛的案例研究。该案例研究使我们能够评估代理处理视觉任务的熟练度，这在之前仅限文本的代理模型中是不可能的。Lightroom作为一款具备多种编辑工具的图像编辑应用，要求执行诸如选择合适工具和调整图像参数等多样操作。该案例研究为代理整体能力提供了有力评估。此外，图像编辑任务的开放性使我们能够评估代理的问题解决能力。</span></p><p><span>assess the agent&#39;s problem-solving abilities. We prepared five images with visual issues, such as low contrast and overexposure. Various variants of our model, as previously illustrated, were used to edit these images. A user study was conducted to rank the editing results produced by different methods. We also reported the average number of tools used for image editing, providing an additional reference to the editing process&#39;s complexity. All models were assigned the task of &quot;fix this image until it looks good to you&quot; without specifying the image&#39;s problems. The comparison of the results is presented in Table 2. As we can see, our agent model with documents yields consistently better results than the GPT-4 baseline, which emphasizes the influence of documents in our design. The generated documents by watching the demonstration produced comparable results with the results of manually crafted documents, which suggests the effectiveness of the exploration phase. We also find that with a document, the agent tends to use various tools to improve the image quality, while the GPT-4 baseline uses fewer tools.</span>
+<span>我们准备了五张存在视觉问题的图像，如低对比度和过曝。使用之前展示的多种模型变体对这些图像进行编辑。我们进行了用户研究，对不同方法产生的编辑结果进行排名。我们还报告了图像编辑中使用工具的平均数量，为编辑过程的复杂性提供了额外参考。所有模型均被赋予“修复此图像直到你觉得满意”的任务，未具体说明图像问题。结果比较见表2。正如所见，带文档的代理模型结果持续优于GPT-4基线，强调了文档在我们设计中的作用。通过观看演示生成的文档产生的结果与手工制作文档的结果相当，表明探索阶段的有效性。我们还发现，有文档时，代理倾向于使用多种工具提升图像质量，而GPT-4基线使用的工具较少。</span></p><h2 id='5-conclusion'><span>5 Conclusion</span></h2><h2 id='5-结论'><span>5 结论</span></h2><p><span>In this paper, we have introduced a novel multimodal agent framework that leverages the vision capabilities of large language models to operate smartphone applications in a human-like manner. Our approach eliminates the need for system back-end access and offers security, adaptability, and flexibility advantages. Our exploration-based learning strategy allows the agent to quickly adapt to new applications with unfamiliar user interfaces, making it a versatile tool for various tasks. Our extensive experiments across various apps highlight our agent&#39;s ability to handle diverse high-level tasks and underscore its adaptability and learning efficiency.</span>
+<span>本文提出了一种新颖的多模态代理框架，利用大型语言模型（LLM）的视觉能力以类人方式操作智能手机应用。我们的方法无需系统后端访问，具备安全性、适应性和灵活性优势。基于探索的学习策略使代理能够快速适应具有陌生用户界面的新应用，成为多任务的通用工具。我们在多款应用上的广泛实验展示了代理处理多样高阶任务的能力，强调了其适应性和学习效率。</span></p><p><span>Limitation. We have adopted a simplified action space for smartphone operations, which means that advanced controls such as multi-touch and irregular gestures are not supported. This limitation may restrict the agent&#39;s applicability in some challenging scenarios. Nevertheless, we recognize this as an avenue for future research and development.</span>
+<span>局限性。我们采用了简化的智能手机操作动作空间，因此不支持多点触控和不规则手势等高级控制。这一限制可能限制代理在某些复杂场景中的适用性。但我们认为这是未来研究和开发的方向。</span></p><h2 id='references'><span>References</span></h2><h2 id='参考文献'><span>参考文献</span></h2><p><span>Michael Ahn, Anthony Brohan, Noah Brown, Yev-gen Chebotar, Omar Cortes, Byron David, Chelsea Finn, Chuyuan Fu, Keerthana Gopalakrishnan, Karol</span>
+<span>Michael Ahn, Anthony Brohan, Noah Brown, Yev-gen Chebotar, Omar Cortes, Byron David, Chelsea Finn, Chuyuan Fu, Keerthana Gopalakrishnan, Karol</span></p><p><span>Hausman, Alex Herzog, Daniel Ho, Jasmine Hsu, Julian Ibarz, Brian Ichter, Alex Irpan, Eric Jang, Rosario Jauregui Ruano, Kyle Jeffrey, Sally Jes-month, Nikhil Joshi, Ryan Julian, Dmitry Kalashnikov, Yuheng Kuang, Kuang-Huei Lee, Sergey Levine, Yao Lu, Linda Luu, Carolina Parada, Peter Pastor, Jornell Quiambao, Kanishka Rao, Jarek Rettinghouse, Diego Reyes, Pierre Sermanet, Nicolas Sievers, Clayton Tan, Alexander Toshev, Vincent Vanhoucke, Fei Xia, Ted Xiao, Peng Xu, Sichun Xu, Mengyuan Yan, and Andy Zeng. 2022. Do as i can and not as i say: Grounding language in robotic af-fordances. In arXiv preprint arXiv:2204.01691.</span>
+<span>Hausman, Alex Herzog, Daniel Ho, Jasmine Hsu, Julian Ibarz, Brian Ichter, Alex Irpan, Eric Jang, Rosario Jauregui Ruano, Kyle Jeffrey, Sally Jes-month, Nikhil Joshi, Ryan Julian, Dmitry Kalashnikov, Yuheng Kuang, Kuang-Huei Lee, Sergey Levine, Yao Lu, Linda Luu, Carolina Parada, Peter Pastor, Jornell Quiambao, Kanishka Rao, Jarek Rettinghouse, Diego Reyes, Pierre Sermanet, Nicolas Sievers, Clayton Tan, Alexander Toshev, Vincent Vanhoucke, Fei Xia, Ted Xiao, Peng Xu, Sichun Xu, Mengyuan Yan, and Andy Zeng. 2022. 按我所能而非我所言：将语言基础植入机器人可供性(affordances)。发表于arXiv预印本 arXiv:2204.01691。</span></p><p><span>Anthony Brohan, Noah Brown, Justice Carbajal, Yevgen Chebotar, Xi Chen, Krzysztof Choromanski, Tianli Ding, Danny Driess, Avinava Dubey, Chelsea Finn, et al. 2023. Rt-2: Vision-language-action models transfer web knowledge to robotic control. arXiv preprint arXiv:2307.15818.</span>
+<span>Anthony Brohan, Noah Brown, Justice Carbajal, Yevgen Chebotar, Xi Chen, Krzysztof Choromanski, Tianli Ding, Danny Driess, Avinava Dubey, Chelsea Finn, 等. 2023. RT-2：视觉-语言-动作模型将网络知识迁移至机器人控制。arXiv预印本 arXiv:2307.15818。</span></p><p><span>Anthony Brohan, Noah Brown, Justice Carbajal, Yev-gen Chebotar, Joseph Dabis, Chelsea Finn, Keerthana Gopalakrishnan, Karol Hausman, Alex Herzog, Jasmine Hsu, et al. 2022. Rt-1: Robotics transformer for real-world control at scale. arXiv preprint arXiv:2212.06817.</span>
+<span>Anthony Brohan, Noah Brown, Justice Carbajal, Yev-gen Chebotar, Joseph Dabis, Chelsea Finn, Keerthana Gopalakrishnan, Karol Hausman, Alex Herzog, Jasmine Hsu, 等. 2022. RT-1：面向大规模现实控制的机器人变换器(transformer)。arXiv预印本 arXiv:2212.06817。</span></p><p><span>Mark Chen, Jerry Tworek, Heewoo Jun, Qiming Yuan, Henrique Ponde de Oliveira Pinto, Jared Kaplan, Harri Edwards, Yuri Burda, Nicholas Joseph, Greg Brockman, et al. 2021. Evaluating large language models trained on code. arXiv preprint arXiv:2107.03374.</span>
+<span>Mark Chen, Jerry Tworek, Heewoo Jun, Qiming Yuan, Henrique Ponde de Oliveira Pinto, Jared Kaplan, Harri Edwards, Yuri Burda, Nicholas Joseph, Greg Brockman, 等. 2021. 评估基于代码训练的大型语言模型。arXiv预印本 arXiv:2107.03374。</span></p><p><span>Meta FAIR, Anton Bakhtin, Noam Brown, Emily Dinan, Gabriele Farina, Colin Flaherty, Daniel Fried, Andrew Goff, Jonathan Gray, Hengyuan Hu, et al. 2022. Human-level play in the game of diplomacy by combining language models with strategic reasoning. Science, 378(6624):1067-1074.</span>
+<span>Meta FAIR, Anton Bakhtin, Noam Brown, Emily Dinan, Gabriele Farina, Colin Flaherty, Daniel Fried, Andrew Goff, Jonathan Gray, Hengyuan Hu, 等. 2022. 通过结合语言模型与战略推理，实现外交游戏中的人类水平对弈。科学，378(6624):1067-1074。</span></p><p><span>Hiroki Furuta, Kuang-Huei Lee, Ofir Nachum, Yutaka Matsuo, Aleksandra Faust, Shixiang Shane Gu, and Izzeddin Gur. 2023. Multimodal web navigation with instruction-finetuned foundation models.</span>
+<span>Hiroki Furuta, Kuang-Huei Lee, Ofir Nachum, Yutaka Matsuo, Aleksandra Faust, Shixiang Shane Gu, 和 Izzeddin Gur. 2023. 基于指令微调基础模型的多模态网页导航。</span></p><p><span>Izzeddin Gur, Hiroki Furuta, Austin Huang, Mustafa Safdari, Yutaka Matsuo, Douglas Eck, and Aleksan-dra Faust. 2023. A real-world webagent with planning, long context understanding, and program synthesis.</span>
+<span>Izzeddin Gur, Hiroki Furuta, Austin Huang, Mustafa Safdari, Yutaka Matsuo, Douglas Eck, 和 Aleksandra Faust. 2023. 具备规划、长上下文理解及程序合成能力的现实世界网页代理。</span></p><p><span>Yucheng Han, Chi Zhang, Xin Chen, Xu Yang, Zhibin Wang, Gang Yu, Bin Fu, and Hanwang Zhang. 2023. Chartllama: A multimodal llm for chart understanding and generation.</span>
+<span>Yucheng Han, Chi Zhang, Xin Chen, Xu Yang, Zhibin Wang, Gang Yu, Bin Fu, 和 Hanwang Zhang. 2023. Chartllama：用于图表理解与生成的多模态大型语言模型(LLM)。</span></p><p><span>Sirui Hong, Mingchen Zhuge, Jonathan Chen, Xiawu Zheng, Yuheng Cheng, Ceyao Zhang, Jinlin Wang, Zili Wang, Steven Ka Shing Yau, Zijuan Lin, Liyang Zhou, Chenyu Ran, Lingfeng Xiao, Chenglin Wu, and Jürgen Schmidhuber. 2023. Metagpt: Meta programming for a multi-agent collaborative framework.</span>
+<span>Sirui Hong, Mingchen Zhuge, Jonathan Chen, Xiawu Zheng, Yuheng Cheng, Ceyao Zhang, Jinlin Wang, Zili Wang, Steven Ka Shing Yau, Zijuan Lin, Liyang Zhou, Chenyu Ran, Lingfeng Xiao, Chenglin Wu, 和 Jürgen Schmidhuber. 2023. MetaGPT：面向多智能体协作框架的元编程。</span></p><p><span>Zhiting Hu and Tianmin Shu. 2023. Language models, agent models, and world models: The law for machine reasoning and planning. arXiv preprint arXiv:2312.05230.</span>
+<span>Zhiting Hu 和 Tianmin Shu. 2023. 语言模型、智能体模型与世界模型：机器推理与规划的法则。arXiv预印本 arXiv:2312.05230。</span></p><p><span>Yanda Li, Chi Zhang, Gang Yu, Zhibin Wang, Bin Fu, Guosheng Lin, Chunhua Shen, Ling Chen, and Yunchao Wei. 2023. Stablellava: Enhanced visual instruction tuning with synthesized image-dialogue data.</span>
+<span>Yanda Li, Chi Zhang, Gang Yu, Zhibin Wang, Bin Fu, Guosheng Lin, Chunhua Shen, Ling Chen, 和 Yunchao Wei. 2023. StableLLaVA：通过合成图像-对话数据增强视觉指令微调。</span></p><p><span>Haotian Liu, Chunyuan Li, Yuheng Li, and Yong Jae Lee. 2023a. Improved baselines with visual instruction tuning.</span>
+<span>Haotian Liu, Chunyuan Li, Yuheng Li, 和 Yong Jae Lee. 2023a. 通过视觉指令微调改进基线模型。</span></p><p><span>Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. 2023b. Visual instruction tuning.</span>
+<span>Haotian Liu, Chunyuan Li, Qingyang Wu, 和 Yong Jae Lee. 2023b. 视觉指令微调。</span></p><p><span>Xiao Liu, Hao Yu, Hanchen Zhang, Yifan Xu, Xuanyu Lei, Hanyu Lai, Yu Gu, Hangliang Ding, Kaiwen Men, Kejuan Yang, Shudan Zhang, Xiang Deng, Ao-han Zeng, Zhengxiao Du, Chenhui Zhang, Sheng Shen, Tianjun Zhang, Yu Su, Huan Sun, Minlie Huang, Yuxiao Dong, and Jie Tang. 2023c. Agent-Bench: Evaluating LLMs as agents. arXiv preprint arXiv: 2308.03688.</span>
+<span>Xiao Liu, Hao Yu, Hanchen Zhang, Yifan Xu, Xuanyu Lei, Hanyu Lai, Yu Gu, Hangliang Ding, Kaiwen Men, Kejuan Yang, Shudan Zhang, Xiang Deng, Ao-han Zeng, Zhengxiao Du, Chenhui Zhang, Sheng Shen, Tianjun Zhang, Yu Su, Huan Sun, Minlie Huang, Yuxiao Dong, 和 Jie Tang. 2023c. Agent-Bench：评估大型语言模型（LLMs）作为代理的性能。arXiv预印本 arXiv: 2308.03688。</span></p><p><span>OpenAI. 2021. Chatgpt. </span><a href='https://openai.com/' target='_blank' class='url'>https://openai.com/</a><span> research/chatgpt.</span>
+<span>OpenAI. 2021. ChatGPT. </span><a href='https://openai.com/research/chatgpt' target='_blank' class='url'>https://openai.com/research/chatgpt</a><span>。</span></p><p><span>OpenAI. 2023. Gpt-4 technical report.</span>
+<span>OpenAI. 2023. GPT-4 技术报告。</span></p><p><span>Joon Sung Park, Joseph O&#39;Brien, Carrie Jun Cai, Meredith Ringel Morris, Percy Liang, and Michael S Bernstein. 2023. Generative agents: Interactive simulacra of human behavior. In Proceedings of the 36th Annual ACM Symposium on User Interface Software and Technology, pages 1-22.</span>
+<span>Joon Sung Park, Joseph O&#39;Brien, Carrie Jun Cai, Meredith Ringel Morris, Percy Liang, 和 Michael S Bernstein. 2023. 生成代理：人类行为的交互式模拟。在第36届年度ACM用户界面软件与技术研讨会论文集，页码1-22。</span></p><p><span>Chen Qian, Xin Cong, Cheng Yang, Weize Chen, Yusheng Su, Juyuan Xu, Zhiyuan Liu, and Maosong Sun. 2023. Communicative agents for software development. arXiv preprint arXiv:2307.07924.</span>
+<span>Chen Qian, Xin Cong, Cheng Yang, Weize Chen, Yusheng Su, Juyuan Xu, Zhiyuan Liu, 和 Maosong Sun. 2023. 用于软件开发的交互式代理。arXiv预印本 arXiv:2307.07924。</span></p><p><span>Scott Reed, Konrad Zolna, Emilio Parisotto, Sergio Gomez Colmenarejo, Alexander Novikov, Gabriel Barth-Maron, Mai Gimenez, Yury Sulsky, Jackie Kay, Jost Tobias Springenberg, et al. 2022. A generalist agent. arXiv preprint arXiv:2205.06175.</span>
+<span>Scott Reed, Konrad Zolna, Emilio Parisotto, Sergio Gomez Colmenarejo, Alexander Novikov, Gabriel Barth-Maron, Mai Gimenez, Yury Sulsky, Jackie Kay, Jost Tobias Springenberg 等. 2022. 通用代理。arXiv预印本 arXiv:2205.06175。</span></p><p><span>Yongliang Shen, Kaitao Song, Xu Tan, Dongsheng Li, Weiming Lu, and Yueting Zhuang. 2023. Hugging-gpt: Solving ai tasks with chatgpt and its friends in huggingface. In Advances in Neural Information Processing Systems.</span>
+<span>Yongliang Shen, Kaitao Song, Xu Tan, Dongsheng Li, Weiming Lu, 和 Yueting Zhuang. 2023. Hugging-GPT：利用ChatGPT及其伙伴在HuggingFace上解决AI任务。在神经信息处理系统进展中。</span></p><p><span>Chunyi Sun, Junlin Han, Weijian Deng, Xinlong Wang, Zishan Qin, and Stephen Gould. 2023. 3d-gpt: Procedural 3d modeling with large language models. arXiv preprint arXiv:2310.12945.</span>
+<span>Chunyi Sun, Junlin Han, Weijian Deng, Xinlong Wang, Zishan Qin, 和 Stephen Gould. 2023. 3D-GPT：基于大型语言模型的程序化三维建模。arXiv预印本 arXiv:2310.12945。</span></p><p><span>Rohan Taori, Ishaan Gulrajani, Tianyi Zhang, Yann Dubois, Xuechen Li, Carlos Guestrin, Percy Liang, and Tatsunori B. Hashimoto. 2023. Stanford alpaca: An instruction-following llama model. https:// github.com/tatsu-lab/stanford_alpaca.</span>
+<span>Rohan Taori, Ishaan Gulrajani, Tianyi Zhang, Yann Dubois, Xuechen Li, Carlos Guestrin, Percy Liang, 和 Tatsunori B. Hashimoto. 2023. Stanford Alpaca：一个遵循指令的LLaMA模型。</span><a href='https://github.com/tatsu-lab/stanford_alpaca' target='_blank' class='url'>https://github.com/tatsu-lab/stanford_alpaca</a><span>。</span></p><p><span>Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lachaux, Timothée Lacroix, Baptiste Rozière, Naman Goyal, Eric Hambro, Faisal Azhar, Aurelien Rodriguez, Armand Joulin, Edouard Grave, and Guillaume Lample. 2023a. Llama: Open and efficient foundation language models.</span>
+<span>Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lachaux, Timothée Lacroix, Baptiste Rozière, Naman Goyal, Eric Hambro, Faisal Azhar, Aurelien Rodriguez, Armand Joulin, Edouard Grave, 和 Guillaume Lample. 2023a. LLaMA：开放且高效的基础语言模型。</span></p><p><span>Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yasmine Babaei, Nikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale, Dan Bikel, Lukas Blecher, Cristian Canton Ferrer, Moya Chen, Guillem Cucurull, David Esiobu, Jude Fernandes, Jeremy Fu, Wenyin Fu, Brian Fuller, Cynthia Gao, Vedanuj Goswami, Naman Goyal, Anthony Hartshorn, Saghar Hosseini, Rui Hou, Hakan Inan, Marcin Kardas, Viktor Kerkez, Madian Khabsa, Isabel Kloumann, Artem Korenev, Punit Singh Koura, Marie-Anne Lachaux, Thibaut Lavril, Jenya Lee, Diana Liskovich, Yinghai Lu, Yuning Mao, Xavier Martinet, Todor Mihaylov, Pushkar Mishra, Igor Moly-bog, Yixin Nie, Andrew Poulton, Jeremy Reizen-stein, Rashi Rungta, Kalyan Saladi, Alan Schelten, Ruan Silva, Eric Michael Smith, Ranjan Subrama-nian, Xiaoqing Ellen Tan, Binh Tang, Ross Taylor, Adina Williams, Jian Xiang Kuan, Puxin Xu, Zheng Yan, Iliyan Zarov, Yuchen Zhang, Angela Fan, Melanie Kambadur, Sharan Narang, Aurelien Rodriguez, Robert Stojnic, Sergey Edunov, and Thomas Scialom. 2023b. Llama 2: Open foundation and fine-tuned chat models.</span>
+<span>Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yasmine Babaei, Nikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale, Dan Bikel, Lukas Blecher, Cristian Canton Ferrer, Moya Chen, Guillem Cucurull, David Esiobu, Jude Fernandes, Jeremy Fu, Wenyin Fu, Brian Fuller, Cynthia Gao, Vedanuj Goswami, Naman Goyal, Anthony Hartshorn, Saghar Hosseini, Rui Hou, Hakan Inan, Marcin Kardas, Viktor Kerkez, Madian Khabsa, Isabel Kloumann, Artem Korenev, Punit Singh Koura, Marie-Anne Lachaux, Thibaut Lavril, Jenya Lee, Diana Liskovich, Yinghai Lu, Yuning Mao, Xavier Martinet, Todor Mihaylov, Pushkar Mishra, Igor Moly-bog, Yixin Nie, Andrew Poulton, Jeremy Reizen-stein, Rashi Rungta, Kalyan Saladi, Alan Schelten, Ruan Silva, Eric Michael Smith, Ranjan Subrama-nian, Xiaoqing Ellen Tan, Binh Tang, Ross Taylor, Adina Williams, Jian Xiang Kuan, Puxin Xu, Zheng Yan, Iliyan Zarov, Yuchen Zhang, Angela Fan, Melanie Kambadur, Sharan Narang, Aurelien Rodriguez, Robert Stojnic, Sergey Edunov, and Thomas Scialom. 2023b. Llama 2: 开放基础模型与微调聊天模型。</span></p><p><span>Zihao Wang, Shaofei Cai, Anji Liu, Yonggang Jin, Jin-bing Hou, Bowei Zhang, Haowei Lin, Zhaofeng He, Zilong Zheng, Yaodong Yang, Xiaojian Ma, and Yitao Liang. 2023. Jarvis-1: Open-world multitask agents with memory-augmented multimodal language models.</span>
+<span>Zihao Wang, Shaofei Cai, Anji Liu, Yonggang Jin, Jin-bing Hou, Bowei Zhang, Haowei Lin, Zhaofeng He, Zilong Zheng, Yaodong Yang, Xiaojian Ma, and Yitao Liang. 2023. Jarvis-1：具备记忆增强多模态语言模型的开放世界多任务代理。</span></p><p><span>Zhiheng Xi, Wenxiang Chen, Xin Guo, Wei He, Yiwen Ding, Boyang Hong, Ming Zhang, Junzhe Wang, Senjie Jin, Enyu Zhou, et al. 2023. The rise and potential of large language model based agents: A survey. arXiv preprint arXiv:2309.07864.</span>
+<span>Zhiheng Xi, Wenxiang Chen, Xin Guo, Wei He, Yiwen Ding, Boyang Hong, Ming Zhang, Junzhe Wang, Senjie Jin, Enyu Zhou, 等. 2023. 基于大型语言模型代理的兴起与潜力：一项综述。arXiv预印本 arXiv:2309.07864。</span></p><p><span>Tianbao Xie, Fan Zhou, Zhoujun Cheng, Peng Shi, Lu-oxuan Weng, Yitao Liu, Toh Jing Hua, Junning Zhao, Qian Liu, Che Liu, Leo Z. Liu, Yiheng Xu, Hongjin Su, Dongchan Shin, Caiming Xiong, and Tao Yu. 2023. Openagents: An open platform for language agents in the wild.</span>
+<span>Tianbao Xie, Fan Zhou, Zhoujun Cheng, Peng Shi, Lu-oxuan Weng, Yitao Liu, Toh Jing Hua, Junning Zhao, Qian Liu, Che Liu, Leo Z. Liu, Yiheng Xu, Hongjin Su, Dongchan Shin, Caiming Xiong, 和 Tao Yu. 2023. Openagents：一个面向实际应用的语言代理开放平台。</span></p><p><span>Yuzhuang Xu, Shuo Wang, Peng Li, Fuwen Luo, Xi-aolong Wang, Weidong Liu, and Yang Liu. 2023. Exploring large language models for communication games: An empirical study on werewolf. arXiv preprint arXiv:2309.04658.</span>
+<span>Yuzhuang Xu, Shuo Wang, Peng Li, Fuwen Luo, Xi-aolong Wang, Weidong Liu, 和 Yang Liu. 2023. 探索大型语言模型在交流游戏中的应用：狼人杀的实证研究。arXiv预印本 arXiv:2309.04658。</span></p><p><span>An Yan, Zhengyuan Yang, Wanrong Zhu, Kevin Lin, Linjie Li, Jianfeng Wang, Jianwei Yang, Yiwu Zhong, Julian McAuley, Jianfeng Gao, Zicheng Liu, and Lijuan Wang. 2023. Gpt-4v in wonderland: Large multimodal models for zero-shot smartphone gui navigation. arXiv preprint arXiv: 2311.07562.</span>
+<span>An Yan, Zhengyuan Yang, Wanrong Zhu, Kevin Lin, Linjie Li, Jianfeng Wang, Jianwei Yang, Yiwu Zhong, Julian McAuley, Jianfeng Gao, Zicheng Liu, 和 Lijuan Wang. 2023. GPT-4V奇境：用于零样本智能手机GUI导航的大型多模态模型。arXiv预印本 arXiv:2311.07562。</span></p><p><span>Hui Yang, Sifu Yue, and Yunzhong He. 2023a. Auto-gpt for online decision making: Benchmarks and additional opinions.</span>
+<span>Hui Yang, Sifu Yue, 和 Yunzhong He. 2023a. Auto-GPT用于在线决策：基准测试与额外观点。</span></p><p><span>Zhengyuan Yang, Linjie Li, Kevin Lin, Jianfeng Wang, Chung-Ching Lin, Zicheng Liu, and Lijuan Wang. 2023b. The dawn of lmms: Preliminary explorations with gpt-4v (ision). arXiv preprint arXiv:2309.17421.</span>
+<span>Zhengyuan Yang, Linjie Li, Kevin Lin, Jianfeng Wang, Chung-Ching Lin, Zicheng Liu, 和 Lijuan Wang. 2023b. LMMs的曙光：基于GPT-4V（视觉）的初步探索。arXiv预印本 arXiv:2309.17421。</span></p><p><span>Zhengyuan Yang, Linjie Li, Kevin Lin, Jianfeng Wang, Chung-Ching Lin, Zicheng Liu, and Lijuan Wang. 2023c. The dawn of Imms: Preliminary explorations with gpt-4v(ision). arXiv preprint arXiv: 2309.17421.</span>
+<span>Zhengyuan Yang, Linjie Li, Kevin Lin, Jianfeng Wang, Chung-Ching Lin, Zicheng Liu, 和 Lijuan Wang. 2023c. IMM的曙光：基于GPT-4V（视觉）的初步探索。arXiv预印本 arXiv:2309.17421。</span></p><p><span>Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, and Yuan Cao. 2023. ReAct: Synergizing reasoning and acting in language models. In ICLR.</span>
+<span>Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, 和 Yuan Cao. 2023. ReAct：在语言模型中协同推理与行动。发表于ICLR会议。</span></p><p><span>Aohan Zeng, Xiao Liu, Zhengxiao Du, Zihan Wang, Hanyu Lai, Ming Ding, Zhuoyi Yang, Yifan Xu, Wendi Zheng, Xiao Xia, et al. 2022. Glm-130b: An open bilingual pre-trained model. arXiv preprint arXiv:2210.02414.</span>
+<span>曾奥涵，刘晓，杜正孝，王子涵，赖涵宇，丁明，杨卓毅，徐一帆，郑文迪，夏晓，等。2022年。Glm-130b：一个开放的双语预训练模型。arXiv预印本 arXiv:2210.02414。</span></p><p><span>Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan Zhuang, Zhanghao Wu, Yonghao Zhuang, Zi Lin, Zhuohan Li, Dacheng Li, Eric. P Xing, Hao Zhang, Joseph E. Gonzalez, and Ion Stoica. 2023. Judging llm-as-a-judge with mt-bench and chatbot arena.</span>
+<span>郑连民，蒋伟林，盛颖，庄思远，吴章浩，庄永浩，林子，李卓翰，李大成，Eric P. Xing，张浩，Joseph E. Gonzalez，Ion Stoica。2023年。使用mt-bench和chatbot arena评估大型语言模型（LLM）作为评审的表现。</span></p></div></div>
+
+<script>(function(){function e(e,n,i){document.addEventListener(e,function(e){if(!e.defaultPrevented)for(var t=e.target;t&&t!=this;t=t.parentNode)if(t.matches(n)){!1===i.call(t,e)&&(e.preventDefault(),e.stopPropagation());break}},!1)}var t=document.body.parentElement,i=[],r=null,o=document.body.classList.contains("typora-export-collapse-outline");function a(){return t.scrollTop}e("click",".outline-expander",function(e){var t=this.closest(".outline-item-wrapper").classList;return t.contains("outline-item-open")?t.remove("outline-item-open"):t.add("outline-item-open"),u(),!1}),e("click",".outline-item",function(e){var t=this.querySelector(".outline-label");location.hash="#"+t.getAttribute("href"),o&&((t=this.closest(".outline-item-wrapper").classList).contains("outline-item-open")||t.add("outline-item-open"),d(),t.add("outline-item-active"))});function s(){var e=a();r=null;for(var t=0;t<i.length&&i[t][1]-e<60;t++)r=i[t]}function n(){c=setTimeout(function(){var n;i=[],n=a(),document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(e=>{var t=e.getAttribute("id");i.push([t,n+e.getBoundingClientRect().y])}),s(),u()},300)}var l,c,d=function(){document.querySelectorAll(".outline-item-active").forEach(e=>e.classList.remove("outline-item-active")),document.querySelectorAll(".outline-item-single.outline-item-open").forEach(e=>e.classList.remove("outline-item-open"))},u=function(){if(r&&(d(),t=document.querySelector('.outline-label[href="#'+(CSS.escape?CSS.escape(r[0]):r[0])+'"]')))if(o){var e=t.closest(".outline-item-open>ul>.outline-item-wrapper");if(e)e.classList.add("outline-item-active");else{for(var t,n=(t=t.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper");n;)n=(t=n).parentElement.closest(".outline-item-wrapper");t.classList.add("outline-item-active")}}else t.closest(".outline-item-wrapper").classList.add("outline-item-active")};window.addEventListener("scroll",function(e){l&&clearTimeout(l),l=setTimeout(function(){s(),u()},300)});window.addEventListener("resize",function(e){c&&clearTimeout(c),n()}),n()})();</script><style>
+/* ===== Typora Enhancer (safe-only hotkeys + tiny tools tab + light progress info + gallery non-overlap) ===== */
+
+/* 顶部阅读进度条 */
+#ty-progress {
+  position: fixed; z-index: 9999; top: 0; left: 0; height: 3px; width: 100%;
+  background: linear-gradient(to right, #4da3ff, #7c4dff);
+  transform-origin: 0 50%; transform: scaleX(0); pointer-events: none;
+}
+/* 进度信息：仅 百分比 / 已读时间（弱遮挡 + 不拦截鼠标） */
+#ty-progress-info{
+  position: fixed; top: 6px; right: 6px; z-index: 10000;
+  font: 12px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  color:#fff; background: rgba(0,0,0,.25);
+  padding: 2px 6px; border-radius: 7px; backdrop-filter: saturate(120%) blur(1.5px);
+  user-select: none; pointer-events: none;
+}
+#ty-progress-info b{ font-weight:600 }
+
+/* 右下功能栏 */
+#ty-tools {
+  position: fixed; z-index: 9999; right: 18px; bottom: 24px; display: flex; gap: 10px; flex-direction: column;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  transition: transform .25s ease, opacity .2s ease;
+}
+.ty-btn {
+  background: rgba(0,0,0,.7); color: #fff; border-radius: 10px; padding: 8px 10px;
+  font-size: 12px; cursor: pointer; user-select: none; backdrop-filter: saturate(120%) blur(2px);
+  transition: transform .15s ease, background .2s ease;
+}
+.ty-btn:hover { transform: translateY(-1px); background: rgba(0,0,0,.82); }
+.ty-btn[hidden] { display: none !important; }
+
+/* 工具栏收起时隐藏，仅保留“抽屉拉手” */
+body.ty-tools-collapsed #ty-tools{ opacity:0; pointer-events:none; transform: translateX(18px); }
+
+/* 抽屉拉手：超小、仅图标，避免与工具栏重叠 */
+#ty-tools-tab{
+  --tab-size: 28px;
+  position: fixed; right: 2px; bottom: 26px; z-index: 10001;
+  width: var(--tab-size); height: var(--tab-size); display: grid; place-items: center;
+  background: rgba(0,0,0,.65); color:#fff; font-size: 16px;
+  border-radius: 50%; cursor: pointer; user-select:none;
+  transform: translateX(40%); transition: background .2s ease, transform .2s ease, opacity .2s ease;
+  backdrop-filter: saturate(120%) blur(2px);
+}
+#ty-tools-tab:hover{ background: rgba(0,0,0,.8); }
+#ty-tools-tab .ico{ line-height: 1; font-weight: 600; }
+
+/* 标题锚点（左侧“#”） */
+#write h1,#write h2,#write h3,#write h4,#write h5,#write h6{ position:relative; }
+.ty-anchor {
+  position:absolute; left:-1.2em; top:50%; transform:translateY(-50%);
+  opacity:0; text-decoration:none; color:#999; font-weight:600; font-size:.9em;
+  padding:0 .2em; border-radius:4px;
+}
+#write h1:hover .ty-anchor,#write h2:hover .ty-anchor,#write h3:hover .ty-anchor,
+#write h4:hover .ty-anchor,#write h5:hover .ty-anchor,#write h6:hover .ty-anchor{ opacity:1 }
+@media (max-width:768px){ .ty-anchor{ left:auto; right:-.8em } }
+
+/* 复制提示气泡 */
+.ty-tip {
+  position:absolute; left:-1.2em; top:0; transform: translate(-10%, -120%);
+  background: rgba(0,0,0,.8); color: #fff; padding: 3px 8px; border-radius: 6px;
+  font-size: 12px; white-space: nowrap; pointer-events: none; opacity: 0;
+}
+@media (max-width:768px){ .ty-tip{ left:auto; right:-.8em; transform: translate(10%,-120%) }}
+
+/* 大纲高亮 */
+.outline-content .active,
+.outline-content .active > .outline-item,
+.outline-content a.active { color: #2a72ff; }
+
+/* 简单收起侧栏：仅隐藏 */
+body.ty-outline-hidden .typora-export-sidebar{ display:none !important; }
+
+/* ========= 图片灯箱（含左侧缩略条、非重叠布局） ========= */
+#ty-lightbox {
+  /* 预留左侧缩略条安全区，避免与大图/按钮重叠 */
+  --lb-strip-w: 108px; /* 左侧缩略条宽度（含边距） */
+  position: fixed; inset: 0; background: rgba(0,0,0,.92); display: none; z-index: 9998;
+  padding-left: calc(var(--lb-strip-w) + 12px);
+}
+#ty-lightbox.open { display: flex; align-items: center; justify-content: center; }
+.ty-lb-img { max-width: calc(92vw - var(--lb-strip-w)); max-height: 86vh; }
+.ty-lb-cap { position: fixed; bottom: 64px; left: 50%; transform: translateX(-50%); color: #ddd; font-size: 13px; }
+
+/* 画廊控制按钮（左箭头避开缩略条） */
+.ty-lb-prev, .ty-lb-next, .ty-lb-close {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.12); color: #fff; border-radius: 50%; width: 40px; height: 40px;
+  display: grid; place-items: center; font-size: 18px; cursor: pointer; user-select: none;
+}
+.ty-lb-prev:hover, .ty-lb-next:hover, .ty-lb-close:hover { background: rgba(255,255,255,.18); }
+.ty-lb-prev { left: calc(var(--lb-strip-w) + 24px); }
+.ty-lb-next { right: 24px; } 
+.ty-lb-close { right: 24px; top: 24px; transform: none; }
+
+/* 画廊顶部序号 */
+#ty-lb-count{
+  position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+  color:#eee; background: rgba(0,0,0,.35); padding: 4px 10px;
+  border-radius: 8px; font: 12px/1.3 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+}
+
+/* 画廊底部动作区 */
+#ty-lb-actions{
+  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px; background: rgba(0,0,0,.35); padding: 8px 10px; border-radius: 12px;
+}
+.ty-act-btn{
+  background: rgba(255,255,255,.16); color:#fff; border-radius: 8px; padding: 6px 10px;
+  font-size: 12px; cursor: pointer; user-select: none; border: 1px solid rgba(255,255,255,.18);
+}
+.ty-act-btn:hover{ background: rgba(255,255,255,.22); }
+
+/* 画廊左侧缩略图条（不与大图重叠） */
+#ty-lb-strip{
+  position: fixed; left: 12px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 8px; max-height: 80vh; overflow: auto; padding-right: 4px;
+  width: var(--lb-strip-w);
+}
+.ty-thumb{
+  position: relative; width: 96px; height: 68px; object-fit: cover; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,.25); cursor: pointer; opacity: .9; background: #111;
+}
+.ty-thumb:hover{ opacity: 1; }
+.ty-thumb.active{ outline: 2px solid #7c4dff; opacity: 1; }
+.ty-thumb::after{
+  content: attr(data-idx); position: absolute; left: 4px; top: 2px;
+  font: 10px/1.1 system-ui,-apple-system,"Segoe UI"; background: rgba(0,0,0,.55); color:#fff;
+  padding: 1px 4px; border-radius: 4px;
+}
+
+/* —— 快速帮助浮层 —— */
+#ty-help-overlay{
+  position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; z-index: 10000;
+}
+#ty-help-overlay.open{ display: flex; align-items: center; justify-content: center; }
+.ty-help-dialog{
+  position: relative; width: min(720px, 92vw); max-height: 84vh; overflow: auto;
+  background: #fff; color: #222; border-radius: 12px; padding: 18px 20px;
+  box-shadow: 0 12px 36px rgba(0,0,0,.25);
+  font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+}
+.ty-help-dialog h3{ margin: 0 0 6px; font-size: 20px; }
+.ty-help-dialog h4{ margin: 14px 0 6px; font-size: 15px; color: #444; }
+.ty-help-dialog code, .ty-help-dialog kbd{
+  background: #f4f6f8; border: 1px solid #e5e8eb; border-radius: 6px; padding: 2px 6px; font-size: 12px;
+}
+.ty-help-close{
+  position: absolute; right: 10px; top: 8px; width: 34px; height: 34px;
+  display: grid; place-items: center; border-radius: 8px; cursor: pointer;
+  background: #f2f3f5; color: #444; font-size: 16px; user-select: none;
+}
+.ty-help-close:hover{ background: #e9eaee; }
+.ty-help-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width:680px){
+  /* 小屏缩窄缩略条并自动适配左侧安全区 */
+  #ty-lightbox{ --lb-strip-w: 80px; padding-left: calc(var(--lb-strip-w) + 8px); }
+  .ty-thumb{ width: 72px; height: 52px; }
+  .ty-lb-prev{ left: calc(var(--lb-strip-w) + 16px) }
+}
+
+/* —— 可视化注释（由 HTML 注释生成） —— */
+.ty-cmt{
+  display: inline-block; max-width: 100%;
+  background: #fffbe6; border: 1px solid #ffe58f; color: #333;
+  border-radius: 8px; padding: 4px 8px; margin: 2px 4px; vertical-align: baseline;
+  font-size: 12px; line-height: 1.5; box-shadow: 0 1px 0 rgba(0,0,0,.03);
+}
+.ty-cmt::before{
+  content: "注释"; font-weight: 600; color: #ad6800;
+  margin-right: .5em; padding: 1px 6px; border-radius: 6px;
+  background: #fff1b8; border: 1px solid #ffe58f;
+}
+body.ty-cmt-hidden .ty-cmt{ display: none !important; }
+
+/* 文中图片跳回高亮动画（保留） */
+@keyframes ty-img-flash{
+  0%{ box-shadow: 0 0 0 0 rgba(124,77,255,.0) }
+  50%{ box-shadow: 0 0 0 6px rgba(124,77,255,.3) }
+  100%{ box-shadow: 0 0 0 0 rgba(124,77,255,0) }
+}
+.ty-img-flash{ animation: ty-img-flash 1.2s ease-out 1; border-radius: 6px; }
+</style>
+
+<div id="ty-progress"></div>
+<div id="ty-progress-info" aria-live="polite">进度 <b>0.0%</b> ｜ 已读 <b>00:00</b></div>
+
+<!-- 工具栏抽屉拉手（仅图标，默认收起） -->
+<div id="ty-tools-tab" title="展开工具栏">
+  <span class="ico">≡</span>
+</div>
+
+<div id="ty-tools" aria-label="Page tools">
+  <div class="ty-btn" id="ty-outline" title="收起/展开左侧大纲（O）">收起/展开大纲（O）</div>
+  <div class="ty-btn" id="ty-top" title="回到顶部（T）">回到顶部（T）</div>
+  <div class="ty-btn" id="ty-urlmode" title="切换复制链接样式（当前：原文）
+快捷键：U 循环；Alt+1 原文，Alt+2 %编码，Alt+3 富文本片段">链接样式：原文</div>
+  <div class="ty-btn" id="ty-copyfmt" title="切换复制格式（当前：URL）
+快捷键：M 切换；Alt+U URL，Alt+M Markdown" hidden="">复制为：URL</div>
+  <div class="ty-btn" id="ty-expand" hidden="" title="大纲一键展开（E）">展开全部（E）</div>
+  <div class="ty-btn" id="ty-collapse" hidden="" title="大纲一键收起（R）">收起全部（R）</div>
+  <div class="ty-btn" id="ty-help" title="快速帮助（H）">帮助 / 快捷键（H）</div>
+  <div class="ty-btn" id="ty-comments" title="显示/隐藏注释（C）">隐藏注释（C）</div>
+</div>
+
+<!-- 图片灯箱 -->
+<div id="ty-lightbox" aria-modal="true" role="dialog">
+  <!-- 左侧缩略图条 -->
+  <div id="ty-lb-strip"></div>
+
+  <!-- 顶部序号 -->
+  <div id="ty-lb-count"></div>
+
+  <img class="ty-lb-img" alt="">
+  <div class="ty-lb-cap"></div>
+
+  <!-- 底部动作按钮 -->
+  <div id="ty-lb-actions">
+    <div class="ty-act-btn" id="ty-lb-copy" title="复制图片链接">复制图片链接</div>
+    <div class="ty-act-btn" id="ty-lb-fmt" title="切换复制格式（URL / Markdown）">复制为：URL</div>
+    <div class="ty-act-btn" id="ty-lb-jump" title="跳转到文中该图片位置">跳转到文中</div>
+  </div>
+
+  <div class="ty-lb-prev">‹</div>
+  <div class="ty-lb-next">›</div>
+  <div class="ty-lb-close">✕</div>
+</div>
+
+<!-- 快速帮助浮层（保持不变） -->
+<div id="ty-help-overlay" role="dialog" aria-modal="true" aria-label="快速帮助">
+  <div class="ty-help-dialog">
+    <div class="ty-help-close" id="ty-help-close" title="关闭（Esc）">✕</div>
+    <h3>快速帮助</h3>
+    <div class="ty-help-grid">
+      <div>
+        <h4>当前模式</h4>
+        <p>链接样式：<b id="ty-help-cur-urlmode">—</b></p>
+        <p>复制为：<b id="ty-help-cur-copyfmt">—</b></p>
+      </div>
+      <div>
+        <h4>常用操作</h4>
+        <p><kbd>#</kbd> 图标：复制段落链接 / 片段</p>
+        <p>收起/展开大纲：<kbd>O</kbd>；回到顶部：<kbd>T</kbd></p>
+        <p>显示/隐藏注释：<kbd>C</kbd></p>
+      </div>
+    </div>
+    <h4>链接样式</h4>
+    <ul>
+      <li><b>原文</b>：<code>#段落</code>（<kbd>Alt</kbd>+<kbd>1</kbd>）</li>
+      <li><b>%编码</b>：<code>#%E6%AE%B5%E8%90%BD</code>（<kbd>Alt</kbd>+<kbd>2</kbd>）</li>
+      <li><b>富文本片段</b>（HTML 片段）（<kbd>Alt</kbd>+<kbd>3</kbd>）</li>
+      <li>循环切换：<kbd>U</kbd></li>
+    </ul>
+    <h4>复制格式（仅“原文 / %编码”可用）</h4>
+    <ul>
+      <li>设为 <b>URL</b>：<kbd>Alt</kbd>+<kbd>U</kbd></li>
+      <li>设为 <b>Markdown</b>：<kbd>Alt</kbd>+<kbd>M</kbd></li>
+      <li>二者切换：<kbd>M</kbd></li>
+    </ul>
+    <h4>大纲与导航</h4>
+    <ul>
+      <li>展开全部：<kbd>E</kbd>；收起全部：<kbd>R</kbd></li>
+      <li>滚动时自动高亮并展开对应大纲分支</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(()=> {
+  const $  = (s, r=document)=>r.querySelector(s);
+  const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+
+  const write       = $('#write') || document.body;
+  const outlineRoot = $('.outline-content');
+
+  /* ========== 0) 工具栏抽屉：默认收起（仅图标按钮，避免重叠） ========== */
+  const TOOLS_KEY = 'ty_tools_opened';
+  const toolsTab  = $('#ty-tools-tab');
+  function setToolsOpen(open){
+    document.body.classList.toggle('ty-tools-collapsed', !open);
+    toolsTab.title = open ? '收起工具栏' : '展开工具栏';
+    toolsTab.querySelector('.ico').textContent = open ? '×' : '≡';
+  }
+  setToolsOpen(localStorage.getItem(TOOLS_KEY) === '1');
+  toolsTab.addEventListener('click', ()=>{
+    const nextOpen = document.body.classList.contains('ty-tools-collapsed');
+    setToolsOpen(nextOpen);
+    localStorage.setItem(TOOLS_KEY, nextOpen ? '1' : '0');
+  });
+
+  /* ========== 1) 图片路径自动纠偏（图床通常不会触发） ========== */
+  (function fixLocalImages(){
+    const imgs = $$('img', write);
+    const folders = ['.', 'assets', 'images', 'image', 'img', 'pics', '资源'];
+    imgs.forEach(img=>{
+      if (img.dataset && img.dataset.src && !img.src) img.src = img.dataset.src;
+      try {
+        const u = img.getAttribute('src') || '';
+        if (u && !/^https?:/i.test(u)) {
+          const d = decodeURI(u);
+          const parts = d.split(/[/\\]/);
+          const file  = parts.pop();
+          if (file) {
+            parts.push(encodeURIComponent(file));
+            const enc = parts.join('/');
+            if (enc !== u) img.src = enc;
+          }
+        }
+      } catch(e){}
+      img.addEventListener('error', ()=>{
+        const original = img.getAttribute('data-src') || img.getAttribute('src') || '';
+        const baseName = (original.split('?')[0]||'').split(/[\\/]/).pop();
+        if (!baseName) return;
+        const tried = new Set((img.dataset.tyTried||'').split('|').filter(Boolean));
+        for (const folder of folders){
+          const guess = (folder === '.') ? `./${baseName}` : `./${folder}/${baseName}`;
+          if (tried.has(guess)) continue;
+          tried.add(guess); img.dataset.tyTried = Array.from(tried).join('|'); img.src = guess; return;
+        }
+      });
+    });
+  })();
+
+  /* ========== 2) 顶部阅读进度条 + 信息（百分比/时间） ========== */
+  const bar = $('#ty-progress');
+  const info = $('#ty-progress-info');
+  const startAnchor = { t0: null };
+  function fmtTime(sec){
+    sec = Math.max(0, Math.floor(sec));
+    const m = Math.floor(sec/60), s = sec%60;
+    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }
+  function updateProgress(){
+    const st = document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const sh = document.documentElement.scrollHeight || document.body.scrollHeight || 1;
+    const max = Math.max(1, sh - window.innerHeight);
+    const p = Math.min(1, st / max);
+    bar.style.transform = 'scaleX(' + p + ')';
+    const now = performance.now();
+    if (startAnchor.t0 == null && st > 8) startAnchor.t0 = now;
+    const pct = (p*100).toFixed(1);
+    const elapsed = startAnchor.t0 ? (now - startAnchor.t0)/1000 : 0;
+    info.innerHTML = `进度 <b>${pct}%</b> ｜ 已读 <b>${fmtTime(elapsed)}</b>`;
+  }
+  updateProgress();
+  addEventListener('scroll', updateProgress, { passive:true });
+  addEventListener('resize', updateProgress);
+
+  /* ========== 3) 左侧大纲开合（保持） ========== */
+  $('#ty-outline').addEventListener('click', ()=>{
+    const hide = !document.body.classList.contains('ty-outline-hidden');
+    document.body.classList.toggle('ty-outline-hidden', hide);
+    document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline');
+  });
+  $('#ty-top').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+  /* ========== 4) 链接样式 & 复制格式（保持） ========== */
+  const MODE_KEY = 'ty_url_mode';        // raw / encoded / rich
+  const FMT_KEY  = 'ty_copy_fmt';        // url / md
+  let urlMode = (localStorage.getItem(MODE_KEY) || 'raw');
+  if (!['raw','encoded','rich'].includes(urlMode)) urlMode = 'raw';
+  let copyFmt = (localStorage.getItem(FMT_KEY)  || 'url');
+
+  const btnUrlMode = $('#ty-urlmode');
+  const btnCopyFmt = $('#ty-copyfmt');
+
+  function urlModeLabel(m){ return m==='encoded' ? '%编码' : (m==='rich' ? '富文本片段' : '原文'); }
+  function renderHelp(){
+    $('#ty-help-cur-urlmode').textContent = urlModeLabel(urlMode);
+    $('#ty-help-cur-copyfmt').textContent = (urlMode === 'rich') ? '（富文本片段下不适用）' : (copyFmt === 'md' ? 'Markdown' : 'URL');
+  }
+  function updateUrlModeButton(){
+    const label = urlModeLabel(urlMode);
+    btnUrlMode.textContent = '链接样式：' + label;
+    btnUrlMode.title = '切换复制链接样式（当前：' + label + '）\n快捷键：U 循环；Alt+1 原文，Alt+2 %编码，Alt+3 富文本片段';
+    btnCopyFmt.hidden = (urlMode === 'rich');
+    renderHelp();
+  }
+  function updateCopyFmtButton(){
+    btnCopyFmt.textContent = '复制为：' + (copyFmt==='md' ? 'Markdown' : 'URL');
+    btnCopyFmt.title = '切换复制格式（当前：' + (copyFmt==='md' ? 'Markdown' : 'URL') + '）\n快捷键：M 切换；Alt+U URL，Alt+M Markdown';
+    renderHelp();
+  }
+  function baseURL(){ return (location.href.split('#')[0] || location.href); }
+  function buildURL(id, encoded=false){
+    return baseURL() + '#' + (encoded ? encodeURIComponent(id) : id);
+  }
+  function setUrlMode(mode){
+    if (!['raw','encoded','rich'].includes(mode)) return;
+    urlMode = mode; localStorage.setItem(MODE_KEY, urlMode); updateUrlModeButton();
+  }
+  function setCopyFmt(fmt){
+    if (!['url','md'].includes(fmt)) return;
+    copyFmt = fmt; localStorage.setItem(FMT_KEY, copyFmt); updateCopyFmtButton();
+  }
+  btnUrlMode.addEventListener('click', ()=>{ setUrlMode(urlMode==='raw' ? 'encoded' : (urlMode==='encoded' ? 'rich' : 'raw')); });
+  btnCopyFmt.addEventListener('click', ()=>{ setCopyFmt(copyFmt==='url' ? 'md' : 'url'); });
+  updateUrlModeButton(); updateCopyFmtButton();
+
+  /* ========== 5) 一键展开/收起所有层级（保持） ========== */
+  const btnExpand = $('#ty-expand'), btnCollapse = $('#ty-collapse');
+  if (outlineRoot){ btnExpand.hidden = false; btnCollapse.hidden = false; }
+  const allWrappers = ()=> $$('.outline-item-wrapper', outlineRoot);
+  function expandAll(){ allWrappers().forEach(w=> w.classList.add('outline-item-open')); document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline'); }
+  function collapseAll(){ allWrappers().forEach(w=> w.classList.remove('outline-item-open')); document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline'); }
+  btnExpand.addEventListener('click', expandAll);
+  btnCollapse.addEventListener('click', collapseAll);
+
+  /* ========== 6) 大纲节点点击（保持） ========== */
+  if (outlineRoot){
+    outlineRoot.addEventListener('click', (e)=>{
+      const expander = e.target.closest('.outline-expander');
+      if (expander){
+        e.preventDefault();
+        const w = expander.closest('.outline-item-wrapper');
+        if (w) w.classList.toggle('outline-item-open');
+        return;
+      }
+      const label = e.target.closest('.outline-label');
+      if (label && !label.closest('a')){
+        const w = label.closest('.outline-item-wrapper');
+        if (w) w.classList.toggle('outline-item-open');
+      }
+    });
+  }
+
+  /* ========== 7) 文本工具：干净标题；从文件名推断论文标题（保持） ========== */
+  function getCleanHeadingText(h){
+    const clone = h.cloneNode(true);
+    clone.querySelectorAll('.ty-anchor,.ty-tip').forEach(n=> n.remove());
+    return (clone.textContent || '').replace(/\s+/g,' ').trim();
+  }
+  function filenameDerivedTitle(){
+    const name = decodeURIComponent((location.pathname.split('/').pop()||'').replace(/\.[^.]+$/,''));
+    const noTs = name.replace(/([_-])\d{4}-\d{2}-\d{2}(?:([_-])\d{2}\2\d{2}\2\d{2})?$/,'');
+    const underscoresToSpace = noTs.replace(/_/g,' ').trim();
+    const m = underscoresToSpace.match(/^(\d{4})[ _-]+(.*)$/);
+    if (m) {
+      const year = m[1]; const rest = (m[2]||'').trim();
+      return year + (rest ? '-' + rest : '');
+    }
+    return underscoresToSpace;
+  }
+
+  /* ========== 8) 标题锚点复制（三种样式 + 两种格式）（保持） ========== */
+  const used = new Set();
+  function slugify(text){
+    const base = text.toLowerCase().trim()
+      .replace(/[\u2000-\u206F\u2E00-\u2E7F'!"#$%&()*+,./:;<=>?@\[\]\\^_`{|}~]/g,'')
+      .replace(/\s+/g,'-') || 'section';
+    let s = base, i=2; while(used.has(s)) s = base + '-' + (i++); used.add(s); return s;
+  }
+
+  const idToItem = new Map();
+  if(outlineRoot){
+    const links = $$('a[href^="#"]', outlineRoot);
+    links.forEach(a=>{
+      const raw = a.getAttribute('href').slice(1);
+      const id1 = raw, id2 = decodeURIComponent(raw);
+      const li = a.closest('.outline-item-wrapper') || a.closest('.outline-item') || a;
+      idToItem.set(id1, li); idToItem.set(id2, li);
+    });
+  }
+  function outlinePathFor(id, fallbackTitle){
+    if(!outlineRoot) return fallbackTitle || '';
+    const node = idToItem.get(id);
+    if(!node) return fallbackTitle || '';
+    let w = node.closest('.outline-item-wrapper') || node, parts=[];
+    while (w && w !== outlineRoot){
+      const label = w.querySelector(':scope > .outline-item .outline-label') || w.querySelector('.outline-label');
+      const txt = label ? label.textContent.trim().replace(/\s+/g,' ') : '';
+      if (txt) parts.push(txt);
+      w = w.parentElement && w.parentElement.closest ? w.parentElement.closest('.outline-item-wrapper') : null;
+    }
+    parts = parts.reverse();
+    return parts.join(' / ');
+  }
+  function buildRichSnippet(headingId, headingText){
+    const rawURL = buildURL(headingId, false);
+    const encURL = buildURL(headingId, true);
+    const docTitle = filenameDerivedTitle();
+    const path = outlinePathFor(headingId, headingText);
+    return [
+`- <p style="background-color: rgb(255, 240, 243); color: black;">${docTitle}</p>`,
+`- <p style="background-color: rgb(255, 248, 230); color: black;">${path}</p>`,
+`- \`${headingText}\``,
+'',
+`<div style="background-color: rgb(245, 240, 255); border: 1px solid rgb(217, 195, 250); padding: 9px 14px; border-radius: 5px;">`,
+`中文路径锚点 <a href="${rawURL}"><b>${headingText}</b></a> 。`,
+`</div>`,
+`<div style="background-color: rgb(240, 255, 244); border: 1px solid rgb(183, 235, 201); padding: 8px 12px; border-radius: 3px;">`,
+`URL编码锚点 <a href="${encURL}"><b>${headingText}</b></a> 。`,
+`</div>`
+].join('\n');
+  }
+
+  const heads = $$('#write h1,#write h2,#write h3,#write h4,#write h5,#write h6');
+  heads.forEach(h=>{
+    if(!h.id || !h.id.trim()) h.id = slugify(getCleanHeadingText(h));
+
+    const a   = document.createElement('a');
+    const tip = document.createElement('span');
+    a.className = 'ty-anchor'; a.textContent = '#'; a.href = '#' + h.id; a.title = '复制此段落链接';
+    tip.className = 'ty-tip'; tip.textContent = '已复制段落链接';
+
+    a.addEventListener('click', async (e)=>{
+      e.preventDefault();
+      const titleText = getCleanHeadingText(h);
+      let copyText = '';
+
+      if (urlMode === 'rich') {
+        copyText = buildRichSnippet(h.id, titleText);
+        tip.textContent = '已复制片段';
+      } else {
+        const urlRaw = (urlMode === 'encoded') ? buildURL(h.id, true) : buildURL(h.id, false);
+        if (copyFmt === 'md') {
+          copyText = `[${titleText}](${urlRaw})`;
+          tip.textContent = '已复制 Markdown 链接';
+        } else {
+          copyText = urlRaw;
+          tip.textContent = '已复制段落链接';
+        }
+      }
+
+      try{ await navigator.clipboard.writeText(copyText); }
+      catch{
+        const ta=document.createElement('textarea'); ta.value=copyText;
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+      history.replaceState(null,'','#'+h.id);
+      tip.style.opacity='1'; clearTimeout(tip._t); tip._t=setTimeout(()=> tip.style.opacity='0', 1000);
+    });
+
+    h.insertBefore(a, h.firstChild);
+    h.appendChild(tip);
+  });
+
+  /* ========== 9) ScrollSpy：滚动高亮 + 自动展开（保持） ========== */
+  let activeId = null;
+  function ensureOpenFor(id){
+    const node = idToItem.get(id); if(!node) return;
+    let w = node.closest('.outline-item-wrapper') || node;
+    while (w && w !== outlineRoot){
+      w.classList.add('outline-item-open');
+      w = w.parentElement && w.parentElement.closest ? w.parentElement.closest('.outline-item-wrapper') : null;
+    }
+  }
+  function setActive(id){
+    if(!outlineRoot || !id || id===activeId) return;
+    activeId = id;
+    outlineRoot.querySelectorAll('.active').forEach(el=> el.classList.remove('active'));
+    const el = idToItem.get(id);
+    if(el){
+      el.classList.add('active');
+      const link = el.querySelector('a[href="#'+CSS.escape(id)+'"]');
+      if(link) link.classList.add('active');
+      ensureOpenFor(id);
+      el.scrollIntoView && el.scrollIntoView({block:'nearest'});
+    }
+  }
+  function updateActiveByScroll(){
+    const y = window.scrollY + 120;
+    let cur = heads.length ? heads[0].id : null;
+    for (const h of heads){ if(h.offsetTop <= y) cur = h.id; else break; }
+    setActive(cur);
+  }
+  updateActiveByScroll();
+  addEventListener('scroll', updateActiveByScroll, { passive:true });
+  addEventListener('resize', updateActiveByScroll);
+
+  /* ========== 10) 图片灯箱（缩略图点击不跳文；预留安全区防重叠） ========== */
+  const lb = $('#ty-lightbox'), lbImg = $('.ty-lb-img', lb), lbCap = $('.ty-lb-cap', lb);
+  const prevBtn = $('.ty-lb-prev', lb), nextBtn = $('.ty-lb-next', lb), closeBtn = $('.ty-lb-close', lb);
+  const lbCount = $('#ty-lb-count'), lbStrip = $('#ty-lb-strip');
+  const lbCopy  = $('#ty-lb-copy'),  lbFmt   = $('#ty-lb-fmt'),   lbJump = $('#ty-lb-jump');
+
+  const IMG_FMT_KEY = 'ty_img_copy_fmt'; // url / md
+  let imgCopyFmt = (localStorage.getItem(IMG_FMT_KEY) || 'url');
+  function setImgCopyFmt(fmt){
+    if (!['url','md'].includes(fmt)) return;
+    imgCopyFmt = fmt; localStorage.setItem(IMG_FMT_KEY, fmt);
+    lbFmt.textContent = '复制为：' + (fmt==='md'?'Markdown':'URL');
+  }
+  setImgCopyFmt(imgCopyFmt);
+
+  let list=[], idx=-1, thumbsBuilt=false;
+
+  function collectImages(){
+    list = $$('#write img').filter(img=>{
+      const w = img.naturalWidth || img.clientWidth;
+      const h = img.naturalHeight || img.clientHeight;
+      return (w*h) >= (48*48);
+    });
+  }
+  function buildThumbs(){
+    lbStrip.innerHTML = '';
+    list.forEach((el,i)=>{
+      const t = document.createElement('img');
+      t.className = 'ty-thumb';
+      const src = el.getAttribute('data-src') || el.currentSrc || el.src;
+      t.src = src; t.alt=''; t.loading='lazy';
+      t.setAttribute('data-idx', (i+1));
+      // 点击缩略图：在画廊内切换到该图（不跳出）
+      t.addEventListener('click', ()=> showAt(i));
+      lbStrip.appendChild(t);
+    });
+    thumbsBuilt = true;
+  }
+  function updateThumbActive(){
+    const thumbs = $$('.ty-thumb', lbStrip);
+    thumbs.forEach(t=> t.classList.remove('active'));
+    const cur = thumbs[idx]; if (cur) cur.classList.add('active');
+  }
+  function showAt(i){
+    if(i<0 || i>=list.length) return;
+    idx=i;
+    const el=list[idx];
+    const src = el.getAttribute('data-src') || el.currentSrc || el.src;
+    const cap = el.getAttribute('alt') || el.title || '';
+    lbImg.src=src; lbImg.alt=cap; lbCap.textContent=cap;
+    lbCount.textContent = (idx+1) + ' / ' + list.length;
+    updateThumbActive();
+    lb.classList.add('open'); document.body.style.overflow='hidden';
+  }
+  function close(){ lb.classList.remove('open'); document.body.style.overflow=''; lbImg.src=''; lbImg.alt=''; }
+  function prev(){ showAt((idx-1+list.length)%list.length); }
+  function next(){ showAt((idx+1)%list.length); }
+
+  // 文中点击图片 → 打开画廊（并构建缩略条）
+  write.addEventListener('click', (e)=>{
+    const target = e.target.closest && e.target.closest('img');
+    if(!target) return;
+    e.preventDefault();
+    collectImages();
+    if (!thumbsBuilt) buildThumbs();
+    const i = list.indexOf(target);
+    if(i>=0) showAt(i);
+  });
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+  closeBtn.addEventListener('click', close);
+  lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+  document.addEventListener('keydown', (e)=>{
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    if(e.key==='ArrowLeft') prev();
+    if(e.key==='ArrowRight') next();
+  });
+
+  // 复制图片链接（URL / Markdown）
+  lbCopy.addEventListener('click', async ()=>{
+    if(idx<0 || idx>=list.length) return;
+    const el = list[idx];
+    const src = el.getAttribute('data-src') || el.currentSrc || el.src;
+    const txt = (imgCopyFmt==='md') ? `![](${src})` : src;
+    try{ await navigator.clipboard.writeText(txt); lbCopy.textContent='已复制'; setTimeout(()=> lbCopy.textContent='复制图片链接', 900); }
+    catch{
+      const ta=document.createElement('textarea'); ta.value=txt;
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      lbCopy.textContent='已复制'; setTimeout(()=> lbCopy.textContent='复制图片链接', 900);
+    }
+  });
+  lbFmt.addEventListener('click', ()=> setImgCopyFmt(imgCopyFmt==='url' ? 'md' : 'url'));
+  // 跳回文中
+  lbJump.addEventListener('click', ()=>{
+    if(idx<0 || idx>=list.length) return;
+    const el = list[idx];
+    close();
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.classList.add('ty-img-flash');
+    setTimeout(()=> el.classList.remove('ty-img-flash'), 1300);
+  });
+
+  /* ========== 11) 帮助浮层（保持） ========== */
+  const helpOverlay = $('#ty-help-overlay');
+  const helpClose   = $('#ty-help-close');
+  const helpBtn     = $('#ty-help');
+  function openHelp(){
+    renderHelp();
+    helpOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeHelp(){
+    helpOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  helpBtn.addEventListener('click', openHelp);
+  helpClose.addEventListener('click', closeHelp);
+  helpOverlay.addEventListener('click', (e)=>{ if(e.target === helpOverlay) closeHelp(); });
+
+  /* ========== 12) 快捷键（白名单：仅单键 & Alt 组合；其它全部放行） ========== */
+  document.addEventListener('keydown', (e)=>{
+    const tag = (e.target && e.target.tagName || '').toLowerCase();
+    const inEditable = !!(e.target && (e.target.isContentEditable || /^(input|textarea|select)$/i.test(tag)));
+    if (inEditable) return;
+
+    if (e.getModifierState && (e.getModifierState('AltGraph') || e.getModifierState('OS'))) return;
+
+    const k    = (e.key || '').toLowerCase();
+    const code = e.code || '';
+
+    // Alt-only 组合：Alt+1/2/3/U/M
+    if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+      if (code==='Digit1' || code==='Numpad1' || k==='1') { e.preventDefault(); setUrlMode('raw');     return; }
+      if (code==='Digit2' || code==='Numpad2' || k==='2') { e.preventDefault(); setUrlMode('encoded'); return; }
+      if (code==='Digit3' || code==='Numpad3' || k==='3') { e.preventDefault(); setUrlMode('rich');    return; }
+      if (!btnCopyFmt.hidden && code==='KeyU') { e.preventDefault(); setCopyFmt('url'); return; }
+      if (!btnCopyFmt.hidden && code==='KeyM') { e.preventDefault(); setCopyFmt('md');  return; }
+      return;
+    }
+
+    // 包含 Ctrl/Cmd/Shift 的组合：放行
+    if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+
+    // 单键白名单
+    const SINGLE = new Set(['o','t','e','r','u','m','c','h']);
+    if (SINGLE.has(k)) {
+      e.preventDefault();
+      if (k==='o') $('#ty-outline')?.click();
+      else if (k==='t') $('#ty-top')?.click();
+      else if (k==='e') $('#ty-expand')?.click();
+      else if (k==='r') $('#ty-collapse')?.click();
+      else if (k==='u') $('#ty-urlmode')?.click();
+      else if (k==='m' && !btnCopyFmt.hidden) $('#ty-copyfmt')?.click();
+      else if (k==='c') $('#ty-comments')?.click();
+      else if (k==='h') openHelp();
+      return;
+    }
+
+    // Esc 仅在帮助打开时拦截
+    if (k==='escape' && helpOverlay.classList.contains('open')) { e.preventDefault(); closeHelp(); }
+  });
+
+  /* ========== 13) 将 HTML 注释转为可见元素 + 开关（保持） ========== */
+  const btnComments = $('#ty-comments');
+  let tyCmtInited = false;
+  function injectCommentsOnce(){
+    if (tyCmtInited) return;
+    tyCmtInited = true;
+    const walker = document.createTreeWalker(write, NodeFilter.SHOW_COMMENT, null, false);
+    const nodes = [];
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) nodes.push(n);
+
+    nodes.forEach(cmt=>{
+      const txt = (cmt.data || '').trim();
+      if (!txt) return;
+      const span = document.createElement('span');
+      span.className = 'ty-cmt';
+      span.textContent = txt;
+      cmt.parentNode && cmt.parentNode.insertBefore(span, cmt);
+    });
+    if (!write.querySelector('.ty-cmt')) btnComments.hidden = true;
+  }
+  injectCommentsOnce();
+  document.body.classList.remove('ty-cmt-hidden');
+  btnComments.textContent = '隐藏注释（C）';
+  btnComments.title = '显示/隐藏注释（C）';
+  btnComments.addEventListener('click', ()=>{
+    injectCommentsOnce();
+    const hide = !document.body.classList.contains('ty-cmt-hidden');
+    document.body.classList.toggle('ty-cmt-hidden', hide);
+    btnComments.textContent = hide ? '显示注释（C）' : '隐藏注释（C）';
+  });
+})();
+</script></body>
+</html>
