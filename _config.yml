@@ -2,6 +2,7 @@
 # 从 Jekyll 构建过程中排除指定的文件和文件夹
 exclude:
   - Demo/Collections_MD/v2/
+  - Demo/Collections_MD_NoTrans/v2/
 
 # 你这个报错来自 Jekyll 的 Liquid 模板解析：Typora 导出的 Markdown 里出现了 {{18} 这样的片段，被当成 Liquid 变量开头解析，但没有用 }} 正确关闭，于是构建直接中断。
 # 日志里已经点名了出错文件与行号（第 141 行）：
