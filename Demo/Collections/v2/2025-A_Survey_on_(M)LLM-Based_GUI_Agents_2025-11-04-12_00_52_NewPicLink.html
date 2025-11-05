@@ -1412,7 +1412,7 @@ g[data-mml-node="xypic"] path {
 <span>[212] S. Nayak, X. Jian, K. Q. Lin, J. A. Rodriguez, M. Kalsi, R. Awal, N. Chapados, M. T. Özsu, A. Agrawal, D. Vazquez, C. Pal, P. Taslakian, S. Gella, 和 S. Rajeswar, “Ui-vision：面向视觉感知与交互的桌面中心GUI基准，”2025年。[在线]. 可获取：</span><a href='https://arxiv.org/abs/2503.15661' target='_blank' class='url'>https://arxiv.org/abs/2503.15661</a></p></div></div>
 
 <script>(function(){function e(e,n,i){document.addEventListener(e,function(e){if(!e.defaultPrevented)for(var t=e.target;t&&t!=this;t=t.parentNode)if(t.matches(n)){!1===i.call(t,e)&&(e.preventDefault(),e.stopPropagation());break}},!1)}var t=document.body.parentElement,i=[],r=null,o=document.body.classList.contains("typora-export-collapse-outline");function a(){return t.scrollTop}e("click",".outline-expander",function(e){var t=this.closest(".outline-item-wrapper").classList;return t.contains("outline-item-open")?t.remove("outline-item-open"):t.add("outline-item-open"),u(),!1}),e("click",".outline-item",function(e){var t=this.querySelector(".outline-label");location.hash="#"+t.getAttribute("href"),o&&((t=this.closest(".outline-item-wrapper").classList).contains("outline-item-open")||t.add("outline-item-open"),d(),t.add("outline-item-active"))});function s(){var e=a();r=null;for(var t=0;t<i.length&&i[t][1]-e<60;t++)r=i[t]}function n(){c=setTimeout(function(){var n;i=[],n=a(),document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(e=>{var t=e.getAttribute("id");i.push([t,n+e.getBoundingClientRect().y])}),s(),u()},300)}var l,c,d=function(){document.querySelectorAll(".outline-item-active").forEach(e=>e.classList.remove("outline-item-active")),document.querySelectorAll(".outline-item-single.outline-item-open").forEach(e=>e.classList.remove("outline-item-open"))},u=function(){if(r&&(d(),t=document.querySelector('.outline-label[href="#'+(CSS.escape?CSS.escape(r[0]):r[0])+'"]')))if(o){var e=t.closest(".outline-item-open>ul>.outline-item-wrapper");if(e)e.classList.add("outline-item-active");else{for(var t,n=(t=t.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper");n;)n=(t=n).parentElement.closest(".outline-item-wrapper");t.classList.add("outline-item-active")}}else t.closest(".outline-item-wrapper").classList.add("outline-item-active")};window.addEventListener("scroll",function(e){l&&clearTimeout(l),l=setTimeout(function(){s(),u()},300)});window.addEventListener("resize",function(e){c&&clearTimeout(c),n()}),n()})();</script><style>
-/* ===== Typora Enhancer (safe-only hotkeys + tiny tools tab + light progress info + gallery non-overlap) ===== */
+/* ===== Typora Cross-Platform Enhancer (final + help overlay + cross-platform hotkeys, safe-only hotkeys) ===== */
 
 /* 顶部阅读进度条 */
 #ty-progress {
@@ -1420,21 +1420,11 @@ g[data-mml-node="xypic"] path {
   background: linear-gradient(to right, #4da3ff, #7c4dff);
   transform-origin: 0 50%; transform: scaleX(0); pointer-events: none;
 }
-/* 进度信息：仅 百分比 / 已读时间（弱遮挡 + 不拦截鼠标） */
-#ty-progress-info{
-  position: fixed; top: 6px; right: 6px; z-index: 10000;
-  font: 12px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-  color:#fff; background: rgba(0,0,0,.25);
-  padding: 2px 6px; border-radius: 7px; backdrop-filter: saturate(120%) blur(1.5px);
-  user-select: none; pointer-events: none;
-}
-#ty-progress-info b{ font-weight:600 }
 
-/* 右下功能栏 */
+/* 右下工具条 */
 #ty-tools {
   position: fixed; z-index: 9999; right: 18px; bottom: 24px; display: flex; gap: 10px; flex-direction: column;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  transition: transform .25s ease, opacity .2s ease;
 }
 .ty-btn {
   background: rgba(0,0,0,.7); color: #fff; border-radius: 10px; padding: 8px 10px;
@@ -1443,22 +1433,6 @@ g[data-mml-node="xypic"] path {
 }
 .ty-btn:hover { transform: translateY(-1px); background: rgba(0,0,0,.82); }
 .ty-btn[hidden] { display: none !important; }
-
-/* 工具栏收起时隐藏，仅保留“抽屉拉手” */
-body.ty-tools-collapsed #ty-tools{ opacity:0; pointer-events:none; transform: translateX(18px); }
-
-/* 抽屉拉手：超小、仅图标，避免与工具栏重叠 */
-#ty-tools-tab{
-  --tab-size: 28px;
-  position: fixed; right: 2px; bottom: 26px; z-index: 10001;
-  width: var(--tab-size); height: var(--tab-size); display: grid; place-items: center;
-  background: rgba(0,0,0,.65); color:#fff; font-size: 16px;
-  border-radius: 50%; cursor: pointer; user-select:none;
-  transform: translateX(40%); transition: background .2s ease, transform .2s ease, opacity .2s ease;
-  backdrop-filter: saturate(120%) blur(2px);
-}
-#ty-tools-tab:hover{ background: rgba(0,0,0,.8); }
-#ty-tools-tab .ico{ line-height: 1; font-weight: 600; }
 
 /* 标题锚点（左侧“#”） */
 #write h1,#write h2,#write h3,#write h4,#write h5,#write h6{ position:relative; }
@@ -1484,66 +1458,23 @@ body.ty-tools-collapsed #ty-tools{ opacity:0; pointer-events:none; transform: tr
 .outline-content .active > .outline-item,
 .outline-content a.active { color: #2a72ff; }
 
-/* 简单收起侧栏：仅隐藏 */
+/* 简单收起侧栏：仅隐藏，不改正文宽度/居中 */
 body.ty-outline-hidden .typora-export-sidebar{ display:none !important; }
 
-/* ========= 图片灯箱（含左侧缩略条、非重叠布局） ========= */
+/* 图片灯箱 */
 #ty-lightbox {
-  /* 预留左侧缩略条安全区，避免与大图/按钮重叠 */
-  --lb-strip-w: 108px; /* 左侧缩略条宽度（含边距） */
   position: fixed; inset: 0; background: rgba(0,0,0,.92); display: none; z-index: 9998;
-  padding-left: calc(var(--lb-strip-w) + 12px);
 }
 #ty-lightbox.open { display: flex; align-items: center; justify-content: center; }
-.ty-lb-img { max-width: calc(92vw - var(--lb-strip-w)); max-height: 86vh; }
-.ty-lb-cap { position: fixed; bottom: 64px; left: 50%; transform: translateX(-50%); color: #ddd; font-size: 13px; }
-
-/* 画廊控制按钮（左箭头避开缩略条） */
+.ty-lb-img { max-width: 92vw; max-height: 86vh; }
+.ty-lb-cap { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); color: #ddd; font-size: 13px; }
 .ty-lb-prev, .ty-lb-next, .ty-lb-close {
   position: fixed; top: 50%; transform: translateY(-50%);
   background: rgba(255,255,255,.12); color: #fff; border-radius: 50%; width: 40px; height: 40px;
   display: grid; place-items: center; font-size: 18px; cursor: pointer; user-select: none;
 }
 .ty-lb-prev:hover, .ty-lb-next:hover, .ty-lb-close:hover { background: rgba(255,255,255,.18); }
-.ty-lb-prev { left: calc(var(--lb-strip-w) + 24px); }
-.ty-lb-next { right: 24px; } 
-.ty-lb-close { right: 24px; top: 24px; transform: none; }
-
-/* 画廊顶部序号 */
-#ty-lb-count{
-  position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
-  color:#eee; background: rgba(0,0,0,.35); padding: 4px 10px;
-  border-radius: 8px; font: 12px/1.3 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-}
-
-/* 画廊底部动作区 */
-#ty-lb-actions{
-  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 10px; background: rgba(0,0,0,.35); padding: 8px 10px; border-radius: 12px;
-}
-.ty-act-btn{
-  background: rgba(255,255,255,.16); color:#fff; border-radius: 8px; padding: 6px 10px;
-  font-size: 12px; cursor: pointer; user-select: none; border: 1px solid rgba(255,255,255,.18);
-}
-.ty-act-btn:hover{ background: rgba(255,255,255,.22); }
-
-/* 画廊左侧缩略图条（不与大图重叠） */
-#ty-lb-strip{
-  position: fixed; left: 12px; top: 50%; transform: translateY(-50%);
-  display: flex; flex-direction: column; gap: 8px; max-height: 80vh; overflow: auto; padding-right: 4px;
-  width: var(--lb-strip-w);
-}
-.ty-thumb{
-  position: relative; width: 96px; height: 68px; object-fit: cover; border-radius: 6px;
-  border: 1px solid rgba(255,255,255,.25); cursor: pointer; opacity: .9; background: #111;
-}
-.ty-thumb:hover{ opacity: 1; }
-.ty-thumb.active{ outline: 2px solid #7c4dff; opacity: 1; }
-.ty-thumb::after{
-  content: attr(data-idx); position: absolute; left: 4px; top: 2px;
-  font: 10px/1.1 system-ui,-apple-system,"Segoe UI"; background: rgba(0,0,0,.55); color:#fff;
-  padding: 1px 4px; border-radius: 4px;
-}
+.ty-lb-prev { left: 24px; } .ty-lb-next { right: 24px; } .ty-lb-close { right: 24px; top: 24px; transform: none; }
 
 /* —— 快速帮助浮层 —— */
 #ty-help-overlay{
@@ -1568,12 +1499,7 @@ body.ty-outline-hidden .typora-export-sidebar{ display:none !important; }
 }
 .ty-help-close:hover{ background: #e9eaee; }
 .ty-help-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media (max-width:680px){
-  /* 小屏缩窄缩略条并自动适配左侧安全区 */
-  #ty-lightbox{ --lb-strip-w: 80px; padding-left: calc(var(--lb-strip-w) + 8px); }
-  .ty-thumb{ width: 72px; height: 52px; }
-  .ty-lb-prev{ left: calc(var(--lb-strip-w) + 16px) }
-}
+@media (max-width:680px){ .ty-help-grid{ grid-template-columns: 1fr; } }
 
 /* —— 可视化注释（由 HTML 注释生成） —— */
 .ty-cmt{
@@ -1589,28 +1515,16 @@ body.ty-outline-hidden .typora-export-sidebar{ display:none !important; }
 }
 body.ty-cmt-hidden .ty-cmt{ display: none !important; }
 
-/* 文中图片跳回高亮动画（保留） */
-@keyframes ty-img-flash{
-  0%{ box-shadow: 0 0 0 0 rgba(124,77,255,.0) }
-  50%{ box-shadow: 0 0 0 6px rgba(124,77,255,.3) }
-  100%{ box-shadow: 0 0 0 0 rgba(124,77,255,0) }
-}
-.ty-img-flash{ animation: ty-img-flash 1.2s ease-out 1; border-radius: 6px; }
+/* ==== 新增：MN4/WKWebView 下隐藏进度信息气泡（百分比/已读时间） ==== */
+html.mn4 #ty-progress-info { display: none !important; }
 
-/* ==== MN4/WKWebView：禁用文本自动缩放，防止 1s 后字体变小 ==== */
+/* 可选：避免 WKWebView 字体自动缩放引发布局跳动 */
 @supports (-webkit-touch-callout: none) {
-  html { -webkit-text-size-adjust: none !important; }
+  html.mn4 { -webkit-text-size-adjust: none !important; }
 }
 </style>
 
 <div id="ty-progress"></div>
-<div id="ty-progress-info" aria-live="polite">进度 <b>0.0%</b> ｜ 已读 <b>00:00</b></div>
-
-<!-- 工具栏抽屉拉手（仅图标，默认收起） -->
-<div id="ty-tools-tab" title="展开工具栏">
-  <span class="ico">≡</span>
-</div>
-
 <div id="ty-tools" aria-label="Page tools">
   <div class="ty-btn" id="ty-outline" title="收起/展开左侧大纲（O）">收起/展开大纲（O）</div>
   <div class="ty-btn" id="ty-top" title="回到顶部（T）">回到顶部（T）</div>
@@ -1626,28 +1540,14 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
 
 <!-- 图片灯箱 -->
 <div id="ty-lightbox" aria-modal="true" role="dialog">
-  <!-- 左侧缩略图条 -->
-  <div id="ty-lb-strip"></div>
-
-  <!-- 顶部序号 -->
-  <div id="ty-lb-count"></div>
-
   <img class="ty-lb-img" alt="">
   <div class="ty-lb-cap"></div>
-
-  <!-- 底部动作按钮 -->
-  <div id="ty-lb-actions">
-    <div class="ty-act-btn" id="ty-lb-copy" title="复制图片链接">复制图片链接</div>
-    <div class="ty-act-btn" id="ty-lb-fmt" title="切换复制格式（URL / Markdown）">复制为：URL</div>
-    <div class="ty-act-btn" id="ty-lb-jump" title="跳转到文中该图片位置">跳转到文中</div>
-  </div>
-
   <div class="ty-lb-prev">‹</div>
   <div class="ty-lb-next">›</div>
   <div class="ty-lb-close">✕</div>
 </div>
 
-<!-- 快速帮助浮层（保持不变） -->
+<!-- 快速帮助浮层 -->
 <div id="ty-help-overlay" role="dialog" aria-modal="true" aria-label="快速帮助">
   <div class="ty-help-dialog">
     <div class="ty-help-close" id="ty-help-close" title="关闭（Esc）">✕</div>
@@ -1667,16 +1567,16 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
     </div>
     <h4>链接样式</h4>
     <ul>
-      <li><b>原文</b>：<code>#段落</code>（<kbd>Alt</kbd>+<kbd>1</kbd>）</li>
-      <li><b>%编码</b>：<code>#%E6%AE%B5%E8%90%BD</code>（<kbd>Alt</kbd>+<kbd>2</kbd>）</li>
-      <li><b>富文本片段</b>（HTML 片段）（<kbd>Alt</kbd>+<kbd>3</kbd>）</li>
-      <li>循环切换：<kbd>U</kbd></li>
+      <li><b>原文</b>（可读）：<code>#段落</code>（快捷键：<kbd>Alt</kbd>+<kbd>1</kbd>）</li>
+      <li><b>%编码</b>（兼容）：<code>#%E6%AE%B5%E8%90%BD</code>（快捷键：<kbd>Alt</kbd>+<kbd>2</kbd>）</li>
+      <li><b>富文本片段</b>（HTML 片段）：复制包含“论文标题 / 目录层级 / 段落标题 / 两种锚点”（快捷键：<kbd>Alt</kbd>+<kbd>3</kbd>）</li>
+      <li>循环切换样式：<kbd>U</kbd></li>
     </ul>
     <h4>复制格式（仅“原文 / %编码”可用）</h4>
     <ul>
-      <li>设为 <b>URL</b>：<kbd>Alt</kbd>+<kbd>U</kbd></li>
-      <li>设为 <b>Markdown</b>：<kbd>Alt</kbd>+<kbd>M</kbd></li>
-      <li>二者切换：<kbd>M</kbd></li>
+      <li>设置为 <b>URL</b>：<kbd>Alt</kbd>+<kbd>U</kbd></li>
+      <li>设置为 <b>Markdown</b>：<kbd>Alt</kbd>+<kbd>M</kbd></li>
+      <li>两者间切换：<kbd>M</kbd></li>
     </ul>
     <h4>大纲与导航</h4>
     <ul>
@@ -1694,58 +1594,13 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
   const write       = $('#write') || document.body;
   const outlineRoot = $('.outline-content');
 
-  /* ==== MN4 环境识别 + 目录隐藏（观察驱动，无需硬编码时间） ==== */
+  /* ==== 新增：MN4/WKWebView 环境识别，仅加类名，不改其它逻辑 ==== */
   const UA = navigator.userAgent || '';
   const isWKWebView = /(iPhone|iPad|Macintosh).+AppleWebKit(?!.*Safari)/i.test(UA);
   const isMarginNote = /MarginNote|MN4|com\.marginnote/i.test(UA) || isWKWebView;
+  if (isMarginNote) document.documentElement.classList.add('mn4');
 
-  if (isMarginNote) {
-    const ensureOutlineHidden = () => {
-      document.body.classList.add('ty-outline-hidden');
-      const sb = document.querySelector('.typora-export-sidebar');
-      if (sb) sb.style.setProperty('display', 'none', 'important');
-    };
-
-    // 进入时先执行一次
-    ensureOutlineHidden();
-
-    // 用 MutationObserver 监听“类名/样式/节点变更”，一旦被还原立刻再隐藏
-    if ('MutationObserver' in window) {
-      const mo = new MutationObserver(ensureOutlineHidden);
-      mo.observe(document.documentElement, {
-        subtree: true,
-        childList: true,
-        attributes: true,
-        attributeFilter: ['class', 'style']
-      });
-      // 用户开始滚动阅读后，基本稳定，关闭观察器以节省开销
-      addEventListener('scroll', () => mo.disconnect(), { once: true, passive: true });
-    } else {
-      // 兜底：老环境没有 MutationObserver，就用短暂的 rAF 循环巩固几帧
-      let n = 0;
-      (function loop(){
-        ensureOutlineHidden();
-        if (++n < 90) requestAnimationFrame(loop); // ~1.5s@60fps，但无固定绝对时间
-      })();
-    }
-  }
-
-  /* ========== 0) 工具栏抽屉：默认收起（仅图标按钮，避免重叠） ========== */
-  const TOOLS_KEY = 'ty_tools_opened';
-  const toolsTab  = $('#ty-tools-tab');
-  function setToolsOpen(open){
-    document.body.classList.toggle('ty-tools-collapsed', !open);
-    toolsTab.title = open ? '收起工具栏' : '展开工具栏';
-    toolsTab.querySelector('.ico').textContent = open ? '×' : '≡';
-  }
-  setToolsOpen(localStorage.getItem(TOOLS_KEY) === '1');
-  toolsTab.addEventListener('click', ()=>{
-    const nextOpen = document.body.classList.contains('ty-tools-collapsed');
-    setToolsOpen(nextOpen);
-    localStorage.setItem(TOOLS_KEY, nextOpen ? '1' : '0');
-  });
-
-  /* ========== 1) 图片路径自动纠偏（图床通常不会触发） ========== */
+  /* ========== 0) 图片路径自动纠偏（若图片均走图床，此段基本不触发） ========== */
   (function fixLocalImages(){
     const imgs = $$('img', write);
     const folders = ['.', 'assets', 'images', 'image', 'img', 'pics', '资源'];
@@ -1778,40 +1633,28 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
     });
   })();
 
-  /* ========== 2) 顶部阅读进度条 + 信息（百分比/时间） ========== */
+  /* ========== 1) 顶部阅读进度条 ========== */
   const bar = $('#ty-progress');
-  const info = $('#ty-progress-info');
-  const startAnchor = { t0: null };
-  function fmtTime(sec){
-    sec = Math.max(0, Math.floor(sec));
-    const m = Math.floor(sec/60), s = sec%60;
-    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-  }
   function updateProgress(){
     const st = document.documentElement.scrollTop || document.body.scrollTop || 0;
     const sh = document.documentElement.scrollHeight || document.body.scrollHeight || 1;
     const max = Math.max(1, sh - window.innerHeight);
-    const p = Math.min(1, st / max);
-    bar.style.transform = 'scaleX(' + p + ')';
-    const now = performance.now();
-    if (startAnchor.t0 == null && st > 8) startAnchor.t0 = now;
-    const pct = (p*100).toFixed(1);
-    const elapsed = startAnchor.t0 ? (now - startAnchor.t0)/1000 : 0;
-    info.innerHTML = `进度 <b>${pct}%</b> ｜ 已读 <b>${fmtTime(elapsed)}</b>`;
+    bar.style.transform = 'scaleX(' + Math.min(1, st / max) + ')';
   }
   updateProgress();
   addEventListener('scroll', updateProgress, { passive:true });
   addEventListener('resize', updateProgress);
 
-  /* ========== 3) 左侧大纲开合（保持） ========== */
+  /* ========== 2) 收起/展开侧栏（简单隐藏，不改正文宽度/居中） ========== */
   $('#ty-outline').addEventListener('click', ()=>{
     const hide = !document.body.classList.contains('ty-outline-hidden');
     document.body.classList.toggle('ty-outline-hidden', hide);
     document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline');
   });
+
   $('#ty-top').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
 
-  /* ========== 4) 链接样式 & 复制格式（保持） ========== */
+  /* ========== 3) 链接样式（raw/encoded/rich）与复制格式（url/md） ========== */
   const MODE_KEY = 'ty_url_mode';        // raw / encoded / rich
   const FMT_KEY  = 'ty_copy_fmt';        // url / md
   let urlMode = (localStorage.getItem(MODE_KEY) || 'raw');
@@ -1822,10 +1665,6 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
   const btnCopyFmt = $('#ty-copyfmt');
 
   function urlModeLabel(m){ return m==='encoded' ? '%编码' : (m==='rich' ? '富文本片段' : '原文'); }
-  function renderHelp(){
-    $('#ty-help-cur-urlmode').textContent = urlModeLabel(urlMode);
-    $('#ty-help-cur-copyfmt').textContent = (urlMode === 'rich') ? '（富文本片段下不适用）' : (copyFmt === 'md' ? 'Markdown' : 'URL');
-  }
   function updateUrlModeButton(){
     const label = urlModeLabel(urlMode);
     btnUrlMode.textContent = '链接样式：' + label;
@@ -1850,20 +1689,26 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
     if (!['url','md'].includes(fmt)) return;
     copyFmt = fmt; localStorage.setItem(FMT_KEY, copyFmt); updateCopyFmtButton();
   }
-  btnUrlMode.addEventListener('click', ()=>{ setUrlMode(urlMode==='raw' ? 'encoded' : (urlMode==='encoded' ? 'rich' : 'raw')); });
-  btnCopyFmt.addEventListener('click', ()=>{ setCopyFmt(copyFmt==='url' ? 'md' : 'url'); });
+
+  btnUrlMode.addEventListener('click', ()=>{
+    setUrlMode(urlMode==='raw' ? 'encoded' : (urlMode==='encoded' ? 'rich' : 'raw'));
+  });
+  btnCopyFmt.addEventListener('click', ()=>{
+    setCopyFmt(copyFmt==='url' ? 'md' : 'url');
+  });
   updateUrlModeButton(); updateCopyFmtButton();
 
-  /* ========== 5) 一键展开/收起所有层级（保持） ========== */
+  /* ========== 4) 一键展开/收起所有层级（不使用 body 全局类） ========== */
   const btnExpand = $('#ty-expand'), btnCollapse = $('#ty-collapse');
   if (outlineRoot){ btnExpand.hidden = false; btnCollapse.hidden = false; }
+
   const allWrappers = ()=> $$('.outline-item-wrapper', outlineRoot);
   function expandAll(){ allWrappers().forEach(w=> w.classList.add('outline-item-open')); document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline'); }
   function collapseAll(){ allWrappers().forEach(w=> w.classList.remove('outline-item-open')); document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline'); }
   btnExpand.addEventListener('click', expandAll);
   btnCollapse.addEventListener('click', collapseAll);
 
-  /* ========== 6) 大纲节点点击（保持） ========== */
+  /* ========== 5) 大纲节点点击：事件委托（自由折叠/展开） ========== */
   if (outlineRoot){
     outlineRoot.addEventListener('click', (e)=>{
       const expander = e.target.closest('.outline-expander');
@@ -1881,7 +1726,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
     });
   }
 
-  /* ========== 7) 文本工具：干净标题；从文件名推断论文标题（保持） ========== */
+  /* ========== 6) 文本工具：干净标题；从文件名推断论文标题 ========== */
   function getCleanHeadingText(h){
     const clone = h.cloneNode(true);
     clone.querySelectorAll('.ty-anchor,.ty-tip').forEach(n=> n.remove());
@@ -1899,7 +1744,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
     return underscoresToSpace;
   }
 
-  /* ========== 8) 标题锚点复制（三种样式 + 两种格式）（保持） ========== */
+  /* ========== 7) 标题锚点：左侧“#” + 复制（三种样式 + 两种格式） ========== */
   const used = new Set();
   function slugify(text){
     const base = text.toLowerCase().trim()
@@ -1992,7 +1837,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
     h.appendChild(tip);
   });
 
-  /* ========== 9) ScrollSpy：滚动高亮 + 自动展开（保持） ========== */
+  /* ========== 8) ScrollSpy：滚动高亮 + 自动展开分支 ========== */
   let activeId = null;
   function ensureOpenFor(id){
     const node = idToItem.get(id); if(!node) return;
@@ -2025,22 +1870,10 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
   addEventListener('scroll', updateActiveByScroll, { passive:true });
   addEventListener('resize', updateActiveByScroll);
 
-  /* ========== 10) 图片灯箱（缩略图点击不跳文；预留安全区防重叠） ========== */
+  /* ========== 9) 图片灯箱（事件委托 + 动态收集） ========== */
   const lb = $('#ty-lightbox'), lbImg = $('.ty-lb-img', lb), lbCap = $('.ty-lb-cap', lb);
   const prevBtn = $('.ty-lb-prev', lb), nextBtn = $('.ty-lb-next', lb), closeBtn = $('.ty-lb-close', lb);
-  const lbCount = $('#ty-lb-count'), lbStrip = $('#ty-lb-strip');
-  const lbCopy  = $('#ty-lb-copy'),  lbFmt   = $('#ty-lb-fmt'),   lbJump = $('#ty-lb-jump');
-
-  const IMG_FMT_KEY = 'ty_img_copy_fmt'; // url / md
-  let imgCopyFmt = (localStorage.getItem(IMG_FMT_KEY) || 'url');
-  function setImgCopyFmt(fmt){
-    if (!['url','md'].includes(fmt)) return;
-    imgCopyFmt = fmt; localStorage.setItem(IMG_FMT_KEY, fmt);
-    lbFmt.textContent = '复制为：' + (fmt==='md'?'Markdown':'URL');
-  }
-  setImgCopyFmt(imgCopyFmt);
-
-  let list=[], idx=-1, thumbsBuilt=false;
+  let list=[], idx=-1;
 
   function collectImages(){
     list = $$('#write img').filter(img=>{
@@ -2049,47 +1882,25 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
       return (w*h) >= (48*48);
     });
   }
-  function buildThumbs(){
-    lbStrip.innerHTML = '';
-    list.forEach((el,i)=>{
-      const t = document.createElement('img');
-      t.className = 'ty-thumb';
-      const src = el.getAttribute('data-src') || el.currentSrc || el.src;
-      t.src = src; t.alt=''; t.loading='lazy';
-      t.setAttribute('data-idx', (i+1));
-      // 点击缩略图：在画廊内切换到该图（不跳出）
-      t.addEventListener('click', ()=> showAt(i));
-      lbStrip.appendChild(t);
-    });
-    thumbsBuilt = true;
-  }
-  function updateThumbActive(){
-    const thumbs = $$('.ty-thumb', lbStrip);
-    thumbs.forEach(t=> t.classList.remove('active'));
-    const cur = thumbs[idx]; if (cur) cur.classList.add('active');
-  }
   function showAt(i){
     if(i<0 || i>=list.length) return;
     idx=i;
     const el=list[idx];
+    aconst = 1; // placeholder to avoid accidental changes (no-op)
     const src = el.getAttribute('data-src') || el.currentSrc || el.src;
     const cap = el.getAttribute('alt') || el.title || '';
     lbImg.src=src; lbImg.alt=cap; lbCap.textContent=cap;
-    lbCount.textContent = (idx+1) + ' / ' + list.length;
-    updateThumbActive();
     lb.classList.add('open'); document.body.style.overflow='hidden';
   }
   function close(){ lb.classList.remove('open'); document.body.style.overflow=''; lbImg.src=''; lbImg.alt=''; }
   function prev(){ showAt((idx-1+list.length)%list.length); }
   function next(){ showAt((idx+1)%list.length); }
 
-  // 文中点击图片 → 打开画廊（并构建缩略条）
   write.addEventListener('click', (e)=>{
     const target = e.target.closest && e.target.closest('img');
     if(!target) return;
     e.preventDefault();
     collectImages();
-    if (!thumbsBuilt) buildThumbs();
     const i = list.indexOf(target);
     if(i>=0) showAt(i);
   });
@@ -2104,34 +1915,14 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
     if(e.key==='ArrowRight') next();
   });
 
-  // 复制图片链接（URL / Markdown）
-  lbCopy.addEventListener('click', async ()=>{
-    if(idx<0 || idx>=list.length) return;
-    const el = list[idx];
-    const src = el.getAttribute('data-src') || el.currentSrc || el.src;
-    const txt = (imgCopyFmt==='md') ? `![](${src})` : src;
-    try{ await navigator.clipboard.writeText(txt); lbCopy.textContent='已复制'; setTimeout(()=> lbCopy.textContent='复制图片链接', 900); }
-    catch{
-      const ta=document.createElement('textarea'); ta.value=txt;
-      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-      lbCopy.textContent='已复制'; setTimeout(()=> lbCopy.textContent='复制图片链接', 900);
-    }
-  });
-  lbFmt.addEventListener('click', ()=> setImgCopyFmt(imgCopyFmt==='url' ? 'md' : 'url'));
-  // 跳回文中
-  lbJump.addEventListener('click', ()=>{
-    if(idx<0 || idx>=list.length) return;
-    const el = list[idx];
-    close();
-    el.scrollIntoView({behavior:'smooth', block:'center'});
-    el.classList.add('ty-img-flash');
-    setTimeout(()=> el.classList.remove('ty-img-flash'), 1300);
-  });
-
-  /* ========== 11) 帮助浮层（保持） ========== */
+  /* ========== 10) 快速帮助浮层 ========== */
   const helpOverlay = $('#ty-help-overlay');
   const helpClose   = $('#ty-help-close');
   const helpBtn     = $('#ty-help');
+  function renderHelp(){
+    $('#ty-help-cur-urlmode').textContent = urlModeLabel(urlMode);
+    $('#ty-help-cur-copyfmt').textContent = (urlMode === 'rich') ? '（富文本片段下不适用）' : (copyFmt === 'md' ? 'Markdown' : 'URL');
+  }
   function openHelp(){
     renderHelp();
     helpOverlay.classList.add('open');
@@ -2145,31 +1936,33 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
   helpClose.addEventListener('click', closeHelp);
   helpOverlay.addEventListener('click', (e)=>{ if(e.target === helpOverlay) closeHelp(); });
 
-  /* ========== 12) 快捷键（白名单：仅单键 & Alt 组合；其它全部放行） ========== */
+  /* ========== 11) 快捷键（“白名单”安全模式：仅单键 & Alt 组合生效，其它全部放行） ========== */
   document.addEventListener('keydown', (e)=>{
+    // 1) 输入/可编辑区域：不处理
     const tag = (e.target && e.target.tagName || '').toLowerCase();
     const inEditable = !!(e.target && (e.target.isContentEditable || /^(input|textarea|select)$/i.test(tag)));
     if (inEditable) return;
 
+    // 2) AltGraph / OS(Win键) / Fn / CapsLock 等状态：全部放行（避免覆盖系统）
     if (e.getModifierState && (e.getModifierState('AltGraph') || e.getModifierState('OS'))) return;
 
     const k    = (e.key || '').toLowerCase();
     const code = e.code || '';
 
-    // Alt-only 组合：Alt+1/2/3/U/M
+    // 3) Alt-Only 组：允许且仅处理 Alt+1/2/3/U/M（无 Ctrl/Meta/Shift 时）
     if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
       if (code==='Digit1' || code==='Numpad1' || k==='1') { e.preventDefault(); setUrlMode('raw');     return; }
       if (code==='Digit2' || code==='Numpad2' || k==='2') { e.preventDefault(); setUrlMode('encoded'); return; }
       if (code==='Digit3' || code==='Numpad3' || k==='3') { e.preventDefault(); setUrlMode('rich');    return; }
       if (!btnCopyFmt.hidden && code==='KeyU') { e.preventDefault(); setCopyFmt('url'); return; }
       if (!btnCopyFmt.hidden && code==='KeyM') { e.preventDefault(); setCopyFmt('md');  return; }
-      return;
+      return; // 其它 Alt 组合放行
     }
 
-    // 包含 Ctrl/Cmd/Shift 的组合：放行
+    // 4) 任何包含 Ctrl/Cmd/Shift 的组合：不处理（留给系统）
     if (e.ctrlKey || e.metaKey || e.shiftKey) return;
 
-    // 单键白名单
+    // 5) 仅“白名单”单键生效（无任何修饰键）
     const SINGLE = new Set(['o','t','e','r','u','m','c','h']);
     if (SINGLE.has(k)) {
       e.preventDefault();
@@ -2184,11 +1977,11 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
       return;
     }
 
-    // Esc 仅在帮助打开时拦截
+    // 6) Escape 仅在帮助浮层打开时处理；否则放行
     if (k==='escape' && helpOverlay.classList.contains('open')) { e.preventDefault(); closeHelp(); }
   });
 
-  /* ========== 13) 将 HTML 注释转为可见元素 + 开关（保持） ========== */
+  /* ========== 12) 将 HTML 注释转为可见元素 + 开关 ========== */
   const btnComments = $('#ty-comments');
   let tyCmtInited = false;
   function injectCommentsOnce(){
@@ -2203,15 +1996,18 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
       if (!txt) return;
       const span = document.createElement('span');
       span.className = 'ty-cmt';
-      span.textContent = txt;
+      span.textContent = txt; // 纯文本显示（自动转义）
       cmt.parentNode && cmt.parentNode.insertBefore(span, cmt);
     });
     if (!write.querySelector('.ty-cmt')) btnComments.hidden = true;
   }
+
+  // 初始：注释默认显示
   injectCommentsOnce();
   document.body.classList.remove('ty-cmt-hidden');
   btnComments.textContent = '隐藏注释（C）';
   btnComments.title = '显示/隐藏注释（C）';
+
   btnComments.addEventListener('click', ()=>{
     injectCommentsOnce();
     const hide = !document.body.classList.contains('ty-cmt-hidden');
