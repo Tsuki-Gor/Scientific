@@ -1719,6 +1719,25 @@ html.mn4-narrow .md-inline-math-container mjx-container{
   font-size: 1.04em !important;
 }
 
+/* MN4：全局水平留白，用一个变量统一调 */
+html.mn4-narrow{ --mn4-pad-x: 8px; }   /* 你觉得还大就改 8px；还小就改 12px */
+
+html.mn4-narrow body{ margin: 0 !important; } /* 清掉 iOS/Safari 的默认 8px 外边距 */
+
+html.mn4-narrow .typora-export,
+html.mn4-narrow .typora-export-content,
+html.mn4-narrow #write{
+  padding-left:  var(--mn4-pad-x) !important;
+  padding-right: var(--mn4-pad-x) !important;
+}
+
+html.mn4-narrow .typora-export,
+html.mn4-narrow .typora-export-content,
+html.mn4-narrow #write{
+  max-width: none !important;
+  width: 100% !important;
+}
+
 </style>
 
 <div id="ty-progress"></div>
