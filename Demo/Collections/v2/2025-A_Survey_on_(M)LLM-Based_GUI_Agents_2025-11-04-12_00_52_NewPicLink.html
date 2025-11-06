@@ -1455,14 +1455,11 @@ g[data-mml-node="xypic"] path {
 /* 工具栏收起时隐藏，仅保留“抽屉拉手” */
 body.ty-tools-collapsed #ty-tools{ opacity:0; pointer-events:none; transform: translateX(18px); }
 
-/* === MN4 小窗修复补丁（放在 <style> 最后，覆盖上面的同名规则）=== */
-
-/* 抽屉拉手：完全在视口内；工具栏展开时隐藏它以免重叠 */
-/* 抽屉拉手：超小、仅图标，避免与工具栏重叠 */
+/* 抽屉拉手：超小、仅图标，避免与工具栏重叠（默认样式，保留普通浏览器的行为） */
 #ty-tools-tab{
-  --tab-size: 26px;               /* 比原来再小一点 */
+  --tab-size: 26px;
   position: fixed;
-  right: 6px;                     /* 保证不越界 */
+  right: 6px;
   bottom: 26px;
   z-index: 10001;
   width: var(--tab-size);
@@ -1477,17 +1474,20 @@ body.ty-tools-collapsed #ty-tools{ opacity:0; pointer-events:none; transform: tr
   user-select: none;
   transition: background .2s ease, opacity .2s ease;
   backdrop-filter: saturate(120%) blur(2px);
-  /* 关键：去掉会把按钮推到视口外的 translateX（不要再写 transform: translateX(40%)） */
+  /* 不再使用 translateX 推出视口 */
+  transform: none;
 }
 body:not(.ty-tools-collapsed) #ty-tools-tab{
   opacity: 0;
   pointer-events: none;
 }
+#ty-tools-tab:hover{ background: rgba(0,0,0,.8); }
+#ty-tools-tab .ico{ line-height: 1; font-weight: 600; }
 
-/* 防止微小水平溢出触发 WKWebView 的整页缩放（导致字体瞬间变小） */
+/* 防止微小水平溢出触发 WKWebView 的整页缩放（基础防线，不影响普通浏览器布局） */
 html, body { overflow-x: hidden; }
 
-/* MN4 小窗等窄宽度下，强制隐藏 Typora 导出侧栏（目录），避免因侧栏挤压而触发缩放 */
+/* 窄宽度时的基本降噪（保留你原有规则） */
 @media (max-width: 720px){
   .typora-export-sidebar { display: none !important; }
   .outline,
@@ -1495,9 +1495,6 @@ html, body { overflow-x: hidden; }
   .typora-export .sidebar { display: none !important; }
   #ty-progress-info{ display: none !important; }
 }
-
-#ty-tools-tab:hover{ background: rgba(0,0,0,.8); }
-#ty-tools-tab .ico{ line-height: 1; font-weight: 600; }
 
 /* 标题锚点（左侧“#”） */
 #write h1,#write h2,#write h3,#write h4,#write h5,#write h6{ position:relative; }
@@ -1635,6 +1632,51 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
   100%{ box-shadow: 0 0 0 0 rgba(124,77,255,0) }
 }
 .ty-img-flash{ animation: ty-img-flash 1.2s ease-out 1; border-radius: 6px; }
+
+/* =========================
+   === MN4 专用：仅在 WKWebView 且窄窗口时生效 ===
+   （通过 <html>.mn4-narrow 进行作用域限制，避免影响普通浏览器）
+   ========================= */
+
+/* 1) WKWebView 禁止文字自动缩放 */
+html.ty-wk{
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 2) MN4 窄窗：隐藏目录 + 进度信息 + 去除正文阴影/边框，仅在 mn4-narrow 生效 */
+html.mn4-narrow .typora-export-sidebar,
+html.mn4-narrow .outline,
+html.mn4-narrow .outline-panel,
+html.mn4-narrow .typora-export .sidebar{
+  display: none !important;
+}
+
+html.mn4-narrow #ty-progress-info{
+  display: none !important;
+}
+
+/* 去除正文容器两侧的阴影/边框（不影响普通浏览器，因为有作用域） */
+html.mn4-narrow #write,
+html.mn4-narrow .typora-export,
+html.mn4-narrow .typora-export-content{
+  box-shadow: none !important;
+  border: none !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+}
+
+/* 防止任何横向溢出导致整体缩放（仅在 mn4-narrow 下更激进） */
+html.mn4-narrow body{ overflow-x: hidden !important; }
+html.mn4-narrow #write img,
+html.mn4-narrow #write table{ max-width: 100% !important; height: auto; }
+html.mn4-narrow #write p,
+html.mn4-narrow #write li,
+html.mn4-narrow #write blockquote{ overflow-wrap: anywhere; word-break: break-word; }
+
+/* 抽屉拉手在 MN4 下也绝不越界 */
+html.mn4-narrow #ty-tools-tab{ right: 6px !important; bottom: 26px !important; transform: none !important; }
+
 </style>
 
 <div id="ty-progress"></div>
@@ -1731,6 +1773,26 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
 
   const write       = $('#write') || document.body;
   const outlineRoot = $('.outline-content');
+
+  /* ========== -1) 识别 WKWebView & MN4 窄窗标记：只影响 MN4，普通浏览器不变 ========== */
+  const isWK = !!(window.webkit && window.webkit.messageHandlers);
+  if (isWK) document.documentElement.classList.add('ty-wk');
+
+  function applyMN4Narrow(){
+    // 经验阈值：MN4 小窗常见 CSS 宽度 <= 1100
+    const vw = Math.min(window.innerWidth || 0, document.documentElement.clientWidth || 0);
+    const narrow = isWK && vw > 0 && vw <= 1100;
+    document.documentElement.classList.toggle('mn4-narrow', !!narrow);
+
+    // 在 MN4 窄窗时：确保目录逻辑被隐藏（与旧版行为一致）
+    if (narrow) {
+      document.body.classList.add('ty-outline-hidden');
+      const side = document.querySelector('.typora-export-sidebar');
+      if (side) side.style.display = 'none';
+    }
+  }
+  applyMN4Narrow();
+  window.addEventListener('resize', applyMN4Narrow, { passive:true });
 
   /* ========== 0) 工具栏抽屉：默认收起（仅图标按钮，避免重叠） ========== */
   const TOOLS_KEY = 'ty_tools_opened';
