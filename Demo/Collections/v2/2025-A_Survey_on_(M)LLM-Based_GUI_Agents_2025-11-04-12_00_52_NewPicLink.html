@@ -1640,8 +1640,8 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
 
 /* 1) WKWebView 禁止文字自动缩放 */
 html.ty-wk{
-  -webkit-text-size-adjust: 200%;
-  text-size-adjust: 200%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* 2) MN4 窄窗：隐藏目录 + 进度信息 + 去除正文阴影/边框，仅在 mn4-narrow 生效 */
@@ -1676,6 +1676,12 @@ html.mn4-narrow #write blockquote{ overflow-wrap: anywhere; word-break: break-wo
 
 /* 抽屉拉手在 MN4 下也绝不越界 */
 html.mn4-narrow #ty-tools-tab{ right: 6px !important; bottom: 26px !important; transform: none !important; }
+
+/* 只在 MN4 窄窗里整体放大文字（包括 UI），普通浏览器不受影响 */
+html.ty-wk.mn4-narrow{
+  -webkit-text-size-adjust: 180%;
+  text-size-adjust: 180%;
+}
 
 </style>
 
