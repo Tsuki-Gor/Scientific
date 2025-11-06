@@ -1721,6 +1721,47 @@ html.mn4-narrow #write h6{ font-size: var(--mn4-base) !important;           line
 html.mn4-narrow #write img,
 html.mn4-narrow #write table{ max-width: 100% !important; height: auto; }
 
+/* —— MN4 正文字号强制放大 & 禁止自动缩放（只影响 MN4 窄窗） —— */
+html.ty-wk.mn4-narrow,
+html.ty-wk.mn4-narrow body,
+html.ty-wk.mn4-narrow #write{
+  /* 关掉 WKWebView 的自动文字缩放，避免把你设的 25px 又缩回去 */
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
+}
+
+/* 以你设的 --mn4-base 为准，强制落到正文常见容器 */
+html.ty-wk.mn4-narrow #write{
+  font-size: var(--mn4-base) !important;
+  line-height: var(--mn4-line) !important;
+}
+
+/* 强化覆盖：Typora 导出的这些内部容器，有时会带固定字号 */
+html.ty-wk.mn4-narrow #write p,
+html.ty-wk.mn4-narrow #write li,
+html.ty-wk.mn4-narrow #write blockquote,
+html.ty-wk.mn4-narrow #write table,
+html.ty-wk.mn4-narrow #write td,
+html.ty-wk.mn4-narrow #write th,
+html.ty-wk.mn4-narrow #write .md-plain,
+html.ty-wk.mn4-narrow #write .md-end-block,
+html.ty-wk.mn4-narrow #write .footnotes,
+html.ty-wk.mn4-narrow #write .task-list-item{
+  font-size: var(--mn4-base) !important;
+  line-height: var(--mn4-line) !important;
+}
+
+/* 代码块稍小 1px，防止爆行（保留你之前的意图） */
+html.ty-wk.mn4-narrow #write pre,
+html.ty-wk.mn4-narrow #write code,
+html.ty-wk.mn4-narrow #write kbd,
+html.ty-wk.mn4-narrow #write samp{
+  font-size: calc(var(--mn4-base) - 1px) !important;
+  line-height: 1.6 !important;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 </style>
 
 <div id="ty-progress"></div>
@@ -1817,6 +1858,28 @@ html.mn4-narrow #write table{ max-width: 100% !important; height: auto; }
 
   const write       = $('#write') || document.body;
   const outlineRoot = $('.outline-content');
+
+    /* —— 标记 MN4 + 窄窗，并在 MN4 注入 viewport —— */
+  function markMN4() {
+    const ua = navigator.userAgent || '';
+    const isWebKit = /\bAppleWebKit\/\d+/.test(ua);
+    const isChrome = /\bChrome\/\d+/.test(ua) || /\bCriOS\/\d+/.test(ua);
+    const isWKWebView = isWebKit && !isChrome; // 近似识别 MN4 所用 WKWebView
+
+    document.documentElement.classList.toggle('ty-wk', isWKWebView);
+    const narrow = window.innerWidth <= 720;
+    document.documentElement.classList.toggle('mn4-narrow', isWKWebView && narrow);
+
+    // 没有 viewport 的静态导出在 WKWebView 里更容易触发整体缩放，这里补上
+    if (isWKWebView && !document.querySelector('meta[name="viewport"]')) {
+      const m = document.createElement('meta');
+      m.name = 'viewport';
+      m.content = 'width=device-width, initial-scale=1, maximum-scale=1';
+      document.head.appendChild(m);
+    }
+  }
+  markMN4();
+  window.addEventListener('resize', markMN4, { passive: true });
 
   /* ========== -1) 识别 WKWebView & MN4 窄窗标记：只影响 MN4，普通浏览器不变 ========== */
   const isWK = !!(window.webkit && window.webkit.messageHandlers);
