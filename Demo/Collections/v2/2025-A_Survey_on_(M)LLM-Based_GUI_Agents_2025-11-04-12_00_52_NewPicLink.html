@@ -1455,9 +1455,7 @@ g[data-mml-node="xypic"] path {
 /* 工具栏收起时隐藏，仅保留“抽屉拉手” */
 body.ty-tools-collapsed #ty-tools{ opacity:0; pointer-events:none; transform: translateX(18px); }
 
-/* === MN4 小窗修复补丁（放在 <style> 最后，覆盖上面的同名规则）=== */
-
-/* 抽屉拉手：完全在视口内；工具栏展开时隐藏它以免重叠 */
+/* 抽屉拉手：超小、仅图标，避免与工具栏重叠（默认样式，保留普通浏览器的行为） */
 #ty-tools-tab{
   --tab-size: 26px;
   position: fixed;
@@ -1476,17 +1474,20 @@ body.ty-tools-collapsed #ty-tools{ opacity:0; pointer-events:none; transform: tr
   user-select: none;
   transition: background .2s ease, opacity .2s ease;
   backdrop-filter: saturate(120%) blur(2px);
-  /* 关键：去掉会把按钮推到视口外的 translateX（不要再写 transform: translateX(40%)） */
+  /* 不再使用 translateX 推出视口 */
+  transform: none;
 }
 body:not(.ty-tools-collapsed) #ty-tools-tab{
   opacity: 0;
   pointer-events: none;
 }
+#ty-tools-tab:hover{ background: rgba(0,0,0,.8); }
+#ty-tools-tab .ico{ line-height: 1; font-weight: 600; }
 
-/* 防止微小水平溢出触发 WKWebView 的整页缩放（导致字体瞬间变小） */
+/* 防止微小水平溢出触发 WKWebView 的整页缩放（基础防线，不影响普通浏览器布局） */
 html, body { overflow-x: hidden; }
 
-/* MN4 小窗等窄宽度下，强制隐藏 Typora 导出侧栏（目录），避免因侧栏挤压而触发缩放 */
+/* 窄宽度时的基本降噪（保留你原有规则） */
 @media (max-width: 720px){
   .typora-export-sidebar { display: none !important; }
   .outline,
@@ -1494,9 +1495,6 @@ html, body { overflow-x: hidden; }
   .typora-export .sidebar { display: none !important; }
   #ty-progress-info{ display: none !important; }
 }
-
-#ty-tools-tab:hover{ background: rgba(0,0,0,.8); }
-#ty-tools-tab .ico{ line-height: 1; font-weight: 600; }
 
 /* 标题锚点（左侧“#”） */
 #write h1,#write h2,#write h3,#write h4,#write h5,#write h6{ position:relative; }
@@ -1527,6 +1525,7 @@ body.ty-outline-hidden .typora-export-sidebar{ display:none !important; }
 
 /* ========= 图片灯箱（含左侧缩略条、非重叠布局） ========= */
 #ty-lightbox {
+  /* 预留左侧缩略条安全区，避免与大图/按钮重叠 */
   --lb-strip-w: 108px; /* 左侧缩略条宽度（含边距） */
   position: fixed; inset: 0; background: rgba(0,0,0,.92); display: none; z-index: 9998;
   padding-left: calc(var(--lb-strip-w) + 12px);
@@ -1634,25 +1633,77 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
 }
 .ty-img-flash{ animation: ty-img-flash 1.2s ease-out 1; border-radius: 6px; }
 
-/* === MN4 小窗“字体过小”补丁：仅 WebKit & ≤720px 生效，不影响桌面浏览器 === */
-@supports (-webkit-touch-callout: none){
-  @media (max-width: 720px){
-    /* 提升导出主题的基准字号（原为 ~9.5pt） */
-    :root{ --base-font-size: 12pt; }
-    /* 让 WebKit 避免把文字压得过小，并做轻度放大 */
-    html{ -webkit-text-size-adjust: 115%; text-size-adjust: 115%; font-size: 16px; }
-    /* 明确让 #write 跟随新的基准字号；并继续移除小窗阴影/边框 */
-    #write{
-      font-size: var(--base-font-size) !important;
-      max-width: 100% !important;
-      padding: 14px !important;
-      box-shadow: none !important;
-      border: none !important;
-    }
-    /* 数学与内联数学同步微调，避免相对缩小 */
-    .math, .md-math-block, .md-inline-math-container mjx-container{ font-size: 1.02em; }
-  }
+/* =========================
+   === MN4 专用：仅在 WKWebView 且窄窗口时生效 ===
+   （通过 <html>.mn4-narrow 进行作用域限制，避免影响普通浏览器）
+   ========================= */
+
+/* 1) WKWebView 禁止文字自动缩放 */
+html.ty-wk{
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
+
+/* 2) MN4 窄窗：隐藏目录 + 进度信息 + 去除正文阴影/边框，仅在 mn4-narrow 生效 */
+html.mn4-narrow .typora-export-sidebar,
+html.mn4-narrow .outline,
+html.mn4-narrow .outline-panel,
+html.mn4-narrow .typora-export .sidebar{
+  display: none !important;
+}
+
+html.mn4-narrow #ty-progress-info{
+  display: none !important;
+}
+
+/* 去除正文容器两侧的阴影/边框（不影响普通浏览器，因为有作用域） */
+html.mn4-narrow #write,
+html.mn4-narrow .typora-export,
+html.mn4-narrow .typora-export-content{
+  box-shadow: none !important;
+  border: none !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+}
+
+/* 防止任何横向溢出导致整体缩放（仅在 mn4-narrow 下更激进） */
+html.mn4-narrow body{ overflow-x: hidden !important; }
+html.mn4-narrow #write img,
+html.mn4-narrow #write table{ max-width: 100% !important; height: auto; }
+html.mn4-narrow #write p,
+html.mn4-narrow #write li,
+html.mn4-narrow #write blockquote{ overflow-wrap: anywhere; word-break: break-word; }
+
+/* 抽屉拉手在 MN4 下也绝不越界 */
+html.mn4-narrow #ty-tools-tab{ right: 6px !important; bottom: 26px !important; transform: none !important; }
+
+/* === MN4 窄窗口字体放大补丁（仅 WKWebView + mn4-narrow 下生效） === */
+
+/* 覆盖你前面设的 html.ty-wk 的 100%，在 MN4 窄窗里做温和放大 */
+html.ty-wk.mn4-narrow{
+  -webkit-text-size-adjust: 115%;
+  text-size-adjust: 115%;
+}
+
+/* 放大正文基准字号；只在 MN4 窄窗里作用，不影响桌面浏览器 */
+html.mn4-narrow #write{
+  font-size: 12pt !important;   /* 可在 11.5–13pt 之间微调 */
+  line-height: 1.7 !important;  /* 提高可读性，避免挤压 */
+}
+
+/* 标题随基准字号等比微调，避免过大或过小（可按需微调比例） */
+html.mn4-narrow #write h1{ font-size: 1.85em !important; }
+html.mn4-narrow #write h2{ font-size: 1.60em !important; }
+html.mn4-narrow #write h3{ font-size: 1.35em !important; }
+html.mn4-narrow #write h4{ font-size: 1.15em !important; }
+
+/* 数学公式轻微放大，避免相对变小 */
+html.mn4-narrow .math,
+html.mn4-narrow .md-math-block,
+html.mn4-narrow .md-inline-math-container mjx-container{
+  font-size: 1.04em !important;
+}
+
 </style>
 
 <div id="ty-progress"></div>
@@ -1664,6 +1715,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
 </div>
 
 <div id="ty-tools" aria-label="Page tools">
+
   <!-- 新增：收起按钮，图标 × -->
   <div class="ty-btn ty-mini" id="ty-tools-close" title="收起工具栏">×</div>
 
@@ -1749,6 +1801,26 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
   const write       = $('#write') || document.body;
   const outlineRoot = $('.outline-content');
 
+  /* ========== -1) 识别 WKWebView & MN4 窄窗标记：只影响 MN4，普通浏览器不变 ========== */
+  const isWK = !!(window.webkit && window.webkit.messageHandlers);
+  if (isWK) document.documentElement.classList.add('ty-wk');
+
+  function applyMN4Narrow(){
+    // 经验阈值：MN4 小窗常见 CSS 宽度 <= 1100
+    const vw = Math.min(window.innerWidth || 0, document.documentElement.clientWidth || 0);
+    const narrow = isWK && vw > 0 && vw <= 1100;
+    document.documentElement.classList.toggle('mn4-narrow', !!narrow);
+
+    // 在 MN4 窄窗时：确保目录逻辑被隐藏（与旧版行为一致）
+    if (narrow) {
+      document.body.classList.add('ty-outline-hidden');
+      const side = document.querySelector('.typora-export-sidebar');
+      if (side) side.style.display = 'none';
+    }
+  }
+  applyMN4Narrow();
+  window.addEventListener('resize', applyMN4Narrow, { passive:true });
+
   /* ========== 0) 工具栏抽屉：默认收起（仅图标按钮，避免重叠） ========== */
   const TOOLS_KEY = 'ty_tools_opened';
   const toolsTab  = $('#ty-tools-tab');
@@ -1766,7 +1838,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
 
   const toolsClose = $('#ty-tools-close');
   if (toolsClose) toolsClose.addEventListener('click', ()=>{
-    setToolsOpen(false);
+    setToolsOpen(false);               // 收起
     localStorage.setItem(TOOLS_KEY,'0');
   });
 
@@ -1906,7 +1978,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
     });
   }
 
-  /* ========== 7) 文本工具（保持） ========== */
+  /* ========== 7) 文本工具：干净标题；从文件名推断论文标题（保持） ========== */
   function getCleanHeadingText(h){
     const clone = h.cloneNode(true);
     clone.querySelectorAll('.ty-anchor,.ty-tip').forEach(n=> n.remove());
@@ -1924,7 +1996,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
     return underscoresToSpace;
   }
 
-  /* ========== 8) 锚点复制（保持） ========== */
+  /* ========== 8) 标题锚点复制（三种样式 + 两种格式）（保持） ========== */
   const used = new Set();
   function slugify(text){
     const base = text.toLowerCase().trim()
@@ -1958,8 +2030,8 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
     return parts.join(' / ');
   }
   function buildRichSnippet(headingId, headingText){
-    const rawURL = (location.href.split('#')[0] || location.href) + '#' + headingId;
-    const encURL = (location.href.split('#')[0] || location.href) + '#' + encodeURIComponent(headingId);
+    const rawURL = buildURL(headingId, false);
+    const encURL = buildURL(headingId, true);
     const docTitle = filenameDerivedTitle();
     const path = outlinePathFor(headingId, headingText);
     return [
@@ -1990,16 +2062,12 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
       const titleText = getCleanHeadingText(h);
       let copyText = '';
 
-      if (['rich'].includes(localStorage.getItem('ty_url_mode') || 'raw')) {
+      if (urlMode === 'rich') {
         copyText = buildRichSnippet(h.id, titleText);
         tip.textContent = '已复制片段';
       } else {
-        const mode = localStorage.getItem('ty_url_mode') || 'raw';
-        const urlRaw = (mode === 'encoded')
-          ? (location.href.split('#')[0] || location.href) + '#' + encodeURIComponent(h.id)
-          : (location.href.split('#')[0] || location.href) + '#' + h.id;
-        const fmt = localStorage.getItem('ty_copy_fmt') || 'url';
-        if (fmt === 'md') {
+        const urlRaw = (urlMode === 'encoded') ? buildURL(h.id, true) : buildURL(h.id, false);
+        if (copyFmt === 'md') {
           copyText = `[${titleText}](${urlRaw})`;
           tip.textContent = '已复制 Markdown 链接';
         } else {
@@ -2054,7 +2122,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
   addEventListener('scroll', updateActiveByScroll, { passive:true });
   addEventListener('resize', updateActiveByScroll);
 
-  /* ========== 10) 图片灯箱（保持） ========== */
+  /* ========== 10) 图片灯箱（缩略图点击不跳文；预留安全区防重叠） ========== */
   const lb = $('#ty-lightbox'), lbImg = $('.ty-lb-img', lb), lbCap = $('.ty-lb-cap', lb);
   const prevBtn = $('.ty-lb-prev', lb), nextBtn = $('.ty-lb-next', lb), closeBtn = $('.ty-lb-close', lb);
   const lbCount = $('#ty-lb-count'), lbStrip = $('#ty-lb-strip');
@@ -2086,6 +2154,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
       const src = el.getAttribute('data-src') || el.currentSrc || el.src;
       t.src = src; t.alt=''; t.loading='lazy';
       t.setAttribute('data-idx', (i+1));
+      // 点击缩略图：在画廊内切换到该图（不跳出）
       t.addEventListener('click', ()=> showAt(i));
       lbStrip.appendChild(t);
     });
@@ -2111,6 +2180,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
   function prev(){ showAt((idx-1+list.length)%list.length); }
   function next(){ showAt((idx+1)%list.length); }
 
+  // 文中点击图片 → 打开画廊（并构建缩略条）
   write.addEventListener('click', (e)=>{
     const target = e.target.closest && e.target.closest('img');
     if(!target) return;
@@ -2145,6 +2215,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
     }
   });
   lbFmt.addEventListener('click', ()=> setImgCopyFmt(imgCopyFmt==='url' ? 'md' : 'url'));
+  // 跳回文中
   lbJump.addEventListener('click', ()=>{
     if(idx<0 || idx>=list.length) return;
     const el = list[idx];
@@ -2159,7 +2230,7 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
   const helpClose   = $('#ty-help-close');
   const helpBtn     = $('#ty-help');
   function openHelp(){
-    // help 面板的当前状态在渲染按钮时已同步
+    renderHelp();
     helpOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -2184,16 +2255,18 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
 
     // Alt-only 组合：Alt+1/2/3/U/M
     if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
-      if (code==='Digit1' || code==='Numpad1' || k==='1') { e.preventDefault(); localStorage.setItem('ty_url_mode','raw');     $('#ty-urlmode')?.click(); return; }
-      if (code==='Digit2' || code==='Numpad2' || k==='2') { e.preventDefault(); localStorage.setItem('ty_url_mode','encoded'); $('#ty-urlmode')?.click(); return; }
-      if (code==='Digit3' || code==='Numpad3' || k==='3') { e.preventDefault(); localStorage.setItem('ty_url_mode','rich');    $('#ty-urlmode')?.click(); return; }
-      if (!$('#ty-copyfmt')?.hidden && code==='KeyU') { e.preventDefault(); localStorage.setItem('ty_copy_fmt','url'); $('#ty-copyfmt')?.click(); return; }
-      if (!$('#ty-copyfmt')?.hidden && code==='KeyM') { e.preventDefault(); localStorage.setItem('ty_copy_fmt','md');  $('#ty-copyfmt')?.click(); return; }
+      if (code==='Digit1' || code==='Numpad1' || k==='1') { e.preventDefault(); setUrlMode('raw');     return; }
+      if (code==='Digit2' || code==='Numpad2' || k==='2') { e.preventDefault(); setUrlMode('encoded'); return; }
+      if (code==='Digit3' || code==='Numpad3' || k==='3') { e.preventDefault(); setUrlMode('rich');    return; }
+      if (!btnCopyFmt.hidden && code==='KeyU') { e.preventDefault(); setCopyFmt('url'); return; }
+      if (!btnCopyFmt.hidden && code==='KeyM') { e.preventDefault(); setCopyFmt('md');  return; }
       return;
     }
 
+    // 包含 Ctrl/Cmd/Shift 的组合：放行
     if (e.ctrlKey || e.metaKey || e.shiftKey) return;
 
+    // 单键白名单
     const SINGLE = new Set(['o','t','e','r','u','m','c','h']);
     if (SINGLE.has(k)) {
       e.preventDefault();
@@ -2202,15 +2275,14 @@ body.ty-cmt-hidden .ty-cmt{ display: none !important; }
       else if (k==='e') $('#ty-expand')?.click();
       else if (k==='r') $('#ty-collapse')?.click();
       else if (k==='u') $('#ty-urlmode')?.click();
-      else if (k==='m' && !$('#ty-copyfmt')?.hidden) $('#ty-copyfmt')?.click();
+      else if (k==='m' && !btnCopyFmt.hidden) $('#ty-copyfmt')?.click();
       else if (k==='c') $('#ty-comments')?.click();
       else if (k==='h') openHelp();
       return;
     }
 
-    if ((e.key || '').toLowerCase()==='escape' && document.querySelector('#ty-help-overlay.open')) {
-      e.preventDefault(); closeHelp();
-    }
+    // Esc 仅在帮助打开时拦截
+    if (k==='escape' && helpOverlay.classList.contains('open')) { e.preventDefault(); closeHelp(); }
   });
 
   /* ========== 13) 将 HTML 注释转为可见元素 + 开关（保持） ========== */
