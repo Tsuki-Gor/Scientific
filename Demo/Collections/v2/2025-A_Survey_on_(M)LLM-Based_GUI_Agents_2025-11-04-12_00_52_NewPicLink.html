@@ -1677,25 +1677,40 @@ html.mn4-narrow #write blockquote{ overflow-wrap: anywhere; word-break: break-wo
 /* 抽屉拉手在 MN4 下也绝不越界 */
 html.mn4-narrow #ty-tools-tab{ right: 6px !important; bottom: 26px !important; transform: none !important; }
 
-/* === MN4 窄窗口字体放大补丁（仅 WKWebView + mn4-narrow 下生效） === */
-
-/* 覆盖你前面设的 html.ty-wk 的 100%，在 MN4 窄窗里做温和放大 */
+/* === MN4 窄窗字体修正（避免整页缩放）=== */
+/* 关键：不要把 text-size-adjust 设成 >100%，否则 WKWebView 可能整页缩小 */
 html.ty-wk.mn4-narrow{
-  -webkit-text-size-adjust: 200%;
-  text-size-adjust: 200%;
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
 }
 
-/* 放大正文基准字号；只在 MN4 窄窗里作用，不影响桌面浏览器 */
+/* 用像素提升正文基准字号（不要用 pt），只在 MN4 窄窗生效 */
 html.mn4-narrow #write{
-  font-size: 18pt !important;   /* 可在 11.5–13pt 之间微调 */
-  line-height: 1.7 !important;  /* 提高可读性，避免挤压 */
+  font-size: 25px !important;   /* 可改 16~18px 之间微调 */
+  line-height: 1.7 !important;
 }
 
-/* 标题随基准字号等比微调，避免过大或过小（可按需微调比例） */
-html.mn4-narrow #write h1{ font-size: 1.85em !important; }
-html.mn4-narrow #write h2{ font-size: 1.60em !important; }
+/* 标题按比例微调，避免过大或过小 */
+html.mn4-narrow #write h1{ font-size: 1.9em !important; }
+html.mn4-narrow #write h2{ font-size: 1.6em !important; }
 html.mn4-narrow #write h3{ font-size: 1.35em !important; }
 html.mn4-narrow #write h4{ font-size: 1.15em !important; }
+
+/* 避免“横向撑爆 → 触发整页缩放”：表格与代码块在窄窗必须自适应 */
+html.mn4-narrow #write table{
+  display: block;               /* 允许内滚动，阻断页面被迫缩放 */
+  width: 100% !important;
+  overflow-x: auto !important;
+}
+
+html.mn4-narrow #write .md-fences,
+html.mn4-narrow #write pre{
+  max-width: 100% !important;
+  overflow-x: auto !important;  /* 保留等宽格式，用横向滚动而不是压缩页面 */
+  white-space: pre;             /* 不强制换行，避免代码失真 */
+  -webkit-overflow-scrolling: touch;
+  font-size: 0.95em !important; /* 代码略微小一档，整体更协调 */
+}
 
 /* 数学公式轻微放大，避免相对变小 */
 html.mn4-narrow .math,
