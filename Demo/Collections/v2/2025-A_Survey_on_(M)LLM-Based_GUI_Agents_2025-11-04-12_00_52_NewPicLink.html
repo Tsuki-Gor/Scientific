@@ -1656,6 +1656,37 @@ html.mn4-narrow #ty-progress-info{
   display: none !important;
 }
 
+/* === MN4 窄窗：把正文字号调大，仅在 MN4 生效 === */
+html.mn4-narrow{
+  /* 你可以把 18px 改成 17px / 19px 看手感 */
+  --mn4-font-size: 18px;           
+  --mn4-line-height: 1.7;
+}
+
+/* 覆盖主题在正文容器上的固定字号（不影响普通浏览器） */
+html.mn4-narrow body,
+html.mn4-narrow .typora-export,
+html.mn4-narrow .typora-export-content,
+html.mn4-narrow #write{
+  font-size: var(--mn4-font-size) !important;
+  line-height: var(--mn4-line-height) !important;
+}
+
+/* 图片、表格仍然自适应，避免横向撑开 */
+html.mn4-narrow #write img,
+html.mn4-narrow #write table{ 
+  max-width: 100% !important; 
+  height: auto; 
+}
+
+/* 代码块一般放大后会显得略粗，这里微调到 0.95em（可按需删除） */
+html.mn4-narrow #write pre,
+html.mn4-narrow #write code,
+html.mn4-narrow #write kbd,
+html.mn4-narrow #write samp{
+  font-size: 0.95em !important;
+}
+
 /* 去除正文容器两侧的阴影/边框（不影响普通浏览器，因为有作用域） */
 html.mn4-narrow #write,
 html.mn4-narrow .typora-export,
