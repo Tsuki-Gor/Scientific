@@ -1,0 +1,2122 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'><style type='text/css'>html {overflow-x: initial !important;}</style>
+<style type='text/css'  id="style-base">:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+.mac-os-11 { --title-bar-height: 28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, "Segoe UI Emoji", "SF Pro", sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5 { white-space: pre-wrap; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p *, #write.first-line-indent svg * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; position: relative; }
+#write svg h1, #write svg h2, #write svg h3, #write svg h4, #write svg h5, #write svg h6, #write svg p { position: static; white-space: nowrap; overflow: visible; }
+foreignobject { overflow: visible; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+li p { orphans: 1; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+thead, tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+svg { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; border-color: transparent !important; padding-top: 0px !important; padding-bottom: 0px !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  #write > p:nth-child(1) { margin-top: 0px; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+  figure { overflow-x: visible; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.reversefootnote { font-family: ui-monospace, sans-serif; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background: inherit; }
+.mermaid-svg { margin: auto; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex: 2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; overflow-wrap: anywhere; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.42857rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left: 28px solid transparent; border-right: 28px solid transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right: 8px solid transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+mjx-container { break-inside: avoid; }
+.md-alert.md-alert-note { border-left-color: rgb(9, 105, 218); }
+.md-alert.md-alert-important { border-left-color: rgb(130, 80, 223); }
+.md-alert.md-alert-warning { border-left-color: rgb(154, 103, 0); }
+.md-alert.md-alert-tip { border-left-color: rgb(31, 136, 61); }
+.md-alert.md-alert-caution { border-left-color: rgb(207, 34, 46); }
+.md-alert { padding: 0px 1em; margin-bottom: 16px; color: inherit; border-left: 0.25em solid rgb(0, 0, 0); }
+.md-alert-text-note { color: rgb(9, 105, 218); }
+.md-alert-text-important { color: rgb(130, 80, 223); }
+.md-alert-text-warning { color: rgb(154, 103, 0); }
+.md-alert-text-tip { color: rgb(31, 136, 61); }
+.md-alert-text-caution { color: rgb(207, 34, 46); }
+.md-alert-text { font-size: 0.9rem; font-weight: 700; }
+.md-alert-text svg { fill: currentcolor; position: relative; top: 0.125em; margin-right: 1ch; overflow: visible; }
+.md-alert-text-container::after { content: attr(data-text); text-transform: capitalize; pointer-events: none; margin-right: 1ch; }
+
+</style>
+<style type='text/css'  id="style-theme_css">
+:root {
+  /* == 字体设置 == */
+  /* 基准字体 */
+  /* 备选：Times, "Times New Roman" */
+  --base-Latin-font: "Latin Modern Roman", "Latin Modern Roman 10", Times;
+  --base-Chinese-font: "家族宋", "宋体-简", "华文宋体", "Noto Serif CJK SC";
+  --base-font-size: 9.5pt;
+  /* 引言字体 */
+  --quote-font: "Latin Modern Roman", "Latin Modern Roman 10", Times,
+    "Times New Roman", "华文仿宋";
+  /* em单位为一个正文字符（--base-font-size）大小，
+  例如，如果您设置 --base-font-size 为 9.5pt，那么 1.05em = 1.05*9.5pt ≈ 10pt。下面的标题字体等设置也遵循该规则。
+  这样，您就可以仅通过调整基准字体大小，而动态对其他元素大小做出调整。
+  当然，您也可以直接设置以pt或px为单位的数值，将元素的大小固定下来，如 --quote-font-size: 10pt; */
+  --quote-font-size: 1.05em;
+  /* 代码字体（代码中的中文会调用 ui-font） */
+  /* "Courier New" 从 Windows 3.1 起成为 Windows 官方提供的字体 */
+  /* "Consolas" 从 Windows Vista 起成为 Windows 官方提供的字体 */
+  --code-font: "Latin Modern Mono", "Latin Modern Mono 10", "Consolas", "Courier New";
+  /* 侧边栏字体 */
+  --ui-font: "阿里巴巴普惠体 2.0", "微软雅黑";
+  /* source mode 字体 */
+  /* 默认调用 code-font 和 ui-font */
+  --sourceMode-font: "SF Mono", "阿里巴巴普惠体 2.0", "微软雅黑";
+  /* 目录字体 */
+  /* 默认调用 base-font */
+  --toc-font: "";
+  /* 默认调用 base-font-size */
+  --toc-font-size: "";
+  /* 公式字体 */
+  --math-font-size: 1em;
+  /* 表格字体 */
+  /* 默认调用 heading-font */
+  --table-title-font: "";
+  /* 默认调用 base-font */
+  --table-font: "";
+  /* 标题字体（总设置） */
+  --heading-Latin-font: var(--base-Latin-font);
+  --heading-Chinese-font: "华文黑体";
+  /* 标题字体分别设置 */
+  /* 大标题（h1）字体 */
+  --title-Chinese-font: "华文黑体";
+  --title-font-size: 1.9em;
+  /* h2字体 */
+  --h2-Chinese-font: "华文黑体";
+  --h2-font-size: 1.5em;
+  /* h3字体 */
+  --h3-Chinese-font: "华文黑体";
+  --h3-font-size: 1.25em;
+  /* h4字体 */
+  --h4-Chinese-font: "华文楷体";
+  --h4-font-size: 1.15em;
+  /* h5字体 */
+  --h5-Chinese-font: "华文仿宋";
+  --h5-font-size: 1.10em;
+  /* h6字体 */
+  --h6-Chinese-font: "华文仿宋";
+  --h6-font-size: 1.05em;
+  /* 粗体样式设置 */
+  /* 加粗风格时使用的字重；400等同于 normal，700等同于 bold，900等同于 heavy */
+  --strong-weight: 900;
+  /* 基础行距 */
+  --base-line-height: 1.618em;
+  /* == 页面设置 == */
+  /* 打印页边距 */
+  --set-margin: 1.8cm 2cm 1.2cm 2cm !important;
+  /* == 控制设置 == */
+  /* 目录中是否显示一级标题 */
+  --toc-show-title: none;
+  /* == 颜色设置 == */
+  /* 超链接颜色 */
+  --link-color-light: #2E67D3;
+  --link-color-dark: #8bb1f9;
+  /* == 二级标题强制分页 == */
+  /* 默认值为 auto */
+  /* 更改为 page 启用强制分页 */
+  --page-break-before-h2: auto;
+}
+
+body {
+  padding: 0 !important;
+  margin: 0 !important;
+  /* counter-reset: tableHead 0 imgHead 0; */
+}
+
+@media print {
+  #write {
+    padding: 0 !important;
+  }
+  h2 {
+    break-before: var(--page-break-before-h2);
+  }
+  h2:first-of-type {
+    break-before: avoid-page;
+  }
+  @page {
+    margin: 1.8cm 2cm 1.2cm 2cm !important; /* 页边距 */
+  }
+}
+#write {
+  font-family: var(--base-Latin-font), var(--base-Chinese-font), serif;
+  font-size: var(--base-font-size);
+  /* A4标准宽度 */
+  max-width: 21cm;
+  background-color: white;
+  /* column-count: 2;
+    column-gap: 25px;
+    column-width: 8cm; 
+    display: inline-block; */
+  /* 这里可以试分栏的，但确实不适合实现 */
+}
+#write .md-math-block,
+#write .md-rawblock,
+#write p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+#write p {
+  text-align: left;
+  line-height: var(--base-line-height);
+}
+#write a {
+  color: var(--link-color-light);
+}
+
+hr {
+  border-top: solid 1px #ddd;
+  margin-top: 1.8em;
+  margin-bottom: 1.8em;
+}
+
+img {
+  /* 避免图片在导出时被断开 */
+  break-inside: avoid-page;
+}
+
+strong {
+  font-weight: var(--strong-weight);
+}
+
+@media screen {
+  #write {
+    padding: var(--set-margin);
+    /* 添加一个淡蓝色的边框 */
+    /* border: 0.8px solid #AAC ; */
+    /* 页边阴影 */
+    box-shadow: 0 0 24px 12px #cccccc;
+  }
+}
+.MathJax {
+  font-size: var(--math-font-size);
+}
+
+/* typora 编写模式 */
+#typora-source {
+  font-family: var(--sourceMode-font), var(--code-font), var(--ui-font), monospace;
+  line-height: 2em;
+}
+
+/* 侧边大纲标题 */
+.sidebar-content {
+  counter-reset: outline-h1 outline-h2 outline-h3 outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h1 {
+  counter-reset: outline-h2 outline-h3 outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h2 {
+  counter-reset: outline-h3 outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h2 .outline-label:before {
+  counter-increment: outline-h2;
+  content: counter(outline-h2) " ";
+}
+.sidebar-content .outline-h3 {
+  counter-reset: outline-h4 outline-h5 outline-h6;
+}
+.sidebar-content .outline-h3 .outline-label:before {
+  counter-increment: outline-h3;
+  content: counter(outline-h2) "." counter(outline-h3) "  ";
+}
+.sidebar-content .outline-h4 {
+  counter-reset: outline-h5 outline-h6;
+}
+.sidebar-content .outline-h4 .outline-label:before {
+  counter-increment: outline-h4;
+  content: counter(outline-h2) "." counter(outline-h3) "." counter(outline-h4) "  ";
+}
+.sidebar-content .outline-h5 {
+  counter-reset: outline-h6;
+}
+.sidebar-content .outline-h5 .outline-label:before {
+  counter-increment: outline-h5;
+  content: counter(outline-h2) "." counter(outline-h3) "." counter(outline-h4) "." counter(outline-h5) "  ";
+}
+
+.sidebar-content {
+  /* 侧边栏的字体修改 */
+  font-family: var(--ui-font);
+  list-style: none;
+}
+
+/* 元数据（如 YAML front matter）的背景框 */
+pre.md-meta-block {
+  background: #cccccc;
+  padding: 1.4em;
+  font-family: var(--code-font), var(--ui-font), monospace;
+  font-size: 0.8em;
+}
+
+#write > h3.md-focus:before,
+#write > h4.md-focus:before,
+#write > h5.md-focus:before,
+#write > h6.md-focus:before,
+h3.md-focus:before,
+h4.md-focus:before,
+h5.md-focus:before,
+h6.md-focus:before {
+  color: inherit;
+  border: inherit;
+  border-radius: inherit;
+  position: inherit;
+  left: initial;
+  float: none;
+  top: initial;
+  font-size: inherit;
+  padding-left: inherit;
+  padding-right: inherit;
+  vertical-align: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+#write {
+  counter-reset: heading-h2 heading-h3 heading-h4 heading-h5 heading-h6;
+}
+#write h1,
+#write h2,
+#write h3,
+#write h4,
+#write h5,
+#write h6 {
+  font-weight: bold;
+  break-after: avoid-page !important;
+}
+#write h1 {
+  font-family: var(--heading-Latin-font), var(--title-Chinese-font), serif;
+  text-align: center;
+  column-span: all;
+  font-size: var(--title-font-size);
+}
+#write h2 {
+  font-family: var(--heading-Latin-font), var(--h2-Chinese-font), serif;
+  font-size: var(--h2-font-size);
+}
+#write h3 {
+  font-family: var(--heading-Latin-font), var(--h3-Chinese-font), serif;
+  font-size: var(--h3-font-size);
+  line-height: var(--h3-font-size);
+}
+#write h4 {
+  font-family: var(--heading-Latin-font), var(--h4-Chinese-font), serif;
+  font-size: var(--h4-font-size);
+  line-height: var(--h4-font-size);
+}
+#write h5 {
+  font-family: var(--heading-Latin-font), var(--h5-Chinese-font), serif;
+  font-size: var(--h5-font-size);
+  line-height: var(--h5-font-size);
+}
+#write h6 {
+  font-family: var(--heading-Latin-font), var(--h6-Chinese-font), serif;
+  font-size: var(--h6-font-size);
+  /* 没有写错，为了避免行距太小才这么写 */
+  line-height: var(--h5-font-size);
+}
+#write h1 {
+  counter-set: heading-h2 0 heading-h3 0 heading-h4 0 heading-h5 0 heading-h6 0;
+}
+#write h2 {
+  counter-set: heading-h3 0 heading-h4 0 heading-h5 0 heading-h6 0;
+}
+#write h3 {
+  counter-set: heading-h4 0 heading-h5 0 heading-h6 0;
+}
+#write h4 {
+  counter-set: heading-h5 0 heading-h6 0;
+}
+#write h5 {
+  counter-set: heading-h6 0;
+}
+#write h2:before, h2.md-focus.md-heading:before {
+  content: counter(heading-h2);
+  counter-increment: heading-h2;
+  margin-right: 1.2em;
+}
+
+#write h3:before, h3.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3);
+  counter-increment: heading-h3;
+  margin-right: 1.2em;
+}
+
+#write h4:before, h4.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3) "." counter(heading-h4);
+  counter-increment: heading-h4;
+  margin-right: 1.2em;
+}
+
+#write h5:before, h5.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3) "." counter(heading-h4) "." counter(heading-h5);
+  counter-increment: heading-h5;
+  margin-right: 1.2em;
+}
+
+#write h6:before, h6.md-focus.md-heading:before {
+  content: counter(heading-h2) "." counter(heading-h3) "." counter(heading-h4) "." counter(heading-h5) "." counter(heading-h6);
+  counter-increment: heading-h6;
+  margin-right: 1.2em;
+}
+
+/* 参考文献（脚注）块，在 Typora 中的样式 */
+.md-def-footnote {
+  display: flex;
+  position: relative;
+  font-size: 0.95em;
+  opacity: 1;
+  margin: 0;
+}
+.md-def-footnote:not(:first-child), .md-def-footnote + *:not(.md-def-footnote) {
+  margin-top: 1em;
+}
+.md-def-footnote + .md-def-footnote {
+  margin-top: 0.5em;
+}
+.md-def-footnote .md-def-name {
+  font-weight: inherit;
+  padding: 0;
+  flex-shrink: 0;
+  width: 3em;
+  margin-inline-start: -1ch;
+  white-space: nowrap;
+  text-align: left;
+}
+.md-def-footnote .md-def-name:before {
+  content: "［";
+  position: static;
+  color: inherit;
+}
+.md-def-footnote .md-def-name:after {
+  content: "］";
+  position: static;
+  color: inherit;
+}
+.md-def-footnote .md-reverse-footnote-area {
+  display: none;
+}
+.md-def-footnote:hover .md-reverse-footnote-area {
+  position: absolute;
+  right: -6px;
+  display: inline;
+}
+
+/* 参考文献（脚注）块，在导出 HTML 或 PDF 时的样式（导出后的 HTML tag 和 Typora 中的 HTML tag 不一致） */
+.footnotes-area {
+  padding-inline-start: 2.5em;
+}
+.footnotes-area hr {
+  display: none;
+}
+.footnotes-area .footnote-line {
+  color: var(--text-color);
+  font-size: 0.95em;
+  margin-top: 0.5em;
+}
+.footnotes-area .footnote-line *:not(.md-fn-count) {
+  display: inline-block;
+  vertical-align: top;
+}
+.footnotes-area .footnote-line span.md-fn-count {
+  font-weight: inherit;
+  padding: 0;
+  margin-inline-start: -3em;
+  white-space: nowrap;
+  display: inline-block;
+  width: 2.5em;
+}
+.footnotes-area .footnote-line span.md-fn-count:before {
+  content: "［";
+  position: static;
+  color: inherit;
+}
+.footnotes-area .footnote-line span.md-fn-count:after {
+  content: "］";
+  position: static;
+  color: inherit;
+}
+.footnotes-area .footnote-line a.reversefootnote {
+  display: none;
+}
+
+/* 参考文献（脚注）上标 */
+sup.md-footnote {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+}
+sup.md-footnote a {
+  color: inherit !important;
+}
+sup.md-footnote:not(.md-expand) {
+  margin-inline: -0.44em;
+}
+sup.md-footnote:not(.md-expand):before {
+  content: "［";
+}
+sup.md-footnote:not(.md-expand):after {
+  content: "］";
+}
+
+/* 无序列表 */
+#write ul {
+  list-style: disc;
+}
+#write ul ul {
+  /*list-style: circle;*/
+  /* 请勿删除“–”后的空格, 他们对缩进有一定影响, 下同 */
+  list-style: "–   ";
+}
+#write ul ul ul {
+  list-style: "◦  ";
+}
+
+/* 有序列表 */
+#write ol {
+  list-style: decimal;
+}
+#write ol ol {
+  counter-reset: liist;
+  list-style: none;
+}
+#write ol ol > li {
+  counter-increment: liist;
+  position: relative;
+}
+#write ol ol > li::before {
+  content: "(" counter(liist, lower-alpha) ")";
+  position: absolute;
+  left: -1.8em;
+}
+#write ol ol ol {
+  counter-reset: liiist;
+  list-style: none;
+  margin: 0;
+}
+#write ol ol ol > li {
+  counter-increment: liiist;
+  position: relative;
+}
+#write ol ol ol > li::before {
+  content: counter(liiist, lower-roman) ".";
+  align-self: flex-end;
+  position: absolute;
+  left: -4.5em;
+  /* -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;*/
+  /* 为了让项目编号是重新用句点对齐而不是左对齐 */
+  width: 4em;
+  text-align: right;
+}
+
+#write ol,
+#write ul {
+  padding-inline-start: 2em;
+}
+
+#write li {
+  position: relative;
+}
+#write li + li,
+#write ul + ol > li,
+#write ol + ul > li,
+#write li > ul > li,
+#write li > ol > li {
+  margin-top: -0.8em;
+}
+
+/* task列表 */
+.md-task-list-item > input {
+  margin-top: 0.42em;
+  margin-left: -1.5em;
+  width: 1em !important;
+  height: 1em !important;
+}
+
+#write table {
+  /* 三线表第一条线宽度 */
+  border-top: 1.2pt solid;
+  /* 三线表第二条线宽度 */
+  border-bottom: 1.2pt solid;
+  font-family: var(--table-font), var(--base-Latin-font), var(--base-Chinese-font), serif;
+  /* font-size: var(--base-font-size); */
+  text-align: center;
+  break-inside: avoid-page;
+  border-spacing: 6px;
+  /* 自动布局表格宽度，如果有时内容太紧建议直接加空格吧，我自己看不惯和页面等宽的大表格 */
+  width: auto;
+  /* 使表格默认居中；虽然这个代码不好，但好像没别的实现办法 */
+  margin: 0 auto;
+}
+#write table td {
+  padding: 2px;
+}
+#write table tr {
+  padding: 2px;
+}
+#write th {
+  padding: 0px 6px;
+}
+#write thead {
+  /* 表格标题（首行）样式 */
+  /* 三线表表头的线 */
+  border-bottom: 0.5pt solid;
+  font-family: var(--table-title-font), var(--heading-Latin-font), var(--heading-Chinese-font), serif !important;
+  /* font-size: var(--base-font-size); */
+  font-weight: var(--strong-weight);
+}
+
+/* 一个>的引言仅为两字符缩进，使用>>的引言为传统引言样式，具有左竖线、左缩进 */
+blockquote {
+  font-style: normal;
+  font-family: var(--quote-font), var(--base-Latin-font), var(--base-Chinese-font), -apple-system, serif;
+  font-size: var(--quote-font-size);
+  /* 文字离左边框的距离 */
+  padding-left: 2em;
+  padding-right: 2em;
+  /* 左边框离页面边的距离 */
+  margin-left: 0;
+}
+
+blockquote blockquote {
+  border-left: 4px solid hsl(0, 0%, 70%);
+  padding-left: calc(2ch - 4px);
+  padding-right: 0;
+  margin-left: -4px;
+  border-radius: 0;
+}
+
+/* 行内代码 */
+code {
+  font-family: var(--code-font), var(--ui-font), monospace;
+}
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code,
+p code,
+li code {
+  color: rgb(60, 112, 198);
+  background-color: #fefefe;
+  /* 阴影 */
+  box-shadow: 0 0 1px 1px #c8d3df;
+  font-family: var(--code-font), var(--ui-font), monospace;
+  box-sizing: border-box;
+  border-right: 0px;
+  margin: 0 2px 0 2px;
+  padding: 0 2px 0 2px;
+  /* 圆角 */
+  border-radius: 2px 2px 2px 2px;
+}
+
+/* 代码块样式 */
+.md-fences,
+.CodeMirror pre,
+.CodeMirror-wrap {
+  /* padding: 10px; */
+  font-size: 1em;
+}
+
+.CodeMirror-code pre,
+.CodeMirror-sizer {
+  font-family: var(--code-font), var(--ui-font), monospace;
+}
+
+/* 目录 */
+.md-toc {
+  font-size: var(--toc-font-size);
+}
+
+.md-toc-content {
+  margin-left: 2em;
+  /* 修复缺失上级标题时无法递增 */
+  counter-reset: toc-h2 toc-h3 toc-h4 toc-h5 toc-h6;
+  break-after: page;
+}
+
+.md-toc-inner {
+  margin-left: 0 !important;
+  color: var(--text-color) !important;
+}
+
+.md-toc-item {
+  color: var(--text-color) !important;
+}
+
+/* 目录标题内容属性 */
+.md-toc-h2,
+.md-toc-h3,
+.md-toc-h4,
+.md-toc-h5,
+.md-toc-h6 {
+  font-size: var(--toc-font-size);
+  font-family: var(--toc-font), var(--base-Latin-font), var(--base-Chinese-font), serif;
+}
+
+.md-toc-h2 {
+  font-weight: var(--strong-weight);
+}
+
+/* 目录标题前 */
+.md-toc-content .md-toc-h1 {
+  display: var(--toc-show-title);
+  counter-set: toc-h2 0 toc-h3 0 toc-h4 0 toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h2 {
+  counter-set: toc-h3 0 toc-h4 0 toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h3 {
+  counter-set: toc-h4 0 toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h4 {
+  counter-set: toc-h5 0 toc-h6 0;
+}
+.md-toc-content .md-toc-h5 {
+  counter-set: toc-h6 0;
+}
+.md-toc-content .md-toc-h2:before {
+  counter-increment: toc-h2;
+  content: counter(toc-h2);
+  margin-right: 1em;
+  font-weight: var(--strong-weight);
+}
+.md-toc-content .md-toc-h3:before {
+  counter-increment: toc-h3;
+  content: counter(toc-h2) "." counter(toc-h3);
+  margin-left: 1.5em;
+  margin-right: 0.5em;
+}
+.md-toc-content .md-toc-h4:before {
+  counter-increment: toc-h4;
+  content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4);
+  margin-left: 3.5em;
+  margin-right: 0.5em;
+}
+.md-toc-content .md-toc-h5:before {
+  counter-increment: toc-h5;
+  content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4) "." counter(toc-h5);
+  margin-left: 5.5em;
+  margin-right: 0.5em;
+}
+.md-toc-content .md-toc-h6:before {
+  counter-increment: toc-h6;
+  content: counter(toc-h2) "." counter(toc-h3) "." counter(toc-h4) "." counter(toc-h5) "." counter(toc-h6);
+  margin-left: 7.5em;
+  margin-right: 0.5em;
+}
+</style>
+<style type='text/css'  id="style-mathjax">
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG2"] path[data-c], mjx-container[jax="SVG2"] use[data-c] {
+  stroke-width: 3;
+}
+
+g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+.MathJax g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+</style>
+<style type='text/css'  id="style-mathjax-ni">mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+							stroke-width: 0;
+						}</style>
+<style type='text/css'  id="style-lp">ol, ul {padding-left: 40px}</style>
+
+<title>2025-GUIOdyssey_supplement_2026-02-01-12_18_13_NewPicLink</title>
+</head>
+<body class='typora-export os-windows typora-export-show-outline typora-export-collapse-outline'><div class='typora-export-content'>
+<div class="typora-export-sidebar"><div class="outline-content"><li class="outline-item-wrapper outline-h1 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#guiodyssey-a-comprehensive-dataset-for-cross-app-gui-navigation-on-mobile-devices">GUIOdyssey: A Comprehensive Dataset for Cross-App GUI Navigation on Mobile Devices</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h1"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#guiodyssey用于移动设备跨应用-gui-导航的综合数据集">GUIOdyssey：用于移动设备跨应用 GUI 导航的综合数据集</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#7-ethical-discussion">7. Ethical Discussion</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#7-伦理讨论">7. 伦理讨论</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#8-details-of-guiodyssey">8. Details of GUIOdyssey</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#8-guiodyssey-的详细信息">8. GUIOdyssey 的详细信息</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#81-description-of-task-categories">8.1. Description of Task Categories</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#81-任务类别描述">8.1. 任务类别描述</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#82-action-set">8.2. Action Set</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#82-动作集">8.2. 动作集</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#83-fine-grained-episode-annotation-generation">8.3. Fine-grained Episode Annotation Generation</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#83-细粒度-episode-注释生成">8.3. 细粒度 Episode 注释生成</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#84-examples">8.4. Examples</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#84-例子">8.4. 例子</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#85-data-format">8.5. Data Format</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#85-数据格式">8.5. 数据格式</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#9-experiment-details">9. Experiment Details</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#9-实验细节">9. 实验细节</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#91-detailed-description-of-four-different-setups">9.1. Detailed description of four different setups.</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#91-四种不同设置的详细描述">9.1. 四种不同设置的详细描述</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#92-training-details">9.2. Training Details.</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#92-训练细节">9.2. 训练细节。</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#93-prompt-for-evaluation">9.3. Prompt for Evaluation.</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#93-评测提示">9.3. 评测提示。</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#10-more-experiments">10. More Experiments</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#10-更多实验">10. 更多实验</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#101-history-resampler-vs-multi-image-training">10.1. History Resampler vs. Multi-Image Training.</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#101-历史重采样与多图像训练">10.1. 历史重采样与多图像训练。</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#102the-effect-of-different-semantic-annotations">10.2.The effect of different semantic annotations.</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#102-不同语义注释的影响">10.2. 不同语义注释的影响。</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#103-transferability-of-instructions-at-different-lev--els-of-granularity">10.3. Transferability of instructions at different lev- els of granularity.</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#103-不同粒度水平指令的可迁移性">10.3. 不同粒度水平指令的可迁移性。</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#104-transferability-across-different-devices">10.4. Transferability across different devices.</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#104-跨不同设备的可迁移性">10.4. 跨不同设备的可迁移性。</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#105-whether-cross-app-tasks-benefit-single-app-tasks">10.5. Whether cross-App tasks benefit single-App tasks.</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#105-跨应用任务是否有益于单应用任务">10.5. 跨应用任务是否有益于单应用任务。</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#instruction-utilize-chrome-to-research-the-key-property-of-a-triangle-and-compile-your-findings-into-a-concise-document-using-google-docs">instruction: Utilize Chrome to research the key property of a Triangle and compile your findings into a concise document using Google Docs.</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#指令使用-chrome-研究三角形的关键属性并将你的发现整理成一份简明文档使用-google-docs">指令：使用 Chrome 研究三角形的关键属性，并将你的发现整理成一份简明文档，使用 Google Docs。</a></div><ul class="outline-children"></ul></li></ul></li></div></div><div id='write'  class=''><h1 id='guiodyssey-a-comprehensive-dataset-for-cross-app-gui-navigation-on-mobile-devices'><span>GUIOdyssey: A Comprehensive Dataset for Cross-App GUI Navigation on Mobile Devices</span></h1><h1 id='guiodyssey用于移动设备跨应用-gui-导航的综合数据集'><span>GUIOdyssey：用于移动设备跨应用 GUI 导航的综合数据集</span></h1><p><span>Supplementary Material</span>
+<span>附加材料</span></p><h2 id='7-ethical-discussion'><span>7. Ethical Discussion</span></h2><h2 id='7-伦理讨论'><span>7. 伦理讨论</span></h2><p><span>Privacy. We use temporary accounts and virtual user-names to register various apps and ensure no personal information is entered. The dataset contains no authentic personal information.</span>
+<span>隐私。我们使用临时账户和虚拟用户名注册各种应用，确保不输入个人信息。数据集不包含任何真实个人信息。</span></p><p><span>Ethical Consent in Data Collection. A formal consent process is implemented, wherein participants explicitly agree to the inclusion of their human-annotated data in the dataset. All data are collected with informed consent and in full compliance with ethical guidelines.</span>
+<span>数据收集中的伦理同意。实现了正式的同意流程，参与者明确同意将其人工标注数据纳入数据集。所有数据在知情同意下收集，完全符合伦理准则。</span></p><p><span>Security Concerns. The development of intelligent agents trained on datasets like this offers significant potential for automating tasks and enhancing accessibility. However, it also raises important ethical and security concerns. Sensitive operations, such as financial transactions or privacy management, pose vulnerabilities without robust safeguards. Additionally, malicious actors could exploit these agents to bypass security protocols or manipulate applications for unethical purposes. To mitigate these risks, it is crucial to implement secure model designs, privacy-preserving techniques, and establish clear ethical guidelines. Addressing these challenges will help ensure the responsible deployment of such technology while maximizing its societal benefits.</span>
+<span>安全性关注。以此类数据集训练的智能代理在自动化任务和提升可访问性方面具有显著潜力。然而，也带来重要的伦理与安全问题。敏感操作如金融交易或隐私管理在缺乏强健保护时存在脆弱性。此外，恶意行为者可能利用这些代理绕过安全协议或以不道德目的操纵应用。为降低风险，关键在于实现安全的模型设计、隐私保护技术，并建立明确的伦理准则。解决这些挑战将有助于负责任地部署此类技术，同时最大化其社会收益。</span></p><h2 id='8-details-of-guiodyssey'><span>8. Details of GUIOdyssey</span></h2><h2 id='8-guiodyssey-的详细信息'><span>8. GUIOdyssey 的详细信息</span></h2><h3 id='81-description-of-task-categories'><span>8.1. Description of Task Categories</span></h3><h3 id='81-任务类别描述'><span>8.1. 任务类别描述</span></h3><p><span>The specific details of the six task categories are as follows:</span>
+<span>六个任务类别的具体细节如下：</span></p><p><span>General Tool. This category encompasses tasks that involve navigating through system-wide operations such as managing system settings or notifications for apps. An instruction example of a general tool task is &quot;Adjust the notification settings for the YouTube app on your phone using Settings, then proceed to open YouTube&quot;.</span>
+<span>通用工具。此类别涵盖涉及通过系统范围操作进行导航的任务，如管理应用的系统设置或通知。一个通用工具任务的示例指令是“在手机的设置中调整 YouTube 应用的通知设置，然后打开 YouTube”。</span></p><p><span>Information Management. Information management tasks involve searching for information and recording it for future use. This might include looking up information on search engines, reading articles on news apps, checking facts on educational or reference apps, and then saving or organizing this information in note-taking apps.</span>
+<span>信息管理。信息管理任务涉及为将来使用而搜索信息并记录信息。这可能包括在搜索引擎上查找信息、在新闻应用中阅读文章、在教育或参考应用中核对事实，然后将这些信息保存或在笔记应用中进行整理。</span></p><p><span>Web Shopping. Shopping tasks encompass a range of activities related to purchasing products online. Users may start by searching for a product on one app, comparing prices on different e-commerce platforms, checking reviews and ratings on review apps or websites, and finally making a purchase.</span>
+<span>网络购物。购物任务涵盖在线购买产品的各种活动。用户可能先在一个应用中搜索产品，在不同的电商平台上比较价格，在评价应用或网站上查看评价与评分，最后完成购买。</span></p><p><span>Media Entertainment. Media entertainment tasks are about activities involving video and music streaming apps. Users may browse for new content on video platforms like YouTube or Netflix, stream music on services like Spotify or Apple Music, and switch between different media apps to manage playlists or download content.</span>
+<span>媒体娱乐。媒体娱乐任务涉及视频和音乐流媒体应用的活动。用户可能在 YouTube、Netflix 等视频平台上浏览新内容，在 Spotify、Apple Music 等服务上进行音乐串流，并在不同的媒体应用之间切换以管理播放列表或下载内容。</span></p><p><span>Social Sharing. This task involves activities where users share content across different social media platforms. This could include taking photos or videos with the camera app, editing them using a photo or video editing app, and then sharing them on multiple social media platforms like Insta-gram, Facebook, Twitter, or TikTok.</span>
+<span>社交分享。此任务涉及用户在不同社交媒体平台上分享内容的活动。可能包括使用相机应用拍摄照片或视频，使用照片或视频编辑应用进行编辑，然后在 Instagram、Facebook、Twitter、TikTok 等多个社交平台上分享。</span></p><p><span>Multi-Apps. Multiple-app tasks involve more complex operations that require three or more apps to complete. For example, cooking food with an online recipe might involve finding the recipe of the food, recording the recipe to a note-taking app, and buying the ingredients online(Fig. 1).</span>
+<span>多应用。多应用任务涉及需要三个以上应用才能完成的更复杂的操作。例如，使用在线食谱烹饪食物可能包括查找食谱、将食谱记录到笔记应用、并在线购买材料（图 1）。</span></p><h3 id='82-action-set'><span>8.2. Action Set</span></h3><h3 id='82-动作集'><span>8.2. 动作集</span></h3><p><span>Our recording system utilizes Android Studio to simulate GUI navigation and virtualize various devices. We use the Android Debug Bridge (ADB) to retrieve device information and status, such as the coordinates of click events, and to monitor a wide range of functional keys. The details of the action set in our Android emulator are presented in Table 5.</span>
+<span>我们的记录系统使用 Android Studio 来模拟 GUI 导航并虚拟化多种设备。我们利用 Android Debug Bridge (ADB) 获取设备信息和状态，例如点击事件的坐标，并监控广泛的功能键。Android 模拟器中的操作集细节在表 5 中展示。</span></p><h3 id='83-fine-grained-episode-annotation-generation'><span>8.3. Fine-grained Episode Annotation Generation</span></h3><h3 id='83-细粒度-episode-注释生成'><span>8.3. 细粒度 Episode 注释生成</span></h3><p><span>Fine-grained episode annotations consist of two components: low-level instructions and semantic annotations. Examples of the fine-grained annotations can be found in Fig. 7.</span>
+<span>细粒度的 episode 注释由两部分组成：低级指令和语义注释。细粒度注释的示例可见图 7。</span></p><p><span>Low-Level Instruction. For each step within an episode, we provide GPT-40 with the high-level instruction corresponding to the episode, along with the action and screenshot associated with the current step. Additionally, for actions such as CLICK and LONG PRESS, we supply an additional image featuring a bounding box to indicate the click coordinates. All images are configured with the fidelity parameter set to &#39;high&#39;. The prompt utilized is provided in Fig. 11.</span>
+<span>低级指令。对于每个 episode 的每一步，我们向 GPT-40 提供与该 episode 相对应的高级指令，以及与当前步骤相关的操作和截图。此外，对于 CLICK 和 LONG PRESS 等操作，我们提供一个额外的图像，包含边界框以标示点击坐标。所有图像的保真度参数设置为 &#39;high&#39;。所用的提示如图 11 所示。</span></p><p><span>Semantic Annotation. We use GPT-40 to generate semantic annotations in an alternating and iterative manner, following the sequential order of steps within each episode. Specifically, the process begins by providing the current episode&#39;s high-level instruction along with the actions and decision rationale from previous steps, prompting GPT-4o to generate the contextual information for the current step. Subsequently, using the generated contextual information, the high-level instruction, the screenshot image, and the action corresponding to the current step, GPT-40 is prompted step-by-step to generate the screen description and decision rationale for the current step. This iterative process continues until all semantic annotations for each step within the episode are completed in sequence. Similarly, for actions such as CLICK and LONG PRESS, we supply an additional image with a bounding box indicating the click coordinates. All images are configured with the fidelity parameter set to &#39;high&#39; to ensure precision. The prompts used for generating these annotations are provided in Fig. 12 and Fig. 13.</span>
+<span>语义注释。我们以交替迭代的方式使用 GPT-40 生成语义注释，按照每个 episode 内步骤的顺序进行。具体地，过程先提供当前 episode 的高级指令，以及前面步骤的操作和决策理由，提示 GPT-4o 生成当前步骤的上下文信息。随后，利用生成的上下文信息、高级指令、当前步骤的截图图像以及对应的操作，逐步提示 GPT-40 生成当前步骤的屏幕描述和决策理由。这一迭代过程持续进行，直到该 episode 内每一步的语义注释全部按序完成。类似地，对于 CLICK 和 LONG PRESS 等操作，我们提供一个额外的带有点击坐标边界框的图像。所有图像的保真度参数设置为 &#39;high&#39; 以确保精确性。用于生成这些注释的提示如图 12 和图 13 所示。</span></p><p><span>Table 5. The argument and functionality of different actions in GUIOdyssey. &#39;pos1&#39; and &#39;pos2&#39; denote the position </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="5.169ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2284.7 1000" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.566ex;"><defs><path id="MJX-706-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-706-TEX-I-1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path><path id="MJX-706-TEX-N-2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path><path id="MJX-706-TEX-I-1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path><path id="MJX-706-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mrow"><g data-mml-node="mo"><use data-c="28" xlink:href="#MJX-706-TEX-N-28"></use></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(389,0)"><g data-mml-node="mi"><use data-c="1D465" xlink:href="#MJX-706-TEX-I-1D465"></use></g><g data-mml-node="mo" transform="translate(572,0)"><use data-c="2C" xlink:href="#MJX-706-TEX-N-2C"></use></g><g data-mml-node="mi" transform="translate(1016.7,0)"><use data-c="1D466" xlink:href="#MJX-706-TEX-I-1D466"></use></g></g><g data-mml-node="mo" transform="translate(1895.7,0)"><use data-c="29" xlink:href="#MJX-706-TEX-N-29"></use></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mrow data-mjx-texclass="ORD"><mi>x</mi><mo>,</mo><mi>y</mi></mrow><mo data-mjx-texclass="CLOSE">)</mo></mrow></math></mjx-assistive-mml></mjx-container><script type="math/tex">\left( {x,y}\right)</script><span> .</span>
+<span>表 5. GUIOdyssey 中不同操作的参数与功能。&#39;pos1&#39; 与 &#39;pos2&#39; 表示位置 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="5.169ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2284.7 1000" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.566ex;"><defs><path id="MJX-706-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-706-TEX-I-1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path><path id="MJX-706-TEX-N-2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path><path id="MJX-706-TEX-I-1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path><path id="MJX-706-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mrow"><g data-mml-node="mo"><use data-c="28" xlink:href="#MJX-706-TEX-N-28"></use></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(389,0)"><g data-mml-node="mi"><use data-c="1D465" xlink:href="#MJX-706-TEX-I-1D465"></use></g><g data-mml-node="mo" transform="translate(572,0)"><use data-c="2C" xlink:href="#MJX-706-TEX-N-2C"></use></g><g data-mml-node="mi" transform="translate(1016.7,0)"><use data-c="1D466" xlink:href="#MJX-706-TEX-I-1D466"></use></g></g><g data-mml-node="mo" transform="translate(1895.7,0)"><use data-c="29" xlink:href="#MJX-706-TEX-N-29"></use></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mrow data-mjx-texclass="ORD"><mi>x</mi><mo>,</mo><mi>y</mi></mrow><mo data-mjx-texclass="CLOSE">)</mo></mrow></math></mjx-assistive-mml></mjx-container><script type="math/tex">\left( {x,y}\right)</script><span> 。</span></p><table><tr><td>Action</td><td>Argument</td><td>Functionality</td></tr><tr><td>CLICK</td><td>[pos1]</td><td>click the on-screen position</td></tr><tr><td>LONG PRESS</td><td>[pos1]</td><td>press the screen for a long time to copy texts or download images</td></tr><tr><td>SCROLL</td><td>[pos1, pos2]</td><td>scroll the screen from position 1 to position 2</td></tr><tr><td>TYPE</td><td>text</td><td>type text with keyboard</td></tr><tr><td>COMPLETE</td><td>-</td><td>the sign that the instruction has been completed</td></tr><tr><td>IMPOSSIBLE</td><td>-</td><td>the sign that the instruction cannot be completed</td></tr><tr><td>HOME</td><td>-</td><td>go to the home screen</td></tr><tr><td>BACK</td><td>-</td><td>go to the previous screen</td></tr><tr><td>RECENT</td><td>-</td><td>go to the previous App</td></tr></table>
+<table><tbody><tr><td>动作</td><td>参数</td><td>功能</td></tr><tr><td>点击</td><td>[pos1]</td><td>点击屏幕上的位置</td></tr><tr><td>长按</td><td>[pos1]</td><td>长按屏幕以复制文本或下载图片</td></tr><tr><td>滚动</td><td>[pos1, pos2]</td><td>从位置1滚动到位置2</td></tr><tr><td>输入</td><td>文本</td><td>用键盘输入文本</td></tr><tr><td>完成</td><td>-</td><td>指示任务已完成的标志</td></tr><tr><td>不可能</td><td>-</td><td>指示任务无法完成的标志</td></tr><tr><td>主页</td><td>-</td><td>返回主屏幕</td></tr><tr><td>返回</td><td>-</td><td>返回到上一屏幕</td></tr><tr><td>最近</td><td>-</td><td>转到上一个应用</td></tr></tbody></table><h3 id='84-examples'><span>8.4. Examples</span></h3><h3 id='84-例子'><span>8.4. 例子</span></h3><p><span>An example of episodes in our GUIOdyssey is shown in Fig. 6, while examples of semantic annotations can be found in Fig. 7. An example of an annotation for a task that could not be successfully completed and ends with the IMPOSSIBLE action can be found in Fig. 8 and Fig. 9.</span>
+<span>在我们的 GUIOdyssey 中的一个剧集示例显示在图6，而语义注解的示例可在图7中找到。一个关于无法成功完成并以 IMPOSSIBLE 行为结束的任务注解的示例可在图8和图9中找到。</span></p><p><span>As mentioned in Sec. 5.1, we use SAM2 [37] to assist in evaluating whether the model&#39;s output actions are correct. Fig. 10 provides examples of bounding boxes for clicked elements obtained through SAM2 segmentation.</span>
+<span>如第5.1节所述，我们使用 SAM2 [37] 来辅助评估模型的输出动作是否正确。图10 提供通过 SAM2 分割获得的被点击元素的边界框示例。</span></p><h3 id='85-data-format'><span>8.5. Data Format</span></h3><h3 id='85-数据格式'><span>8.5. 数据格式</span></h3><p><span>Each field of annotation is as follows.</span>
+<span>注解的每个字段如下。</span></p><p><span>episode_id: the unique identifier of this episode.</span>
+<span>episode_id：本剧集的唯一标识符。</span></p><p><span>device_info: the detailed information of the virtual device from which the episode was collected, including the device model, screen resolution, and other device-related details.</span>
+<span>device_info：收集该剧集所使用的虚拟设备的详细信息，包括设备型号、屏幕分辨率和其他设备相关细节。</span></p><p><span>task_info: the detailed information of the task from which the episode was collected, including the task category, the app used, the high-level instruction, and other task-related details. step_length: the total number of steps in this episode.</span>
+<span>task_info：剧集所对应任务的详细信息，包括任务类别、所用应用、高层指令等任务相关细节。step_length：本剧集中的总步数。</span></p><p><span>steps: a list of steps in this episode. Each step in the list includes the file path of the screenshot, executed action and its corresponding parameters (e.g., the coordinates for a click action), the low-level instruction, the semantic annotation, the bounding box obtained from SAM2 segmentation, and additional recorded information such as the overall scroll trajectory for scroll actions and annotator notes.</span>
+<span>steps：本剧集中的步骤列表。列表中的每个步骤包括截图的文件路径、执行的动作及其对应参数（如点击动作的坐标）、低级指令、语义注解、通过 SAM2 分割得到的边界框，以及如滚动动作的整体滚动轨迹等额外记录信息和标注者注记。</span></p><h2 id='9-experiment-details'><span>9. Experiment Details</span></h2><h2 id='9-实验细节'><span>9. 实验细节</span></h2><h3 id='91-detailed-description-of-four-different-setups'><span>9.1. Detailed description of four different setups.</span></h3><h3 id='91-四种不同设置的详细描述'><span>9.1. 四种不同设置的详细描述</span></h3><p><span>The following details the four different setups in GUIOdyssey.</span>
+<span>下文详细说明 GUIOdyssey 的四种不同设置。</span></p><p><span>i) Train-Random &amp; Test-Random. We randomly partitioned all the episodes in the dataset into training and testing sets using a ratio of </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="4.147ex" height="1.824ex" role="img" focusable="false" viewBox="0 -750 1833 806" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.127ex;"><defs><path id="MJX-1272-TEX-N-38" d="M70 417T70 494T124 618T248 666Q319 666 374 624T429 515Q429 485 418 459T392 417T361 389T335 371T324 363L338 354Q352 344 366 334T382 323Q457 264 457 174Q457 95 399 37T249 -22Q159 -22 101 29T43 155Q43 263 172 335L154 348Q133 361 127 368Q70 417 70 494ZM286 386L292 390Q298 394 301 396T311 403T323 413T334 425T345 438T355 454T364 471T369 491T371 513Q371 556 342 586T275 624Q268 625 242 625Q201 625 165 599T128 534Q128 511 141 492T167 463T217 431Q224 426 228 424L286 386ZM250 21Q308 21 350 55T392 137Q392 154 387 169T375 194T353 216T330 234T301 253T274 270Q260 279 244 289T218 306L210 311Q204 311 181 294T133 239T107 157Q107 98 150 60T250 21Z"></path><path id="MJX-1272-TEX-N-30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path><path id="MJX-1272-TEX-N-25" d="M465 605Q428 605 394 614T340 632T319 641Q332 608 332 548Q332 458 293 403T202 347Q145 347 101 402T56 548Q56 637 101 693T202 750Q241 750 272 719Q359 642 464 642Q580 642 650 732Q662 748 668 749Q670 750 673 750Q682 750 688 743T693 726Q178 -47 170 -52Q166 -56 160 -56Q147 -56 142 -45Q137 -36 142 -27Q143 -24 363 304Q469 462 525 546T581 630Q528 605 465 605ZM207 385Q235 385 263 427T292 548Q292 617 267 664T200 712Q193 712 186 709T167 698T147 668T134 615Q132 595 132 548V527Q132 436 165 403Q183 385 203 385H207ZM500 146Q500 234 544 290T647 347Q699 347 737 292T776 146T737 0T646 -56Q590 -56 545 0T500 146ZM651 -18Q679 -18 707 24T736 146Q736 215 711 262T644 309Q637 309 630 306T611 295T591 265T578 212Q577 200 577 146V124Q577 -18 647 -18H651Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="38" xlink:href="#MJX-1272-TEX-N-38"></use><use data-c="30" xlink:href="#MJX-1272-TEX-N-30" transform="translate(500,0)"></use></g></g><g data-mml-node="mi" transform="translate(1000,0)"><use data-c="25" xlink:href="#MJX-1272-TEX-N-25"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="ORD"><mn>80</mn></mrow><mi mathvariant="normal">%</mi></math></mjx-assistive-mml></mjx-container><script type="math/tex">{80}\%</script><span> to </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="4.147ex" height="1.824ex" role="img" focusable="false" viewBox="0 -750 1833 806" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.127ex;"><defs><path id="MJX-777-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path id="MJX-777-TEX-N-30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path><path id="MJX-777-TEX-N-25" d="M465 605Q428 605 394 614T340 632T319 641Q332 608 332 548Q332 458 293 403T202 347Q145 347 101 402T56 548Q56 637 101 693T202 750Q241 750 272 719Q359 642 464 642Q580 642 650 732Q662 748 668 749Q670 750 673 750Q682 750 688 743T693 726Q178 -47 170 -52Q166 -56 160 -56Q147 -56 142 -45Q137 -36 142 -27Q143 -24 363 304Q469 462 525 546T581 630Q528 605 465 605ZM207 385Q235 385 263 427T292 548Q292 617 267 664T200 712Q193 712 186 709T167 698T147 668T134 615Q132 595 132 548V527Q132 436 165 403Q183 385 203 385H207ZM500 146Q500 234 544 290T647 347Q699 347 737 292T776 146T737 0T646 -56Q590 -56 545 0T500 146ZM651 -18Q679 -18 707 24T736 146Q736 215 711 262T644 309Q637 309 630 306T611 295T591 265T578 212Q577 200 577 146V124Q577 -18 647 -18H651Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-777-TEX-N-32"></use><use data-c="30" xlink:href="#MJX-777-TEX-N-30" transform="translate(500,0)"></use></g></g><g data-mml-node="mi" transform="translate(1000,0)"><use data-c="25" xlink:href="#MJX-777-TEX-N-25"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="ORD"><mn>20</mn></mrow><mi mathvariant="normal">%</mi></math></mjx-assistive-mml></mjx-container><script type="math/tex">{20}\%</script><span> as the standard approach to divide the dataset. It can assess the in-domain performance of OdysseyAgent.</span>
+<span>i) Train-Random </span>&amp;<span> Test-Random。我们将数据集中所有剧集随机划分为训练集和测试集，按 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="4.147ex" height="1.824ex" role="img" focusable="false" viewBox="0 -750 1833 806" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.127ex;"><defs><path id="MJX-1272-TEX-N-38" d="M70 417T70 494T124 618T248 666Q319 666 374 624T429 515Q429 485 418 459T392 417T361 389T335 371T324 363L338 354Q352 344 366 334T382 323Q457 264 457 174Q457 95 399 37T249 -22Q159 -22 101 29T43 155Q43 263 172 335L154 348Q133 361 127 368Q70 417 70 494ZM286 386L292 390Q298 394 301 396T311 403T323 413T334 425T345 438T355 454T364 471T369 491T371 513Q371 556 342 586T275 624Q268 625 242 625Q201 625 165 599T128 534Q128 511 141 492T167 463T217 431Q224 426 228 424L286 386ZM250 21Q308 21 350 55T392 137Q392 154 387 169T375 194T353 216T330 234T301 253T274 270Q260 279 244 289T218 306L210 311Q204 311 181 294T133 239T107 157Q107 98 150 60T250 21Z"></path><path id="MJX-1272-TEX-N-30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path><path id="MJX-1272-TEX-N-25" d="M465 605Q428 605 394 614T340 632T319 641Q332 608 332 548Q332 458 293 403T202 347Q145 347 101 402T56 548Q56 637 101 693T202 750Q241 750 272 719Q359 642 464 642Q580 642 650 732Q662 748 668 749Q670 750 673 750Q682 750 688 743T693 726Q178 -47 170 -52Q166 -56 160 -56Q147 -56 142 -45Q137 -36 142 -27Q143 -24 363 304Q469 462 525 546T581 630Q528 605 465 605ZM207 385Q235 385 263 427T292 548Q292 617 267 664T200 712Q193 712 186 709T167 698T147 668T134 615Q132 595 132 548V527Q132 436 165 403Q183 385 203 385H207ZM500 146Q500 234 544 290T647 347Q699 347 737 292T776 146T737 0T646 -56Q590 -56 545 0T500 146ZM651 -18Q679 -18 707 24T736 146Q736 215 711 262T644 309Q637 309 630 306T611 295T591 265T578 212Q577 200 577 146V124Q577 -18 647 -18H651Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="38" xlink:href="#MJX-1272-TEX-N-38"></use><use data-c="30" xlink:href="#MJX-1272-TEX-N-30" transform="translate(500,0)"></use></g></g><g data-mml-node="mi" transform="translate(1000,0)"><use data-c="25" xlink:href="#MJX-1272-TEX-N-25"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="ORD"><mn>80</mn></mrow><mi mathvariant="normal">%</mi></math></mjx-assistive-mml></mjx-container><script type="math/tex">{80}\%</script><span> 与 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="4.147ex" height="1.824ex" role="img" focusable="false" viewBox="0 -750 1833 806" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.127ex;"><defs><path id="MJX-777-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path id="MJX-777-TEX-N-30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path><path id="MJX-777-TEX-N-25" d="M465 605Q428 605 394 614T340 632T319 641Q332 608 332 548Q332 458 293 403T202 347Q145 347 101 402T56 548Q56 637 101 693T202 750Q241 750 272 719Q359 642 464 642Q580 642 650 732Q662 748 668 749Q670 750 673 750Q682 750 688 743T693 726Q178 -47 170 -52Q166 -56 160 -56Q147 -56 142 -45Q137 -36 142 -27Q143 -24 363 304Q469 462 525 546T581 630Q528 605 465 605ZM207 385Q235 385 263 427T292 548Q292 617 267 664T200 712Q193 712 186 709T167 698T147 668T134 615Q132 595 132 548V527Q132 436 165 403Q183 385 203 385H207ZM500 146Q500 234 544 290T647 347Q699 347 737 292T776 146T737 0T646 -56Q590 -56 545 0T500 146ZM651 -18Q679 -18 707 24T736 146Q736 215 711 262T644 309Q637 309 630 306T611 295T591 265T578 212Q577 200 577 146V124Q577 -18 647 -18H651Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-777-TEX-N-32"></use><use data-c="30" xlink:href="#MJX-777-TEX-N-30" transform="translate(500,0)"></use></g></g><g data-mml-node="mi" transform="translate(1000,0)"><use data-c="25" xlink:href="#MJX-777-TEX-N-25"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="ORD"><mn>20</mn></mrow><mi mathvariant="normal">%</mi></math></mjx-assistive-mml></mjx-container><script type="math/tex">{20}\%</script><span> 的比例作为划分数据集的标准方法。它可以评估 OdysseyAgent 的领域内表现。</span></p><p><span>ii) Train-Task &amp; Test-Task. In this setup, We proportionally sampled meta-tasks from six categories, maintaining approximately a </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="4.148ex" height="1.557ex" role="img" focusable="false" viewBox="0 -666 1833.6 688" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.05ex;"><defs><path id="MJX-1734-TEX-N-36" d="M42 313Q42 476 123 571T303 666Q372 666 402 630T432 550Q432 525 418 510T379 495Q356 495 341 509T326 548Q326 592 373 601Q351 623 311 626Q240 626 194 566Q147 500 147 364L148 360Q153 366 156 373Q197 433 263 433H267Q313 433 348 414Q372 400 396 374T435 317Q456 268 456 210V192Q456 169 451 149Q440 90 387 34T253 -22Q225 -22 199 -14T143 16T92 75T56 172T42 313ZM257 397Q227 397 205 380T171 335T154 278T148 216Q148 133 160 97T198 39Q222 21 251 21Q302 21 329 59Q342 77 347 104T352 209Q352 289 347 316T329 361Q302 397 257 397Z"></path><path id="MJX-1734-TEX-N-3A" d="M78 370Q78 394 95 412T138 430Q162 430 180 414T199 371Q199 346 182 328T139 310T96 327T78 370ZM78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60Z"></path><path id="MJX-1734-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><use data-c="36" xlink:href="#MJX-1734-TEX-N-36"></use></g><g data-mml-node="mo" transform="translate(777.8,0)"><use data-c="3A" xlink:href="#MJX-1734-TEX-N-3A"></use></g><g data-mml-node="mn" transform="translate(1333.6,0)"><use data-c="31" xlink:href="#MJX-1734-TEX-N-31"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>6</mn><mo>:</mo><mn>1</mn></math></mjx-assistive-mml></mjx-container><script type="math/tex">6 : 1</script><span> ratio for the training and test sets. The tasks in the test set differ significantly from those in the training set. This partitioning method allows for a robust assessment of an agent&#39;s generalization capabilities across diverse tasks.</span>
+<span>ii) Train-Task </span>&amp;<span> Test-Task。在此设置中，我们从六个类别中成比例抽样元任务，训练集与测试集保持约 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="4.148ex" height="1.557ex" role="img" focusable="false" viewBox="0 -666 1833.6 688" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.05ex;"><defs><path id="MJX-1734-TEX-N-36" d="M42 313Q42 476 123 571T303 666Q372 666 402 630T432 550Q432 525 418 510T379 495Q356 495 341 509T326 548Q326 592 373 601Q351 623 311 626Q240 626 194 566Q147 500 147 364L148 360Q153 366 156 373Q197 433 263 433H267Q313 433 348 414Q372 400 396 374T435 317Q456 268 456 210V192Q456 169 451 149Q440 90 387 34T253 -22Q225 -22 199 -14T143 16T92 75T56 172T42 313ZM257 397Q227 397 205 380T171 335T154 278T148 216Q148 133 160 97T198 39Q222 21 251 21Q302 21 329 59Q342 77 347 104T352 209Q352 289 347 316T329 361Q302 397 257 397Z"></path><path id="MJX-1734-TEX-N-3A" d="M78 370Q78 394 95 412T138 430Q162 430 180 414T199 371Q199 346 182 328T139 310T96 327T78 370ZM78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60Z"></path><path id="MJX-1734-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><use data-c="36" xlink:href="#MJX-1734-TEX-N-36"></use></g><g data-mml-node="mo" transform="translate(777.8,0)"><use data-c="3A" xlink:href="#MJX-1734-TEX-N-3A"></use></g><g data-mml-node="mn" transform="translate(1333.6,0)"><use data-c="31" xlink:href="#MJX-1734-TEX-N-31"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>6</mn><mo>:</mo><mn>1</mn></math></mjx-assistive-mml></mjx-container><script type="math/tex">6 : 1</script><span> 的比例。测试集中的任务与训练集中的任务显著不同。这种划分方法有助于对智能体在多样任务中的泛化能力进行稳健评估。</span></p><p><span>iii) Train-Device &amp; Test-Device. To evaluate an agent&#39;s generalizability across different and unseen devices, we selected episodes annotated on the Tablet, which differs significantly from other devices, as the test set. We obtained 1,381 episodes as the test set and 6,953 episodes as the training set.</span>
+<span>iii) Train-Device </span>&amp;<span> Test-Device。为评估智能体在不同且未见设备上的泛化能力，我们选择在平板电脑上标注的剧集作为测试集，这些设备与其他设备差异显著。我们获得了1,381个剧集作为测试集，6,953个剧集作为训练集。</span></p><p><span>iv) Train-App &amp; Test-App. This split is aimed at evaluating the agent&#39;s performance on unseen Apps and App combinations. First, we calculated the frequency of app usage in the dataset and categorized the apps into 25 classes (e.g., Video, Music) based on their characteristics. Then, we selected a few apps with the lowest occurrence from each class to form the test app set. Subsequently, we partitioned the episodes that utilized the app in the test app set into the Test-App set, maintaining an approximately 85% to 15% ratio between the training set and the test set.</span>
+<span>iv) Train-App </span>&amp;<span> Test-App。此划分旨在评估智能体在未见应用及应用组合上的性能。首先，我们计算数据集中应用的使用频率，并基于其特征将应用分类为25个类别（如视频、音乐）。然后，从每个类别中选择出现频率最低的若干应用组成测试应用集。随后，我们将使用测试应用集中的应用所涉及的剧集划分到 Test-App 集，训练集与测试集的比例约为 85% 对 15%。</span></p><p><span>Table 6. The impact of different semantic annotations on OdysseyAgent across four different splits. We use high-level instructions for both training and evaluation. Performance is assessed using AMS and SR as metrics. SD, CI, and DR denote screen description, contextual information, and decision rationale, respectively.</span>
+<span>表6. 不同语义注释对 OdysseyAgent 在四个不同拆分上的影响。训练与评估均使用高层指令。性能以 AMS 和 SR 为指标进行评估。SD、CI 与 DR 分别表示屏幕描述、上下文信息与决策理由。</span></p><table><tr><td rowspan="2"></td><td colspan="3">Semantic Annotation</td><td colspan="2">Test-Random</td><td colspan="2">Test-Task</td><td colspan="2">Test-Device</td><td colspan="2">Test-App</td><td colspan="2">Overall</td></tr><tr><td>SD</td><td>CI</td><td>DR</td><td>AMS</td><td>SR</td><td>AMS</td><td>SR</td><td>AMS</td><td>SR</td><td>AMS</td><td>SR</td><td>AMS</td><td>SR</td></tr><tr><td>(1)</td><td>✘</td><td>✘</td><td>✘</td><td>75.79</td><td>9.38</td><td>54.36</td><td>0.09</td><td>61.20</td><td>1.88</td><td>63.03</td><td>7.70</td><td>63.60</td><td>4.76</td></tr><tr><td>(2)</td><td>✓</td><td>✘</td><td>✘</td><td>75.18</td><td>8.94</td><td>54.06</td><td>0.00</td><td>64.41</td><td>2.03</td><td>64.91</td><td>8.47</td><td>64.64</td><td>4.86</td></tr><tr><td>(3)</td><td>✘</td><td>✓</td><td>✘</td><td>75.42</td><td>10.04</td><td>55.71</td><td>0.00</td><td>62.52</td><td>3.19</td><td>64.24</td><td>5.30</td><td>64.47</td><td>4.63</td></tr><tr><td>(4)</td><td>✘</td><td>✘</td><td>✓</td><td>77.71</td><td>11.44</td><td>55.60</td><td>0.26</td><td>65.88</td><td>4.63</td><td>65.74</td><td>7.96</td><td>66.23</td><td>6.07</td></tr><tr><td>(5)</td><td>✘</td><td>✓</td><td>✓</td><td>77.23</td><td>11.16</td><td>56.93</td><td>0.18</td><td>63.87</td><td>2.24</td><td>66.32</td><td>7.87</td><td>66.09</td><td>5.36</td></tr><tr><td>(6)</td><td>✓</td><td>✘</td><td>✓</td><td>77.24</td><td>10.88</td><td>57.15</td><td>0.00</td><td>63.55</td><td>2.17</td><td>67.04</td><td>9.67</td><td>66.24</td><td>5.68</td></tr><tr><td>(7)</td><td>✓</td><td>✓</td><td>✘</td><td>76.58</td><td>10.14</td><td>57.13</td><td>0.26</td><td>64.48</td><td>3.91</td><td>66.27</td><td>7.96</td><td>66.11</td><td>5.57</td></tr><tr><td>(8)</td><td>✓</td><td>✓</td><td>✓</td><td>78.24</td><td>11.62</td><td>56.19</td><td>0.26</td><td>66.63</td><td>5.07</td><td>65.89</td><td>8.81</td><td>66.74</td><td>6.44</td></tr></table>
+<table><tbody><tr><td rowspan="2"></td><td colspan="3">语义标注</td><td colspan="2">随机测试</td><td colspan="2">测试任务</td><td colspan="2">测试设备</td><td colspan="2">测试应用</td><td colspan="2">总体</td></tr><tr><td>SD</td><td>CI</td><td>DR</td><td>AMS</td><td>SR</td><td>AMS</td><td>SR</td><td>AMS</td><td>SR</td><td>AMS</td><td>SR</td><td>AMS</td><td>SR</td></tr><tr><td>(1)</td><td>✘</td><td>✘</td><td>✘</td><td>75.79</td><td>9.38</td><td>54.36</td><td>0.09</td><td>61.20</td><td>1.88</td><td>63.03</td><td>7.70</td><td>63.60</td><td>4.76</td></tr><tr><td>(2)</td><td>✓</td><td>✘</td><td>✘</td><td>75.18</td><td>8.94</td><td>54.06</td><td>0.00</td><td>64.41</td><td>2.03</td><td>64.91</td><td>8.47</td><td>64.64</td><td>4.86</td></tr><tr><td>(3)</td><td>✘</td><td>✓</td><td>✘</td><td>75.42</td><td>10.04</td><td>55.71</td><td>0.00</td><td>62.52</td><td>3.19</td><td>64.24</td><td>5.30</td><td>64.47</td><td>4.63</td></tr><tr><td>(4)</td><td>✘</td><td>✘</td><td>✓</td><td>77.71</td><td>11.44</td><td>55.60</td><td>0.26</td><td>65.88</td><td>4.63</td><td>65.74</td><td>7.96</td><td>66.23</td><td>6.07</td></tr><tr><td>(5)</td><td>✘</td><td>✓</td><td>✓</td><td>77.23</td><td>11.16</td><td>56.93</td><td>0.18</td><td>63.87</td><td>2.24</td><td>66.32</td><td>7.87</td><td>66.09</td><td>5.36</td></tr><tr><td>(6)</td><td>✓</td><td>✘</td><td>✓</td><td>77.24</td><td>10.88</td><td>57.15</td><td>0.00</td><td>63.55</td><td>2.17</td><td>67.04</td><td>9.67</td><td>66.24</td><td>5.68</td></tr><tr><td>(7)</td><td>✓</td><td>✓</td><td>✘</td><td>76.58</td><td>10.14</td><td>57.13</td><td>0.26</td><td>64.48</td><td>3.91</td><td>66.27</td><td>7.96</td><td>66.11</td><td>5.57</td></tr><tr><td>(8)</td><td>✓</td><td>✓</td><td>✓</td><td>78.24</td><td>11.62</td><td>56.19</td><td>0.26</td><td>66.63</td><td>5.07</td><td>65.89</td><td>8.81</td><td>66.74</td><td>6.44</td></tr></tbody></table><h3 id='92-training-details'><span>9.2. Training Details.</span></h3><h3 id='92-训练细节'><span>9.2. 训练细节。</span></h3><p><span>To train OdysseyAgent, we employ the AdamW optimizer with a learning rate of </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="6.082ex" height="1.692ex" role="img" focusable="false" viewBox="0 -666 2688.4 748" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.186ex;"><defs><path id="MJX-1739-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path id="MJX-1739-TEX-I-1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path><path id="MJX-1739-TEX-N-2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path><path id="MJX-1739-TEX-N-35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-1739-TEX-N-32"></use></g><g data-mml-node="mi" transform="translate(500,0)"><use data-c="1D452" xlink:href="#MJX-1739-TEX-I-1D452"></use></g></g><g data-mml-node="mo" transform="translate(1188.2,0)"><use data-c="2212" xlink:href="#MJX-1739-TEX-N-2212"></use></g><g data-mml-node="mn" transform="translate(2188.4,0)"><use data-c="35" xlink:href="#MJX-1739-TEX-N-35"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="ORD"><mn>2</mn><mi>e</mi></mrow><mo>−</mo><mn>5</mn></math></mjx-assistive-mml></mjx-container><script type="math/tex">{2e} - 5</script><span> and utilize a cosine learning rate schedule. We set </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="2.268ex" height="2.034ex" role="img" focusable="false" viewBox="0 -705 1002.6 899" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.439ex;"><defs><path id="MJX-1740-TEX-I-1D6FD" d="M29 -194Q23 -188 23 -186Q23 -183 102 134T186 465Q208 533 243 584T309 658Q365 705 429 705H431Q493 705 533 667T573 570Q573 465 469 396L482 383Q533 332 533 252Q533 139 448 65T257 -10Q227 -10 203 -2T165 17T143 40T131 59T126 65L62 -188Q60 -194 42 -194H29ZM353 431Q392 431 427 419L432 422Q436 426 439 429T449 439T461 453T472 471T484 495T493 524T501 560Q503 569 503 593Q503 611 502 616Q487 667 426 667Q384 667 347 643T286 582T247 514T224 455Q219 439 186 308T152 168Q151 163 151 147Q151 99 173 68Q204 26 260 26Q302 26 349 51T425 137Q441 171 449 214T457 279Q457 337 422 372Q380 358 347 358H337Q258 358 258 389Q258 396 261 403Q275 431 353 431Z"></path><path id="MJX-1740-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><use data-c="1D6FD" xlink:href="#MJX-1740-TEX-I-1D6FD"></use></g></g><g data-mml-node="TeXAtom" transform="translate(599,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-1740-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mrow data-mjx-texclass="ORD"><mi>β</mi></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msub></math></mjx-assistive-mml></mjx-container><script type="math/tex">{\beta }_{1}</script><span> and </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="2.268ex" height="2.034ex" role="img" focusable="false" viewBox="0 -705 1002.6 899" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.439ex;"><defs><path id="MJX-1741-TEX-I-1D6FD" d="M29 -194Q23 -188 23 -186Q23 -183 102 134T186 465Q208 533 243 584T309 658Q365 705 429 705H431Q493 705 533 667T573 570Q573 465 469 396L482 383Q533 332 533 252Q533 139 448 65T257 -10Q227 -10 203 -2T165 17T143 40T131 59T126 65L62 -188Q60 -194 42 -194H29ZM353 431Q392 431 427 419L432 422Q436 426 439 429T449 439T461 453T472 471T484 495T493 524T501 560Q503 569 503 593Q503 611 502 616Q487 667 426 667Q384 667 347 643T286 582T247 514T224 455Q219 439 186 308T152 168Q151 163 151 147Q151 99 173 68Q204 26 260 26Q302 26 349 51T425 137Q441 171 449 214T457 279Q457 337 422 372Q380 358 347 358H337Q258 358 258 389Q258 396 261 403Q275 431 353 431Z"></path><path id="MJX-1741-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><use data-c="1D6FD" xlink:href="#MJX-1741-TEX-I-1D6FD"></use></g></g><g data-mml-node="TeXAtom" transform="translate(599,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-1741-TEX-N-32"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mrow data-mjx-texclass="ORD"><mi>β</mi></mrow><mrow data-mjx-texclass="ORD"><mn>2</mn></mrow></msub></math></mjx-assistive-mml></mjx-container><script type="math/tex">{\beta }_{2}</script><span> to 0.9 and 0.95,respectively, and use a weight decay of 0.1 . Additionally, we utilize a global batch size of 128 and implement DeepSpeed ZERO2-style data parallelism. During training, OdysseyA-gent treats each action step as an individual training sample. The input consists of the task instruction, the current screenshot, and the previous 4 actions and screenshots (i.e., </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="5.153ex" height="1.808ex" role="img" focusable="false" viewBox="0 -717 2277.6 799" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.186ex;"><defs><path id="MJX-1742-TEX-I-1D6FF" d="M195 609Q195 656 227 686T302 717Q319 716 351 709T407 697T433 690Q451 682 451 662Q451 644 438 628T403 612Q382 612 348 641T288 671T249 657T235 628Q235 584 334 463Q401 379 401 292Q401 169 340 80T205 -10H198Q127 -10 83 36T36 153Q36 286 151 382Q191 413 252 434Q252 435 245 449T230 481T214 521T201 566T195 609ZM112 130Q112 83 136 55T204 27Q233 27 256 51T291 111T309 178T316 232Q316 267 309 298T295 344T269 400L259 396Q215 381 183 342T137 256T118 179T112 130Z"></path><path id="MJX-1742-TEX-N-3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path><path id="MJX-1742-TEX-N-34" d="M462 0Q444 3 333 3Q217 3 199 0H190V46H221Q241 46 248 46T265 48T279 53T286 61Q287 63 287 115V165H28V211L179 442Q332 674 334 675Q336 677 355 677H373L379 671V211H471V165H379V114Q379 73 379 66T385 54Q393 47 442 46H471V0H462ZM293 211V545L74 212L183 211H293Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D6FF" xlink:href="#MJX-1742-TEX-I-1D6FF"></use></g><g data-mml-node="mo" transform="translate(721.8,0)"><use data-c="3D" xlink:href="#MJX-1742-TEX-N-3D"></use></g><g data-mml-node="mn" transform="translate(1777.6,0)"><use data-c="34" xlink:href="#MJX-1742-TEX-N-34"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>δ</mi><mo>=</mo><mn>4</mn></math></mjx-assistive-mml></mjx-container><script type="math/tex">\delta  = 4</script><span> ),while the output corresponds to the action for the current step. By default, OdysseyAgent is trained separately on Train-Random/Task/Device/App for one epoch, excluding the semantic annotation component. When training includes semantic annotations, these annotations are converted into single-turn QA pairs, which serve as additional training samples (i.e., semantic annotations are introduced only during training-time). Any training configuration that incorporates semantic annotations is explicitly noted. The entire training process requires approximately 32 A100 hours to complete.</span>
+<span>为了训练 OdysseyAgent，我们使用 AdamW 优化器，学习率为 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="6.082ex" height="1.692ex" role="img" focusable="false" viewBox="0 -666 2688.4 748" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.186ex;"><defs><path id="MJX-1739-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path id="MJX-1739-TEX-I-1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path><path id="MJX-1739-TEX-N-2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path><path id="MJX-1739-TEX-N-35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-1739-TEX-N-32"></use></g><g data-mml-node="mi" transform="translate(500,0)"><use data-c="1D452" xlink:href="#MJX-1739-TEX-I-1D452"></use></g></g><g data-mml-node="mo" transform="translate(1188.2,0)"><use data-c="2212" xlink:href="#MJX-1739-TEX-N-2212"></use></g><g data-mml-node="mn" transform="translate(2188.4,0)"><use data-c="35" xlink:href="#MJX-1739-TEX-N-35"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="ORD"><mn>2</mn><mi>e</mi></mrow><mo>−</mo><mn>5</mn></math></mjx-assistive-mml></mjx-container><script type="math/tex">{2e} - 5</script><span>，并采用余弦学习率调度。我们将 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="2.268ex" height="2.034ex" role="img" focusable="false" viewBox="0 -705 1002.6 899" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.439ex;"><defs><path id="MJX-1740-TEX-I-1D6FD" d="M29 -194Q23 -188 23 -186Q23 -183 102 134T186 465Q208 533 243 584T309 658Q365 705 429 705H431Q493 705 533 667T573 570Q573 465 469 396L482 383Q533 332 533 252Q533 139 448 65T257 -10Q227 -10 203 -2T165 17T143 40T131 59T126 65L62 -188Q60 -194 42 -194H29ZM353 431Q392 431 427 419L432 422Q436 426 439 429T449 439T461 453T472 471T484 495T493 524T501 560Q503 569 503 593Q503 611 502 616Q487 667 426 667Q384 667 347 643T286 582T247 514T224 455Q219 439 186 308T152 168Q151 163 151 147Q151 99 173 68Q204 26 260 26Q302 26 349 51T425 137Q441 171 449 214T457 279Q457 337 422 372Q380 358 347 358H337Q258 358 258 389Q258 396 261 403Q275 431 353 431Z"></path><path id="MJX-1740-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><use data-c="1D6FD" xlink:href="#MJX-1740-TEX-I-1D6FD"></use></g></g><g data-mml-node="TeXAtom" transform="translate(599,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-1740-TEX-N-31"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mrow data-mjx-texclass="ORD"><mi>β</mi></mrow><mrow data-mjx-texclass="ORD"><mn>1</mn></mrow></msub></math></mjx-assistive-mml></mjx-container><script type="math/tex">{\beta }_{1}</script><span> 和 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="2.268ex" height="2.034ex" role="img" focusable="false" viewBox="0 -705 1002.6 899" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.439ex;"><defs><path id="MJX-1741-TEX-I-1D6FD" d="M29 -194Q23 -188 23 -186Q23 -183 102 134T186 465Q208 533 243 584T309 658Q365 705 429 705H431Q493 705 533 667T573 570Q573 465 469 396L482 383Q533 332 533 252Q533 139 448 65T257 -10Q227 -10 203 -2T165 17T143 40T131 59T126 65L62 -188Q60 -194 42 -194H29ZM353 431Q392 431 427 419L432 422Q436 426 439 429T449 439T461 453T472 471T484 495T493 524T501 560Q503 569 503 593Q503 611 502 616Q487 667 426 667Q384 667 347 643T286 582T247 514T224 455Q219 439 186 308T152 168Q151 163 151 147Q151 99 173 68Q204 26 260 26Q302 26 349 51T425 137Q441 171 449 214T457 279Q457 337 422 372Q380 358 347 358H337Q258 358 258 389Q258 396 261 403Q275 431 353 431Z"></path><path id="MJX-1741-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><use data-c="1D6FD" xlink:href="#MJX-1741-TEX-I-1D6FD"></use></g></g><g data-mml-node="TeXAtom" transform="translate(599,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-1741-TEX-N-32"></use></g></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mrow data-mjx-texclass="ORD"><mi>β</mi></mrow><mrow data-mjx-texclass="ORD"><mn>2</mn></mrow></msub></math></mjx-assistive-mml></mjx-container><script type="math/tex">{\beta }_{2}</script><span> 分别设为 0.9 和 0.95，权重衰减为 0.1。此外，我们使用全局批大小 128，并实现 DeepSpeed ZERO2 风格的数据并行。在训练过程中，OdysseyA-gent 将每个动作步骤视为一个独立的训练样本。输入包括任务指令、当前截图以及前 4 个动作和截图（即 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="5.153ex" height="1.808ex" role="img" focusable="false" viewBox="0 -717 2277.6 799" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.186ex;"><defs><path id="MJX-1742-TEX-I-1D6FF" d="M195 609Q195 656 227 686T302 717Q319 716 351 709T407 697T433 690Q451 682 451 662Q451 644 438 628T403 612Q382 612 348 641T288 671T249 657T235 628Q235 584 334 463Q401 379 401 292Q401 169 340 80T205 -10H198Q127 -10 83 36T36 153Q36 286 151 382Q191 413 252 434Q252 435 245 449T230 481T214 521T201 566T195 609ZM112 130Q112 83 136 55T204 27Q233 27 256 51T291 111T309 178T316 232Q316 267 309 298T295 344T269 400L259 396Q215 381 183 342T137 256T118 179T112 130Z"></path><path id="MJX-1742-TEX-N-3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path><path id="MJX-1742-TEX-N-34" d="M462 0Q444 3 333 3Q217 3 199 0H190V46H221Q241 46 248 46T265 48T279 53T286 61Q287 63 287 115V165H28V211L179 442Q332 674 334 675Q336 677 355 677H373L379 671V211H471V165H379V114Q379 73 379 66T385 54Q393 47 442 46H471V0H462ZM293 211V545L74 212L183 211H293Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D6FF" xlink:href="#MJX-1742-TEX-I-1D6FF"></use></g><g data-mml-node="mo" transform="translate(721.8,0)"><use data-c="3D" xlink:href="#MJX-1742-TEX-N-3D"></use></g><g data-mml-node="mn" transform="translate(1777.6,0)"><use data-c="34" xlink:href="#MJX-1742-TEX-N-34"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>δ</mi><mo>=</mo><mn>4</mn></math></mjx-assistive-mml></mjx-container><script type="math/tex">\delta  = 4</script><span>），输出对应当前步骤的动作。默认情况下，OdysseyAgent 在 Train-Random/Task/Device/App 上单独训练一个时期，不包含语义注释组件。当训练包含语义注释时，这些注释被转换为单轮问答对，作为额外的训练样本（即语义注释仅在训练时引入）。任何包含语义注释的训练配置都将被明确标注。整个训练过程大约需要 32 个 A100 小时完成。</span></p><h3 id='93-prompt-for-evaluation'><span>9.3. Prompt for Evaluation.</span></h3><h3 id='93-评测提示'><span>9.3. 评测提示。</span></h3><p><span>We utilize the prompt shown in Fig. 14 to evaluate the performance of GPT-4V, GPT-4o, Claude3.5-sonnet, and InternVL2-Pro. For SphAgent and CogAgent, we tested them following their officially recommended methods [9, 23].</span>
+<span>我们使用图 14 中给出的提示来评估 GPT-4V、GPT-4o、Claude3.5-sonnet 与 InternVL2-Pro 的性能。对于 SphAgent 和 CogAgent，我们按其官方推荐方法进行测试 [9, 23]。</span></p><h2 id='10-more-experiments'><span>10. More Experiments</span></h2><h2 id='10-更多实验'><span>10. 更多实验</span></h2><h3 id='101-history-resampler-vs-multi-image-training'><span>10.1. History Resampler vs. Multi-Image Training.</span></h3><h3 id='101-历史重采样与多图像训练'><span>10.1. 历史重采样与多图像训练。</span></h3><p><span>We evaluate different approaches for processing historical screenshot images. Qwen-VL supports multi-image input by interleaving image and text tokens, but this leads to a high token overhead (e.g., 1024 tokens for four historical steps). Our history resampler compresses this to 256 tokens, greatly improving efficiency. As shown in Table 7, both approaches achieve comparable performance, but the history resampler significantly enhances training and inference efficiency.</span>
+<span>我们评估处理历史截图图像的不同方法。Qwen-VL 通过交错图像和文本标记来支持多图像输入，但这会导致较高的标记开销（如四个历史步骤需 1024 个标记）。我们的历史重采样将其压缩到 256 个标记，大幅提升效率。如表 7 所示，两种方法的性能相近，但历史重采样显著提升了训练和推理效率。</span></p><p><span>Table 7. The average AMS for HL and LL instructions across 4 splits, along with the number of historical screenshot tokens, inference metrics (Time to First Token (TTFT) and Tokens per Second (TPS)), and training GPU hours.</span>
+<span>Table 7. HL 与 LL 指令在 4 个分割上的平均 AMS，以及历史截图标记数量、推理指标（首个标记耗时 TTFT 和每秒标记数 TPS）和训练 GPU 小时数。</span></p><table><tr><td>strategy</td><td>HL</td><td>LL</td><td>Token Count</td><td>TTFT $\downarrow$</td><td>TPS $\uparrow$</td><td>GPU Hours</td></tr><tr><td>history resampler</td><td>63.60</td><td>82.44</td><td>256</td><td>0.71</td><td>20.27</td><td>32</td></tr><tr><td>multi-image</td><td>65.04</td><td>82.34</td><td>1024</td><td>0.98</td><td>17.05</td><td>48</td></tr></table>
+<table><tbody><tr><td>策略</td><td>HL</td><td>LL</td><td>令牌计数</td><td>TTFT $\downarrow$</td><td>TPS $\uparrow$</td><td>GPU 小时</td></tr><tr><td>历史重采样器</td><td>63.60</td><td>82.44</td><td>256</td><td>0.71</td><td>20.27</td><td>32</td></tr><tr><td>多图像</td><td>65.04</td><td>82.34</td><td>1024</td><td>0.98</td><td>17.05</td><td>48</td></tr></tbody></table><h4 id='102the-effect-of-different-semantic-annotations'><span>10.2.The effect of different semantic annotations.</span></h4><h4 id='102-不同语义注释的影响'><span>10.2. 不同语义注释的影响。</span></h4><p><span>We assess the impact of different semantic annotations in GUIOdyssey (i.e., screen description, contextual information and decision rationale) on model performance in both in-domain and out-of-domain settings. The results are presented in Table 6. A comparison of experiments (1)-(4) shows that all three components contribute positively, but engaging in detailed reasoning before making decisions is more important than understanding current screen information or summarizing historical processes in cross-app tasks. Experiments (5)-(8) further indicate that using two or more types of semantic annotations generally outperforms using a single annotation type. Specifically, using all semantic annotations yields the best results and improves AMS by 3.14 and SR by </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="4.147ex" height="1.824ex" role="img" focusable="false" viewBox="0 -750 1833 806" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.127ex;"><defs><path id="MJX-1744-TEX-N-33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path id="MJX-1744-TEX-N-35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z"></path><path id="MJX-1744-TEX-N-25" d="M465 605Q428 605 394 614T340 632T319 641Q332 608 332 548Q332 458 293 403T202 347Q145 347 101 402T56 548Q56 637 101 693T202 750Q241 750 272 719Q359 642 464 642Q580 642 650 732Q662 748 668 749Q670 750 673 750Q682 750 688 743T693 726Q178 -47 170 -52Q166 -56 160 -56Q147 -56 142 -45Q137 -36 142 -27Q143 -24 363 304Q469 462 525 546T581 630Q528 605 465 605ZM207 385Q235 385 263 427T292 548Q292 617 267 664T200 712Q193 712 186 709T167 698T147 668T134 615Q132 595 132 548V527Q132 436 165 403Q183 385 203 385H207ZM500 146Q500 234 544 290T647 347Q699 347 737 292T776 146T737 0T646 -56Q590 -56 545 0T500 146ZM651 -18Q679 -18 707 24T736 146Q736 215 711 262T644 309Q637 309 630 306T611 295T591 265T578 212Q577 200 577 146V124Q577 -18 647 -18H651Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="33" xlink:href="#MJX-1744-TEX-N-33"></use><use data-c="35" xlink:href="#MJX-1744-TEX-N-35" transform="translate(500,0)"></use></g></g><g data-mml-node="mi" transform="translate(1000,0)"><use data-c="25" xlink:href="#MJX-1744-TEX-N-25"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="ORD"><mn>35</mn></mrow><mi mathvariant="normal">%</mi></math></mjx-assistive-mml></mjx-container><script type="math/tex">{35}\%</script><span> compared to training without any semantic annotations. These findings suggest that teaching the model to understand the reasoning behind each action-similar to how humans observe, understand, review completed steps, and reason thoroughly before deciding—can be beneficial for improving performance in both in-domain and out-of-domain cross-app tasks.</span>
+<span>我们评估 GUIOdyssey 中不同语义注释（即屏幕描述、上下文信息和决策依据）对模型在同域和跨域任务中的性能影响。结果见表6。对实验（1）-（4）的比较显示，三种组成部分均有正向贡献，但在跨应用任务中，在做出决定之前进行详细推理比理解当前屏幕信息或总结历史过程更为重要。实验（5）-（8）进一步表明，使用两种以上类型的语义注释通常优于使用单一注释类型。具体而言，使用全部语义注释可获得最佳结果，与不使用任何语义注释的训练相比，AMS 提高 3.14，SR 提高 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="4.147ex" height="1.824ex" role="img" focusable="false" viewBox="0 -750 1833 806" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.127ex;"><defs><path id="MJX-1744-TEX-N-33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path id="MJX-1744-TEX-N-35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z"></path><path id="MJX-1744-TEX-N-25" d="M465 605Q428 605 394 614T340 632T319 641Q332 608 332 548Q332 458 293 403T202 347Q145 347 101 402T56 548Q56 637 101 693T202 750Q241 750 272 719Q359 642 464 642Q580 642 650 732Q662 748 668 749Q670 750 673 750Q682 750 688 743T693 726Q178 -47 170 -52Q166 -56 160 -56Q147 -56 142 -45Q137 -36 142 -27Q143 -24 363 304Q469 462 525 546T581 630Q528 605 465 605ZM207 385Q235 385 263 427T292 548Q292 617 267 664T200 712Q193 712 186 709T167 698T147 668T134 615Q132 595 132 548V527Q132 436 165 403Q183 385 203 385H207ZM500 146Q500 234 544 290T647 347Q699 347 737 292T776 146T737 0T646 -56Q590 -56 545 0T500 146ZM651 -18Q679 -18 707 24T736 146Q736 215 711 262T644 309Q637 309 630 306T611 295T591 265T578 212Q577 200 577 146V124Q577 -18 647 -18H651Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="33" xlink:href="#MJX-1744-TEX-N-33"></use><use data-c="35" xlink:href="#MJX-1744-TEX-N-35" transform="translate(500,0)"></use></g></g><g data-mml-node="mi" transform="translate(1000,0)"><use data-c="25" xlink:href="#MJX-1744-TEX-N-25"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="ORD"><mn>35</mn></mrow><mi mathvariant="normal">%</mi></math></mjx-assistive-mml></mjx-container><script type="math/tex">{35}\%</script><span>。这些发现表明，教会模型理解每个操作背后的推理——类似于人类观察、理解、回顾已完成步骤并在决定前进行充分推理——有助于提升同域和跨域跨应用任务的性能。</span></p><h3 id='103-transferability-of-instructions-at-different-lev--els-of-granularity'><span>10.3. Transferability of instructions at different lev- els of granularity.</span></h3><h3 id='103-不同粒度水平指令的可迁移性'><span>10.3. 不同粒度水平指令的可迁移性。</span></h3><p><span>As shown in Table 8, models trained on high-level instructions exhibit significantly better transferability across different levels of instruction granularity compared to those trained on low-level instructions. Furthermore, training on both instruction granularities outperforms training on a single granularity, a phenomenon similar to what has been observed in single-app tasks [26].</span>
+<span>如表8所示，在较高层次指令上训练的模型在跨不同指令粒度水平的可迁移性显著优于在低层次指令上训练的模型。此外，在两种粒度水平上进行训练的结果优于在单一粒度水平上训练的结果，这一现象与单应用任务中的观察类似[26]。</span></p><h3 id='104-transferability-across-different-devices'><span>10.4. Transferability across different devices.</span></h3><h3 id='104-跨不同设备的可迁移性'><span>10.4. 跨不同设备的可迁移性。</span></h3><p><span>We utilize our GUIOdyssey dataset to conduct additional experiments to evaluate the generalization capabilities of OdysseyAgent beyond the initial experimental setup. we test the OdysseyAgent&#39;s adaptability by using data from one device as the test set while training on data from the remaining five devices. The results of these experiments are presented in the Table 9, demonstrating the model&#39;s performance across different devices. The model exhibits the weakest transferability on tablet devices, which we attribute to the significant differences in user interface layouts between tablets and smartphones. Furthermore, the model&#39;s transferability on small phones and foldable devices is also suboptimal. We surmise that the disparity in screen resolution compared to other phone models may contribute to this underperformance.</span>
+<span>我们利用 GUIOdyssey 数据集开展额外实验，以评估 OdysseyAgent 在初始实验设置之外的泛化能力。我们通过使用一个设备的数据作为测试集，而在其余五个设备的数据上进行训练，来测试 OdysseyAgent 的适应性。这些实验结果见表9，展示模型在不同设备上的表现。模型在平板设备上的可迁移性最差，我们将其归因于平板与智能手机之间的用户界面布局存在显著差异。此外，模型在小型手机和折叠设备上的可迁移性也不理想。我们推断，与其他手机型号相比，屏幕分辨率的差异可能导致这一表现不佳。</span></p><p><span>Table 8. The results for OdysseyAgent trained and tested on Train-Random/Test-Random with both high-level and low-level instructions are presented, with AMS as the evaluation metric. HL and LL denote high-level and low-level instructions, respectively.</span>
+<span>表8。展示在 Train-Random/Test-Random 条件下，使用高层次和低层次指令训练并测试的 OdysseyAgent 的结果，AMS 作为评估指标。HL 指高层次指令，LL 指低层次指令。</span></p><table><tr><td rowspan="2">Testing Instructions</td><td colspan="3">Training Instructions</td></tr><tr><td>HL</td><td>LL</td><td>HL + LL</td></tr><tr><td>HL</td><td>75.79</td><td>29.39</td><td>78.96</td></tr><tr><td>LL</td><td>71.26</td><td>86.88</td><td>88.84</td></tr></table>
+<table><tbody><tr><td rowspan="2">测试说明</td><td colspan="3">训练说明</td></tr><tr><td>HL</td><td>LL</td><td>HL + LL</td></tr><tr><td>HL</td><td>75.79</td><td>29.39</td><td>78.96</td></tr><tr><td>LL</td><td>71.26</td><td>86.88</td><td>88.84</td></tr></tbody></table><h3 id='105-whether-cross-app-tasks-benefit-single-app-tasks'><span>10.5. Whether cross-App tasks benefit single-App tasks.</span></h3><h3 id='105-跨应用任务是否有益于单应用任务'><span>10.5. 跨应用任务是否有益于单应用任务。</span></h3><p><span>We further investigate whether cross-app tasks benefit single-app performance by evaluating the impact of different training data compositions under controlled conditions. Specifically, we randomly sample 50k training samples each from GUIOdyssey, AITW, and AndroidControl</span>
+<span>我们进一步研究在受控条件下，不同训练数据组成对跨应用任务是否有益于单应用性能。具体而言，我们随机从 GUIOdyssey、AITW 和 AndroidControl 各抽取 50k 条训练样本</span></p><p><span>Table 9. Performance Evaluation of OdysseyAgent Across Different Devices. Each Device serves as a test set while the remaining five devices are used as training sets.</span>
+<span>表 9。OdysseyAgent 在不同设备上的性能评估。每个设备作为测试集，剩余五个设备作为训练集。</span></p><table><tr><td>Evaluation Device</td><td>Resolution</td><td>AMS</td><td>SR</td></tr><tr><td>Pixel 7 Pro</td><td>1,440×3,120</td><td>75.91</td><td>7.44</td></tr><tr><td>Pixel 8 Pro</td><td>1,344×2,992</td><td>74.67</td><td>6.05</td></tr><tr><td>Small Phone</td><td>720×1,280</td><td>71.68</td><td>3.77</td></tr><tr><td>Medium Phone</td><td>1,080×2,400</td><td>73.05</td><td>5.45</td></tr><tr><td>Pixel Fold</td><td>2, ${208} \times  1,{840}$</td><td>67.67</td><td>4.48</td></tr><tr><td>Pixel Tablet</td><td>2,560 × 1,600</td><td>61.20</td><td>1.88</td></tr></table>
+<table><tbody><tr><td>评测设备</td><td>分辨率</td><td>AMS</td><td>SR</td></tr><tr><td>Pixel 7 Pro</td><td>1,440×3,120</td><td>75.91</td><td>7.44</td></tr><tr><td>Pixel 8 Pro</td><td>1,344×2,992</td><td>74.67</td><td>6.05</td></tr><tr><td>小型手机</td><td>720×1,280</td><td>71.68</td><td>3.77</td></tr><tr><td>中型手机</td><td>1,080×2,400</td><td>73.05</td><td>5.45</td></tr><tr><td>Pixel Fold</td><td>2, ${208} \times  1,{840}$</td><td>67.67</td><td>4.48</td></tr><tr><td>Pixel Tablet</td><td>2,560 × 1,600</td><td>61.20</td><td>1.88</td></tr></tbody></table><p><span>(denoted as Ody50k, AITW50k, and AC50k, respectively) and evaluate their performance on AndroidControl, which provides both in-domain and out-of-domain scenarios. As shown in Table 10, we find that incorporating cross-app data from GUIOdyssey consistently enhances performance in most single-app scenarios, whereas adding AITW data surprisingly yields limited improvements or even performance degradation. This suggests that the more complex cross-app tasks in GUIOdyssey can benefit single-app tasks.</span>
+<span>(表示为 Ody50k、AITW50k 和 AC50k，分别) 并在 AndroidControl 上评估它们的性能，AndroidControl 同时提供域内和域外场景。如表 10 所示，我们发现将 GUIOdyssey 的跨应用数据整合进来在大多数单应用场景中持续提升性能，而添加 AITW 数据令人惊讶地收获有限的改进，甚至可能导致性能下降。这表明 GUIOdyssey 中更复杂的跨应用任务可以使单应用任务受益。</span></p><p><span>Table 10. Effectiveness of Different Training Data on the Android-Control. The evaluation metrics are the action matching score (AMS).</span>
+<span>表 10. 不同训练数据对 Android-Control 的有效性。评估指标为动作匹配分数 (AMS)。</span></p><table><tr><td>Training Data</td><td>IDD</td><td>category_unseen</td><td>app_unseen</td><td>task_unseen</td><td>Overall</td></tr><tr><td>AC50k</td><td>60.43</td><td>54.46</td><td>50.00</td><td>72.10</td><td>59.25</td></tr><tr><td>AC50k + AITW50k</td><td>60.69</td><td>55.26</td><td>45.19</td><td>68.84</td><td>57.50</td></tr><tr><td>AC50k + Ody50k</td><td>61.48</td><td>54.61</td><td>50.96</td><td>72.46</td><td>59.88</td></tr></table>
+<table><tbody><tr><td>训练数据</td><td>IDD</td><td>category_unseen</td><td>app_unseen</td><td>task_unseen</td><td>总览</td></tr><tr><td>AC50k</td><td>60.43</td><td>54.46</td><td>50.00</td><td>72.10</td><td>59.25</td></tr><tr><td>AC50k + AITW50k</td><td>60.69</td><td>55.26</td><td>45.19</td><td>68.84</td><td>57.50</td></tr><tr><td>AC50k + Ody50k</td><td>61.48</td><td>54.61</td><td>50.96</td><td>72.46</td><td>59.88</td></tr></tbody></table><h2 id='instruction-utilize-chrome-to-research-the-key-property-of-a-triangle-and-compile-your-findings-into-a-concise-document-using-google-docs'><span>instruction: Utilize Chrome to research the key property of a Triangle and compile your findings into a concise document using Google Docs.</span></h2><h2 id='指令使用-chrome-研究三角形的关键属性并将你的发现整理成一份简明文档使用-google-docs'><span>指令：使用 Chrome 研究三角形的关键属性，并将你的发现整理成一份简明文档，使用 Google Docs。</span></h2><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_21_30_d0a127.jpg"/></p><p>&nbsp;</p><p><span>Figure 6. An example of episodes in our GUIOdyssey.</span>
+<span>图 6。我们 GUIOdyssey 中的一集示例。</span></p><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_21_30_c4ca5e.jpg"/></p><p>&nbsp;</p><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_21_30_4ae99d.jpg"/></p><p>&nbsp;</p><p><span>Figure 8. Example of an annotation for an unsuccessful task, ending with the IMPOSSIBLE action.</span>
+<span>图 8。对未成功任务的注释示例，以 IMPOSSIBLE 行动结束。</span></p><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_21_30_26dec6.jpg"/></p><p>&nbsp;</p><p><span>Figure 9. Example of an annotation for an unsuccessful task, ending with the IMPOSSIBLE action.</span>
+<span>图 9。对未成功任务的注释示例，以 IMPOSSIBLE 行动结束。</span></p><p><img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_21_30_e6260b.jpg"/></p><p>&nbsp;</p><p><span>Figure 10. Examples of bounding boxes for UI elements segmented by SAM2. The actual click locations are indicated by blue &#39;+&#39; symbols, while the red rectangles outline the bounding boxes obtained from the SAM2.</span>
+<span>图 10。由 SAM2 分割的 UI 元素边界框示例。实际点击位置以蓝色“+”符号表示，红色矩形标出由 SAM2 获得的边界框。</span></p><hr /><p>&nbsp;</p><p><img><span>current_screenshot.png</span></img>
+<img><span>current_screenshot.png</span></img></p><p><img><span>current_screenshot_w_labels.png</span></img>
+<img><span>current_screenshot_w_labels.png</span></img></p><p><span>Based on the original and marked screenshots of an Android mobile phone, where the marked screenshot is the original screenshot marked with action location, please follow the</span>
+<span>基于原始截图与标记的 Android 手机屏幕截图，其中标记截图为在原始截图上标记了动作位置，请遵循下列</span></p><p><span>instructions below:</span>
+<span>指示：</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>Low-Level Instruction Identification</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>低级指令识别</span></p><ul><li><p><span>Identify the low-level instruction that the current action represents, such as &quot;Go to the alarm section.&quot;</span></p></li><li><p><span>识别当前动作所代表的低级指令，例如“前往闹钟区域。”</span></p></li></ul><p><span>P.S.:</span></p><p>&nbsp;</p><ul><li><p><span>When following these instructions, use natural language, avoid mentioning technical details (such as action coordinates) or direct use of action tags (such as &quot;PRESS_HOME&quot;).</span></p></li><li><p><span>在遵循这些指令时，使用自然语言，避免提及技术细节（如行动坐标）或直接使用行动标签（如“PRESS_HOME”）。</span></p></li></ul><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>Output Format:</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>输出格式：</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>The output should be in JSON format as follows:</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>输出应以 JSON 格式如下：</span></p><p><span>{</span><span>{</span><span>&quot;instruction&quot;: &quot;low-level instruction that the current action represents in the desired format&quot;</span><span>}</span><span>}</span>
+<span>{{&quot;instruction&quot;: &quot;当前动作所代表的低级指令以所需格式呈现&quot;}}</span></p><p><span>Please return the result in pure JSON format, without any json tags like </span><code>json</code><span>.</span>
+<span>请仅以纯 JSON 格式返回结果，不要包含类似 </span><code>json</code><span> 的 json 标签。</span></p><hr /><p>&nbsp;</p><p><span>Figure 11. Prompts for generating low-level instruction.</span>
+<span>图 11. 生成低级指令的提示。</span></p><hr /><p>&nbsp;</p><p><span>You are completing the task: </span><span>{</span><span>task</span><span>}</span><span> on a mobile phone, and the actions you have performed along with their respective intentions are listed in chronological order as:</span>
+<span>你正在手机上完成任务：</span><span>{</span><span>task</span><span>}</span><span>，你所执行的操作及其各自的意图按时间顺序列出如下：</span></p><p><span>{</span><span>intentions</span><span>}</span>
+<span>{</span><span>intentions</span><span>}</span></p><p><span>Please follow the instructions below:</span>
+<span>请按照以下指示执行：</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>- Create a logically connected summary, rather than simply listing each action in detail.</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>- \t\t- 生成一个逻辑连贯的摘要，而不是逐一详细列出每个动作。</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>- Avoid using any time-sequence phrases, such as &#39;after completing,&#39; &#39;upon finishing,&#39; or similar expressions.</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>- \t\t- 避免使用任何时间顺序的短语，如“完成后”、“在完成时”或类似表达。</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>- Use a completed-action tone, describing the progress as if each step has already occurred.</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>- \t\t- 采用完成行动的语气，描述进展时如同每一步已发生。</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>- Use an objective tone and describe concisely from an impersonal perspective.</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>- \t\t- 使用客观语气，从非个人角度简明描述。</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>- Format the context as follows: &quot;So far, [summary of what has been accomplished].&quot;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>- \t\t- 将上下文格式化为如下：“至今为止，[已完成的概要]。”</span></p><p><span>P.S.:</span></p><p>&nbsp;</p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>- When following these instructions, use natural language, avoid mentioning technical details (such as action coordinates) or direct use of action tags (such as &quot;PRESS_HOME&quot;).</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>- \t\t- 在遵循这些指示时，使用自然语言，避免提及技术细节（如动作坐标）或直接使用动作标签（如“PRESS_HOME”）。</span></p><p><span>Output Format:</span>
+<span>输出格式：</span></p><p><span>The output should be in JSON format as follows:</span>
+<span>输出应为如下的 JSON 格式：</span></p><p><span>{</span><span>{</span></p><p>&nbsp;</p><p><span>&quot;context&quot;: &quot;a 2-3 sentence summary of task progress up to this point in the desired format&quot;</span>
+<span>&quot;context&quot;: &quot;到目前为止任务进展的2-3句总结，按所需格式&quot;</span></p><p><span>}</span><span>}</span></p><p>&nbsp;</p><p><span>Please return the result in pure JSON format, without any json tags like </span><code>json</code><span>.</span>
+<span>请仅以纯 JSON 格式返回结果，不要包含类似 </span><code>json</code><span> 的 json 标签。</span></p><hr /><p>&nbsp;</p><p><span>Figure 12. Prompts for generating contextual information.</span>
+<span>图 12. 生成上下文信息的提示。</span></p><hr /><p>&nbsp;</p><p><img><span>current_screenshot.png</span></img>
+<img><span>current_screenshot.png</span></img></p><p><img><span>current_screenshot_w_labels.png</span></img>
+<img><span>current_screenshot_w_labels.png</span></img></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>Based on the original and marked screenshots of an Android mobile phone, where the marked screenshot is the original screenshot marked with action location, please follow the</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>基于原始截图及其标注的 Android 手机截图，其中标注截图是在原始截图上标注了操作位置，请按照以下说明：</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>instructions below:</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>以下说明：</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>1. Screenshot Description:</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>1. 截图描述：</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>- Analyze and describe the overall content of the current screenshot.</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>- - 分析并描述当前截图的总体内容。</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>- Provide a concise 2-3 sentence summary of the screenshot content.</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>- - 提供截图内容的简要2-3句概括。</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>- Format the description as follows: &quot;This is a screenshot of [summary of the screenshot content].&quot;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>- - 将描述格式化为： &quot;This is a screenshot of [summary of the screenshot content].&quot; </span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>2. Intention Recognition:</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>2. 意图识别：</span></p><ul><li><p><span>You are viewing the current screenshot while completing the task: </span><span>{</span><span>task</span><span>}</span><span> on a mobile phone, and you have chosen to perform the action: </span><span>{</span><span>action</span><span>}</span><span>. Analyze the reasoning behind this</span></p></li><li><p><span>在完成任务时你正在查看当前截图：</span><span>{</span><span>task</span><span>}</span><span> 在手机上，并且你选择执行的操作：</span><span>{</span><span>action</span><span>}</span><span>。分析这背后的理由</span></p></li></ul><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>- The progress made on the task before this action is: </span><span>{</span><span>context</span><span>}</span><span>.</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>- - 在此操作之前所完成的任务进展：</span><span>{</span><span>context</span><span>}</span><span>。</span></p><ul><li><p><span>Focus on why this action is appropriate within the current context, using present tense as if actively solving the problem.</span></p></li><li><p><span>着重说明在当前情境中为何此操作是合适的，使用现在时态，仿佛在主动解决问题。</span></p></li></ul><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>- Explain your intention in the first person.</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>- - 用第一人称说明你的意图。</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>- Format the intention in 2-3 sentences as follows: &quot;To [goal or purpose], I choose to [action to take]. This allows me to [result or benefit].&quot;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>- - 将意图以2-3句格式如下表达： &quot;To [goal or purpose], I choose to [action to take]. This allows me to [result or benefit].&quot;</span></p><p><span>P.S.:</span></p><p>&nbsp;</p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>- When following these instructions, use natural language, avoid mentioning technical details (such as action coordinates) or direct use of action tags (such as &quot;PRESS_HOME&quot;).</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>- - 遵循这些指示时，使用自然语言，避免提及技术细节（如操作坐标）或直接使用操作标签（如 &quot;PRESS_HOME&quot;）。</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>Output Format:</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>输出格式：</span></p><p><span>The output should be in JSON format as follows:</span>
+<span>输出应以如下 JSON 格式：</span></p><p><span>{</span><span>{</span></p><p>&nbsp;</p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>&quot;description&quot;: &quot;2-3 sentences summarizing the current screenshot content in the desired format&quot;,</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>&quot;description&quot;: &quot;当前屏幕截图内容的 2-3 句摘要，以所需格式&quot;</span></p><p>&nbsp;&nbsp;&nbsp;&nbsp;<span>&quot;intention&quot;: &quot;2-3 sentences explaining reasoning for choosing this action in the desired format&quot;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span>&quot;intention&quot;: &quot;解释选择此操作的原因的 2-3 句，以所需格式&quot;</span></p><p><span>}</span><span>}</span></p><p>&nbsp;</p><p><span>Please return the result in pure JSON format, without any json tags like </span><code>json</code><span>.</span>
+<span>请以纯 JSON 格式返回结果，不要包含任何 json 标签如 </span><code>json</code><span>。</span></p><hr /><p>&nbsp;</p><p><span>Figure 13. Prompts for generating screen description and decision rationale.</span>
+<span>图 13. 生成屏幕描述和决策理由的提示。</span></p><p><span>Prompt for evaluating closed-source proprietary LVLMs</span>
+<span>评估闭源专有 LVLMs 的提示</span></p><p><img><span>current_screenshot.png</span></img>
+<img><span>current_screenshot.png</span></p><p><span>Given a device screenshot and an instruction, please provide the corresponding action.</span>
+<span>给定设备截图与指令，请提供相应的操作。</span></p><p><span>Available Actions:</span>
+<span>可用操作：</span></p><p><span>CLICK: </span><coordinate>
+<span>点击：</span><coordinate></p><p><span>LONG_PRESS: </span><coordinate>
+<span>长按：</span><coordinate></p><p><span>TYPE: </span><text>
+<span>输入：</span><text></p><p><span>SCROLL: UP</span>
+<span>滚动：向上</span></p><p><span>SCROLL: DOWN</span>
+<span>滚动：向下</span></p><p><span>SCROLL: LEFT</span>
+<span>滚动：向左</span></p><p><span>SCROLL: RIGHT</span>
+<span>滚动：向右</span></p><p><span>PRESS_BACK</span>
+<span>返回</span></p><p><span>PRESS_HOME</span>
+<span>按主页</span></p><p><span>PRESS_RECENT</span>
+<span>按最近使用</span></p><p><span>IMPOSSIBLE</span>
+<span>不可能</span></p><p><span>COMPLETE</span></p><p>&nbsp;</p><p><span>All </span><coordinates><span> are in the form (x, y), representing the coordinates to click or long press. The coordinate of the top-left corner is </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="5.029ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2222.7 1000" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.566ex;"><defs><path id="MJX-1747-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-1747-TEX-N-30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path><path id="MJX-1747-TEX-N-2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path><path id="MJX-1747-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mrow"><g data-mml-node="mo"><use data-c="28" xlink:href="#MJX-1747-TEX-N-28"></use></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(389,0)"><g data-mml-node="mn"><use data-c="30" xlink:href="#MJX-1747-TEX-N-30"></use></g><g data-mml-node="mo" transform="translate(500,0)"><use data-c="2C" xlink:href="#MJX-1747-TEX-N-2C"></use></g><g data-mml-node="mn" transform="translate(944.7,0)"><use data-c="30" xlink:href="#MJX-1747-TEX-N-30"></use></g></g><g data-mml-node="mo" transform="translate(1833.7,0)"><use data-c="29" xlink:href="#MJX-1747-TEX-N-29"></use></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mrow data-mjx-texclass="ORD"><mn>0</mn><mo>,</mo><mn>0</mn></mrow><mo data-mjx-texclass="CLOSE">)</mo></mrow></math></mjx-assistive-mml></mjx-container><script type="math/tex">\left( {0,0}\right)</script><span> ,and the coordinate of the bottom-right corner is </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="11.816ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 5222.7 1000" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.566ex;"><defs><path id="MJX-1748-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-1748-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path><path id="MJX-1748-TEX-N-30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path><path id="MJX-1748-TEX-N-2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path><path id="MJX-1748-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mrow"><g data-mml-node="mo"><use data-c="28" xlink:href="#MJX-1748-TEX-N-28"></use></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(389,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-1748-TEX-N-31"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(500,0)"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(1000,0)"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(1500,0)"></use></g></g><g data-mml-node="mo" transform="translate(2000,0)"><use data-c="2C" xlink:href="#MJX-1748-TEX-N-2C"></use></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(2444.7,0)"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-1748-TEX-N-31"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(500,0)"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(1000,0)"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(1500,0)"></use></g></g></g><g data-mml-node="mo" transform="translate(4833.7,0)"><use data-c="29" xlink:href="#MJX-1748-TEX-N-29"></use></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="ORD"><mn>1000</mn></mrow><mo>,</mo><mrow data-mjx-texclass="ORD"><mn>1000</mn></mrow></mrow><mo data-mjx-texclass="CLOSE">)</mo></mrow></math></mjx-assistive-mml></mjx-container><script type="math/tex">\left( {{1000},{1000}}\right)</script><span> .</span>
+<span>所有 </span><coordinates><span> 的形式为 (x, y)，表示需要点击或长按的坐标。左上角的坐标是 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="5.029ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2222.7 1000" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.566ex;"><defs><path id="MJX-1747-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-1747-TEX-N-30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path><path id="MJX-1747-TEX-N-2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path><path id="MJX-1747-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mrow"><g data-mml-node="mo"><use data-c="28" xlink:href="#MJX-1747-TEX-N-28"></use></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(389,0)"><g data-mml-node="mn"><use data-c="30" xlink:href="#MJX-1747-TEX-N-30"></use></g><g data-mml-node="mo" transform="translate(500,0)"><use data-c="2C" xlink:href="#MJX-1747-TEX-N-2C"></use></g><g data-mml-node="mn" transform="translate(944.7,0)"><use data-c="30" xlink:href="#MJX-1747-TEX-N-30"></use></g></g><g data-mml-node="mo" transform="translate(1833.7,0)"><use data-c="29" xlink:href="#MJX-1747-TEX-N-29"></use></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mrow data-mjx-texclass="ORD"><mn>0</mn><mo>,</mo><mn>0</mn></mrow><mo data-mjx-texclass="CLOSE">)</mo></mrow></math></mjx-assistive-mml></mjx-container><script type="math/tex">\left( {0,0}\right)</script><span>，右下角的坐标是 </span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="11.816ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 5222.7 1000" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.566ex;"><defs><path id="MJX-1748-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-1748-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path><path id="MJX-1748-TEX-N-30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path><path id="MJX-1748-TEX-N-2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path><path id="MJX-1748-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mrow"><g data-mml-node="mo"><use data-c="28" xlink:href="#MJX-1748-TEX-N-28"></use></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(389,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-1748-TEX-N-31"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(500,0)"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(1000,0)"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(1500,0)"></use></g></g><g data-mml-node="mo" transform="translate(2000,0)"><use data-c="2C" xlink:href="#MJX-1748-TEX-N-2C"></use></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(2444.7,0)"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-1748-TEX-N-31"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(500,0)"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(1000,0)"></use><use data-c="30" xlink:href="#MJX-1748-TEX-N-30" transform="translate(1500,0)"></use></g></g></g><g data-mml-node="mo" transform="translate(4833.7,0)"><use data-c="29" xlink:href="#MJX-1748-TEX-N-29"></use></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="ORD"><mn>1000</mn></mrow><mo>,</mo><mrow data-mjx-texclass="ORD"><mn>1000</mn></mrow></mrow><mo data-mjx-texclass="CLOSE">)</mo></mrow></math></mjx-assistive-mml></mjx-container><script type="math/tex">\left( {{1000},{1000}}\right)</script><span> 。</span></p><p><span>The instuction is: </span><span>{</span><span>instuction</span><span>}</span>
+<span>指令是：</span><span>{</span><span>instuction</span><span>}</span></p><p><span>The historical actions are: </span><span>{</span><span>history_actions</span><span>}</span>
+<span>历史动作是：</span><span>{</span><span>history_actions</span><span>}</span></p><p><span>Based on the screenshots and the available actions, provide the next step directly.</span>
+<span>基于屏幕截图和可用操作，直接给出下一步。</span></p><p><span>Prompt for evaluating closed-source proprietary LVLMs with OmniParser</span>
+<span>用于评估闭源专有 LVLM 的提示：OmniParser</span></p><p><img><span>current_screenshot.png</span></img>
+<img><span>current_screenshot.png</span></img></p><p><img><span>current_screenshot_w_labels.png</span></img>
+<img><span>current_screenshot_w_labels.png</span></img></p><p><span>Given two device screenshots and an instruction, provide the corresponding action.</span>
+<span>给定两个设备屏幕截图和一个指令，给出相应动作。</span></p><p><span>The first image is the original screenshot, and the second is the same screenshot with numeric tags on different interface elements. If the action requires clicking or pressing, choose the closest numeric tag that aligns with your intended location.</span>
+<span>第一张图是原始截图，第二张图是在不同界面元素上标注了数字标签的同一张截图。如果需要点击或按压，请选择与目标位置最接近的数字标签。</span></p><p><span>Here are the Available Actions:</span>
+<span>以下是可用操作：</span></p><p><span>CLICK: &lt;element_idx chosen from the second screen&gt;</span>
+<span>CLICK: &lt;element_idx 从第二屏幕中选择&gt;</span></p><p><span>LONG_PRESS: &lt;element_idx chosen from the second screen&gt;</span>
+<span>LONG_PRESS: &lt;element_idx 从第二屏幕中选择&gt;</span></p><p><span>TYPE: </span><text>
+<span>TYPE: </span><text></p><p><span>SCROLL: UP</span>
+<span>向上滚动</span></p><p><span>SCROLL: DOWN</span>
+<span>向下滚动</span></p><p><span>SCROLL: LEFT</span>
+<span>向左滚动</span></p><p><span>SCROLL: RIGHT</span>
+<span>向右滚动</span></p><p><span>PRESS_BACK</span>
+<span>按返回</span></p><p><span>PRESS_HOME</span>
+<span>按主页</span></p><p><span>PRESS_RECENT</span>
+<span>按最近使用</span></p><p><span>IMPOSSIBLE</span>
+<span>不可能</span></p><p><span>COMPLETE</span></p><p>&nbsp;</p><p><span>The instuction is: </span><span>{</span><span>instuction</span><span>}</span>
+<span>指令是：</span><span>{</span><span>instuction</span><span>}</span></p><p><span>The historical actions are: </span><span>{</span><span>history_actions</span><span>}</span>
+<span>历史操作为：</span><span>{</span><span>history_actions</span><span>}</span></p><p><span>Based on the screenshots and the available actions, provide the next step directly.</span>
+<span>基于屏幕截图和可用操作，直接给出下一步。</span></p></div></div>
+
+<script>(function(){function e(e,n,i){document.addEventListener(e,function(e){if(!e.defaultPrevented)for(var t=e.target;t&&t!=this;t=t.parentNode)if(t.matches(n)){!1===i.call(t,e)&&(e.preventDefault(),e.stopPropagation());break}},!1)}var t=document.body.parentElement,i=[],r=null,o=document.body.classList.contains("typora-export-collapse-outline");function a(){return t.scrollTop}e("click",".outline-expander",function(e){var t=this.closest(".outline-item-wrapper").classList;return t.contains("outline-item-open")?t.remove("outline-item-open"):t.add("outline-item-open"),u(),!1}),e("click",".outline-item",function(e){var t=this.querySelector(".outline-label");location.hash="#"+t.getAttribute("href"),o&&((t=this.closest(".outline-item-wrapper").classList).contains("outline-item-open")||t.add("outline-item-open"),d(),t.add("outline-item-active"))});function s(){var e=a();r=null;for(var t=0;t<i.length&&i[t][1]-e<60;t++)r=i[t]}function n(){c=setTimeout(function(){var n;i=[],n=a(),document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(e=>{var t=e.getAttribute("id");i.push([t,n+e.getBoundingClientRect().y])}),s(),u()},300)}var l,c,d=function(){document.querySelectorAll(".outline-item-active").forEach(e=>e.classList.remove("outline-item-active")),document.querySelectorAll(".outline-item-single.outline-item-open").forEach(e=>e.classList.remove("outline-item-open"))},u=function(){if(r&&(d(),t=document.querySelector('.outline-label[href="#'+(CSS.escape?CSS.escape(r[0]):r[0])+'"]')))if(o){var e=t.closest(".outline-item-open>ul>.outline-item-wrapper");if(e)e.classList.add("outline-item-active");else{for(var t,n=(t=t.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper");n;)n=(t=n).parentElement.closest(".outline-item-wrapper");t.classList.add("outline-item-active")}}else t.closest(".outline-item-wrapper").classList.add("outline-item-active")};window.addEventListener("scroll",function(e){l&&clearTimeout(l),l=setTimeout(function(){s(),u()},300)});window.addEventListener("resize",function(e){c&&clearTimeout(c),n()}),n()})();</script><style>
+/* ===== Typora Enhancer (safe-only hotkeys + tiny tools tab + light progress info + gallery non-overlap) ===== */
+
+/* 顶部阅读进度条 */
+#ty-progress {
+  position: fixed; z-index: 9999; top: 0; left: 0; height: 3px; width: 100%;
+  background: linear-gradient(to right, #4da3ff, #7c4dff);
+  transform-origin: 0 50%; transform: scaleX(0); pointer-events: none;
+}
+/* 进度信息：仅 百分比 / 已读时间（弱遮挡 + 不拦截鼠标） */
+#ty-progress-info{
+  position: fixed; top: 6px; right: 6px; z-index: 10000;
+  font: 12px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  color:#fff; background: rgba(0,0,0,.25);
+  padding: 2px 6px; border-radius: 7px; backdrop-filter: saturate(120%) blur(1.5px);
+  user-select: none; pointer-events: none;
+}
+#ty-progress-info b{ font-weight:600 }
+
+/* 右下功能栏 */
+#ty-tools {
+  position: fixed; z-index: 9999; right: 18px; bottom: 24px; display: flex; gap: 10px; flex-direction: column;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  transition: transform .25s ease, opacity .2s ease;
+}
+.ty-btn {
+  background: rgba(0,0,0,.7); color: #fff; border-radius: 10px; padding: 8px 10px;
+  font-size: 12px; cursor: pointer; user-select: none; backdrop-filter: saturate(120%) blur(2px);
+  transition: transform .15s ease, background .2s ease;
+}
+.ty-btn:hover { transform: translateY(-1px); background: rgba(0,0,0,.82); }
+.ty-btn[hidden] { display: none !important; }
+
+/* 工具栏内的收起按钮（纯图标、很小） */
+#ty-tools .ty-mini{
+  width: 26px; height: 26px; padding: 0;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 16px; line-height: 1;
+}
+
+/* 工具栏收起时隐藏，仅保留“抽屉拉手” */
+body.ty-tools-collapsed #ty-tools{ opacity:0; pointer-events:none; transform: translateX(18px); }
+
+/* 抽屉拉手：超小、仅图标，避免与工具栏重叠（默认样式，保留普通浏览器的行为） */
+#ty-tools-tab{
+  --tab-size: 26px;
+  position: fixed;
+  right: 6px;
+  bottom: 26px;
+  z-index: 10001;
+  width: var(--tab-size);
+  height: var(--tab-size);
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.65);
+  color:#fff;
+  font-size: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+  transition: background .2s ease, opacity .2s ease;
+  backdrop-filter: saturate(120%) blur(2px);
+  /* 不再使用 translateX 推出视口 */
+  transform: none;
+}
+body:not(.ty-tools-collapsed) #ty-tools-tab{
+  opacity: 0;
+  pointer-events: none;
+}
+#ty-tools-tab:hover{ background: rgba(0,0,0,.8); }
+#ty-tools-tab .ico{ line-height: 1; font-weight: 600; }
+
+/* 防止微小水平溢出触发 WKWebView 的整页缩放（基础防线，不影响普通浏览器布局） */
+html, body { overflow-x: hidden; }
+
+/* 窄宽度时的基本降噪（保留你原有规则） */
+@media (max-width: 720px){
+  .typora-export-sidebar { display: none !important; }
+  .outline,
+  .outline-panel,
+  .typora-export .sidebar { display: none !important; }
+  #ty-progress-info{ display: none !important; }
+}
+
+/* 标题锚点（左侧“#”） */
+#write h1,#write h2,#write h3,#write h4,#write h5,#write h6{ position:relative; }
+.ty-anchor {
+  position:absolute; left:-1.2em; top:50%; transform:translateY(-50%);
+  opacity:0; text-decoration:none; color:#999; font-weight:600; font-size:.9em;
+  padding:0 .2em; border-radius:4px;
+}
+#write h1:hover .ty-anchor,#write h2:hover .ty-anchor,#write h3:hover .ty-anchor,
+#write h4:hover .ty-anchor,#write h5:hover .ty-anchor,#write h6:hover .ty-anchor{ opacity:1 }
+@media (max-width:768px){ .ty-anchor{ left:auto; right:-.8em } }
+
+/* 复制提示气泡 */
+.ty-tip {
+  position:absolute; left:-1.2em; top:0; transform: translate(-10%, -120%);
+  background: rgba(0,0,0,.8); color: #fff; padding: 3px 8px; border-radius: 6px;
+  font-size: 12px; white-space: nowrap; pointer-events: none; opacity: 0;
+}
+@media (max-width:768px){ .ty-tip{ left:auto; right:-.8em; transform: translate(10%,-120%) }}
+
+/* 大纲高亮 */
+.outline-content .active,
+.outline-content .active > .outline-item,
+.outline-content a.active { color: #2a72ff; }
+
+/* 简单收起侧栏：仅隐藏 */
+body.ty-outline-hidden .typora-export-sidebar{ display:none !important; }
+
+/* ========= 图片灯箱（含左侧缩略条、非重叠布局） ========= */
+#ty-lightbox {
+  /* 预留左侧缩略条安全区，避免与大图/按钮重叠 */
+  --lb-strip-w: 108px; /* 左侧缩略条宽度（含边距） */
+  position: fixed; inset: 0; background: rgba(0,0,0,.92); display: none; z-index: 9998;
+  padding-left: calc(var(--lb-strip-w) + 12px);
+}
+#ty-lightbox.open { display: flex; align-items: center; justify-content: center; }
+.ty-lb-img { max-width: calc(92vw - var(--lb-strip-w)); max-height: 86vh; }
+.ty-lb-cap { position: fixed; bottom: 64px; left: 50%; transform: translateX(-50%); color: #ddd; font-size: 13px; }
+
+/* 画廊控制按钮（左箭头避开缩略条） */
+.ty-lb-prev, .ty-lb-next, .ty-lb-close {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.12); color: #fff; border-radius: 50%; width: 40px; height: 40px;
+  display: grid; place-items: center; font-size: 18px; cursor: pointer; user-select: none;
+}
+.ty-lb-prev:hover, .ty-lb-next:hover, .ty-lb-close:hover { background: rgba(255,255,255,.18); }
+.ty-lb-prev { left: calc(var(--lb-strip-w) + 24px); }
+.ty-lb-next { right: 24px; } 
+.ty-lb-close { right: 24px; top: 24px; transform: none; }
+
+/* 画廊顶部序号 */
+#ty-lb-count{
+  position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+  color:#eee; background: rgba(0,0,0,.35); padding: 4px 10px;
+  border-radius: 8px; font: 12px/1.3 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+}
+
+/* 画廊底部动作区 */
+#ty-lb-actions{
+  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px; background: rgba(0,0,0,.35); padding: 8px 10px; border-radius: 12px;
+}
+.ty-act-btn{
+  background: rgba(255,255,255,.16); color:#fff; border-radius: 8px; padding: 6px 10px;
+  font-size: 12px; cursor: pointer; user-select: none; border: 1px solid rgba(255,255,255,.18);
+}
+.ty-act-btn:hover{ background: rgba(255,255,255,.22); }
+
+/* 画廊左侧缩略图条（不与大图重叠） */
+#ty-lb-strip{
+  position: fixed; left: 12px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 8px; max-height: 80vh; overflow: auto; padding-right: 4px;
+  width: var(--lb-strip-w);
+}
+.ty-thumb{
+  position: relative; width: 96px; height: 68px; object-fit: cover; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,.25); cursor: pointer; opacity: .9; background: #111;
+}
+.ty-thumb:hover{ opacity: 1; }
+.ty-thumb.active{ outline: 2px solid #7c4dff; opacity: 1; }
+.ty-thumb::after{
+  content: attr(data-idx); position: absolute; left: 4px; top: 2px;
+  font: 10px/1.1 system-ui,-apple-system,"Segoe UI"; background: rgba(0,0,0,.55); color:#fff;
+  padding: 1px 4px; border-radius: 4px;
+}
+
+/* —— 快速帮助浮层 —— */
+#ty-help-overlay{
+  position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; z-index: 10000;
+}
+#ty-help-overlay.open{ display: flex; align-items: center; justify-content: center; }
+.ty-help-dialog{
+  position: relative; width: min(720px, 92vw); max-height: 84vh; overflow: auto;
+  background: #fff; color: #222; border-radius: 12px; padding: 18px 20px;
+  box-shadow: 0 12px 36px rgba(0,0,0,.25);
+  font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+}
+.ty-help-dialog h3{ margin: 0 0 6px; font-size: 20px; }
+.ty-help-dialog h4{ margin: 14px 0 6px; font-size: 15px; color: #444; }
+.ty-help-dialog code, .ty-help-dialog kbd{
+  background: #f4f6f8; border: 1px solid #e5e8eb; border-radius: 6px; padding: 2px 6px; font-size: 12px;
+}
+.ty-help-close{
+  position: absolute; right: 10px; top: 8px; width: 34px; height: 34px;
+  display: grid; place-items: center; border-radius: 8px; cursor: pointer;
+  background: #f2f3f5; color: #444; font-size: 16px; user-select: none;
+}
+.ty-help-close:hover{ background: #e9eaee; }
+.ty-help-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width:680px){
+  /* 小屏缩窄缩略条并自动适配左侧安全区 */
+  #ty-lightbox{ --lb-strip-w: 80px; padding-left: calc(var(--lb-strip-w) + 8px); }
+  .ty-thumb{ width: 72px; height: 52px; }
+  .ty-lb-prev{ left: calc(var(--lb-strip-w) + 16px) }
+}
+
+/* —— 可视化注释（由 HTML 注释生成） —— */
+.ty-cmt{
+  display: inline-block; max-width: 100%;
+  background: #fffbe6; border: 1px solid #ffe58f; color: #333;
+  border-radius: 8px; padding: 4px 8px; margin: 2px 4px; vertical-align: baseline;
+  font-size: 12px; line-height: 1.5; box-shadow: 0 1px 0 rgba(0,0,0,.03);
+}
+.ty-cmt::before{
+  content: "注释"; font-weight: 600; color: #ad6800;
+  margin-right: .5em; padding: 1px 6px; border-radius: 6px;
+  background: #fff1b8; border: 1px solid #ffe58f;
+}
+body.ty-cmt-hidden .ty-cmt{ display: none !important; }
+
+/* 文中图片跳回高亮动画（保留） */
+@keyframes ty-img-flash{
+  0%{ box-shadow: 0 0 0 0 rgba(124,77,255,.0) }
+  50%{ box-shadow: 0 0 0 6px rgba(124,77,255,.3) }
+  100%{ box-shadow: 0 0 0 0 rgba(124,77,255,0) }
+}
+.ty-img-flash{ animation: ty-img-flash 1.2s ease-out 1; border-radius: 6px; }
+
+/* =========================
+   === MN4 专用：仅在 WKWebView 且窄窗口时生效 ===
+   （通过 <html>.mn4-narrow 进行作用域限制，避免影响普通浏览器）
+   ========================= */
+
+/* 1) WKWebView 禁止文字自动缩放 */
+html.ty-wk{
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 2) MN4 窄窗：隐藏目录 + 进度信息 + 去除正文阴影/边框，仅在 mn4-narrow 生效 */
+html.mn4-narrow .typora-export-sidebar,
+html.mn4-narrow .outline,
+html.mn4-narrow .outline-panel,
+html.mn4-narrow .typora-export .sidebar{
+  display: none !important;
+}
+
+html.mn4-narrow #ty-progress-info{
+  display: none !important;
+}
+
+/* 去除正文容器两侧的阴影/边框（不影响普通浏览器，因为有作用域） */
+html.mn4-narrow #write,
+html.mn4-narrow .typora-export,
+html.mn4-narrow .typora-export-content{
+  box-shadow: none !important;
+  border: none !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+}
+
+/* 防止任何横向溢出导致整体缩放（仅在 mn4-narrow 下更激进） */
+html.mn4-narrow body{ overflow-x: hidden !important; }
+html.mn4-narrow #write img,
+html.mn4-narrow #write table{ max-width: 100% !important; height: auto; }
+html.mn4-narrow #write p,
+html.mn4-narrow #write li,
+html.mn4-narrow #write blockquote{ overflow-wrap: anywhere; word-break: break-word; }
+
+/* 抽屉拉手在 MN4 下也绝不越界 */
+html.mn4-narrow #ty-tools-tab{ right: 6px !important; bottom: 26px !important; transform: none !important; }
+
+/* === MN4 窄窗字体修正（避免整页缩放）=== */
+/* 关键：不要把 text-size-adjust 设成 >100%，否则 WKWebView 可能整页缩小 */
+html.ty-wk.mn4-narrow{
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
+}
+
+/* 用像素提升正文基准字号（不要用 pt），只在 MN4 窄窗生效 */
+html.mn4-narrow #write{
+  font-size: 12px !important;   /* 可改 16~18px 之间微调 */
+  line-height: 1.25 !important;
+}
+
+/* 标题按比例微调，避免过大或过小 */
+html.mn4-narrow #write h1{ font-size: 1.9em !important; }
+html.mn4-narrow #write h2{ font-size: 1.6em !important; }
+html.mn4-narrow #write h3{ font-size: 1.35em !important; }
+html.mn4-narrow #write h4{ font-size: 1.15em !important; }
+
+/* 避免“横向撑爆 → 触发整页缩放”：表格与代码块在窄窗必须自适应 */
+html.mn4-narrow #write table{
+  display: block;               /* 允许内滚动，阻断页面被迫缩放 */
+  width: 100% !important;
+  overflow-x: auto !important;
+}
+
+html.mn4-narrow #write .md-fences,
+html.mn4-narrow #write pre{
+  max-width: 100% !important;
+  overflow-x: auto !important;  /* 保留等宽格式，用横向滚动而不是压缩页面 */
+  white-space: pre;             /* 不强制换行，避免代码失真 */
+  -webkit-overflow-scrolling: touch;
+  font-size: 0.95em !important; /* 代码略微小一档，整体更协调 */
+}
+
+/* 数学公式轻微放大，避免相对变小 */
+html.mn4-narrow .math,
+html.mn4-narrow .md-math-block,
+html.mn4-narrow .md-inline-math-container mjx-container{
+  font-size: 1.04em !important;
+}
+
+/* MN4：全局水平留白，用一个变量统一调 */
+html.mn4-narrow{ --mn4-pad-x: 11px; }   /* 你觉得还大就改 8px；还小就改 12px */
+
+html.mn4-narrow body{ margin: 0 !important; } /* 清掉 iOS/Safari 的默认 8px 外边距 */
+
+html.mn4-narrow .typora-export,
+html.mn4-narrow .typora-export-content,
+html.mn4-narrow #write{
+  padding-left:  var(--mn4-pad-x) !important;
+  padding-right: var(--mn4-pad-x) !important;
+}
+
+html.mn4-narrow .typora-export,
+html.mn4-narrow .typora-export-content,
+html.mn4-narrow #write{
+  max-width: none !important;
+  width: 100% !important;
+}
+
+</style>
+
+<div id="ty-progress"></div>
+<div id="ty-progress-info" aria-live="polite">进度 <b>0.0%</b> ｜ 已读 <b>00:00</b></div>
+
+<!-- 工具栏抽屉拉手（仅图标，默认收起） -->
+<div id="ty-tools-tab" title="展开工具栏">
+  <span class="ico">≡</span>
+</div>
+
+<div id="ty-tools" aria-label="Page tools">
+
+  <!-- 新增：收起按钮，图标 × -->
+  <div class="ty-btn ty-mini" id="ty-tools-close" title="收起工具栏">×</div>
+
+  <div class="ty-btn" id="ty-outline" title="收起/展开左侧大纲（O）">收起/展开大纲（O）</div>
+  <div class="ty-btn" id="ty-top" title="回到顶部（T）">回到顶部（T）</div>
+  <div class="ty-btn" id="ty-urlmode" title="切换复制链接样式（当前：原文）
+快捷键：U 循环；Alt+1 原文，Alt+2 %编码，Alt+3 富文本片段">链接样式：原文</div>
+  <div class="ty-btn" id="ty-copyfmt" title="切换复制格式（当前：URL）
+快捷键：M 切换；Alt+U URL，Alt+M Markdown" hidden="">复制为：URL</div>
+  <div class="ty-btn" id="ty-expand" hidden="" title="大纲一键展开（E）">展开全部（E）</div>
+  <div class="ty-btn" id="ty-collapse" hidden="" title="大纲一键收起（R）">收起全部（R）</div>
+  <div class="ty-btn" id="ty-help" title="快速帮助（H）">帮助 / 快捷键（H）</div>
+  <div class="ty-btn" id="ty-comments" title="显示/隐藏注释（C）">隐藏注释（C）</div>
+</div>
+
+<!-- 图片灯箱 -->
+<div id="ty-lightbox" aria-modal="true" role="dialog">
+  <!-- 左侧缩略图条 -->
+  <div id="ty-lb-strip"></div>
+
+  <!-- 顶部序号 -->
+  <div id="ty-lb-count"></div>
+
+  <img class="ty-lb-img" alt="">
+  <div class="ty-lb-cap"></div>
+
+  <!-- 底部动作按钮 -->
+  <div id="ty-lb-actions">
+    <div class="ty-act-btn" id="ty-lb-copy" title="复制图片链接">复制图片链接</div>
+    <div class="ty-act-btn" id="ty-lb-fmt" title="切换复制格式（URL / Markdown）">复制为：URL</div>
+    <div class="ty-act-btn" id="ty-lb-jump" title="跳转到文中该图片位置">跳转到文中</div>
+  </div>
+
+  <div class="ty-lb-prev">‹</div>
+  <div class="ty-lb-next">›</div>
+  <div class="ty-lb-close">✕</div>
+</div>
+
+<!-- 快速帮助浮层（保持不变） -->
+<div id="ty-help-overlay" role="dialog" aria-modal="true" aria-label="快速帮助">
+  <div class="ty-help-dialog">
+    <div class="ty-help-close" id="ty-help-close" title="关闭（Esc）">✕</div>
+    <h3>快速帮助</h3>
+    <div class="ty-help-grid">
+      <div>
+        <h4>当前模式</h4>
+        <p>链接样式：<b id="ty-help-cur-urlmode">—</b></p>
+        <p>复制为：<b id="ty-help-cur-copyfmt">—</b></p>
+      </div>
+      <div>
+        <h4>常用操作</h4>
+        <p><kbd>#</kbd> 图标：复制段落链接 / 片段</p>
+        <p>收起/展开大纲：<kbd>O</kbd>；回到顶部：<kbd>T</kbd></p>
+        <p>显示/隐藏注释：<kbd>C</kbd></p>
+      </div>
+    </div>
+    <h4>链接样式</h4>
+    <ul>
+      <li><b>原文</b>：<code>#段落</code>（<kbd>Alt</kbd>+<kbd>1</kbd>）</li>
+      <li><b>%编码</b>：<code>#%E6%AE%B5%E8%90%BD</code>（<kbd>Alt</kbd>+<kbd>2</kbd>）</li>
+      <li><b>富文本片段</b>（HTML 片段）（<kbd>Alt</kbd>+<kbd>3</kbd>）</li>
+      <li>循环切换：<kbd>U</kbd></li>
+    </ul>
+    <h4>复制格式（仅“原文 / %编码”可用）</h4>
+    <ul>
+      <li>设为 <b>URL</b>：<kbd>Alt</kbd>+<kbd>U</kbd></li>
+      <li>设为 <b>Markdown</b>：<kbd>Alt</kbd>+<kbd>M</kbd></li>
+      <li>二者切换：<kbd>M</kbd></li>
+    </ul>
+    <h4>大纲与导航</h4>
+    <ul>
+      <li>展开全部：<kbd>E</kbd>；收起全部：<kbd>R</kbd></li>
+      <li>滚动时自动高亮并展开对应大纲分支</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(()=> {
+  const $  = (s, r=document)=>r.querySelector(s);
+  const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+
+  const write       = $('#write') || document.body;
+  const outlineRoot = $('.outline-content');
+
+  /* ========== -1) 识别 WKWebView & MN4 窄窗标记：只影响 MN4，普通浏览器不变 ========== */
+  const isWK = !!(window.webkit && window.webkit.messageHandlers);
+  if (isWK) document.documentElement.classList.add('ty-wk');
+
+  function applyMN4Narrow(){
+    // 经验阈值：MN4 小窗常见 CSS 宽度 <= 1100
+    const vw = Math.min(window.innerWidth || 0, document.documentElement.clientWidth || 0);
+    const narrow = isWK && vw > 0 && vw <= 1100;
+    document.documentElement.classList.toggle('mn4-narrow', !!narrow);
+
+    // 在 MN4 窄窗时：确保目录逻辑被隐藏（与旧版行为一致）
+    if (narrow) {
+      document.body.classList.add('ty-outline-hidden');
+      const side = document.querySelector('.typora-export-sidebar');
+      if (side) side.style.display = 'none';
+    }
+  }
+  applyMN4Narrow();
+  window.addEventListener('resize', applyMN4Narrow, { passive:true });
+
+  /* ========== 0) 工具栏抽屉：默认收起（仅图标按钮，避免重叠） ========== */
+  const TOOLS_KEY = 'ty_tools_opened';
+  const toolsTab  = $('#ty-tools-tab');
+  function setToolsOpen(open){
+    document.body.classList.toggle('ty-tools-collapsed', !open);
+    toolsTab.title = open ? '收起工具栏' : '展开工具栏';
+    toolsTab.querySelector('.ico').textContent = open ? '×' : '≡';
+  }
+  setToolsOpen(localStorage.getItem(TOOLS_KEY) === '1');
+  toolsTab.addEventListener('click', ()=>{
+    const nextOpen = document.body.classList.contains('ty-tools-collapsed');
+    setToolsOpen(nextOpen);
+    localStorage.setItem(TOOLS_KEY, nextOpen ? '1' : '0');
+  });
+
+  const toolsClose = $('#ty-tools-close');
+  if (toolsClose) toolsClose.addEventListener('click', ()=>{
+    setToolsOpen(false);               // 收起
+    localStorage.setItem(TOOLS_KEY,'0');
+  });
+
+  /* ========== 1) 图片路径自动纠偏（图床通常不会触发） ========== */
+  (function fixLocalImages(){
+    const imgs = $$('img', write);
+    const folders = ['.', 'assets', 'images', 'image', 'img', 'pics', '资源'];
+    imgs.forEach(img=>{
+      if (img.dataset && img.dataset.src && !img.src) img.src = img.dataset.src;
+      try {
+        const u = img.getAttribute('src') || '';
+        if (u && !/^https?:/i.test(u)) {
+          const d = decodeURI(u);
+          const parts = d.split(/[/\\]/);
+          const file  = parts.pop();
+          if (file) {
+            parts.push(encodeURIComponent(file));
+            const enc = parts.join('/');
+            if (enc !== u) img.src = enc;
+          }
+        }
+      } catch(e){}
+      img.addEventListener('error', ()=>{
+        const original = img.getAttribute('data-src') || img.getAttribute('src') || '';
+        const baseName = (original.split('?')[0]||'').split(/[\\/]/).pop();
+        if (!baseName) return;
+        const tried = new Set((img.dataset.tyTried||'').split('|').filter(Boolean));
+        for (const folder of folders){
+          const guess = (folder === '.') ? `./${baseName}` : `./${folder}/${baseName}`;
+          if (tried.has(guess)) continue;
+          tried.add(guess); img.dataset.tyTried = Array.from(tried).join('|'); img.src = guess; return;
+        }
+      });
+    });
+  })();
+
+  /* ========== 2) 顶部阅读进度条 + 信息（百分比/时间） ========== */
+  const bar = $('#ty-progress');
+  const info = $('#ty-progress-info');
+  const startAnchor = { t0: null };
+  function fmtTime(sec){
+    sec = Math.max(0, Math.floor(sec));
+    const m = Math.floor(sec/60), s = sec%60;
+    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }
+  function updateProgress(){
+    const st = document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const sh = document.documentElement.scrollHeight || document.body.scrollHeight || 1;
+    const max = Math.max(1, sh - window.innerHeight);
+    const p = Math.min(1, st / max);
+    bar.style.transform = 'scaleX(' + p + ')';
+    const now = performance.now();
+    if (startAnchor.t0 == null && st > 8) startAnchor.t0 = now;
+    const pct = (p*100).toFixed(1);
+    const elapsed = startAnchor.t0 ? (now - startAnchor.t0)/1000 : 0;
+    info.innerHTML = `进度 <b>${pct}%</b> ｜ 已读 <b>${fmtTime(elapsed)}</b>`;
+  }
+  updateProgress();
+  addEventListener('scroll', updateProgress, { passive:true });
+  addEventListener('resize', updateProgress);
+
+  /* ========== 3) 左侧大纲开合（保持） ========== */
+  $('#ty-outline').addEventListener('click', ()=>{
+    const hide = !document.body.classList.contains('ty-outline-hidden');
+    document.body.classList.toggle('ty-outline-hidden', hide);
+    document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline');
+  });
+  $('#ty-top').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+  /* ========== 4) 链接样式 & 复制格式（保持） ========== */
+  const MODE_KEY = 'ty_url_mode';        // raw / encoded / rich
+  const FMT_KEY  = 'ty_copy_fmt';        // url / md
+  let urlMode = (localStorage.getItem(MODE_KEY) || 'raw');
+  if (!['raw','encoded','rich'].includes(urlMode)) urlMode = 'raw';
+  let copyFmt = (localStorage.getItem(FMT_KEY)  || 'url');
+
+  const btnUrlMode = $('#ty-urlmode');
+  const btnCopyFmt = $('#ty-copyfmt');
+
+  function urlModeLabel(m){ return m==='encoded' ? '%编码' : (m==='rich' ? '富文本片段' : '原文'); }
+  function renderHelp(){
+    $('#ty-help-cur-urlmode').textContent = urlModeLabel(urlMode);
+    $('#ty-help-cur-copyfmt').textContent = (urlMode === 'rich') ? '（富文本片段下不适用）' : (copyFmt === 'md' ? 'Markdown' : 'URL');
+  }
+  function updateUrlModeButton(){
+    const label = urlModeLabel(urlMode);
+    btnUrlMode.textContent = '链接样式：' + label;
+    btnUrlMode.title = '切换复制链接样式（当前：' + label + '）\n快捷键：U 循环；Alt+1 原文，Alt+2 %编码，Alt+3 富文本片段';
+    btnCopyFmt.hidden = (urlMode === 'rich');
+    renderHelp();
+  }
+  function updateCopyFmtButton(){
+    btnCopyFmt.textContent = '复制为：' + (copyFmt==='md' ? 'Markdown' : 'URL');
+    btnCopyFmt.title = '切换复制格式（当前：' + (copyFmt==='md' ? 'Markdown' : 'URL') + '）\n快捷键：M 切换；Alt+U URL，Alt+M Markdown';
+    renderHelp();
+  }
+  function baseURL(){ return (location.href.split('#')[0] || location.href); }
+  function buildURL(id, encoded=false){
+    return baseURL() + '#' + (encoded ? encodeURIComponent(id) : id);
+  }
+  function setUrlMode(mode){
+    if (!['raw','encoded','rich'].includes(mode)) return;
+    urlMode = mode; localStorage.setItem(MODE_KEY, urlMode); updateUrlModeButton();
+  }
+  function setCopyFmt(fmt){
+    if (!['url','md'].includes(fmt)) return;
+    copyFmt = fmt; localStorage.setItem(FMT_KEY, copyFmt); updateCopyFmtButton();
+  }
+  btnUrlMode.addEventListener('click', ()=>{ setUrlMode(urlMode==='raw' ? 'encoded' : (urlMode==='encoded' ? 'rich' : 'raw')); });
+  btnCopyFmt.addEventListener('click', ()=>{ setCopyFmt(copyFmt==='url' ? 'md' : 'url'); });
+  updateUrlModeButton(); updateCopyFmtButton();
+
+  /* ========== 5) 一键展开/收起所有层级（保持） ========== */
+  const btnExpand = $('#ty-expand'), btnCollapse = $('#ty-collapse');
+  if (outlineRoot){ btnExpand.hidden = false; btnCollapse.hidden = false; }
+  const allWrappers = ()=> $$('.outline-item-wrapper', outlineRoot);
+  function expandAll(){ allWrappers().forEach(w=> w.classList.add('outline-item-open')); document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline'); }
+  function collapseAll(){ allWrappers().forEach(w=> w.classList.remove('outline-item-open')); document.body.classList.remove('typora-export-no-collapse-outline','typora-export-collapse-outline'); }
+  btnExpand.addEventListener('click', expandAll);
+  btnCollapse.addEventListener('click', collapseAll);
+
+  /* ========== 6) 大纲节点点击（保持） ========== */
+  if (outlineRoot){
+    outlineRoot.addEventListener('click', (e)=>{
+      const expander = e.target.closest('.outline-expander');
+      if (expander){
+        e.preventDefault();
+        const w = expander.closest('.outline-item-wrapper');
+        if (w) w.classList.toggle('outline-item-open');
+        return;
+      }
+      const label = e.target.closest('.outline-label');
+      if (label && !label.closest('a')){
+        const w = label.closest('.outline-item-wrapper');
+        if (w) w.classList.toggle('outline-item-open');
+      }
+    });
+  }
+
+  /* ========== 7) 文本工具：干净标题；从文件名推断论文标题（保持） ========== */
+  function getCleanHeadingText(h){
+    const clone = h.cloneNode(true);
+    clone.querySelectorAll('.ty-anchor,.ty-tip').forEach(n=> n.remove());
+    return (clone.textContent || '').replace(/\s+/g,' ').trim();
+  }
+  function filenameDerivedTitle(){
+    const name = decodeURIComponent((location.pathname.split('/').pop()||'').replace(/\.[^.]+$/,''));
+    const noTs = name.replace(/([_-])\d{4}-\d{2}-\d{2}(?:([_-])\d{2}\2\d{2}\2\d{2})?$/,'');
+    const underscoresToSpace = noTs.replace(/_/g,' ').trim();
+    const m = underscoresToSpace.match(/^(\d{4})[ _-]+(.*)$/);
+    if (m) {
+      const year = m[1]; const rest = (m[2]||'').trim();
+      return year + (rest ? '-' + rest : '');
+    }
+    return underscoresToSpace;
+  }
+
+  /* ========== 8) 标题锚点复制（三种样式 + 两种格式）（保持） ========== */
+  const used = new Set();
+  function slugify(text){
+    const base = text.toLowerCase().trim()
+      .replace(/[\u2000-\u206F\u2E00-\u2E7F'!"#$%&()*+,./:;<=>?@\[\]\\^_`{|}~]/g,'')
+      .replace(/\s+/g,'-') || 'section';
+    let s = base, i=2; while(used.has(s)) s = base + '-' + (i++); used.add(s); return s;
+  }
+
+  const idToItem = new Map();
+  if(outlineRoot){
+    const links = $$('a[href^="#"]', outlineRoot);
+    links.forEach(a=>{
+      const raw = a.getAttribute('href').slice(1);
+      const id1 = raw, id2 = decodeURIComponent(raw);
+      const li = a.closest('.outline-item-wrapper') || a.closest('.outline-item') || a;
+      idToItem.set(id1, li); idToItem.set(id2, li);
+    });
+  }
+  function outlinePathFor(id, fallbackTitle){
+    if(!outlineRoot) return fallbackTitle || '';
+    const node = idToItem.get(id);
+    if(!node) return fallbackTitle || '';
+    let w = node.closest('.outline-item-wrapper') || node, parts=[];
+    while (w && w !== outlineRoot){
+      const label = w.querySelector(':scope > .outline-item .outline-label') || w.querySelector('.outline-label');
+      const txt = label ? label.textContent.trim().replace(/\s+/g,' ') : '';
+      if (txt) parts.push(txt);
+      w = w.parentElement && w.parentElement.closest ? w.parentElement.closest('.outline-item-wrapper') : null;
+    }
+    parts = parts.reverse();
+    return parts.join(' / ');
+  }
+  function buildRichSnippet(headingId, headingText){
+    const rawURL = buildURL(headingId, false);
+    const encURL = buildURL(headingId, true);
+    const docTitle = filenameDerivedTitle();
+    const path = outlinePathFor(headingId, headingText);
+    return [
+`- <p style="background-color: rgb(255, 240, 243); color: black;">${docTitle}</p>`,
+`- <p style="background-color: rgb(255, 248, 230); color: black;">${path}</p>`,
+`- \`${headingText}\``,
+'',
+`<div style="background-color: rgb(245, 240, 255); border: 1px solid rgb(217, 195, 250); padding: 9px 14px; border-radius: 5px;">`,
+`中文路径锚点 <a href="${rawURL}"><b>${headingText}</b></a> 。`,
+`</div>`,
+`<div style="background-color: rgb(240, 255, 244); border: 1px solid rgb(183, 235, 201); padding: 8px 12px; border-radius: 3px;">`,
+`URL编码锚点 <a href="${encURL}"><b>${headingText}</b></a> 。`,
+`</div>`
+].join('\n');
+  }
+
+  const heads = $$('#write h1,#write h2,#write h3,#write h4,#write h5,#write h6');
+  heads.forEach(h=>{
+    if(!h.id || !h.id.trim()) h.id = slugify(getCleanHeadingText(h));
+
+    const a   = document.createElement('a');
+    const tip = document.createElement('span');
+    a.className = 'ty-anchor'; a.textContent = '#'; a.href = '#' + h.id; a.title = '复制此段落链接';
+    tip.className = 'ty-tip'; tip.textContent = '已复制段落链接';
+
+    a.addEventListener('click', async (e)=>{
+      e.preventDefault();
+      const titleText = getCleanHeadingText(h);
+      let copyText = '';
+
+      if (urlMode === 'rich') {
+        copyText = buildRichSnippet(h.id, titleText);
+        tip.textContent = '已复制片段';
+      } else {
+        const urlRaw = (urlMode === 'encoded') ? buildURL(h.id, true) : buildURL(h.id, false);
+        if (copyFmt === 'md') {
+          copyText = `[${titleText}](${urlRaw})`;
+          tip.textContent = '已复制 Markdown 链接';
+        } else {
+          copyText = urlRaw;
+          tip.textContent = '已复制段落链接';
+        }
+      }
+
+      try{ await navigator.clipboard.writeText(copyText); }
+      catch{
+        const ta=document.createElement('textarea'); ta.value=copyText;
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+      history.replaceState(null,'','#'+h.id);
+      tip.style.opacity='1'; clearTimeout(tip._t); tip._t=setTimeout(()=> tip.style.opacity='0', 1000);
+    });
+
+    h.insertBefore(a, h.firstChild);
+    h.appendChild(tip);
+  });
+
+  /* ========== 9) ScrollSpy：滚动高亮 + 自动展开（保持） ========== */
+  let activeId = null;
+  function ensureOpenFor(id){
+    const node = idToItem.get(id); if(!node) return;
+    let w = node.closest('.outline-item-wrapper') || node;
+    while (w && w !== outlineRoot){
+      w.classList.add('outline-item-open');
+      w = w.parentElement && w.parentElement.closest ? w.parentElement.closest('.outline-item-wrapper') : null;
+    }
+  }
+  function setActive(id){
+    if(!outlineRoot || !id || id===activeId) return;
+    activeId = id;
+    outlineRoot.querySelectorAll('.active').forEach(el=> el.classList.remove('active'));
+    const el = idToItem.get(id);
+    if(el){
+      el.classList.add('active');
+      const link = el.querySelector('a[href="#'+CSS.escape(id)+'"]');
+      if(link) link.classList.add('active');
+      ensureOpenFor(id);
+      el.scrollIntoView && el.scrollIntoView({block:'nearest'});
+    }
+  }
+  function updateActiveByScroll(){
+    const y = window.scrollY + 120;
+    let cur = heads.length ? heads[0].id : null;
+    for (const h of heads){ if(h.offsetTop <= y) cur = h.id; else break; }
+    setActive(cur);
+  }
+  updateActiveByScroll();
+  addEventListener('scroll', updateActiveByScroll, { passive:true });
+  addEventListener('resize', updateActiveByScroll);
+
+  /* ========== 10) 图片灯箱（缩略图点击不跳文；预留安全区防重叠） ========== */
+  const lb = $('#ty-lightbox'), lbImg = $('.ty-lb-img', lb), lbCap = $('.ty-lb-cap', lb);
+  const prevBtn = $('.ty-lb-prev', lb), nextBtn = $('.ty-lb-next', lb), closeBtn = $('.ty-lb-close', lb);
+  const lbCount = $('#ty-lb-count'), lbStrip = $('#ty-lb-strip');
+  const lbCopy  = $('#ty-lb-copy'),  lbFmt   = $('#ty-lb-fmt'),   lbJump = $('#ty-lb-jump');
+
+  const IMG_FMT_KEY = 'ty_img_copy_fmt'; // url / md
+  let imgCopyFmt = (localStorage.getItem(IMG_FMT_KEY) || 'url');
+  function setImgCopyFmt(fmt){
+    if (!['url','md'].includes(fmt)) return;
+    imgCopyFmt = fmt; localStorage.setItem(IMG_FMT_KEY, fmt);
+    lbFmt.textContent = '复制为：' + (fmt==='md'?'Markdown':'URL');
+  }
+  setImgCopyFmt(imgCopyFmt);
+
+  let list=[], idx=-1, thumbsBuilt=false;
+
+  function collectImages(){
+    list = $$('#write img').filter(img=>{
+      const w = img.naturalWidth || img.clientWidth;
+      const h = img.naturalHeight || img.clientHeight;
+      return (w*h) >= (48*48);
+    });
+  }
+  function buildThumbs(){
+    lbStrip.innerHTML = '';
+    list.forEach((el,i)=>{
+      const t = document.createElement('img');
+      t.className = 'ty-thumb';
+      const src = el.getAttribute('data-src') || el.currentSrc || el.src;
+      t.src = src; t.alt=''; t.loading='lazy';
+      t.setAttribute('data-idx', (i+1));
+      // 点击缩略图：在画廊内切换到该图（不跳出）
+      t.addEventListener('click', ()=> showAt(i));
+      lbStrip.appendChild(t);
+    });
+    thumbsBuilt = true;
+  }
+  function updateThumbActive(){
+    const thumbs = $$('.ty-thumb', lbStrip);
+    thumbs.forEach(t=> t.classList.remove('active'));
+    const cur = thumbs[idx]; if (cur) cur.classList.add('active');
+  }
+  function showAt(i){
+    if(i<0 || i>=list.length) return;
+    idx=i;
+    const el=list[idx];
+    const src = el.getAttribute('data-src') || el.currentSrc || el.src;
+    const cap = el.getAttribute('alt') || el.title || '';
+    lbImg.src=src; lbImg.alt=cap; lbCap.textContent=cap;
+    lbCount.textContent = (idx+1) + ' / ' + list.length;
+    updateThumbActive();
+    lb.classList.add('open'); document.body.style.overflow='hidden';
+  }
+  function close(){ lb.classList.remove('open'); document.body.style.overflow=''; lbImg.src=''; lbImg.alt=''; }
+  function prev(){ showAt((idx-1+list.length)%list.length); }
+  function next(){ showAt((idx+1)%list.length); }
+
+  // 文中点击图片 → 打开画廊（并构建缩略条）
+  write.addEventListener('click', (e)=>{
+    const target = e.target.closest && e.target.closest('img');
+    if(!target) return;
+    e.preventDefault();
+    collectImages();
+    if (!thumbsBuilt) buildThumbs();
+    const i = list.indexOf(target);
+    if(i>=0) showAt(i);
+  });
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+  closeBtn.addEventListener('click', close);
+  lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+  document.addEventListener('keydown', (e)=>{
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    if(e.key==='ArrowLeft') prev();
+    if(e.key==='ArrowRight') next();
+  });
+
+  // 复制图片链接（URL / Markdown）
+  lbCopy.addEventListener('click', async ()=>{
+    if(idx<0 || idx>=list.length) return;
+    const el = list[idx];
+    const src = el.getAttribute('data-src') || el.currentSrc || el.src;
+    const txt = (imgCopyFmt==='md') ? `![](${src})` : src;
+    try{ await navigator.clipboard.writeText(txt); lbCopy.textContent='已复制'; setTimeout(()=> lbCopy.textContent='复制图片链接', 900); }
+    catch{
+      const ta=document.createElement('textarea'); ta.value=txt;
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      lbCopy.textContent='已复制'; setTimeout(()=> lbCopy.textContent='复制图片链接', 900);
+    }
+  });
+  lbFmt.addEventListener('click', ()=> setImgCopyFmt(imgCopyFmt==='url' ? 'md' : 'url'));
+  // 跳回文中
+  lbJump.addEventListener('click', ()=>{
+    if(idx<0 || idx>=list.length) return;
+    const el = list[idx];
+    close();
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.classList.add('ty-img-flash');
+    setTimeout(()=> el.classList.remove('ty-img-flash'), 1300);
+  });
+
+  /* ========== 11) 帮助浮层（保持） ========== */
+  const helpOverlay = $('#ty-help-overlay');
+  const helpClose   = $('#ty-help-close');
+  const helpBtn     = $('#ty-help');
+  function openHelp(){
+    renderHelp();
+    helpOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeHelp(){
+    helpOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  helpBtn.addEventListener('click', openHelp);
+  helpClose.addEventListener('click', closeHelp);
+  helpOverlay.addEventListener('click', (e)=>{ if(e.target === helpOverlay) closeHelp(); });
+
+  /* ========== 12) 快捷键（白名单：仅单键 & Alt 组合；其它全部放行） ========== */
+  document.addEventListener('keydown', (e)=>{
+    const tag = (e.target && e.target.tagName || '').toLowerCase();
+    const inEditable = !!(e.target && (e.target.isContentEditable || /^(input|textarea|select)$/i.test(tag)));
+    if (inEditable) return;
+
+    if (e.getModifierState && (e.getModifierState('AltGraph') || e.getModifierState('OS'))) return;
+
+    const k    = (e.key || '').toLowerCase();
+    const code = e.code || '';
+
+    // Alt-only 组合：Alt+1/2/3/U/M
+    if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+      if (code==='Digit1' || code==='Numpad1' || k==='1') { e.preventDefault(); setUrlMode('raw');     return; }
+      if (code==='Digit2' || code==='Numpad2' || k==='2') { e.preventDefault(); setUrlMode('encoded'); return; }
+      if (code==='Digit3' || code==='Numpad3' || k==='3') { e.preventDefault(); setUrlMode('rich');    return; }
+      if (!btnCopyFmt.hidden && code==='KeyU') { e.preventDefault(); setCopyFmt('url'); return; }
+      if (!btnCopyFmt.hidden && code==='KeyM') { e.preventDefault(); setCopyFmt('md');  return; }
+      return;
+    }
+
+    // 包含 Ctrl/Cmd/Shift 的组合：放行
+    if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+
+    // 单键白名单
+    const SINGLE = new Set(['o','t','e','r','u','m','c','h']);
+    if (SINGLE.has(k)) {
+      e.preventDefault();
+      if (k==='o') $('#ty-outline')?.click();
+      else if (k==='t') $('#ty-top')?.click();
+      else if (k==='e') $('#ty-expand')?.click();
+      else if (k==='r') $('#ty-collapse')?.click();
+      else if (k==='u') $('#ty-urlmode')?.click();
+      else if (k==='m' && !btnCopyFmt.hidden) $('#ty-copyfmt')?.click();
+      else if (k==='c') $('#ty-comments')?.click();
+      else if (k==='h') openHelp();
+      return;
+    }
+
+    // Esc 仅在帮助打开时拦截
+    if (k==='escape' && helpOverlay.classList.contains('open')) { e.preventDefault(); closeHelp(); }
+  });
+
+  /* ========== 13) 将 HTML 注释转为可见元素 + 开关（保持） ========== */
+  const btnComments = $('#ty-comments');
+  let tyCmtInited = false;
+  function injectCommentsOnce(){
+    if (tyCmtInited) return;
+    tyCmtInited = true;
+    const walker = document.createTreeWalker(write, NodeFilter.SHOW_COMMENT, null, false);
+    const nodes = [];
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) nodes.push(n);
+
+    nodes.forEach(cmt=>{
+      const txt = (cmt.data || '').trim();
+      if (!txt) return;
+      const span = document.createElement('span');
+      span.className = 'ty-cmt';
+      span.textContent = txt;
+      cmt.parentNode && cmt.parentNode.insertBefore(span, cmt);
+    });
+    if (!write.querySelector('.ty-cmt')) btnComments.hidden = true;
+  }
+  injectCommentsOnce();
+  document.body.classList.remove('ty-cmt-hidden');
+  btnComments.textContent = '隐藏注释（C）';
+  btnComments.title = '显示/隐藏注释（C）';
+  btnComments.addEventListener('click', ()=>{
+    injectCommentsOnce();
+    const hide = !document.body.classList.contains('ty-cmt-hidden');
+    document.body.classList.toggle('ty-cmt-hidden', hide);
+    btnComments.textContent = hide ? '显示注释（C）' : '隐藏注释（C）';
+  });
+})();
+</script></body>
+</html>

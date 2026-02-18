@@ -1,0 +1,2162 @@
+# ANDROIDWORLD: A DYNAMIC BENCHMARKING ENVIRONMENT FOR AUTONOMOUS AGENTS
+# ANDROIDWORLD: 面向自主智能体的动态基准测试环境
+
+
+Christopher Rawles ${}^{*1}$ , Sarah Clinckemaillie ${}^{\dagger 2}$ , Yifan Chang ${}^{\dagger 2}$ , Jonathan Waltz ${}^{2}$ , Gabrielle Lau ${}^{2}$ , Marybeth Fair ${}^{2}$ , Alice Li ${}^{1}$ , William Bishop ${}^{1}$ , Wei Li ${}^{1}$ , Folawiyo Campbell-Ajalal ${}^{1}$ , Daniel Toyama ${}^{1}$ , Robert Berry ${}^{1}$ , Divya Tyamagundlu ${}^{2}$ , Timothy Lillicrap ${}^{1}$ , and Oriana Riva ${}^{1}$
+Christopher Rawles ${}^{*1}$ , Sarah Clinckemaillie ${}^{\dagger 2}$ , Yifan Chang ${}^{\dagger 2}$ , Jonathan Waltz ${}^{2}$ , Gabrielle Lau ${}^{2}$ , Marybeth Fair ${}^{2}$ , Alice Li ${}^{1}$ , William Bishop ${}^{1}$ , Wei Li ${}^{1}$ , Folawiyo Campbell-Ajalal ${}^{1}$ , Daniel Toyama ${}^{1}$ , Robert Berry ${}^{1}$ , Divya Tyamagundlu ${}^{2}$ , Timothy Lillicrap ${}^{1}$ , 与 Oriana Riva ${}^{1}$
+
+
+${}^{1}$ Google DeepMind
+${}^{1}$ Google DeepMind
+
+
+${}^{2}$ Google
+${}^{2}$ Google
+
+
+## ABSTRACT
+## 摘要
+
+
+Autonomous agents that execute human tasks by controlling computers can enhance human productivity and application accessibility. However, progress in this field will be driven by realistic and reproducible benchmarks. We present ANDROIDWORLD, a fully functional Android environment that provides reward signals for 116 programmatic tasks across 20 real-world Android apps. Unlike existing interactive environments, which provide a static test set, ANDROIDWORLD dynamically constructs tasks that are parameterized and expressed in natural language in unlimited ways, thus enabling testing on a much larger and more realistic suite of tasks. To ensure reproducibility, each task includes dedicated initialization, success-checking, and tear-down logic, which modifies and inspects the device's system state.
+自主智能体通过控制计算机执行人类任务，可以提升人类生产力和应用可及性。然而，该领域的进展将由现实且可复现的基准测试推动。我们提出 ANDROIDWORLD，一种功能完备的 Android 环境，提供对 116 项跨越 20 个真实 Android 应用的程序任务的奖励信号。与仅提供静态测试集的现有交互环境不同，ANDROIDWORLD 动态构建任务，这些任务以自然语言参数化并以无限方式表达，从而在更大且更真实的任务集合上进行测试。为确保可复现性，每个任务都包含专门的初始化、成功检查和拆解逻辑，用于修改并检查设备的系统状态。
+
+
+We experiment with baseline agents to test ANDROIDWORLD and provide initial results on the benchmark. Our best agent can complete 30.6% of ANDROID-WORLD's tasks, leaving ample room for future work. Furthermore, we adapt a popular desktop web agent to work on Android, which we find to be less effective on mobile, suggesting future research is needed to achieve universal, cross-platform agents. Finally, we also conduct a robustness analysis, showing that task variations can significantly affect agent performance, demonstrating that without such testing, agent performance metrics may not fully reflect practical challenges. ANDROIDWORLD and the experiments in this paper are available at https://github.com/google-research/android_world.
+我们对基线代理进行实验以测试 ANDROIDWORLD，并给出基准的初步结果。我们最好的代理能够完成 30.6% 的 ANDROID-WORLD 任务，仍有大量未来改进空间。此外，我们将一个热门桌面网页代理移植到 Android 上，发现其在移动端效果较差，表明未来需要在跨平台实现通用代理方面开展研究。最后，我们还进行了鲁棒性分析，显示任务变体会显著影响代理性能，表明若缺乏此类测试，代理性能指标可能无法充分反映实际挑战。ANDROIDWORLD 及本文所述实验可在 https://github.com/google-research/android_world 获取。
+
+
+## 1 INTRODUCTION
+## 1 引言
+
+
+Autonomous agents that interpret natural language instructions and operate computing devices can provide enormous value to users by automating repetitive tasks, augmenting human intelligence, and accomplishing complex workflows. However, a key research challenge remains the realistic evaluation of these agents in real-world settings. Despite growing enthusiasm for building autonomous agents (Deng et al., 2023; Rawles et al., 2023; Zheng et al., 2024a; Koh et al., 2024; Kim et al., 2024; He et al., 2024; Gravitas, 2023; Wu et al., 2023; Xie et al., 2023) most existing approaches for evaluation compare an agent's actions at each step to a previously collected human demonstration (Deng et al., 2023; Rawles et al., 2023; Yang et al., 2023b; Zhang & Zhang, 2023; Lu et al., 2024; Zhang et al., 2024c; Yan et al., 2023; Li et al., 2024). Measuring performance in this way can be misleading because when performing tasks online in real environments agents can take multiple paths to solve tasks, environments may behave non-deterministically, and agents can dynamically learn from mistakes to correct their actions (Shinn et al., 2023; Liu et al., 2018b; Li et al., 2023b; Pan et al., 2024). For this reason, online evaluation of agents in realistic environments able to reward task outcome provides a gold standard for evaluation. While there is an emerging body of work to address this need across different environments (Zhou et al., 2023; Koh et al., 2024; Drouin et al.,
+理解自然语言指令并操作计算设备的自主代理可以通过自动化重复性任务、增强人类智能、完成复杂工作流程，为用户带来巨大价值。然而，一个关键的研究挑战仍是对这些代理在真实世界环境中的现实评估。尽管对构建自主代理的热情日益高涨（Deng 等，2023；Rawles 等，2023；Zheng 等，2024a；Koh 等，2024；Kim 等，2024；He 等，2024；Gravitas，2023；Wu 等，2023；Xie 等，2023；Yan 等，2023；Li 等，2024；Zhang 等，2024c；Lu 等，2024；Zhang & Zhang，2023），但现有大多数评估方法仍是将代理在每一步的行动与先前收集的人类示范进行比较（Deng 等，2023；Rawles 等，2023；Yang 等，2023b；Zhang & Zhang，2023；Lu 等，2024；Zhang 等，2024c；Yan 等，2023；Li 等，2024）。以这种方式衡量性能可能会产生误导，因为在真实环境中在线执行任务时，代理可能有多种解决路径、环境可能具有非确定性、代理可以从错误中动态学习以纠正行动（Shinn 等，2023；Liu 等，2018b；Li 等，2023b；Pan 等，2024）。因此，对在现实环境中能够奖励任务结果的在线评估，成为评估的金标准。尽管已经出现了一些工作来解决不同环境中的这一需求（Zhou 等，2023；Koh 等，2024；Drouin 等，）
+
+
+---
+
+
+
+*Lead contributor. Contact: crawles@google.com
+*主要贡献者。联系方式：crawles@google.com
+
+
+${}^{ \dagger  }$ Equal contribution.
+${}^{ \dagger  }$ 平等贡献。
+
+
+---
+
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_20_49_250579.jpg"/>
+
+
+
+Figure 1: ANDROIDWORLD is an environment for building and testing autonomous agents.
+图1：ANDROIDWORLD 是一个用于构建和测试自主代理的环境。
+
+
+2024; Lee et al., 2024; Xie et al., 2024; Bonatti et al., 2024; Zheng et al., 2024b), there is no comprehensive solution for mobile platforms, such as Android, which are used by billions of users and therefore represent environments in which automation agents may be very productively employed. We introduce ANDROIDWORLD to address this.
+2024 年；Lee 等，2024；Xie 等，2024；Bonatti 等，2024；Zheng 等，2024b），目前还没有一个针对移动平台（如 Android）全面的解决方案，而这类平台被数十亿用户使用，因此代表着自动化代理可能高效应用的环境。我们提出 ANDROIDWORLD 以应对这一挑战。
+
+
+At its core, ANDROIDWORLD offers a reliable means of obtaining reward signals for tasks performed by agents in realistic mobile environments. Reward signals are quantitative metrics that indicate functional correctness of a task, i.e. is the stated goal achieved? For example, for the task "Send a text message to Jane confirming I'll be there," a positive reward indicates that the relevant message has been sent. Unlike simulated environments (Tassa et al., 2018; Shridhar et al., 2020) or games (Mnih et al., 2013; Silver et al., 2016; Vinyals et al., 2019; Wang et al., 2023b; Tan et al., 2024; Toyama et al., 2021), real-world apps and websites do not inherently offer explicit reward signals. While human (Rawles et al., 2023; Zheng et al., 2024a; Pan et al., 2024; Kinniment et al., 2023) or LLM-based (Chiang et al., 2024; Zheng et al., 2023; Liu et al., 2023; Du et al., 2023; Ma et al., 2023; Pan et al., 2024; He et al., 2024) judges can be employed to reward the outcome of a task, these approaches scale poorly or are not fully reliable, respectively. Alternatively, environments for autonomous agents which provide automated ground-truth rewards for complex workflows have been developed (Yao et al., 2023; Zhou et al., 2023; Koh et al., 2024; Xie et al., 2024; Bonatti et al., 2024). We find two problems with these environments. First, they are constrained to desktop computing environments, overlooking the mobile domain, which is of paramount importance given the ubiquity and diversity of mobile devices in the real world. Secondly, they are limited in their real-world diversity and scale. Crucially, unlike in real-world scenarios where conditions and task inputs vary widely, these environments support only static test specifications, meaning that when task parameters deviate, the reward signal is likely to break.
+在本质上，ANDROIDWORLD 提供了一种在真实移动环境中获取代理执行任务的奖励信号的可靠手段。奖励信号是用于指示任务功能正确性的定量指标，即目标是否实现？例如，对于任务“给 Jane 发送一条短信并确认我会到场”，正向奖励表示相关信息已发送。与仿真环境（Tassa 等, 2018；Shridhar 等, 2020）或游戏（Mnih 等, 2013；Silver 等, 2016；Vinyals 等, 2019；Wang 等, 2023b；Tan 等, 2024；Toyama 等, 2021）不同，真实世界的应用和网站本身并不固有地提供显式的奖励信号。虽然可以雇用人类评审（Rawles 等, 2023；Zheng 等, 2024a；Pan 等, 2024；Kinniment 等, 2023）或基于大语言模型的评审（Chiang 等, 2024；Zheng 等, 2023；Liu 等, 2023；Du 等, 2023；Ma 等, 2023；Pan 等, 2024；He 等, 2024）来奖励任务结果，但这些方法在扩展性或可靠性方面分别存在不足。或者，已经开发出为复杂工作流提供自动化真实标签奖励的自主代理环境（Yao 等, 2023；Zhou 等, 2023；Koh 等, 2024；Xie 等, 2024；Bonatti 等, 2024）。我们在这些环境中发现了两个问题。首先，它们限于桌面计算环境，忽略了移动领域，而移动设备在现实世界中的普及性和多样性使其至关重要。其次，它们在真实世界的多样性和规模方面受限。关键是，与真实世界场景中条件和任务输入差异很大不同，这些环境仅支持静态测试规格，意味着当任务参数偏离时，奖励信号很可能失效。
+
+
+We seek to develop a comprehensive benchmark that addresses the limitations of the existing approaches above for evaluating automation agents in mobile environments. ANDROIDWORLD does this by spanning 20 Android apps on a total of 116 programmatic tasks to provide ground truth-rewards. Unlike existing test environments (MiniWoB++ (Shi et al., 2017) being a notable exception), each task in ANDROIDWORLD is dynamically instantiated using randomly-generated parameters, challenging agents with millions of unique task goals and conditions. While MiniWob++ consists of simple, synthetic websites, ANDROIDWORLD leverages actual Android applications. A main challenge that ANDROIDWORLD must address is how to ensure that reward signals are durable when using real-world applications and varying task parameters dynamically. ANDROIDWORLD's solves this by leveraging the extensive and consistent state management capabilities of the Android OS, using the same mechanisms that the apps themselves utilize to store and update data.
+我们寻求开发一个全面的基准，以解决上述现有方法在移动环境中评估自动化代理时的局限性。ANDROIDWORLD 通过覆盖20个 Android 应用、共计116个程序化任务来提供真实奖励的Ground Truth，从而实现这一目标。与现有测试环境（MiniWoB++（Shi 等, 2017）是一个显著的例外）不同，ANDROIDWORLD 中的每个任务都是通过随机生成的参数动态实例化的，向代理提出数百万个独特的任务目标和条件挑战。虽然 MiniWob++ 由简单、合成的网站组成，但 ANDROIDWORLD 利用的是实际的 Android 应用。ANDROIDWORLD 需要解决的一个主要挑战是如何在使用真实应用和动态变化的任务参数时确保奖励信号的持久性。ANDROIDWORLD 通过利用 Android 操作系统广泛且一致的状态管理能力来解决这一问题，使用应用本身用于存储和更新数据的相同机制。
+
+
+In addition to providing a comprehensive benchmark, ANDROIDWORLD is lightweight, requiring only 2 GB of memory and 8 GB of disk space, and is designed with convenience in mind. It connects agents to the Android OS by leveraging the Python library AndroidEnv (Toyama et al.,
+除了提供全面的基准外，ANDROIDWORLD 还具备轻量级的特点，仅需 2 GB 内存和 8 GB 磁盘空间，且在设计上注重便利性。它通过 AndroidEnv（Toyama 等,）中的 Python 库将代理与 Android OS 连接起来。
+
+
+Table 1: Comparison of different datasets and environments for benchmarking computer agents.
+表 1：用于基准计算机代理的不同数据集和环境的比较。
+
+
+<table><tr><td></td><td>Env?</td><td>#of apps or websites</td><td>#task templates</td><td>Avg # task instances</td><td>Reward method</td><td>Platform</td></tr><tr><td>GAIA</td><td>✘</td><td>n/a</td><td>466</td><td>1</td><td>text-match</td><td>None</td></tr><tr><td>Mind2WEB</td><td>✘</td><td>137</td><td>2350</td><td>1</td><td>None</td><td>Desktop Web</td></tr><tr><td>WEBLINX</td><td>✘</td><td>155</td><td>2337</td><td>1</td><td>None</td><td>Desktop Web</td></tr><tr><td>WEBVOYAGER</td><td>✘</td><td>15</td><td>643</td><td>1</td><td>LLM judge</td><td>Desktop Web</td></tr><tr><td>PIXELHELP</td><td>✘</td><td>4</td><td>187</td><td>1</td><td>None</td><td>Android</td></tr><tr><td>METAGUI</td><td>✘</td><td>6</td><td>1125</td><td>1</td><td>None</td><td>Android</td></tr><tr><td>MOTIF</td><td>✘</td><td>125</td><td>4707</td><td>1</td><td>None</td><td>Android (Apps+Web)</td></tr><tr><td>AITW</td><td>✘</td><td>357+</td><td>30378</td><td>1</td><td>None</td><td>Android (Apps+Web)</td></tr><tr><td>ANDROIDCONTROL</td><td>✘</td><td>833</td><td>15283</td><td>1</td><td>None</td><td>Android (Apps+Web)</td></tr><tr><td>OMNIACT</td><td>✘</td><td>60+</td><td>9802</td><td>1</td><td>None</td><td>Desktop (Apps+Web)</td></tr><tr><td>ANDROIDARENA</td><td>✘</td><td>13</td><td>221</td><td>1</td><td>Action match/LLM</td><td>Android (Apps+Web)</td></tr><tr><td>LLAMATOUCH</td><td>✘</td><td>57</td><td>496</td><td>1</td><td>Screen match</td><td>Android (Apps+Web)</td></tr><tr><td>MINIWOB++</td><td>✓</td><td>1</td><td>114</td><td>$\infty$</td><td>HTML/JS state</td><td>Web (synthetic)</td></tr><tr><td>WEBSHOP</td><td>✓</td><td>1</td><td>12k</td><td>1</td><td>product attrs match</td><td>Desktop Web</td></tr><tr><td>WEBARENA</td><td>✓</td><td>6</td><td>241</td><td>3.3</td><td>url/text-match</td><td>Desktop Web</td></tr><tr><td>VISUALWEBARENA</td><td>✓</td><td>4</td><td>314</td><td>2.9</td><td>url/text/image-match</td><td>Desktop Web</td></tr><tr><td>WORKARENA</td><td>✓</td><td>1</td><td>29</td><td>622.4</td><td>cloud state</td><td>Desktop Web</td></tr><tr><td>MOBILE-ENV</td><td>✓</td><td>1</td><td>13</td><td>11.5</td><td>regex</td><td>Android (Apps)</td></tr><tr><td>B-MoCA</td><td>✓</td><td>4</td><td>6</td><td>1.9</td><td>regex</td><td>Android (Apps+Web)</td></tr><tr><td>MMINA</td><td>✓</td><td>14</td><td>1050</td><td>1</td><td>text-match</td><td>Desktop web</td></tr><tr><td>OSWORLD</td><td>✓</td><td>9</td><td>369</td><td>1</td><td>device/cloud state</td><td>Desktop (Apps+Web)</td></tr><tr><td>WINDOWSAGENTARENA</td><td>✓</td><td>11</td><td>154</td><td>1</td><td>device state</td><td>Desktop (Apps+Web)</td></tr><tr><td>AGENTSTUDIO</td><td>✓</td><td>9</td><td>205</td><td>1</td><td>device state</td><td>Desktop (Apps+Web)</td></tr><tr><td>AndroidWorld</td><td>✓</td><td>20</td><td>116</td><td>$\infty$</td><td>device state</td><td>Android (Apps+Web)</td></tr></table>
+<table><tbody><tr><td></td><td>Env?</td><td>应用或网站数量</td><td>任务模板</td><td>平均任务实例</td><td>奖励方式</td><td>平台</td></tr><tr><td>GAIA</td><td>✘</td><td>n/a</td><td>466</td><td>1</td><td>文本匹配</td><td>无</td></tr><tr><td>Mind2WEB</td><td>✘</td><td>137</td><td>2350</td><td>1</td><td>无</td><td>桌面网页</td></tr><tr><td>WEBLINX</td><td>✘</td><td>155</td><td>2337</td><td>1</td><td>无</td><td>桌面网页</td></tr><tr><td>WEBVOYAGER</td><td>✘</td><td>15</td><td>643</td><td>1</td><td>LLM 评判</td><td>桌面网页</td></tr><tr><td>PIXELHELP</td><td>✘</td><td>4</td><td>187</td><td>1</td><td>无</td><td>Android</td></tr><tr><td>METAGUI</td><td>✘</td><td>6</td><td>1125</td><td>1</td><td>无</td><td>Android</td></tr><tr><td>MOTIF</td><td>✘</td><td>125</td><td>4707</td><td>1</td><td>无</td><td>Android（应用+网页）</td></tr><tr><td>AITW</td><td>✘</td><td>357+</td><td>30378</td><td>1</td><td>无</td><td>Android（应用+网页）</td></tr><tr><td>ANDROIDCONTROL</td><td>✘</td><td>833</td><td>15283</td><td>1</td><td>无</td><td>Android（应用+网页）</td></tr><tr><td>OMNIACT</td><td>✘</td><td>60+</td><td>9802</td><td>1</td><td>无</td><td>桌面（应用+网页）</td></tr><tr><td>ANDROIDARENA</td><td>✘</td><td>13</td><td>221</td><td>1</td><td>操作匹配/LLM</td><td>Android（应用+网页）</td></tr><tr><td>LLAMATOUCH</td><td>✘</td><td>57</td><td>496</td><td>1</td><td>屏幕匹配</td><td>Android（应用+网页）</td></tr><tr><td>MINIWOB++</td><td>✓</td><td>1</td><td>114</td><td>$\infty$</td><td>HTML/JS 状态</td><td>网页（合成）</td></tr><tr><td>WEBSHOP</td><td>✓</td><td>1</td><td>12k</td><td>1</td><td>产品属性匹配</td><td>桌面网页</td></tr><tr><td>WEBARENA</td><td>✓</td><td>6</td><td>241</td><td>3.3</td><td>url/文本匹配</td><td>桌面网页</td></tr><tr><td>VISUALWEBARENA</td><td>✓</td><td>4</td><td>314</td><td>2.9</td><td>url/文本/图片匹配</td><td>桌面网页</td></tr><tr><td>WORKARENA</td><td>✓</td><td>1</td><td>29</td><td>622.4</td><td>云端状态</td><td>桌面网页</td></tr><tr><td>移动环境</td><td>✓</td><td>1</td><td>13</td><td>11.5</td><td>正则</td><td>Android（应用）</td></tr><tr><td>B-MoCA</td><td>✓</td><td>4</td><td>6</td><td>1.9</td><td>正则</td><td>Android（应用+网页）</td></tr><tr><td>MMINA</td><td>✓</td><td>14</td><td>1050</td><td>1</td><td>文本匹配</td><td>桌面网页</td></tr><tr><td>OSWORLD</td><td>✓</td><td>9</td><td>369</td><td>1</td><td>设备/云端状态</td><td>桌面（应用+网页）</td></tr><tr><td>WINDOWSAGENTARENA</td><td>✓</td><td>11</td><td>154</td><td>1</td><td>设备状态</td><td>桌面（应用+网页）</td></tr><tr><td>AGENTSTUDIO</td><td>✓</td><td>9</td><td>205</td><td>1</td><td>设备状态</td><td>桌面（应用+网页）</td></tr><tr><td>AndroidWorld</td><td>✓</td><td>20</td><td>116</td><td>$\infty$</td><td>设备状态</td><td>Android（应用+网页）</td></tr></tbody></table>
+
+
+2021) to connect to the freely available Android Emulator. ${}^{1}$ In addition to the 116 Android tasks, we extend ANDROIDWORLD with web tasks by integrating the MiniWoB++ (Shi et al., 2017; Liu et al., 2018a) benchmark into it.
+2021) 连接到可自由获取的 Android 模拟器。${}^{1}$ 除了 116 个 Android 任务外，我们通过将 MiniWoB++（Shi 等, 2017; Liu 等, 2018a）基准引入其中，来扩展 ANDROIDWORLD，加入网页任务。
+
+
+To demonstrate ANDROIDWORLD's usefulness as a benchmark, we build and release a multi-modal agent, M3A (Multimodal Autonomous Agent for Android), and establish state-of-the-art results on ANDROIDWORLD. We analyze M3A's performance using both multimodal and text-only input, and we observe that while multimodal perception can improve performance in some cases, it generally does not outperform the text-only approach. On ANDROIDWORLD, M3A achieves a 30.6% success rate, which surpasses that of a web agent adapted for Android but remains significantly lower than the human success rate of ${80.0}\%$ . In pursuit of building robust UI control agents,our study includes comprehensive tests under varied real-world conditions, demonstrating significant performance variations primarily driven by changes in intent parameters.
+为展示 ANDROIDWORLD 作为基准的有用性，我们构建并发布一个多模态代理 M3A（用于 Android 的多模态自主代理），并在 ANDROIDWORLD 上取得了最先进的结果。我们使用多模态输入和文本输入两种方式分析 M3A 的性能，观察到尽管多模态感知在某些情况下可以提升性能，但通常不及文本仅输入的方法。在 ANDROIDWORLD 上，M3A 的成功率为 30.6%，超过了为 Android 调整的网页代理的水平，但仍显著低于 ${80.0}\%$ 的人类成功率。为构建鲁棒的 UI 控制代理，我们的研究包含在多种真实世界条件下的全面测试，显示显著的性能差异，主要由意图参数的变化驱动。
+
+
+We make the following contributions: (i) the creation of a new, highly diverse and realistic mobile UI control agent environment; (ii) establishment of benchmark performance with a state-of-the-art multimodal agent, and (iii) a careful analysis demonstrating the need to evaluate agents across variable task parameters and conditions due to the inherent stochasticity in both models and environments.
+我们作出如下贡献：(i) 创建一个新的、高度多样化且真实的移动端 UI 控制代理环境；(ii) 与最先进的多模态代理建立基准性能；(iii) 通过仔细分析表明需要在可变任务参数和条件下评估代理，因为模型和环境中固有的随机性。
+
+
+## 2 RELATED WORK
+## 2 相关工作
+
+
+Table 1 compares existing evaluation environments for autonomous UI agents.
+表 1 比较了现有的自主 UI 代理评估环境。
+
+
+### 2.1 INTERACTIVE EVALUATION ENVIRONMENTS
+### 2.1 交互式评估环境
+
+
+Effective evaluation of autonomous agents requires benchmarks that mimic real-world scenarios, but also interactive environments that provide reward signals upon successful task completion (Rawles et al., 2023; Deng et al., 2023; Abramson et al., 2022; Ruan et al., 2023; Chen et al., 2021). Many existing benchmarking environments target web browsing. MiniWoB++ (Shi et al., 2017; Liu et al., 2018b) consists of small, synthetic HTML pages with parameterizable tasks which allow for un-
+有效评估自治代理需要模拟真实世界场景的基准，同时需要在成功完成任务后提供奖励信号的互动环境（Rawles 等, 2023; Deng 等, 2023; Abramson 等, 2022; Ruan 等, 2023; Chen 等, 2021）。许多现有基准环境针对网页浏览。MiniWoB++（Shi 等, 2017; Liu 等, 2018b）由小型、合成的 HTML 页面组成，任务参数可调，允许进行未完结的任务。
+
+
+---
+
+
+
+${}^{1}$ The Android Emulator is packaged as part of Android Studio,which can be downloaded from https://developer.android.com/studio
+${}^{1}$ The Android Emulator is packaged as part of Android Studio,which can be downloaded from https://developer.android.com/studio
+
+
+---
+
+
+
+limited task variability. WebShop (Yao et al., 2023) provides a simulated e-commerce environment, whereas WebArena (Zhou et al., 2023) and VisualWebArena (Koh et al., 2024) consist of simulated websites across up to six domains. WorkArena (Drouin et al., 2024) consists of 29 tasks for enterprise software. GAIA (Mialon et al., 2023) is a static dataset that tests an agent's ability to interact with live web environments. MMInA (Zhang et al., 2024e) is a multihop and multimodal benchmark designed to evaluate agents for compositional Internet tasks.
+有限的任务变异性。WebShop（Yao 等, 2023）提供了一个模拟的电子商务环境，而 WebArena（Zhou 等, 2023）和 VisualWebArena（Koh 等, 2024）由多达六个域中的模拟网站组成。WorkArena（Drouin 等, 2024）包含 29 项企业软件任务。GAIA（Mialon 等, 2023）是一个静态数据集，用于测试代理与实时网页环境交互的能力。MMInA（Zhang 等, 2024e）是一个多跳和多模态基准，旨在评估用于组合式互联网任务的代理。
+
+
+Towards building computer use agents, OSWorld (Xie et al., 2024), WindowsAgentArena (Bonatti et al., 2024), and AgentStudio (Zheng et al., 2024b) provide a test suite of tasks for desktop computer interfaces and custom execution-based evaluation scripts across 9, 11, and 9 apps, respectively. In the mobile domain, existing benchmarks are limited and do not capture the diversity of real-world mobile interactions, containing low-complexity tasks or on a limited number of applications. B-MoCA's (Lee et al., 2024) evaluation is based on 6 simple tasks (e.g., "Call 911", "turn on airplane mode") across 4 apps ${}^{2}$ , validated using regular expressions. Mobile-Env (Zhang et al., 2024b) offers task reproducibility limited to 13 task templates for a single app (WikiHow).
+在构建计算机使用代理方面，OSWorld（Xie 等, 2024）、WindowsAgentArena（Bonatti 等, 2024）和 AgentStudio（Zheng 等, 2024b）提供了桌面计算机界面的任务测试套件，以及分别跨 9、11 和 9 个应用的基于执行的评估脚本。在移动领域，现有基准有限，且未能捕捉真实世界移动交互的多样性，包含低复杂度任务或仅限于少量应用。B-MoCA 的评估基于 6 个简单任务（如“呼叫 911”、“开启飞行模式”）跨 4 个应用${}^{2}$，通过正则表达式进行验证。Mobile-Env（Zhang 等, 2024b）提供的任务可重复性仅限于单个应用（WikiHow）的 13 个任务模板。
+
+
+While ANDROIDWORLD shares the mobile OS focus of B-MoCA and Mobile-Env, it is more comparable to OSWorld (and WindowsAgentArena, which builds on top of OSWorld) in terms of task complexity and the diversity of interactions it supports. ANDROIDWORLD enhances OSWorld's approach by dynamically constructing the start states of an agent's run and varying the task parameters in unlimited ways, thus allowing for a new type of evaluation under varying real-world conditions.
+尽管 ANDROIDWORLD 与 B-MoCA 和 Mobile-Env 在移动操作系统侧重点相同，但在任务复杂性和交互多样性方面更接近 OSWorld（以及在 OSWorld 基础上构建的 WindowsAgentArena）。ANDROIDWORLD 通过动态构建代理运行的起始状态、无限制地改变任务参数来增强 OSWorld 的方法，从而在不同现实世界条件下提供一种新的评估方式。
+
+
+Other studies leverage human evaluation (Rawles et al., 2023; Zheng et al., 2024a; Bishop et al., 2024) for tasks where automatic evaluation is not available. Lastly, emerging research (Pan et al., 2024; He et al., 2024; Xing et al., 2024; Zheng et al., 2024b) explores the potential of multimodal models to generalize agent evaluations to new settings, though this area requires further research to achieve accuracy comparable to manually-coded rewards.
+其他研究使用人工评估（Rawles et al., 2023; Zheng et al., 2024a; Bishop et al., 2024）来处理自动评估不可用的任务。最后，新兴研究（Pan et al., 2024; He et al., 2024; Xing et al., 2024; Zheng et al., 2024b）探讨多模态模型将代理评估推广到新环境的潜力，尽管该领域需要进一步研究以达到与人工编码奖励相当的准确性。
+
+
+AndroidEnv (Toyama et al., 2021) provides a mechanism to manage communication with the Android emulator, similar to Playwright and Selenium for web environments. While ANDROIDWORLD leverages this functionality, it diverges in its reward system. AndroidEnv's approach requires modifying application source code and implementing task-specific logging statements, making it well-suited for gaming environments with easily verifiable success criteria. In contrast, ANDROID-WORLD implements a non-invasive reward mechanism, allowing it to create a benchmark suite for apps whose source code is unavailable and to reuse validation components across different apps. This approach enables ANDROIDWORLD to cover a broader range of real-world mobile tasks.
+AndroidEnv (Toyama et al., 2021) 提供一种机制来管理与 Android 模拟器的通信，类似于网页环境中的 Playwright 和 Selenium。虽然 ANDROIDWORLD 利用此功能，但其奖励系统存在差异。AndroidEnv 的做法需要修改应用源代码并实现特定任务的日志记录语句，因而非常适用于具备易于验证的成功条件的游戏环境。相反，ANDROID-WORLD 实现了一种非侵入性的奖励机制，使其能够为源代码不可用的应用创建基准套件，并在不同应用之间重用验证组件。这种方法使 ANDROIDWORLD 能覆盖更广泛的真实世界移动任务。
+
+
+### 2.2 STATIC DATASETS FOR UI AUTOMATION
+### 2.2 用于 UI 自动化的静态数据集
+
+
+Datasets derived from human interactions provide proxy metrics that correlate with real-world agent performance (Li et al., 2020; Burns et al., 2021; Deng et al., 2023; Rawles et al., 2023). On mobile platforms, AitW (Rawles et al., 2023), AndroidControl (Li et al., 2024), PixelHelp (Li et al., 2020), AndroidArena (Xing et al., 2024), LlamaTouch (Zhang et al., 2024d), UGIF (Venkatesh et al., 2022), and MoTIF (Burns et al., 2021) consist of demonstrations across Android apps and mobile websites, with screens often represented via accessibility trees. In contrast, desktop web environments typically utilize the DOM for representing website content, with Mind2Web (Deng et al., 2023), OmniAct (Kapoor et al., 2024) and others, across various desktop websites. Mobile-based datasets frequently involve more complex actions, such as scrolling, which are not as useful in DOM-based desktop interactions where the entire action space is readily accessible. Additionally, API-centric datasets like API-Bank (Li et al., 2023a), ToolTalk (Fam & Shin, 2023), and ToolBench (Xu et al., 2023) assess agents' capabilities to manipulate computer systems via APIs.
+源自人类交互的数据集提供与真实世界代理性能相关的代理指标（Li et al., 2020; Burns et al., 2021; Deng et al., 2023; Rawles et al., 2023）。在移动平台上，AitW（Rawles et al., 2023）、AndroidControl（Li et al., 2024）、PixelHelp（Li et al., 2020）、AndroidArena（Xing et al., 2024）、LlamaTouch（Zhang et al., 2024d）、UGIF（Venkatesh et al., 2022）和 MoTIF（Burns et al., 2021）包括跨 Android 应用和移动网站的演示，屏幕通常通过可访问性树表示。相比之下，桌面网页环境通常使用 DOM 来表示网站内容，Mind2Web（Deng et al., 2023）、OmniAct（Kapoor et al., 2024）等覆盖各种桌面网站。基于移动的数据集常涉及更复杂的操作，如滚动，在 DOM 基于的桌面交互中并不那么有用，因为整个操作空间是易于访问的。此外，API 为中心的数据集如 API-Bank（Li et al., 2023a）、ToolTalk（Fam & Shin, 2023）和 ToolBench（Xu et al., 2023）评估代理通过 API 操作计算机系统的能力。
+
+
+### 2.3 INTERACTIVE AGENTS
+### 2.3 交互式代理
+
+
+Prior to today's foundation models, traditional approaches to developing user interface-operating agents primarily used reinforcement learning and behavioral cloning to simulate interactions like mouse clicks and keyboard typing (Liu et al., 2018b; Li et al., 2020; Shvo et al., 2021; Gur et al., 2022a; Humphreys et al., 2022). More recent work leverages off-the-shelf foundational models (Gemini, 2023; OpenAI, 2023; Touvron et al., 2023) with in-context learning (ICL) and fine-tuning applied to mobile (Rawles et al., 2023; Hong et al., 2023; Wang et al., 2023a; Yan et al., 2023; Zhang & Zhang, 2023; Bishop et al., 2024; Zhang et al., 2023), desktop web (Zheng et al., 2024a; Deng et al., 2023; Zhou et al., 2023; Koh et al., 2024; Cheng et al., 2024; Lai et al., 2024; You et al., 2024), and desktop OS (Wu et al., 2024; Zhang et al., 2024a; Xie et al., 2024). Recent work explores agents that reflect on system state (Shinn et al., 2023; Yao et al., 2022; Madaan et al., 2024) by leveraging exploration, self-evaluation, and retry-capabilities for continual learning and adaptation (Li et al., 2023b; Yang et al., 2023b; Pan et al., 2024; Wu et al., 2024; Gao et al., 2023; Murty et al., 2024).
+在今天的基础模型出现之前，开发用户界面操作代理的传统方法主要使用强化学习和行为克隆来模拟如鼠标点击和键盘输入等交互（Liu et al., 2018b; Li et al., 2020; Shvo et al., 2021; Gur et al., 2022a; Humphreys et al., 2022）。更新的工作更多地利用现成的基础模型（Gemini, 2023; OpenAI, 2023; Touvron et al., 2023），通过上下文学习（ICL）和对移动端（Rawles et al., 2023; Hong et al., 2023; Wang et al., 2023a; Yan et al., 2023; Zhang & Zhang, 2023; Bishop et al., 2024; Zhang et al., 2023）、桌面网页（Zheng et al., 2024a; Deng et al., 2023; Zhou et al., 2023; Koh et al., 2024; Cheng et al., 2024; Lai et al., 2024; You et al., 2024）以及桌面操作系统（Wu et al., 2024; Zhang et al., 2024a; Xie et al., 2024）上进行微调。最新工作探索通过反思系统状态（Shinn et al., 2023; Yao et al., 2022; Madaan et al., 2024），利用探索、自我评估和重试能力实现持续学习与适应（Li et al., 2023b; Yang et al., 2023b; Pan et al., 2024; Wu et al., 2024; Gao et al., 2023; Murty et al., 2024）。
+
+
+---
+
+
+
+${}^{2}$ Based on what reported in the Experiments Section of the B-MoCA manuscript as of October 1 ${}^{\text{ st }},{2024}$ .
+${}^{2}$ 基于 B-MoCA 手稿在 10 月 1 日实验部分所报道的内容 ${}^{\text{ st }},{2024}$ 。
+
+
+---
+
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_20_49_e3f48d.jpg"/>
+
+
+
+Figure 2: Annotators performed the tasks assigned to them, assigned a difficulty level (2a) and estimated the number of steps required to complete each task (2b), using the action space available to an agent. For each task, they selected relevant category tags from a predefined list (2c).
+Figure 2: 注释者执行分配给他们的任务，分配一个难度等级（2a）并估计完成每个任务所需的步骤数（2b），使用智能体可用的动作空间。对于每个任务，他们从预定义列表中选择相关类别标签（2c）。
+
+
+## 3 ANDROIDWORLD
+## 3 ANDROIDWORLD
+
+
+### 3.1 ANDROID FOR AUTONOMOUS AGENTS
+### 3.1 ANDROID FOR AUTONOMOUS AGENTS
+
+
+Android is an ideal environment for developing autonomous agents. It is the most widely-used OS globally ${}^{3}$ and is highly flexible for research,while providing an open world of the Web ${}^{4}$ and over 2M apps for agents to operate in. Using emulation, an Android environment is easy to deploy, does not require specialized hardware, and can be run on a laptop. Android Virtual Devices or emulator images are well suited for research as they are self-contained, easy to distribute, and configurable.
+Android 是开发自主智能体的理想环境。它是全球使用最广泛的操作系统${}^{3}$，在研究中具有极高的灵活性，同时为网络世界${}^{4}$提供一个开放的环境，并且有超过 200 万个应用可让智能体在其中操作。通过仿真，Android 环境易于部署，不需要专业硬件，并且可以在笔记本电脑上运行。Android 虚拟设备或模拟器镜像非常适合研究，因为它们是独立、易于分发且可配置的。
+
+
+Compared to desktops, mobile environments like Android present unique challenges for computer-use agents. While mobile UIs are simpler due to smaller screens, their action space is more complex, requiring intricate gestures (e.g., navigating carousels, long-pressing, multi-finger zooming) and often more steps to complete tasks. Unlike web-browser-only environments, Android, as an OS, offers greater flexibility, including function-calling APIs (e.g., sending texts) alongside standard UI actions (click, scroll, type).
+与桌面相比，像 Android 这样的移动环境为计算机使用的智能体带来独特挑战。尽管移动界面因屏幕更小而更简单，但其动作空间更为复杂，需进行复杂手势（例如浏览轮播、长按、双指缩放）且完成任务往往需要更多步骤。与仅基于网页浏览器的环境不同，Android 作为操作系统，提供更大的灵活性，包括在常规 UI 操作（点击、滚动、输入）之外的函数调用 API（如发送文本）。
+
+
+### 3.2 THE OBSERVATION AND ACTION SPACE
+### 3.2 THE OBSERVATION AND ACTION SPACE
+
+
+ANDROIDWORLD provides an interface for agents to receive observations and execute actions on Android. It uses AndroidEnv (Toyama et al., 2021) and the Android Device Bridge to facilitate interaction between Android and the agent. The observation space consists of a full-resolution screenshot and a UI tree representation developed for accessibility purposes. The action space is similar to that which humans use, consisting of gestures (i.e., tapping, swiping), typing, and navigation buttons (i.e., go home and go back). In addition to these naturalistic actions, ANDROIDWORLD exposes a limited set of function calling APIs, such as send_text_message, to help agents accomplish goals. Appendix C provides more details on the observation format and action space.
+ANDROIDWORLD 为智能体提供接收观察并在 Android 上执行动作的接口。它使用 AndroidEnv（Toyama 等，2021）和 Android 设备桥梁来促进 Android 与智能体之间的交互。观察空间包括高分辨率截图和为无障碍目的开发的 UI 树表示。动作空间类似于人类使用的动作，包括手势（如轻触、滑动）、输入文本和导航按钮（如返回主页和返回）。除了这些自然动作外，ANDROIDWORLD 还暴露了一组有限的函数调用 API，例如 send_text_message，以帮助智能体实现目标。附录 C 详细介绍了观察格式和动作空间。
+
+
+### 3.3 REPRODUCIBLE AND PARAMETERIZED TASKS
+### 3.3 REPRODUCIBLE AND PARAMETERIZED TASKS
+
+
+ANDROIDWORLD consists of a suite of 116 tasks, spread across 20 diverse applications (see Appendix D for more details). These tasks simulate practical, everyday activities, including note-taking, scheduling appointments, communicating through messaging, and interacting with system utilities. The suite consists of open-source apps and built-in Android system apps, such as Settings and Contacts. As rated by humans, the tasks vary in difficulty, duration, and categories (Figure 2).
+ANDROIDWORLD 由 116 个任务组成，分布在 20 个不同应用中（更多细节见附录 D）。这些任务模拟实际的日常活动，包括记笔记、安排约会、通过消息进行沟通以及与系统实用工具交互。该套件包含开源应用和内置的 Android 系统应用，如设置和联系人。人类评估显示，任务在难度、时长和类别上有所不同（见图 2）。
+
+
+---
+
+
+
+${}^{3}$ https://gs.statcounter.com/os-market-share
+${}^{3}$ https://gs.statcounter.com/os-market-share
+
+
+${}^{4}$ Mobile is the most popular platform for accessing the web; https://gs.statcounter.com/ platform-market-share/desktop-mobile/worldwide/
+${}^{4}$ Mobile 是访问网络的最受欢迎的平台；https://gs.statcounter.com/ platform-market-share/desktop-mobile/worldwide/
+
+
+---
+
+
+
+Table 2: Selected tasks with code describing validation logic.
+Table 2: Selected tasks with code describing validation logic.
+
+
+<table><tr><td>Task</td><td>Validation code</td></tr><tr><td>In Simple Calendar Pro, create a calendar event on <br> \{event.year\}-\{event.month\}-\{event.day\} at \{event.hour\}h with the title '\{event.title\}' and the description '\{event.description\}'. The event should last for \{event.duration\} mins.</td><td>event_exists (event)</td></tr><tr><td>Send a text message to \{phone_number\} with message: \{message\}.</td><td>message_exists(phone_number, message, messaging_db)</td></tr><tr><td>Create a new drawing in Simple Draw Pro. Name it \{file_name\}. Save it in the Pictures folder.</td><td>file_exists(file_path)</td></tr><tr><td>Create a timer with \{hours\} hours, \{minutes\} minutes, and \{seconds\} seconds. Do not start the timer.</td><td>timer_displays(time, ui_hierarchy)</td></tr><tr><td>Create a new note in Markor named \{file_name\} with the following text: \{text\}. Share the entire content of the note with the phone number \{number\} via SMS.</td><td>(file_exists(file_name, content=text) + <br> message_exists(phone_number, message)) / 2.0</td></tr><tr><td>Turn on WiFi and open \{app_name\}.</td><td>(wifi_enabled) + app_launched(app_name)) / 2.0</td></tr></table>
+<table><tbody><tr><td>任务</td><td>校验码</td></tr><tr><td>在 Simple Calendar Pro 中创建一个日历事件，时间为 <br/> \{event.year\}-\{event.month\}-\{event.day\} 的 \{event.hour\} 点，标题为 '\{event.title\}'，描述为 '\{event.description\}'。事件持续 \{event.duration\} 分钟。</td><td>event_exists (event)</td></tr><tr><td>给 \{phone_number\} 发送短信，内容为：\{message\}。</td><td>message_exists(phone_number, message, messaging_db)</td></tr><tr><td>在 Simple Draw Pro 中创建一个新绘画。命名为 \{file_name\}。保存在图片文件夹中。</td><td>file_exists(file_path)</td></tr><tr><td>创建一个定时器，设定为 \{hours\} 小时、\{minutes\} 分钟、\{seconds\} 秒。不启动定时器。</td><td>timer_displays(time, ui_hierarchy)</td></tr><tr><td>在 Markor 中创建一个新笔记，命名为 \{file_name\}，文本如下：\{text\}。通过短信将整篇笔记内容分享给号码 \{number\}。</td><td>(file_exists(file_name, content=text) + <br/> message_exists(phone_number, message)) / 2.0</td></tr><tr><td>打开 WiFi 并启动 \{app_name\}。</td><td>(wifi_enabled) + app_launched(app_name)) / 2.0</td></tr></tbody></table>
+
+
+To achieve a high degree of reproducibility in real-world scenarios, ANDROIDWORLD precisely controls the OS and app states in several ways. The Android OS is fixed, consisting of a Pixel 6 emulator running Android 13. At the start of each task, ANDROIDWORLD resets the device timestamp to October 15th, 2023 at 15:34 UTC, ensuring consistent time-dependent behaviors across all executions. All applications in ANDROIDWORLD are fully-functional and consists of both open-source apps and OS-level apps included with Android. For the open-source apps, ANDROIDWORLD maintains a constant environment by installing a fixed version of each app, acquired from F-Droid. ${}^{5}$ OS-level apps' versions are determined by the Android OS, which is also fixed. To maintain a reproducible environment, ANDROIDWORLD utilizes apps that do not require login/authentication and can store their application data on device.
+为了在真实世界场景中实现高度可重复性，ANDROIDWORLD 在多个方面对操作系统和应用状态进行精确控制。Android 操作系统是固定的，由运行 Android 13 的 Pixel 6 模拟器组成。在每个任务开始时，ANDROIDWORLD 将设备时间戳重置为 2023 年 10 月 15 日 15:34 UTC，确保所有执行中时间相关行为的一致性。ANDROIDWORLD 中的所有应用都可正常运行，既包括开源应用，也包括随 Android 提供的 OS 级应用。对于开源应用，ANDROIDWORLD 通过从 F-Droid 获取并安装固定版本的每个应用来维持恒定环境。${}^{5}$ OS 级应用的版本由 Android OS 决定，且同样是固定的。为了维持可重复的环境，ANDROIDWORLD 使用不需要登录/认证、且可以将应用数据存储在设备上的应用。
+
+
+In addition to managing the states of apps and operating systems, ANDROIDWORLD precisely defines and controls the state during task execution. Each task has its own unique setup, reward determination logic, and teardown procedures (see Appendix D. 2 and D. 3 for more details), ensuring a fully reproducible suite of tasks.
+除了管理应用和操作系统的状态外，ANDROIDWORLD 还精确定义并控制任务执行过程中的状态。每个任务有其独特的设置、奖励判定逻辑和拆解流程（更多细节请见附录 D.2 和 D.3），确保任务集合的完全可重复性。
+
+
+Automatic task parameterization is a critical mechanism, unique to ANDROIDWORLD, to evaluate agents on a much larger and more realistic suite of tasks than current benchmarks support. Achieving this requires significantly more effort than randomly generating new task parameters because it involves developing evaluation logic that remains valid across different task instantiations. It is exactly through its careful state management that in addition to reproducibility AndroidWorld ensures that the reward mechanisms function correctly. Task parameters, initialized randomly at the start of each task based on a controlled random seed, dictate the initial state and influence reward outcomes. Similar to MiniWoB++ (Shi et al., 2017; Liu et al., 2018a), ANDROIDWORLD consists of a practically infinite set of varying initial conditions and success criteria.
+自动任务参数化是 ANDROIDWORLD 独有的关键机制，用以在当前基准难以覆盖的更大且更现实的任务集合上评估智能体。实现这一点比随机生成新的任务参数需要更多努力，因为它涉及开发在不同任务实例中仍然有效的评估逻辑。正是通过其细致的状态管理，除了可重复性外，ANDROIDWORLD 还确保奖励机制的正确运作。任务参数在每个任务开始时基于受控随机种随机初始化，决定初始状态并影响奖励结果。与 MiniWoB++（Shi 等，2017；Liu 等，2018a）类似，ANDROIDWORLD 由几乎无限的不同初始条件和成功标准组成。
+
+
+This approach enables finer-grained analyses of agent adaptability, essential for real-world deployment. Beyond robustness testing, dynamic task construction supports online learning, particularly reinforcement learning (Shi et al., 2017; Liu et al., 2018a; Humphreys et al., 2022; Gur et al., 2022a), while also streamlining train/test dataset generation for supervised learning (Humphreys et al., 2022; Shaw et al., 2023; Furuta et al., 2023).
+这种方法实现了对智能体适应性的更细粒度分析，对现实世界部署至关重要。除了鲁棒性测试外，动态任务构建支持在线学习，尤其是强化学习（Shi 等，2017；Liu 等，2018a；Humphreys 等，2022；Gur 等，2022a），同时也简化了监督学习的训练/测试数据集生成（Humphreys 等，2022；Shaw 等，2023；Furuta 等，2023）。
+
+
+### 3.4 DURABLE REWARDS FROM SYSTEM STATE
+### 3.4 来自系统状态的稳定奖励
+
+
+ANDROIDWORLD provides reward signals primarily by managing application state using the Android Debug Bridge (adb), while also incorporating UI element validation where appropriate. With adb, ANDROIDWORLD has complete access to system resources including the file system, application databases, and system settings. For tasks where system state inspection is impractical, ANDROIDWORLD validates task completion by examining UI elements on screen. Determining reward signals from system state has several benefits. It is highly accurate because an application's state can be quickly inspected and manipulated using the same mechanisms that the app itself utilizes. Using the underlying system state is much more durable than matching superficial UI changes. Additionally, it facilitates easy re-use across disparate apps, which tend to use the same underlying caching mechanisms. For instance, logic for checking existence of a specific file is used across many unrelated applications, including those for file management, note-taking, and media playback. For applications leveraging SQLite databases, a common pattern, ANDROIDWORLD implements evaluators that verify the existence of new and deleted rows. Table 2 shows examples of the validators in ANDROIDWORLD. See Table 6 for a comprehensive list of all tasks in the suite. Table 5 provides selected examples with additional implementation details.
+ANDROIDWORLD 通过管理应用状态并结合 Android 调试桥（adb）来提供奖励信号，同时在适用时引入 UI 元素验证。借助 adb，ANDROIDWORLD 可以对包括文件系统、应用数据库和系统设置在内的系统资源进行完全访问。对于难以进行系统状态检查的任务，ANDROIDWORLD 通过检查屏幕上的 UI 元素来验证任务完成情况。从系统状态获取奖励信号有若干好处。它极其准确，因为可以使用应用本身使用的相同机制快速检查和操作应用状态。使用底层系统状态比匹配表面化的 UI 更具持久性。此外，它还便于在不同应用间重复使用，因为它们往往使用相同的底层缓存机制。例如，检查特定文件是否存在的逻辑在许多无关的应用中被使用，包括文件管理、记笔记和媒体播放等应用。对于利用 SQLite 数据库的应用，这是一个常见模式，ANDROIDWORLD 实现了验证新行/已删除行存在性的评估器。表 2 显示了 ANDROIDWORLD 验证器的示例。完整任务列表请参见表 6。表 5 给出选定示例及额外实现细节。
+
+
+---
+
+
+
+5https://f-droid.org/
+5https://f-droid.org/
+
+
+---
+
+
+
+### 3.5 TASK COMPOSABILITY
+### 3.5 任务组合性
+
+
+Inferring task success from system state enables accurate, reusable evaluations and simplifies creating composite tasks by combining existing ones. For instance, "Create a calendar event with details and text the details to contact" merges two standalone tasks, facilitated by hermetic initialization and success detection. Composite tasks are more challenging due to their complexity but provide partial rewards for subtask completion, aiding hill climbing. The last two rows of Table 2 show validation code for composite tasks.
+从系统状态推断任务成功可以实现准确、可复用的评估，并通过将现有任务组合在一起来简化创建复合任务的过程。例如，“创建一个带有详细信息并将详情文本发送给联系人”将两个独立任务合并，在密封初始化和成功检测的帮助下实现。复合任务由于其复杂性而更具挑战性，但在子任务完成时可提供部分奖励，帮助爬山优化。表 2 的最后两行展示了复合任务的验证代码。
+
+
+### 3.6 INTEGRATING MINIWOB++
+### 3.6 集成 MiniWoB++
+
+
+We implement MiniWoB++ in the ANDROIDWORLD framework and term it MobileMiniWoB++. Each MobileMiniWoB++ task is instantiated using the standard ANDROIDWORLD interface, inheriting from TaskEval base class, and contains methods like initialize_state and is_successful. Since MiniWoB++ leverages JavaScript for task configuration and success detection, we built a WebView app to communicate between Python and the app.
+我们在 ANDROIDWORLD 框架中实现了 MiniWoB++，并将其命名为 MobileMiniWoB++。每个 MobileMiniWoB++ 任务均使用标准的 ANDROIDWORLD 接口实例化，继承自 TaskEval 基类，并包含诸如 initialize_state 和 is_successful 等方法。由于 MiniWoB++ 使用 JavaScript 进行任务配置和成功检测，我们构建了一个 WebView 应用，以在 Python 与应用之间进行通信。
+
+
+MobileMiniWoB++ introduces modifications in both observations and actions compared to the original benchmark. For example, HTML5 <input> elements are rendered with native Android UI widgets like the date-picker (see Figure 4), enhancing the realism of the tasks. MobileMiniWoB++ uses the same observation space as the Android tasks (accessibility tree and screenshot). Notably, it does not include the DOM as in the original implementation. The action space from ANDROIDWORLD is retained. We manually review and test each task to ensure they are solvable. We excluded twelve of the original tasks that failed to render correctly on Android, presented compatibility issues with the touch interface, or required near real-time interaction, which poses challenges on emulators. Overall, ANDROIDWORLD supports 92 MiniWoB++ tasks. See Appendix C. 3 for more details.
+相比原始基准，MobileMiniWoB++ 在观测和动作上均有修改。例如，HTML5 <input> 元素以本地 Android UI 小部件（如日期选择器）呈现（见图4），提升任务的真实感。MobileMiniWoB++ 使用与 Android 任务相同的观测空间（可访问性树和截图）。值得注意的是，它不像原实现那样包含 DOM。保留了来自 ANDROIDWORLD 的动作空间。我们对每个任务进行人工审查和测试，以确保它们可解。我们排除了原始任务中在 Android 上渲染失败、与触控界面存在兼容性问题、或需要接近实时交互的任务共计十二个，这在模拟器上存在挑战。总体而言，ANDROIDWORLD 支持 92 个 MiniWoB++ 任务。详见附录 C.3。
+
+
+## 4 ANDROIDWORLD AS A COMPUTER-CONTROL BENCHMARK
+## 4 ANDROIDWORLD 作为计算机控制基准
+
+
+To test ANDROIDWORLD's applicability for autonomous agents, we develop and test a state-of-the-art agent and its variants across all 20 apps and 116 tasks, as well as on MobileMiniWoB++.
+为了测试 ANDROIDWORLD 对自主代理的适用性，我们在所有 20 个应用和 116 个任务上，以及在 MobileMiniWoB++ 上，开发并测试了一种最先进的代理及其变体。
+
+
+### 4.1 COMPUTER USE AGENTS
+### 4.1 计算机使用代理
+
+
+#### 4.1.1 M3A
+
+
+
+We develop a multimodal autonomous agent for Android, M3A. It is zero-shot, integrating ReAct-style (Yao et al., 2022) and Reflexion-style (Shinn et al., 2023) prompting to consume user instructions and screen content, reason, take actions, and update its decision-making based on the outcome of its actions.
+我们为 Android 开发了多模态自治代理 M3A。它是零样本的，整合了 ReAct 风格（Yao 等, 2022）和 Reflexion 风格（Shinn 等, 2023）的提示，用于处理用户指令和屏幕内容、推理、采取行动，并根据行动结果更新其决策。
+
+
+In the first stage, M3A generates an action, represented in JSON, and reasoning for that action. To generate this output, the agent is provided with a list of available action types, guidelines for operating the phone, and a list of UI elements derived from the Android accessibility tree's leaf nodes. The agent receives the current screenshot and a Set-of-Mark (SoM) (Yang et al., 2023a) annotated screenshot, which includes bounding boxes with numeric labels on the top-left corner for each UI element (see screenshot in Figure 5). The agent attempts to execute outputted action by referencing the specific mark (if applicable). In addition to the multimodal agent, we have developed a text-only variant that consumes the screen represented using the accessibility tree and selects the relevant action in JSON format.
+在第一阶段，M3A 生成一个表示为 JSON 的动作及该动作的推理。为生成该输出，代理被提供一个可用动作类型清单、手机操作指南，以及从 Android 可访问性树叶节点派生的 UI 元素列表。代理接收当前截图和带注释的 Set-of-Mark（SoM，Yang 等, 2023a）截图，其中每个 UI 元素在左上角有带数字标签的边界框（见图5中的截图）。代理通过引用特定标记（如适用）来尝试执行输出的动作。除了多模态代理外，我们还开发了一个仅文本版本，使用可访问性树表示的屏幕，并在 JSON 格式中选择相关动作。
+
+
+Table 3: Success Rates (SR) on ANDROIDWORLD and MobileMiniWoB++.
+表3：在 ANDROIDWORLD 和 MobileMiniWoB++ 上的成功率（SR）。
+
+
+<table><tr><td>Agent</td><td>Input</td><td>Base model</td><td>SRANDROIDWORLD</td><td>SRMobileMiniWoB++</td></tr><tr><td>Human</td><td>screen</td><td>N/A</td><td>80.0</td><td>100.0</td></tr><tr><td>$\mathrm{{SeeAct}}$ (Zheng et al.,2024a)</td><td>SoM (screen + a11y tree)</td><td>GPT-4 Turbo</td><td>15.5</td><td>66.1</td></tr><tr><td>M3A-Simple</td><td>ally tree</td><td>Gemma 2</td><td>3.4</td><td>35.5</td></tr><tr><td>M3A-Simple</td><td>a11y tree</td><td>Gemini 1.5 Pro</td><td>14.7</td><td>55.2</td></tr><tr><td>M3A-Simple</td><td>ally tree</td><td>GPT-4 Turbo</td><td>19.8</td><td>67.7</td></tr><tr><td>M3A</td><td>a11y tree</td><td>Gemina 2</td><td>9.5</td><td>45.6</td></tr><tr><td>M3A</td><td>a11y tree</td><td>Gemini 1.5 Pro</td><td>19.4</td><td>57.4</td></tr><tr><td>M3A</td><td>SoM (screen + a11y tree)</td><td>Gemini 1.5 Pro</td><td>22.8</td><td>40.3</td></tr><tr><td>M3A</td><td>a11y tree</td><td>GPT-4 Turbo</td><td>30.6</td><td>59.7</td></tr><tr><td>M3A</td><td>SoM (screen + a11y tree)</td><td>GPT-4 Turbo</td><td>25.4</td><td>67.7</td></tr></table>
+<table><tbody><tr><td>代理</td><td>输入</td><td>基础模型</td><td>SRANDROIDWORLD</td><td>SRMobileMiniWoB++</td></tr><tr><td>人类</td><td>屏幕</td><td>N/A</td><td>80.0</td><td>100.0</td></tr><tr><td>$\mathrm{{SeeAct}}$ (Zheng et al.,2024a)</td><td>SoM（屏幕 + 无障碍树）</td><td>GPT-4 Turbo</td><td>15.5</td><td>66.1</td></tr><tr><td>M3A-简单</td><td>盟友树</td><td>Gemma 2</td><td>3.4</td><td>35.5</td></tr><tr><td>M3A-简单</td><td>无障碍树</td><td>Gemini 1.5 Pro</td><td>14.7</td><td>55.2</td></tr><tr><td>M3A-简单</td><td>盟友树</td><td>GPT-4 Turbo</td><td>19.8</td><td>67.7</td></tr><tr><td>M3A</td><td>无障碍树</td><td>Gemina 2</td><td>9.5</td><td>45.6</td></tr><tr><td>M3A</td><td>无障碍树</td><td>Gemini 1.5 Pro</td><td>19.4</td><td>57.4</td></tr><tr><td>M3A</td><td>SoM（屏幕 + 无障碍树）</td><td>Gemini 1.5 Pro</td><td>22.8</td><td>40.3</td></tr><tr><td>M3A</td><td>无障碍树</td><td>GPT-4 Turbo</td><td>30.6</td><td>59.7</td></tr><tr><td>M3A</td><td>SoM（屏幕 + 无障碍树）</td><td>GPT-4 Turbo</td><td>25.4</td><td>67.7</td></tr></tbody></table>
+
+
+After executing an action, M3A reflects on its effect by observing any state changes that may have occurred. During this stage, the agent is provided with available action types, general operating guidelines, the actual action taken, and its reasoning, as well as before-and-after UI states, represented by UI element representations and screenshots with SoM annotations. We request the agent to provide a concise summary of this step, including the intended action, success or failure, potential reasons for failure, and recommendations for subsequent actions. This summary will serve as the action history and be used for future action selection. See Appendix E for more details on the agent.
+执行操作后，M3A 通过观察可能发生的状态变化来反思其影响。在此阶段，代理将获得可用的行动类型、通用操作指南、实际采取的行动及其推理，以及前后 UI 状态，由 UI 元素表示和带有 SoM 注释的截图表示。请求代理对本步骤给出简明摘要，包括预期行动、成功或失败、失败的潜在原因，以及后续行动的建议。该摘要将作为行动历史并用于未来的行动选择。有关代理的更多细节，请参见附录 E。
+
+
+In addition to the full agent, we develop M3A-SIMPLE to measure the performance that can be achieved with minimal prompting, without guidelines or reflection mechanisms. This helps quantify the impact of more advanced prompting techniques and domain-specific guidance.
+除了完整代理，我们还开发 M3A-SIMPLE，以在最少提示、无指南或反思机制的情况下衡量可以实现的性能。这有助于量化更高级的提示技术和领域特定指导的影响。
+
+
+#### 4.1.2 SEEACT BASELINE
+#### 4.1.2 SEEACT 基线
+
+
+We implement a baseline agent based on SeeAct (Zheng et al., 2024a), which was originally designed for GPT-4V for web navigation. Specifically, we implement the best-performing variant, ${\text{ SeeAct }}_{\text{ choice }}$ ,which grounds actions via textual choices. We implement SeeAct for the Android environment to evaluate how an existing model that performs well on web tasks (Deng et al., 2023) can be adapted and applied to Android.
+我们实现基于 SeeAct（Zheng 等，2024a）的基线代理，最初为 GPT-4V 的网页导航设计。具体而言，我们实现性能最佳的变体 ${\text{ SeeAct }}_{\text{ choice }}$，通过文本选项来确定行动。我们为 Android 环境实现 SeeAct，以评估在网络任务上表现良好的现有模型（Deng 等，2023）如何适应并应用于 Android。
+
+
+To accommodate the Android environment, we adapt SeeAct in several ways. Firstly, we augment the action space from the original SeeAct implementation to support actions needed for mobile, including scroll, long press, navigate home and back, and open app actions. Secondly, in lieu of the DOM, which is not available for Android apps, we utilize the accessibility tree to construct candidate UI actions. Due to the lack of the DOM representation, we do not use the bespoke ranker model from the original implementation. However, we observe that after applying a filtering heuristic to remove non-interactable elements, the majority of screens contains less than 50 candidate elements. See Appendix E. 6 for more details on the implementation.
+为适应 Android 环境，我们在多方面对 SeeAct 进行改造。首先，我们将行动空间从原始 SeeAct 实现扩展到支持移动端所需的行动，包括滚动、长按、返回主页、返回上一个屏幕以及打开应用等。其次，由于 Android 应用未提供 DOM，我们改用无障碍树来构建候选 UI 动作。由于缺少 DOM 表征，我们不使用原始实现中的定制排名模型。然而，我们观察到在应用了筛选启发式以去除不可互动元素后，大多数屏幕的候选元素不到 50 个。有关实现的更多细节，请参见附录 E.6。
+
+
+### 4.2 EXPERIMENTAL RESULTS
+### 4.2 实验结果
+
+
+We evaluate M3A, M3A-SIMPLE, and SeeAct on ANDROIDWORLD and MobileMiniWoB++. We set the seed to 30 and the temperature to 0 to aid reproducibility. Each task has a maximum allowed number of steps (detailed in Appendix F), typically set to twice the number of steps needed by human annotators to complete the task. We use Gemini 1.5 Pro, GPT-4 Turbo, and the open-source Gemma 2 27B (Team et al., 2024) as base models. For MobileMiniWoB++, we evaluate on a subset of 62 tasks, consistent with recent studies (Zheng et al., 2024c; Kim et al., 2024; Gur et al., 2022b).
+我们在 ANDROIDWORLD 和 MobileMiniWoB++ 上评估 M3A、M3A-SIMPLE 和 SeeAct。将种子设为 30，温度设为 0 以提高可重复性。每个任务都有一个最大允许步骤数（在附录 F 中详细说明），通常设定为人类标注者完成任务所需步骤数的两倍。我们以 Gemini 1.5 Pro、GPT-4 Turbo，以及开源的 Gemma 2 27B（Team 等，2024）作为基础模型。对于 MobileMiniWoB++，我们在 62 个任务的子集上进行评估，与最近的研究一致（Zheng 等，2024c；Kim 等，2024；Gur 等，2022b）。
+
+
+Table 3 presents the success rates (SR) for the agents and human performance on both task suites. Although the agents have far from human performance, they demonstrate out-of-the-box capabilities in operating mobile UIs, exhibiting basic understanding and control capabilities of UIs. They can perform a variety of actions, including long-press, scrolling to search for information, and revising their plan if actions do not work out. The best performance is obtained by M3A when using GPT- 4. On ANDROIDWORLD the SoM-based variant is less performant, while on MobileMiniWoB++ it performs best. A similar result was obtained in recent work on computer agents for desktop applications (Xie et al., 2024). We posit SoM plays a more critical role in MobileMiniWoB++ tasks due to the often incomplete accessibility tree, compared to that of native Android apps.
+表 3 展示了两组任务的代理人和人类表现的成功率（SR）。尽管代理尚未达到人类水平，但它们在移动 UI 操作方面展现了开箱即用的能力，具备对 UI 的基本理解和控制能力。它们可以执行多种操作，包括长按、滚动以查找信息，以及在行动未如预期时重新制定计划。使用 GPT-4 时，M3A 获得的表现最好。在 ANDROIDWORLD 上，基于 SoM 的变体性能较差，而在 MobileMiniWoB++ 上表现最好。最近关于桌面应用的计算机代理的工作（Xie 等，2024）也得出了类似的结论。我们认为在 MobileMiniWoB++ 任务中，SoM 的作用更为关键，因为无障碍树通常不完整，而本地 Android 应用的无障碍树则更完整。
+
+
+The simplified agent variant M3A-SIMPLE shows a significant performance drop on ANDROID-WORLD tasks (19.8% vs 30.6% with GPT-4), indicating that additional prompting techniques and domain-specific guidance are beneficial for navigating the complexity of Android interactions. However, on MobileMiniWoB++ tasks, M3A-SIMPLE achieves comparable performance (67.7%), suggesting that these simpler tasks may not benefit as much from sophisticated prompting strategies. The open-source Gemma model's lower performance (9.5% on ANDROIDWORLD, 45.6% on Mo-bileMiniWoB++) compared to proprietary models likely stems from its smaller parameter count, though exact comparisons are difficult as the parameter counts for GPT-4 and Gemini are not public.
+简化的代理变体 M3A-SIMPLE 在 ANDROID-WORLD 任务上表现显著下降（19.8% 对 30.6% 使用 GPT-4），这表明额外的提示技术和领域特定指导对应对 Android 交互的复杂性有帮助。然而，在 MobileMiniWoB++ 任务中，M3A-SIMPLE 的表现相当（67.7%），这表明这些更简单的任务可能不需要如此复杂的提示策略。从开源 Gemma 模型的较低表现（在 ANDROIDWORLD 为 9.5%，在 MobileMiniWoB++ 为 45.6%）相较于专有模型来看，可能源于其参数数量较小，尽管无法精确比较 GPT-4 与 Gemini 的参数数量，因为两者的参数数量未公开。
+
+
+### 4.3 ANALYSIS
+### 4.3 分析
+
+
+Agents have difficulty understanding mobile UIs, often failing to detect visual cues that are essential for task completion (see Figure 6a). Additionally, agents struggle with certain UI patterns and affordances, and when they make reasoning mistakes (see Figure 6b), they often lack the capability to explore and adapt as humans do (see Figure 6c). Moreover, agents sometimes struggle with tasks that simply involve confirming system states, e.g., confirming the WiFi is turned on, suggesting challenges in both task and screen understanding.
+代理在理解移动 UI 方面存在困难，常常无法察觉对完成任务至关重要的视觉线索（见图 6a）。此外，代理在某些 UI 模式和交互中也会遇到困难，当他们出现推理错误时（见图 6b），往往缺乏像人类那样探索和适应的能力（见图 6c）。此外，代理有时在仅需要确认系统状态的任务上也会遇到困难，例如确认 WiFi 是否开启，表明在任务理解与屏幕理解方面都存在挑战。
+
+
+The agents struggle with grounding, particularly when executing precise interactions, such as manipulating text (see Figure 7) or operating sliders, and they are often unable to recover from mistyping errors. In addition, for tasks that demand memory, such as performing transcriptions across apps, multiplying numbers, or scrolling, the agents struggle as they are unable to "remember" content.
+代理在落地对接方面存在难度，尤其是在执行精确交互时，如操作文本（见图 7）或滑块，且往往无法从输入错误中恢复。此外，对需要记忆的任务，如跨应用进行转录、数字相乘或滚动，代理会因为无法“记住”内容而遇到困难。
+
+
+SeeAct performs less effectively than M3A on the ANDROIDWORLD task suite and similarly on MobileMiniWoB++, reflecting its optimization for web rather than mobile environments. It struggles with mobile-specific actions like long-presses and swipes, and often fails to select appropriate actions due to not incorporating screen elements during action generation. Memory-intensive tasks are particularly challenging, as SeeAct only caches actions without remembering outcomes, leading to repetitive, ineffective behaviors such as endless scrolling. This lack of quick error recovery often results in task termination once maximum steps are reached.
+SeeAct 在 ANDROIDWORLD 任务组上的表现不及 M3A，在 MobileMiniWoB++ 上也类似，反映出其针对网页环境的优化而非移动环境。它在移动特定动作如长按和滑动方面存在难题，且由于生成动作时未将屏幕元素纳入考虑，常常无法选择合适的动作。记忆密集型任务尤其具有挑战性，因为 SeeAct 只缓存动作而不记住结果，导致重复、无效的行为，如无尽滚动。这种缺乏快速错误恢复的情况在达到最大步骤后往往导致任务终止。
+
+
+Finally, we note that large foundation models significantly increase latency, taking three times longer than humans on average to complete tasks. On average, M3A takes 3.9 minutes to complete a task, with the text-only version taking 2.5 minutes.
+最后，我们注意到大型基础模型显著增加延迟，完成任务的时间比人类平均要长三倍。平均而言，M3A 完成一个任务需要 3.9 分钟，文本版本为 2.5 分钟。
+
+
+## 5 ROBUSTNESS ANALYSIS
+## 5 稳健性分析
+
+
+To understand agent robustness, we analyze M3A's performance across different random seeds, which generate different task parameters (e.g., calendar appointments, expense categories) and can consequently require different UI interaction patterns (e.g., scrolling to access hidden elements, handling varying numbers of elements to modify, or adapting to different input types and lengths). Across three seeds, we observe significant performance variations: 27.6%, 26.3% and 33.2% (mean 29.0%), obtained using M3A with GPT-4 Turbo with accessibility trees as input. Note that for consistency with existing literature we maintain the single-seed results in Table 3.
+为了理解代理的稳健性，我们分析 M3A 在不同随机种子下的表现，这些种子会生成不同的任务参数（如日历约会、支出类别），进而需要不同的 UI 交互模式（如滚动以访问隐藏元素、处理不同数量的需要修改的元素，或适应不同的输入类型与长度）。在三组种子下，我们观察到显著的性能差异：27.6%、26.3% 和 33.2%（均值 29.0%），使用带可访问性树的 GPT-4 Turbo 的 M3A 获得。请注意，为与现有文献保持一致，我们在表 3 中保留单一种 seed 的结果。
+
+
+To better understand the sources of this variability, we evaluate agent robustness under two conditions: (1) identical tasks with the same parameters and (2) tasks with different parameter combinations, which change the initial state and task definition. We perform this analysis on a representative subset of ANDROIDWORLD tasks that span different interaction patterns and complexity levels (listed in Appendix E.4). Due to computational constraints, we conduct 20 trials for each task using our strongest agent configuration - M3A using the accessibility tree and GPT-4.
+为了更好地理解这种变异性的来源，我们在两种条件下评估代理的稳健性：(1) 相同任务与相同参数；(2) 参数组合不同的任务，这会改变初始状态和任务定义。我们在一个具有代表性的 ANDROIDWORLD 任务子集上进行分析，这些任务覆盖不同的交互模式和复杂度水平（见附录 E.4）。由于计算约束，我们对每个任务使用最强的代理配置 - 使用可访问性树和 GPT-4 的 M3A，进行 20 次试验。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_20_49_2c0593.jpg"/>
+
+
+
+Figure 3: Success rate variation across tasks due to the parametrization built into ANDROIDWORLD. Using a fixed seed, the agent appears completely incapable of solving some tasks due to "bad luck" with the seed. In contrast, under different task parameterizations, we observe the agent can solve the tasks fairly often. Wilson binomial proportion confidence intervals (95%) are shown for the different seed group (orange) and the same seed group (blue). The different seed group has higher variance than the same seed group. Significant differences, with p-value < 0.05, are indicated by "*".
+图 3：由于 ANDROIDWORLD 内置的参数化，任务成功率在不同任务间的变化。使用固定种子时，代理对某些任务似乎完全无法解决，原因是种子“运气不佳”。相反，在不同任务参数下，我们观察到代理能相当频繁地解决任务。Wilson 二项分布置信区间（95%）显示了不同种子组（橙色）和相同种子组（蓝色）的结果。不同种子组的方差高于相同种子组。显著差异，p 值 < 0.05，用“*”标注。
+
+
+Figure 3 shows our results. With a constant seed, the agent fails on add and edit tasks and rarely solves delete tasks, primarily due to UI operation challenges. Surprisingly, performance varies even with a fixed seed, suggesting model non-determinism affects reliability. Performance varies significantly more with different seeds, with statistically significant differences for add expense and edit note tasks. The high intra-task variation indicates the model's sensitivity to task parameters. Section E.5 provides an analysis on how specific parameter variations impact agent performance.
+图 3 展示了我们的结果。在恒定种子下，代理在添加和编辑任务上失败，且很少解决删除任务，主要原因是 UI 操作挑战。令人惊讶的是，即使在固定种子下，性能也会有所波动，表明模型的非确定性影响可靠性。不同种子下的性能差异显著，添加支出和编辑笔记任务存在统计学显著差异。高的任务内变异表明模型对任务参数的敏感性。E.5 节提供关于特定参数变化如何影响代理性能的分析。
+
+
+This sensitivity aligns with observations in RL research (Henderson et al., 2018; Raffin et al., 2021; Colas et al., 2018), suggesting performance is best represented by the mean across seeds. We believe ANDROIDWORLD's support for such analysis will become increasingly valuable as more efficient models are developed. Finally, we note the observation of non-zero rewards under some seeds points to potential enhancements through RL-like mechanisms in future work.
+这种敏感性与强化学习研究中的观察一致（Henderson 等，2018；Raffin 等，2021；Colas 等，2018），表明性能最好由各种种子平均值来表示。我们相信，随着更高效模型的开发，ANDROIDWORLD 对此类分析的支持将变得越来越有价值。最后，我们注意到在某些种子下出现非零奖励，提示未来工作中通过类似 RL 的机制进行潜在改进的可能性。
+
+
+To assess AndroidWorld's robustness to OS variations, we tested on a Pixel 5 (Android 12) alongside our primary setup (Pixel 6, Android 13). The agent achieved a 28.4% success rate, with performance variations akin to those from random seed changes, suggesting it maintained its capabilities despite differing UI layouts and device types.
+为评估 AndroidWorld 对操作系统变体的鲁棒性，我们在 Pixel 5（Android 12）上进行测试，同时保持主设置（Pixel 6，Android 13）。代理的成功率为 28.4%，性能变化与随机种子变化时的波动相似，表明尽管 UI 布局和设备类型不同，其能力仍得以维持。
+
+
+These experiments underscore the importance of testing agents under varied conditions, a capability that ANDROIDWORLD effectively supports.
+这些实验强调在不同条件下测试代理的重要性，AndroidWorld 在这方面有效地提供了支持。
+
+
+## 6 CONCLUSION
+## 6 结论
+
+
+We introduced ANDROIDWORLD, a realistic and robust agent environment for Android that enables the development and evaluation of autonomous agents across a wide range of tasks and apps. AN-DROIDWORLD provides a reproducible task suite consisting of 116 tasks across 20 apps, with each task dynamically generated using random parameters to challenge agents with millions of unique goals. By releasing ANDROIDWORLD and establishing benchmark performance with M3A, we aim to accelerate research and development in this area, ultimately leading to the creation of computer use agents capable of operating effectively in real-world environments. Further, the dynamic nature of ANDROIDWORLD opens up new research opportunities for online learning algorithms in computer use agents.
+我们引入ANDROIDWORLD，一个现实且健壮的安卓代理环境，支持在广泛任务和应用中开发与评估自治代理。ANDROIDWORLD 提供可重复的任务集合，由 116 项任务覆盖 20 个应用，每项任务通过随机参数动态生成，以向代理提出数百万个独特目标的挑战。通过发布 ANDROIDWORLD 并以 M3A 建立基准性能，我们旨在加速该领域的研究与开发，最终促成能够在现实世界环境中高效运行的计算机使用代理的创建。此外，ANDROIDWORLD 的动态特性为计算机使用代理中的在线学习算法开启了新的研究机会。
+
+
+## REFERENCES
+## 参考文献
+
+
+Josh Abramson, Arun Ahuja, Federico Carnevale, Petko Georgiev, Alex Goldin, Alden Hung, Jessica Landon, Timothy Lillicrap, Alistair Muldal, Blake Richards, Adam Santoro, Tamara von Glehn, Greg Wayne, Nathaniel Wong, and Chen Yan. Evaluating multimodal interactive agents, 2022.
+Josh Abramson、Arun Ahuja、Federico Carnevale、Petko Georgiev、Alex Goldin、Alden Hung、Jessica Landon、Timothy Lillicrap、Alistair Muldal、Blake Richards、Adam Santoro、Tamara von Glehn、Greg Wayne、Nathaniel Wong 与 Chen Yan。评估多模态互动代理，2022。
+
+
+William E Bishop, Alice Li, Christopher Rawles, and Oriana Riva. Latent state estimation helps ui agents to reason, 2024.
+William E Bishop、Alice Li、Christopher Rawles 与 Oriana Riva。潜在状态估计帮助 ui 代理推理，2024。
+
+
+Rogerio Bonatti, Dan Zhao, Francesco Bonacci, Dillon Dupont, Sara Abdali, Yinheng Li, Yadong Lu, Justin Wagle, Kazuhito Koishida, Arthur Bucker, Lawrence Jang, and Zack Hui. Windows Agent Arena: Evaluating Multi-Modal OS Agents at Scale, 2024. URL https://arxiv.org/abs/2409.08264.
+Rogerio Bonatti、Dan Zhao、Francesco Bonacci、Dillon Dupont、Sara Abdali、Yinheng Li、Yadong Lu、Justin Wagle、Kazuhito Koishida、Arthur Bucker、Lawrence Jang 与 Zack Hui。Windows Agent Arena：大规模评估多模态操作系统代理，2024。URLhttps://arxiv.org/abs/2409.08264。
+
+
+Andrea Burns, Deniz Arsan, Sanjna Agrawal, Ranjitha Kumar, Kate Saenko, and Bryan A. Plummer. Mobile app tasks with iterative feedback (motif): Addressing task feasibility in interactive visual environments. CoRR, abs/2104.08560, 2021. URL https://arxiv.org/abs/ 2104.08560.
+Andrea Burns、Deniz Arsan、Sanjna Agrawal、Ranjitha Kumar、Kate Saenko 与 Bryan A. Plummer。带迭代反馈（motif）的移动应用任务：在交互式视觉环境中解决任务可行性。CoRR，abs/2104.08560，2021。URL https://arxiv.org/abs/ 2104.08560。
+
+
+Mark Chen, Jerry Tworek, Heewoo Jun, Qiming Yuan, Henrique Ponde de Oliveira Pinto, Jared Kaplan, Harri Edwards, Yuri Burda, Nicholas Joseph, Greg Brockman, Alex Ray, Raul Puri, Gretchen Krueger, Michael Petrov, Heidy Khlaaf, Girish Sastry, Pamela Mishkin, Brooke Chan, Scott Gray, Nick Ryder, Mikhail Pavlov, Alethea Power, Lukasz Kaiser, Mohammad Bavarian, Clemens Winter, Philippe Tillet, Felipe Petroski Such, Dave Cummings, Matthias Plappert, Fo-tios Chantzis, Elizabeth Barnes, Ariel Herbert-Voss, William Hebgen Guss, Alex Nichol, Alex Paino, Nikolas Tezak, Jie Tang, Igor Babuschkin, Suchir Balaji, Shantanu Jain, William Saunders, Christopher Hesse, Andrew N Carr, Jan Leike, Josh Achiam, Vedant Misra, Evan Morikawa, Alec Radford, Matthew Knight, Miles Brundage, Mira Murati, Katie Mayer, Peter Welinder, Bob McGrew, Dario Amodei, Sam McCandlish, Ilya Sutskever, and Wojciech Zaremba. Evaluating large language models trained on code. July 2021.
+Mark Chen、Jerry Tworek、Heewoo Jun、Qiming Yuan、Henrique Ponde de Oliveira Pinto、Jared Kaplan、Harri Edwards、Yuri Burda、Nicholas Joseph、Greg Brockman、Alex Ray、Raul Puri、Gretchen Krueger、Michael Petrov、Heidy Khlaaf、Girish Sastry、Pamela Mishkin、Brooke Chan、Scott Gray、Nick Ryder、Mikhail Pavlov、Alethea Power、Lukasz Kaiser、Mohammad Bavarian、Clemens Winter、Philippe Tillet、Felipe Petroski Such、Dave Cummings、Matthias Plappert、Fo-tios Chantzis、Elizabeth Barnes、Ariel Herbert-Voss、William Hebgen Guss、Alex Nichol、Alex Paino、Nikolas Tezak、Jie Tang、Igor Babuschkin、Suchir Balaji、Shantanu Jain、William Saunders、Christopher Hesse、Andrew N Carr、Jan Leike、Josh Achiam、Vedant Misra、Evan Morikawa、Alec Radford、Matthew Knight、Miles Brundage、Mira Murati、Katie Mayer、Peter Welinder、Bob McGrew、Dario Amodei、Sam McCandlish、Ilya Sutskever 与 Wojciech Zaremba。评估以代码训练的大型语言模型。2021年7月。
+
+
+Kanzhi Cheng, Qiushi Sun, Yougang Chu, Fangzhi Xu, Yantao Li, Jianbing Zhang, and Zhiy-ong Wu. Seeclick: Harnessing gui grounding for advanced visual gui agents. arXiv preprint arXiv:2401.10935, 2024.
+Kanzhi Cheng、Qiushi Sun、Yougang Chu、Fangzhi Xu、Yantao Li、Jianbing Zhang 与 Zhiy-ong Wu。Seeclick：为先进视觉 GUI 代理利用 GUI 基地进行感知。arXiv 预印本 arXiv:2401.10935，2024。
+
+
+Wei-Lin Chiang, Lianmin Zheng, Ying Sheng, Anastasios Nikolas Angelopoulos, Tianle Li, Dacheng Li, Hao Zhang, Banghua Zhu, Michael Jordan, Joseph E Gonzalez, et al. Chatbot arena: An open platform for evaluating llms by human preference. arXiv preprint arXiv:2403.04132, 2024.
+Wei-Lin Chiang、Lianmin Zheng、Ying Sheng、Anastasios Nikolas Angelopoulos、Tianle Li、Dacheng Li、Hao Zhang、Banghua Zhu、Michael Jordan、Joseph E Gonzalez 等。Chatbot Arena：一个开放平台，用于通过人类偏好评估大型语言模型。arXiv 预印本 arXiv:2403.04132，2024。
+
+
+Cédric Colas, Olivier Sigaud, and Pierre-Yves Oudeyer. How many random seeds? statistical power analysis in deep reinforcement learning experiments. arXiv preprint arXiv:1806.08295, 2018.
+Cédric Colas、Olivier Sigaud 与 Pierre-Yves Oudeyer。需要多少随机种子？深度强化学习实验中的统计功效分析。arXiv 预印本 arXiv:1806.08295，2018。
+
+
+Xiang Deng, Yu Gu, Boyuan Zheng, Shijie Chen, Samuel Stevens, Boshi Wang, Huan Sun, and Yu Su. Mind2Web: Towards a generalist agent for the web, 2023.
+Xiang Deng、Yu Gu、Boyuan Zheng、Shijie Chen、Samuel Stevens、Boshi Wang、Huan Sun 与 Yu Su。Mind2Web：面向网页通用代理的探索，2023。
+
+
+Alexandre Drouin, Maxime Gasse, Massimo Caccia, Issam H Laradji, Manuel Del Verme, Tom Marty, Léo Boisvert, Megh Thakkar, Quentin Cappart, David Vazquez, et al. Workarena: How capable are web agents at solving common knowledge work tasks? arXiv preprint arXiv:2403.07718, 2024.
+Alexandre Drouin, Maxime Gasse, Massimo Caccia, Issam H Laradji, Manuel Del Verme, Tom Marty, Léo Boisvert, Megh Thakkar, Quentin Cappart, David Vazquez, et al. Workarena: Web代理在解决常识工作任务的能力如何？ arXiv 预印本 arXiv:2403.07718, 2024。
+
+
+Yuqing Du, Ksenia Konyushkova, Misha Denil, Akhil Raju, Jessica Landon, Felix Hill, Nando de Freitas, and Serkan Cabi. Vision-Language models as success detectors. March 2023.
+Yuqing Du, Ksenia Konyushkova, Misha Denil, Akhil Raju, Jessica Landon, Felix Hill, Nando de Freitas, 及 Serkan Cabi。 Vision-Language 模型作为成功检测器。2023年3月。
+
+
+Nicholas Farn and Richard Shin. Tooltalk: Evaluating tool-usage in a conversational setting. arXiv preprint arXiv:2311.10775, 2023.
+Nicholas Farn 与 Richard Shin。Tooltalk：在对话场景中评估工具使用。arXiv 预印本 arXiv:2311.10775, 2023。
+
+
+Hiroki Furuta, Kuang-Huei Lee, Ofir Nachum, Yutaka Matsuo, Aleksandra Faust, Shixiang Shane Gu, and Izzeddin Gur. Multimodal web navigation with Instruction-Finetuned foundation models. May 2023.
+Hiroki Furuta, Kuang-Huei Lee, Ofir Nachum, Yutaka Matsuo, Aleksandra Faust, Shixiang Shane Gu, 以及 Izzeddin Gur。带指令微调的多模态网页导航基础模型。2023年5月。
+
+
+Difei Gao, Lei Ji, Zechen Bai, Mingyu Ouyang, Peiran Li, Dongxing Mao, Qinchen Wu, Weichen Zhang, Peiyi Wang, Xiangwu Guo, et al. Assistgui: Task-oriented desktop graphical user interface automation. arXiv preprint arXiv:2312.13108, 2023.
+Difei Gao, Lei Ji, Zechen Bai, Mingyu Ouyang, Peiran Li, Dongxing Mao, Qinchen Wu, Weichen Zhang, Peiyi Wang, Xiangwu Guo, et al. Assistgui：面向任务的桌面图形用户界面自动化。arXiv 预印本 arXiv:2312.13108, 2023。
+
+
+Gemini. Gemini: A family of highly capable multimodal models, 2023.
+Gemini。Gemini：一系列高能力的多模态模型，2023。
+
+
+Significant Gravitas. AutoGPT. https://agpt.co, 2023. https://agpt.co.
+Significant Gravitas。AutoGPT。https://agpt.co，2023。https://agpt.co。
+
+
+Izzeddin Gur, Natasha Jaques, Yingjie Miao, Jongwook Choi, Manoj Tiwari, Honglak Lee, and Aleksandra Faust. Environment generation for zero-shot compositional reinforcement learning, 2022a.
+Izzeddin Gur, Natasha Jaques, Yingjie Miao, Jongwook Choi, Manoj Tiwari, Honglak Lee, 以及 Aleksandra Faust。零样本成分化强化学习的环境生成，2022a。
+
+
+Izzeddin Gur, Ofir Nachum, Yingjie Miao, Mustafa Safdari, Austin Huang, Aakanksha Chowdhery, Sharan Narang, Noah Fiedel, and Aleksandra Faust. Understanding html with large language models. arXiv preprint arXiv:2210.03945, 2022b.
+Izzeddin Gur, Ofir Nachum, Yingjie Miao, Mustafa Safdari, Austin Huang, Aakanksha Chowdhery, Sharan Narang, Noah Fiedel, 以及 Aleksandra Faust。使用大型语言模型理解 HTML。arXiv 预印本 arXiv:2210.03945, 2022b。
+
+
+Hongliang He, Wenlin Yao, Kaixin Ma, Wenhao Yu, Yong Dai, Hongming Zhang, Zhenzhong Lan, and Dong Yu. Webvoyager: Building an end-to-end web agent with large multimodal models. arXiv preprint arXiv:2401.13919, 2024.
+Hongliang He, Wenlin Yao, Kaixin Ma, Wenhao Yu, Yong Dai, Hongming Zhang, Zhenzhong Lan, 以及 Dong Yu。Webvoyager：利用大型多模态模型构建端到端网页代理。arXiv 预印本 arXiv:2401.13919, 2024。
+
+
+Peter Henderson, Riashat Islam, Philip Bachman, Joelle Pineau, Doina Precup, and David Meger. Deep reinforcement learning that matters. In Proceedings of the AAAI conference on artificial intelligence, volume 32, 2018.
+Peter Henderson, Riashat Islam, Philip Bachman, Joelle Pineau, Doina Precup, 以及 David Meger。对重要的深度强化学习。发表于 AAAI 人工智能大会论文集，卷号 32，2018。
+
+
+Wenyi Hong, Weihan Wang, Qingsong Lv, Jiazheng Xu, Wenmeng Yu, Junhui Ji, Yan Wang, Zihan Wang, Yuxiao Dong, Ming Ding, et al. Cogagent: A visual language model for gui agents. arXiv preprint arXiv:2312.08914, 2023.
+Wenyi Hong, Weihan Wang, Qingsong Lv, Jiazheng Xu, Wenmeng Yu, Junhui Ji, Yan Wang, Zihan Wang, Yuxiao Dong, Ming Ding, et al. Cogagent：一个面向 GUI 代理的视觉语言模型。arXiv 预印本 arXiv:2312.08914, 2023。
+
+
+Peter C Humphreys, David Raposo, Tobias Pohlen, Gregory Thornton, Rachita Chhaparia, Alistair Muldal, Josh Abramson, Petko Georgiev, Adam Santoro, and Timothy Lillicrap. A data-driven approach for learning to control computers. In Kamalika Chaudhuri, Stefanie Jegelka, Le Song, Csaba Szepesvari, Gang Niu, and Sivan Sabato (eds.), Proceedings of the 39th International Conference on Machine Learning, volume 162 of Proceedings of Machine Learning Research, pp. 9466-9482. PMLR, 17-23 Jul 2022. URL https://proceedings.mlr.press/v162/ humphreys22a.html.
+Peter C Humphreys, David Raposo, Tobias Pohlen, Gregory Thornton, Rachita Chhaparia, Alistair Muldal, Josh Abramson, Petko Georgiev, Adam Santoro, 以及 Timothy Lillicrap。以数据驱动的学习控制计算机方法。收录于 Kamalika Chaudhuri 等编辑的 Proceedings of the 39th International Conference on Machine Learning，Machine Learning Research 的卷 162，页 9466-9482。PMLR，2022年7月17-23日。URL https://proceedings.mlr.press/v162/ humphreys22a.html。
+
+
+Raghav Kapoor, Yash Parag Butala, Melisa Russak, Jing Yu Koh, Kiran Kamble, Waseem Alshikh, and Ruslan Salakhutdinov. Omniact: A dataset and benchmark for enabling multimodal generalist autonomous agents for desktop and web. arXiv preprint arXiv:2402.17553, 2024.
+Raghav Kapoor, Yash Parag Butala, Melisa Russak, Jing Yu Koh, Kiran Kamble, Waseem Alshikh, 以及 Ruslan Salakhutdinov。Omniact：一个数据集与基准，用于实现桌面和网页的多模态通用自主代理。arXiv 预印本 arXiv:2402.17553, 2024。
+
+
+Geunwoo Kim, Pierre Baldi, and Stephen McAleer. Language models can solve computer tasks. Advances in Neural Information Processing Systems, 36, 2024.
+Geunwoo Kim, Pierre Baldi, 以及 Stephen McAleer。语言模型可以解决计算机任务。神经信息处理系统进展，36，2024。
+
+
+Megan Kinniment, Lucas Jun Koba Sato, Haoxing Du, Brian Goodrich, Max Hasin, Lawrence Chan, Luke Harold Miles, Tao R Lin, Hjalmar Wijk, Joel Burget, et al. Evaluating language-model agents on realistic autonomous tasks. arXiv preprint arXiv:2312.11671, 2023.
+Megan Kinniment, Lucas Jun Koba Sato, Haoxing Du, Brian Goodrich, Max Hasin, Lawrence Chan, Luke Harold Miles, Tao R Lin, Hjalmar Wijk, Joel Burget, et al. 在现实自主任务上评估语言模型代理。 arXiv 预印本 arXiv:2312.11671, 2023.
+
+
+Jing Yu Koh, Robert Lo, Lawrence Jang, Vikram Duvvur, Ming Chong Lim, Po-Yu Huang, Graham Neubig, Shuyan Zhou, Ruslan Salakhutdinov, and Daniel Fried. Visualwebarena: Evaluating multimodal agents on realistic visual web tasks. arXiv preprint arXiv:2401.13649, 2024.
+Jing Yu Koh, Robert Lo, Lawrence Jang, Vikram Duvvur, Ming Chong Lim, Po-Yu Huang, Graham Neubig, Shuyan Zhou, Ruslan Salakhutdinov, 与 Daniel Fried. Visualwebarena：在现实视觉网络任务上评估多模态代理。 arXiv 预印本 arXiv:2401.13649, 2024.
+
+
+Hanyu Lai, Xiao Liu, Iat Long Iong, Shuntian Yao, Yuxuan Chen, Pengbo Shen, Hao Yu, Hanchen Zhang, Xiaohan Zhang, Yuxiao Dong, et al. Autowebglm: Bootstrap and reinforce a large language model-based web navigating agent. arXiv preprint arXiv:2404.03648, 2024.
+Hanyu Lai, Xiao Liu, Iat Long Iong, Shuntian Yao, Yuxuan Chen, Pengbo Shen, Hao Yu, Hanchen Zhang, Xiaohan Zhang, Yuxiao Dong, et al. Autowebglm：基于大语言模型的网页导航代理的启动与强化。 arXiv 预印本 arXiv:2404.03648, 2024.
+
+
+Juyong Lee, Taywon Min, Minyong An, Changyeon Kim, and Kimin Lee. Benchmarking mobile device control agents across diverse configurations. In ICLR 2024 Workshop on Generative Models for Decision Making, 2024.
+Juyong Lee, Taywon Min, Minyong An, Changyeon Kim, 与 Kimin Lee. 在多样配置下对移动设备控制代理进行基准评测。ICLR 2024 研讨会：用于决策的生成模型，2024。
+
+
+Minghao Li, Yingxiu Zhao, Bowen Yu, Feifan Song, Hangyu Li, Haiyang Yu, Zhoujun Li, Fei Huang, and Yongbin Li. API-Bank: A comprehensive benchmark for Tool-Augmented LLMs. April 2023a.
+Minghao Li, Yingxiu Zhao, Bowen Yu, Feifan Song, Hangyu Li, Haiyang Yu, Zhoujun Li, Fei Huang, 与 Yongbin Li. API-Bank：一个面向工具增强的LLM的综合基准。2023年4月a。
+
+
+Tao Li, Gang Li, Zhiwei Deng, Bryan Wang, and Yang Li. A Zero-Shot language agent for computer control with structured reflection. In Houda Bouamor, Juan Pino, and Kalika Bali (eds.), Findings of the Association for Computational Linguistics: EMNLP 2023, pp. 11261-11274, Singapore, December 2023b. Association for Computational Linguistics.
+Tao Li, Gang Li, Zhiwei Deng, Bryan Wang, 与 Yang Li. 用结构化反思的零样本语言代理实现计算机控制。在 Houda Bouamor、Juan Pino 与 Kalika Bali（编）之 Findings of the Association for Computational Linguistics: EMNLP 2023，pp. 11261-11274，新加坡，2023年12月。计算语言学会。
+
+
+Wei Li, William Bishop, Alice Li, Chris Rawles, Folawiyo Campbell-Ajala, Divya Tyamagundlu, and Oriana Riva. On the effects of data scale on computer control agents. In Advances in Neural Information Processing Systems (NeurIPS 2024), 2024. URL https://arxiv.org/abs/ 2406.03679.
+Wei Li, William Bishop, Alice Li, Chris Rawles, Folawiyo Campbell-Ajala, Divya Tyamagundlu, 与 Oriana Riva. 数据规模对计算机控制代理的影响。In Advances in Neural Information Processing Systems (NeurIPS 2024)，2024。URL https://arxiv.org/abs/ 2406.03679。
+
+
+Yang Li, Jiacong He, Xin Zhou, Yuan Zhang, and Jason Baldridge. Mapping natural language instructions to mobile UI action sequences. In Proc. of the 58th Annual Meeting of the Association for Computational Linguistics, ACL 2020, Online, July 5-10, 2020, pp. 8198-8210. Association for Computational Linguistics, 2020. URL https://www.aclweb.org/anthology/ 2020.acl-main.729/.
+Yang Li, Jiacong He, Xin Zhou, Yuan Zhang, 与 Jason Baldridge. 将自然语言指令映射到移动UI动作序列。ACL 2020 第58届年会：在线，2020年7月5-10日，pp. 8198-8210。计算语言学协会，2020。URL https://www.aclweb.org/anthology/ 2020.acl-main.729/。
+
+
+Evan Zheran Liu, Kelvin Guu, Panupong Pasupat, and Percy Liang. Reinforcement learning on web interfaces using workflow-guided exploration. In 6th International Conference on Learning Representations (ICLR '18), 2018a. URL https://openreview.net/forum?id= ryTp3f-0-.
+Evan Zheran Liu, Kelvin Guu, Panupong Pasupat, 与 Percy Liang. 使用工作流引导探索的网页界面强化学习。ICLR 2018（第6届国际学习表示大会），2018a。URL https://openreview.net/forum?id= ryTp3f-0-。
+
+
+Thomas F. Liu, Mark Craft, Jason Situ, Ersin Yumer, Radomir Mech, and Ranjitha Kumar. Learning design semantics for mobile apps. In Proc. of the 31st Annual ACM Symposium on User Interface Software and Technology, UIST '18, pp. 569-579, New York, NY, USA, 2018b. Association for Computing Machinery. ISBN 9781450359481. doi: 10.1145/3242587.3242650. URL https: //doi.org/10.1145/3242587.3242650.
+Thomas F. Liu, Mark Craft, Jason Situ, Ersin Yumer, Radomir Mech, 与 Ranjitha Kumar. 为移动应用学习设计语义。Proc. 第31届 ACM 用户界面软件与技术年会，UIST '18，pp. 569-579，美国纽约。计算机机械学会。ISBN 9781450359481。doi: 10.1145/3242587.3242650。URL https: //doi.org/10.1145/3242587.3242650。
+
+
+Yang Liu, Dan Iter, Yichong Xu, Shuohang Wang, Ruochen Xu, and Chenguang Zhu. G-Eval: NLG evaluation using GPT-4 with better human alignment, 2023.
+Yang Liu, Dan Iter, Yichong Xu, Shuohang Wang, Ruochen Xu, 与 Chenguang Zhu. G-Eval：使用GPT-4进行更好的人类对齐的NLG评估，2023。
+
+
+Xing Han Lù, Zdeněk Kasner, and Siva Reddy. WebLINX: Real-World website navigation with Multi-Turn dialogue. February 2024.
+Xing Han Lù, Zdeněk Kasner, 与 Siva Reddy. WebLINX：带多轮对话的真实世界网站导航。2024年2月。
+
+
+Yecheng Jason Ma, William Liang, Guanzhi Wang, De-An Huang, Osbert Bastani, Dinesh Jayara-man, Yuke Zhu, Linxi Fan, and Anima Anandkumar. Eureka: Human-level reward design via coding large language models, 2023.
+Yecheng Jason Ma, William Liang, Guanzhi Wang, De-An Huang, Osbert Bastani, Dinesh Jayara-man, Yuke Zhu, Linxi Fan, 与 Anima Anandkumar. Eureka：通过编码大语言模型实现人类级奖赏设计，2023。
+
+
+Aman Madaan, Niket Tandon, Prakhar Gupta, Skyler Hallinan, Luyu Gao, Sarah Wiegreffe, Uri Alon, Nouha Dziri, Shrimai Prabhumoye, Yiming Yang, et al. Self-refine: Iterative refinement with self-feedback. Advances in Neural Information Processing Systems, 36, 2024.
+Aman Madaan, Niket Tandon, Prakhar Gupta, Skyler Hallinan, Luyu Gao, Sarah Wiegreffe, Uri Alon, Nouha Dziri, Shrimai Prabhumoye, Yiming Yang, et al. 自我改进：通过自我反馈进行迭代 refinement。 Advances in Neural Information Processing Systems, 36, 2024.
+
+
+Grégoire Mialon, Clémentine Fourrier, Craig Swift, Thomas Wolf, Yann LeCun, and Thomas Scialom. GAIA: a benchmark for general AI assistants. November 2023.
+Grégoire Mialon, Clémentine Fourrier, Craig Swift, Thomas Wolf, Yann LeCun, 和 Thomas Scialom. GAIA：通用 AI 助手基准。2023 年 11 月。
+
+
+Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis Antonoglou, Daan Wier-stra, and Martin Riedmiller. Playing atari with deep reinforcement learning, 2013.
+Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis Antonoglou, Daan Wier-str a, 和 Martin Riedmiller. 使用深度强化学习在 Atari 上的游戏，2013 年。
+
+
+Shikhar Murty, Christopher Manning, Peter Shaw, Mandar Joshi, and Kenton Lee. BAGEL: Bootstrapping agents by guiding exploration with language, 2024. URL https://arxiv.org/ abs/2403.08140.
+Shikhar Murty, Christopher Manning, Peter Shaw, Mandar Joshi, 与 Kenton Lee. BAGEL：通过语言引导探索来自举代理，2024。URL https://arxiv.org/abs/2403.08140。
+
+
+OpenAI. GPT-4 technical report, 2023.
+OpenAI. GPT-4 技术报告，2023。
+
+
+Jiayi Pan, Yichi Zhang, Nicholas Tomlin, Yifei Zhou, Sergey Levine, and Alane Suhr. Autonomous evaluation and refinement of digital agents. April 2024.
+Jiayi Pan, Yichi Zhang, Nicholas Tomlin, Yifei Zhou, Sergey Levine, 与 Alane Suhr. 自主评估与数字代理的改进，2024 年 4 月。
+
+
+Antonin Raffin, Ashley Hill, Adam Gleave, Anssi Kanervisto, Maximilian Ernestus, and Noah Dor-mann. Stable-baselines3: Reliable reinforcement learning implementations. Journal of Machine Learning Research, 22(268):1-8, 2021.
+Antonin Raffin, Ashley Hill, Adam Gleave, Anssi Kanervisto, Maximilian Ernestus, 与 Noah Dor-mann. Stable-baselines3：可靠的强化学习实现。机器学习研究杂志，22(268):1-8, 2021。
+
+
+Christopher Rawles, Alice Li, Daniel Rodriguez, Oriana Riva, and Timothy Lillicrap. Android in the wild: A large-scale dataset for android device control. arXiv preprint arXiv:2307.10088, 2023.
+Christopher Rawles, Alice Li, Daniel Rodriguez, Oriana Riva, 与 Timothy Lillicrap. 野外的 Android：用于 Android 设备控制的大规模数据集。arXiv 预印本 arXiv:2307.10088, 2023。
+
+
+Yangjun Ruan, Honghua Dong, Andrew Wang, Silviu Pitis, Yongchao Zhou, Jimmy Ba, Yann Dubois, Chris J Maddison, and Tatsunori Hashimoto. Identifying the risks of LM agents with an LM-Emulated sandbox. September 2023.
+Yangjun Ruan, Honghua Dong, Andrew Wang, Silviu Pitis, Yongchao Zhou, Jimmy Ba, Yann Dubois, Chris J Maddison, 与 Tatsunori Hashimoto. 通过 LM 模拟沙盒识别 LM 代理的风险。2023 年 9 月。
+
+
+Peter Shaw, Mandar Joshi, James Cohan, Jonathan Berant, Panupong Pasupat, Hexiang Hu, Urvashi Khandelwal, Kenton Lee, and Kristina Toutanova. From pixels to UI actions: Learning to follow instructions via graphical user interfaces. May 2023.
+Peter Shaw, Mandar Joshi, James Cohan, Jonathan Berant, Panupong Pasupat, Hexiang Hu, Urvashi Khandelwal, Kenton Lee, 与 Kristina Toutanova. 从像素到 UI 操作：通过图形用户界面学习执行指令。2023 年 5 月。
+
+
+Tianlin Shi, Andrej Karpathy, Linxi Fan, Jonathan Hernandez, and Percy Liang. World of bits: An open-domain platform for web-based agents. In Doina Precup and Yee Whye Teh (eds.), Proc. of the 34th International Conference on Machine Learning, volume 70 of Proceedings of Machine Learning Research, pp. 3135-3144. PMLR, 06-11 Aug 2017. URL http://proceedings.mlr.press/v70/shi17a.html.
+Tianlin Shi, Andrej Karpathy, Linxi Fan, Jonathan Hernandez, 与 Percy Liang. Bits 世界：一个面向网络代理的开放域平台。在 Doina Precup 和 Yee Whye Teh（编）收录的机器学习国际会议论文集第 34 届，MLR 论文集卷 70，页 3135-3144。PMLR，2017 年 8 月 11 日。URL http://proceedings.mlr.press/v70/shi17a.html。
+
+
+Noah Shinn, Beck Labash, and Ashwin Gopinath. Reflexion: an autonomous agent with dynamic memory and self-reflection. arXiv preprint arXiv:2303.11366, 2023.
+Noah Shinn, Beck Labash, 与 Ashwin Gopinath. Reflexion：具备动态记忆与自我反思的自主代理。arXiv 预印本 arXiv:2303.11366, 2023。
+
+
+Mohit Shridhar, Jesse Thomason, Daniel Gordon, Yonatan Bisk, Winson Han, Roozbeh Mottaghi, Luke Zettlemoyer, and Dieter Fox. Alfred: A benchmark for interpreting grounded instructions for everyday tasks, 2020.
+Mohit Shridhar, Jesse Thomason, Daniel Gordon, Yonatan Bisk, Winson Han, Roozbeh Mottaghi, Luke Zettlemoyer, 与 Dieter Fox. Alfred：用于解释日常任务的具体现地指令理解的基准，2020。
+
+
+Maayan Shvo, Zhiming Hu, Rodrigo Toro Icarte, Iqbal Mohomed, Allan Jepson, and Sheila A. McIlraith. Appbuddy: Learning to accomplish tasks in mobile apps via reinforcement learning, 2021. URL https://arxiv.org/abs/2106.00133.
+Maayan Shvo, Zhiming Hu, Rodrigo Toro Icarte, Iqbal Mohomed, Allan Jepson, 与 Sheila A. McIlraith. Appbuddy：通过强化学习在移动应用中学习完成任务，2021。URL https://arxiv.org/abs/2106.00133。
+
+
+David Silver, Aja Huang, Chris J. Maddison, Arthur Guez, Laurent Sifre, George van den Driessche, Julian Schrittwieser, Ioannis Antonoglou, Veda Panneershelvam, Marc Lanctot, Sander Dieleman, Dominik Grewe, John Nham, Nal Kalchbrenner, Ilya Sutskever, Timothy Lillicrap, Madeleine Leach, Koray Kavukcuoglu, Thore Graepel, and Demis Hassabis. Mastering the Game of Go with Deep Neural Networks and Tree Search. Nature, 529(7587):484-489, January 2016. doi: 10.1038/nature16961.
+David Silver, Aja Huang, Chris J. Maddison, Arthur Guez, Laurent Sifre, George van den Driessche, Julian Schrittwieser, Ioannis Antonoglou, Veda Panneershelvam, Marc Lanctot, Sander Dieleman, Dominik Grewe, John Nham, Nal Kalchbrenner, Ilya Sutskever, Timothy Lillicrap, Madeleine Leach, Koray Kavukcuoglu, Thore Graepel, 与 Demis Hassabis. 使用深度神经网络与树搜索的围棋游戏精通。Nature，529(7587):484-489，2016 年 1 月。doi: 10.1038/nature16961。
+
+
+Weihao Tan, Ziluo Ding, Wentao Zhang, Boyu Li, Bohan Zhou, Junpeng Yue, Haochong Xia, Jiechuan Jiang, Longtao Zheng, Xinrun Xu, Yifei Bi, Pengjie Gu, Xinrun Wang, Börje F. Karls-son, Bo An, and Zongqing Lu. Towards General Computer Control: A Multimodal Agent For Red Dead Redemption II As A Case Study. arXiv preprint arXiv:2403.03186, 2024.
+魏豪 谭、秭洛 丁、温涛 张、博宇 李、博汉 周、钧朋 岳、浩冲 下、洁川 江、龙涛 郑、新润 徐、一菲 毕、鹏杰 顾、新润 王、博尔耶 F. Karls-son、Bo An，以及 Zongqing Lu。面向通用计算机控制：以 Red Dead Redemption II 的多模态智能体为案例研究。arXiv 预印本 arXiv:2403.03186，2024。
+
+
+Yuval Tassa, Yotam Doron, Alistair Muldal, Tom Erez, Yazhe Li, Diego de Las Casas, David Bud-den, Abbas Abdolmaleki, Josh Merel, Andrew Lefrancq, Timothy Lillicrap, and Martin Ried-miller. DeepMind control suite. January 2018.
+尤瓦尔 塔萨、约坦 多伦、艾利斯泰尔 穆尔达尔、汤姆 伊雷兹、亚什 李、迭戈 de Las Casas、David Bud-den、Abbas Abdolmaleki、Josh Merel、Andrew Lefrancq、Timothy Lillicrap，以及 Martin Ried-miller。DeepMind 控制套件。2018 年 1 月。
+
+
+Gemma Team, Morgane Riviere, Shreya Pathak, Pier Giuseppe Sessa, Cassidy Hardin, Surya Bhu-patiraju, Léonard Hussenot, Thomas Mesnard, Bobak Shahriari, Alexandre Ramé, Johan Ferret, Peter Liu, Pouya Tafti, Abe Friesen, Michelle Casbon, Sabela Ramos, Ravin Kumar, Charline Le Lan, Sammy Jerome, Anton Tsitsulin, Nino Vieillard, Piotr Stanczyk, Sertan Girgin, Nikola Momchev, Matt Hoffman, Shantanu Thakoor, Jean-Bastien Grill, Behnam Neyshabur, Olivier Bachem, Alanna Walton, Aliaksei Severyn, Alicia Parrish, Aliya Ahmad, Allen Hutchison, Alvin Abdagic, Amanda Carl, Amy Shen, Andy Brock, Andy Coenen, Anthony Laforge, Antonia Paterson, Ben Bastian, Bilal Piot, Bo Wu, Brandon Royal, Charlie Chen, Chintu Kumar, Chris Perry, Chris Welty, Christopher A. Choquette-Choo, Danilla Sinopalnikov, David Weinberger, Dimple Vijaykumar, Dominika Rogozińska, Dustin Herbison, Elisa Bandy, Emma Wang, Eric Noland, Erica Moreira, Evan Senter, Evgenii Eltyshev, Francesco Visin, Gabriel Rasskin, Gary Wei, Glenn Cameron, Gus Martins, Hadi Hashemi, Hanna Klimczak-Plucińska, Harleen Batra, Harsh Dhand, Ivan Nardini, Jacinda Mein, Jack Zhou, James Svensson, Jeff Stanway, Jetha Chan, Jin Peng Zhou, Joana Carrasqueira, Joana Iljazi, Jocelyn Becker, Joe Fernandez, Joost van Amersfoort, Josh Gordon, Josh Lipschultz, Josh Newlan, Ju yeong Ji, Kareem Mohamed, Kar-tikeya Badola, Kat Black, Katie Millican, Keelin McDonell, Kelvin Nguyen, Kiranbir Sodhia, Kish Greene, Lars Lowe Sjoesund, Lauren Usui, Laurent Sifre, Lena Heuermann, Leticia Lago, Lilly McNealus, Livio Baldini Soares, Logan Kilpatrick, Lucas Dixon, Luciano Martins, Machel Reid, Manvinder Singh, Mark Iverson, Martin Görner, Mat Velloso, Mateo Wirth, Matt Davidow, Matt Miller, Matthew Rahtz, Matthew Watson, Meg Risdal, Mehran Kazemi, Michael Moyni-han, Ming Zhang, Minsuk Kahng, Minwoo Park, Mofi Rahman, Mohit Khatwani, Natalie Dao, Nenshad Bardoliwalla, Nesh Devanathan, Neta Dumai, Nilay Chauhan, Oscar Wahltinez, Pankil Botarda, Parker Barnes, Paul Barham, Paul Michel, Pengchong Jin, Petko Georgiev, Phil Culliton, Pradeep Kuppala, Ramona Comanescu, Ramona Merhej, Reena Jana, Reza Ardeshir Rokni,
+Gemma Team、 Morgane Riviere、 Shreya Pathak、 Pier Giuseppe Sessa、 Cassidy Hardin、 Surya Bhu-patiraju、 Léonard Hussenot、 Thomas Mesnard、 Bobak Shahriari、 Alexandre Ramé、 Johan Ferret、 Peter Liu、 Pouya Tafti、 Abe Friesen、 Michelle Casbon、 Sabela Ramos、 Ravin Kumar、 Charline Le Lan、 Sammy Jerome、 Anton Tsitsulin、 Nino Vieillard、 Piotr Stanczyk、 Sertan Girgin、 Nikola Momchev、 Matt Hoffman、 Shantanu Thakoor、 Jean-Bastien Grill、 Behnam Neyshabur、 Olivier Bachem、 Alanna Walton、 Aliaksei Severyn、 Alicia Parrish、 Aliya Ahmad、 Allen Hutchison、 Alvin Abdagic、 Amanda Carl、 Amy Shen、 Andy Brock、 Andy Coenen、 Anthony Laforge、 Antonia Paterson、 Ben Bastian、 Bilal Piot、 Bo Wu、 Brandon Royal、 Charlie Chen、 Chintu Kumar、 Chris Perry、 Chris Welty、 Christopher A. Choquette-Choo、 Danilla Sinopalnikov、 David Weinberger、 Dimple Vijaykumar、 Dominika Rogozińska、 Dustin Herbison、 Elisa Bandy、 Emma Wang、 Eric Noland、 Erica Moreira、 Evan Senter、 Evgenii Eltyshev、 Francesco Visin、 Gabriel Rasskin、 Gary Wei、 Glenn Cameron、 Gus Martins、 Hadi Hashemi、 Hanna Klimczak-Plucińska、 Harleen Batra、 Harsh Dhand、 Ivan Nardini、 Jacinda Mein、 Jack Zhou、 James Svensson、 Jeff Stanway、 Jetha Chan、 Jin Peng Zhou、 Joana Carrasqueira、 Joana Iljazi、 Jocelyn Becker、 Joe Fernandez、 Joost van Amersfoort、 Josh Gordon、 Josh Lipschultz、 Josh Newlan、 Ju yeong Ji、 Kareem Mohamed、 Kar-tikeya Badola、 Kat Black、 Katie Millican、 Keelin McDonell、 Kelvin Nguyen、 Kiranbir Sodhia、 Kish Greene、 Lars Lowe Sjoesund、 Lauren Usui、 Laurent Sifre、 Lena Heuermann、 Leticia Lago、 Lilly McNealus、 Livio Baldini Soares、 Logan Kilpatrick、 Lucas Dixon、 Luciano Martins、 Machel Reid、 Manvinder Singh、 Mark Iverson、 Martin Görner、 Mat Velloso、 Mateo Wirth、 Matt Davidow、 Matt Miller、 Matthew Rahtz、 Matthew Watson、 Meg Risdal、 Mehran Kazemi、 Michael Moyni-han、 Ming Zhang、 Minsuk Kahng、 Minwoo Park、 Mofi Rahman、 Mohit Khatwani、 Natalie Dao、 Nenshad Bardoliwalla、 Nesh Devanathan、 Neta Dumai、 Nilay Chauhan、 Oscar Wahltinez、 Pankil Botarda、 Parker Barnes、 Paul Barham、 Paul Michel、 Pengchong Jin、 Petko Georgiev、 Phil Culliton、 Pradeep Kuppala、 Ramona Comanescu、 Ramona Merhej、 Reena Jana、 Reza Ardeshir Rokni
+
+
+Rishabh Agarwal, Ryan Mullins, Samaneh Saadat, Sara Mc Carthy, Sarah Cogan, Sarah Perrin, Sébastien M. R. Arnold, Sebastian Krause, Shengyang Dai, Shruti Garg, Shruti Sheth, Sue Ron-strom, Susan Chan, Timothy Jordan, Ting Yu, Tom Eccles, Tom Hennigan, Tomas Kocisky, Tulsee Doshi, Vihan Jain, Vikas Yadav, Vilobh Meshram, Vishal Dharmadhikari, Warren Barkley, Wei Wei, Wenming Ye, Woohyun Han, Woosuk Kwon, Xiang Xu, Zhe Shen, Zhitao Gong, Zichuan Wei, Victor Cotruta, Phoebe Kirk, Anand Rao, Minh Giang, Ludovic Peran, Tris Warkentin, Eli Collins, Joelle Barral, Zoubin Ghahramani, Raia Hadsell, D. Sculley, Jeanine Banks, Anca Dra-gan, Slav Petrov, Oriol Vinyals, Jeff Dean, Demis Hassabis, Koray Kavukcuoglu, Clement Fara-bet, Elena Buchatskaya, Sebastian Borgeaud, Noah Fiedel, Armand Joulin, Kathleen Kenealy, Robert Dadashi, and Alek Andreev. Gemma 2: Improving open language models at a practical size, 2024. URL https://arxiv.org/abs/2408.00118.
+Rishabh Agarwal, Ryan Mullins, Samaneh Saadat, Sara Mc Carthy, Sarah Cogan, Sarah Perrin, Sébastien M. R. Arnold, Sebastian Krause, Shengyang Dai, Shruti Garg, Shruti Sheth, Sue Ron-strom, Susan Chan, Timothy Jordan, Ting Yu, Tom Eccles, Tom Hennigan, Tomas Kocisky, Tulsee Doshi, Vihan Jain, Vikas Yadav, Vilobh Meshram, Vishal Dharmadhikari, Warren Barkley, Wei Wei, Wenming Ye, Woohyun Han, Woosuk Kwon, Xiang Xu, Zhe Shen, Zhitao Gong, Zichuan Wei, Victor Cotruta, Phoebe Kirk, Anand Rao, Minh Giang, Ludovic Peran, Tris Warkentin, Eli Collins, Joelle Barral, Zoubin Ghahramani, Raia Hadsell, D. Sculley, Jeanine Banks, Anca Dra-gan, Slav Petrov, Oriol Vinyals, Jeff Dean, Demis Hassabis, Koray Kavukcuoglu, Clement Fara-bet, Elena Buchatskaya, Sebastian Borgeaud, Noah Fiedel, Armand Joulin, Kathleen Kenealy, Robert Dadashi, and Alek Andreev. Gemma 2: Improving open language models at a practical size, 2024. URL https://arxiv.org/abs/2408.00118.
+
+
+Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yasmine Babaei, Niko-lay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale, et al. Llama 2: Open foundation and fine-tuned chat models. arXiv preprint arXiv:2307.09288, 2023.
+Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yasmine Babaei, Niko-lay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale, et al. Llama 2: Open foundation and fine-tuned chat models. arXiv preprint arXiv:2307.09288, 2023.
+
+
+Daniel Toyama, Philippe Hamel, Anita Gergely, Gheorghe Comanici, Amelia Glaese, Zafarali Ahmed, Tyler Jackson, Shibl Mourad, and Doina Precup. Androidenv: A reinforcement learning platform for android, 2021. URL https://arxiv.org/abs/2105.13231.
+Daniel Toyama, Philippe Hamel, Anita Gergely, Gheorghe Comanici, Amelia Glaese, Zafarali Ahmed, Tyler Jackson, Shibl Mourad, and Doina Precup. Androidenv: A reinforcement learning platform for android, 2021. URL https://arxiv.org/abs/2105.13231.
+
+
+Sagar Gubbi Venkatesh, Partha Talukdar, and Srini Narayanan. Ugif: Ui grounded instruction following, 2022. URL https://arxiv.org/abs/2211.07615.
+Sagar Gubbi Venkatesh, Partha Talukdar, and Srini Narayanan. Ugif: Ui grounded instruction following, 2022. URL https://arxiv.org/abs/2211.07615.
+
+
+Oriol Vinyals, Igor Babuschkin, Wojciech M Czarnecki, Michaël Mathieu, Andrew Dudzik, Juny-oung Chung, David H Choi, Richard Powell, Timo Ewalds, Petko Georgiev, Junhyuk Oh, Dan Horgan, Manuel Kroiss, Ivo Danihelka, Aja Huang, Laurent Sifre, Trevor Cai, John P Agapiou, Max Jaderberg, Alexander S Vezhnevets, Rémi Leblond, Tobias Pohlen, Valentin Dalibard, David Budden, Yury Sulsky, James Molloy, Tom L Paine, Caglar Gulcehre, Ziyu Wang, Tobias Pfaff, Yuhuai Wu, Roman Ring, Dani Yogatama, Dario Wünsch, Katrina McKinney, Oliver Smith, Tom Schaul, Timothy Lillicrap, Koray Kavukcuoglu, Demis Hassabis, Chris Apps, and David Silver. Grandmaster level in StarCraft II using multi-agent reinforcement learning. Nature, 575(7782): 350-354, November 2019.
+Oriol Vinyals, Igor Babuschkin, Wojciech M Czarnecki, Michaël Mathieu, Andrew Dudzik, Juny-oung Chung, David H Choi, Richard Powell, Timo Ewalds, Petko Georgiev, Junhyuk Oh, Dan Horgan, Manuel Kroiss, Ivo Danihelka, Aja Huang, Laurent Sifre, Trevor Cai, John P Agapiou, Max Jaderberg, Alexander S Vezhnevets, Rémi Leblond, Tobias Pohlen, Valentin Dalibard, David Budden, Yury Sulsky, James Molloy, Tom L Paine, Caglar Gulcehre, Ziyu Wang, Tobias Pfaff, Yuhuai Wu, Roman Ring, Dani Yogatama, Dario Wünsch, Katrina McKinney, Oliver Smith, Tom Schaul, Timothy Lillicrap, Koray Kavukcuoglu, Demis Hassabis, Chris Apps, and David Silver. Grandmaster level in StarCraft II using multi-agent reinforcement learning. Nature, 575(7782): 350-354, November 2019.
+
+
+Bryan Wang, Gang Li, and Yang Li. Enabling conversational interaction with mobile ui using large language models. In Proc. of the 2023 CHI Conference on Human Factors in Computing Systems, CHI '23. Association for Computing Machinery, 2023a. ISBN 9781450394215. doi: 10.1145/3544548.3580895.URL https://doi.org/10.1145/3544548.3580895.
+Bryan Wang, Gang Li, and Yang Li. Enabling conversational interaction with mobile ui using large language models. In Proc. of the 2023 CHI Conference on Human Factors in Computing Systems, CHI '23. Association for Computing Machinery, 2023a. ISBN 9781450394215. doi: 10.1145/3544548.3580895.URL https://doi.org/10.1145/3544548.3580895.
+
+
+Guanzhi Wang, Yuqi Xie, Yunfan Jiang, Ajay Mandlekar, Chaowei Xiao, Yuke Zhu, Linxi Fan, and Anima Anandkumar. Voyager: An open-ended embodied agent with large language models. arXiv preprint arXiv:2305.16291, 2023b.
+Guanzhi Wang, Yuqi Xie, Yunfan Jiang, Ajay Mandlekar, Chaowei Xiao, Yuke Zhu, Linxi Fan, and Anima Anandkumar. Voyager: An open-ended embodied agent with large language models. arXiv preprint arXiv:2305.16291, 2023b.
+
+
+Qingyun Wu, Gagan Bansal, Jieyu Zhang, Yiran Wu, Beibin Li, Erkang Zhu, Li Jiang, Xiaoyun Zhang, Shaokun Zhang, Jiale Liu, Ahmed Hassan Awadallah, Ryen W White, Doug Burger, and Chi Wang. Autogen: Enabling next-gen llm applications via multi-agent conversation framework. 2023.
+秦雲 吳, Gagan Bansal, Jieyu Zhang, Yiran Wu, Beibin Li, Erkang Zhu, Li Jiang, Xiaoyun Zhang, Shaokun Zhang, Jiale Liu, Ahmed Hassan Awadallah, Ryen W White, Doug Burger, and Chi Wang. Autogen: Enabling next-gen llm applications via multi-agent conversation framework. 2023.
+
+
+Zhiyong Wu, Chengcheng Han, Zichen Ding, Zhenmin Weng, Zhoumianze Liu, Shunyu Yao, Tao Yu, and Lingpeng Kong. Os-copilot: Towards generalist computer agents with self-improvement. arXiv preprint arXiv:2402.07456, 2024.
+Zhiyong Wu, Chengcheng Han, Zichen Ding, Zhenmin Weng, Zhoumianze Liu, Shunyu Yao, Tao Yu, and Lingpeng Kong. Os-copilot: Towards generalist computer agents with self-improvement. arXiv preprint arXiv:2402.07456, 2024.
+
+
+Tianbao Xie, Fan Zhou, Zhoujun Cheng, Peng Shi, Luoxuan Weng, Yitao Liu, Toh Jing Hua, Jun-ning Zhao, Qian Liu, Che Liu, Leo Z. Liu, Yiheng Xu, Hongjin Su, Dongchan Shin, Caiming Xiong, and Tao Yu. Openagents: An open platform for language agents in the wild, 2023.
+Tianbao Xie, Fan Zhou, Zhoujun Cheng, Peng Shi, Luoxuan Weng, Yitao Liu, Toh Jing Hua, Jun-ning Zhao, Qian Liu, Che Liu, Leo Z. Liu, Yiheng Xu, Hongjin Su, Dongchan Shin, Caiming Xiong, and Tao Yu. Openagents: An open platform for language agents in the wild, 2023.
+
+
+Tianbao Xie, Danyang Zhang, Jixuan Chen, Xiaochuan Li, Siheng Zhao, Ruisheng Cao, Toh Jing Hua, Zhoujun Cheng, Dongchan Shin, Fangyu Lei, et al. Osworld: Benchmarking multimodal agents for open-ended tasks in real computer environments. arXiv preprint arXiv:2404.07972, 2024.
+Tianbao Xie, Danyang Zhang, Jixuan Chen, Xiaochuan Li, Siheng Zhao, Ruisheng Cao, Toh Jing Hua, Zhoujun Cheng, Dongchan Shin, Fangyu Lei, et al. Osworld: Benchmarking multimodal agents for open-ended tasks in real computer environments. arXiv preprint arXiv:2404.07972, 2024.
+
+
+Mingzhe Xing, Rongkai Zhang, Hui Xue, Qi Chen, Fan Yang, and Zhen Xiao. Understanding the weakness of large language model agents within a complex android environment. In Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining, pp. 6061- 6072, 2024.
+Mingzhe Xing, Rongkai Zhang, Hui Xue, Qi Chen, Fan Yang, and Zhen Xiao. Understanding the weakness of large language model agents within a complex android environment. In Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining, pp. 6061- 6072, 2024.
+
+
+Qiantong Xu, Fenglu Hong, Bo Li, Changran Hu, Zhengyu Chen, and Jian Zhang. On the tool manipulation capability of open-source large language models. May 2023.
+Qiantong Xu, Fenglu Hong, Bo Li, Changran Hu, Zhengyu Chen, and Jian Zhang. On the tool manipulation capability of open-source large language models. May 2023.
+
+
+An Yan, Zhengyuan Yang, Wanrong Zhu, Kevin Lin, Linjie Li, Jianfeng Wang, Jianwei Yang, Yiwu Zhong, Julian McAuley, Jianfeng Gao, Zicheng Liu, and Lijuan Wang. GPT-4V in wonderland: Large multimodal models for Zero-Shot smartphone GUI navigation. November 2023.
+An Yan, Zhengyuan Yang, Wanrong Zhu, Kevin Lin, Linjie Li, Jianfeng Wang, Jianwei Yang, Yiwu Zhong, Julian McAuley, Jianfeng Gao, Zicheng Liu, and Lijuan Wang. GPT-4V in wonderland: Large multimodal models for Zero-Shot smartphone GUI navigation. November 2023.
+
+
+Jianwei Yang, Hao Zhang, Feng Li, Xueyan Zou, Chunyuan Li, and Jianfeng Gao. Set-of-mark prompting unleashes extraordinary visual grounding in gpt-4v. arXiv preprint arXiv:2310.11441, 2023a.
+Jianwei Yang, Hao Zhang, Feng Li, Xueyan Zou, Chunyuan Li, and Jianfeng Gao. Set-of-mark prompting unleashes extraordinary visual grounding in gpt-4v. arXiv preprint arXiv:2310.11441, 2023a.
+
+
+Zhao Yang, Jiaxuan Liu, Yucheng Han, Xin Chen, Zebiao Huang, Bin Fu, and Gang Yu. Appagent: Multimodal agents as smartphone users. arXiv preprint arXiv:2312.13771, 2023b.
+Zhao Yang, Jiaxuan Liu, Yucheng Han, Xin Chen, Zebiao Huang, Bin Fu, and Gang Yu. Appagent: Multimodal agents as smartphone users. arXiv preprint arXiv:2312.13771, 2023b.
+
+
+Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, and Yuan Cao. ReAct: Synergizing reasoning and acting in language models. October 2022.
+沈宇姚、Jeffrey Zhao、Dian Yu、Nan Du、Izhak Shafran、Karthik Narasimhan 与 Yuan Cao。ReAct：在语言模型中协调推理与行动。2022年10月。
+
+
+Shunyu Yao, Howard Chen, John Yang, and Karthik Narasimhan. Webshop: Towards scalable real-world web interaction with grounded language agents, 2023.
+沈宇姚、Howard Chen、John Yang 与 Karthik Narasimhan。Webshop：在 grounded language agents 的现实世界网页交互中实现可扩展性，2023。
+
+
+Keen You, Haotian Zhang, Eldon Schoop, Floris Weers, Amanda Swearngin, Jeffrey Nichols, Yinfei Yang, and Zhe Gan. Ferret-ui: Grounded mobile ui understanding with multimodal llms, 2024. URL https://arxiv.org/abs/2404.05719.
+Keen You、Haotian Zhang、Eldon Schoop、Floris Weers、Amanda Swearngin、Jeffrey Nichols、Yinfei Yang 与 Zhe Gan。Ferret-ui：基于多模态大型语言模型的具场景感知的移动界面理解，2024。URL https://arxiv.org/abs/2404.05719。
+
+
+Chaoyun Zhang, Liqun Li, Shilin He, Xu Zhang, Bo Qiao, Si Qin, Minghua Ma, Yu Kang, Qingwei Lin, Saravan Rajmohan, et al. Ufo: A ui-focused agent for windows os interaction. arXiv preprint arXiv:2402.07939, 2024a.
+Chaoyun Zhang、Liqun Li、Shilin He、Xu Zhang、Bo Qiao、Si Qin、Minghua Ma、Yu Kang、Qingwei Lin、Saravan Rajmohan 等。Ufo：面向 UI 的 Windows OS 交互代理。arXiv 预印本 arXiv:2402.07939，2024a。
+
+
+Danyang Zhang, Zhennan Shen, Rui Xie, Situo Zhang, Tianbao Xie, Zihan Zhao, Siyuan Chen, Lu Chen, Hongshen Xu, Ruisheng Cao, and Kai Yu. Mobile-env: Building qualified evaluation benchmarks for llm-gui interaction, 2024b. URL https://arxiv.org/abs/2305.08144.
+Danyang Zhang、Zhennan Shen、Rui Xie、Situo Zhang、Tianbao Xie、Zihan Zhao、Siyuan Chen、Lu Chen、Hongshen Xu、Ruisheng Cao 与 Kai Yu。Mobile-env：为 llm-gui 交互建立合格的评估基准，2024b。URL https://arxiv.org/abs/2305.08144。
+
+
+Jiwen Zhang, Jihao Wu, Yihua Teng, Minghui Liao, Nuo Xu, Xiao Xiao, Zhongyu Wei, and Duyu Tang. Android in the zoo: Chain-of-action-thought for gui agents. arXiv preprint arXiv:2403.02713, 2024c.
+Jiwen Zhang、Jihao Wu、Yihua Teng、Minghui Liao、Nuox Xu、Xiao Xiao、Zhongyu Wei 与 Duyu Tang。Android in the zoo：嵌入式行动链条用于 GUI 代理。arXiv 预印本 arXiv:2403.02713，2024c。
+
+
+Li Zhang, Shihe Wang, Xianqing Jia, Zhihan Zheng, Yunhe Yan, Longxi Gao, Yuanchun Li, and Mengwei Xu. Llamatouch: A faithful and scalable testbed for mobile ui task automation, 2024d. URL https://arxiv.org/abs/2404.16054.
+Li Zhang、Shihe Wang、Xianqing Jia、Zhihan Zheng、Yunhe Yan、Longxi Gao、Yuanchun Li 与 Mengwei Xu。Llamatouch：一个可信且可扩展的移动 UI 任务自动化测试平台，2024d。URL https://arxiv.org/abs/2404.16054。
+
+
+Zhuosheng Zhang and Aston Zhang. You only look at screens: Multimodal chain-of-action agents, 2023.
+Zhuosheng Zhang 与 Aston Zhang。你只看屏幕：多模态行动链代理，2023。
+
+
+Zhuosheng Zhang, Yao Yao, Aston Zhang, Xiangru Tang, Xinbei Ma, Zhiwei He, Yiming Wang, Mark Gerstein, Rui Wang, Gongshen Liu, et al. Igniting language intelligence: The hitchhiker's guide from chain-of-thought reasoning to language agents. arXiv preprint arXiv:2311.11797, 2023.
+Zhuosheng Zhang、Yao Yao、Aston Zhang、Xiangru Tang、Xinbei Ma、Zhiwei He、Yiming Wang、Mark Gerstein、Rui Wang、Gongshen Liu 等。点燃语言智能：从思维链推理到语言代理的向导。arXiv 预印本 arXiv:2311.11797，2023。
+
+
+Ziniu Zhang, Shulin Tian, Liangyu Chen, and Ziwei Liu. MMInA: Benchmarking multihop multimodal internet agents. arXiv preprint arXiv:2404.09992, 2024e.
+Ziniu Zhang、Shulin Tian、Liangyu Chen 与 Ziwei Liu。MMInA：多跳多模态互联网代理基准测试。arXiv 预印本 arXiv:2404.09992，2024e。
+
+
+Boyuan Zheng, Boyu Gou, Jihyung Kil, Huan Sun, and Yu Su. Gpt-4v(ision) is a generalist web agent, if grounded. arXiv preprint arXiv:2401.01614, 2024a.
+Boyuan Zheng、Boyu Gou、Jihyung Kil、Huan Sun 与 Yu Su。GPT-4v(ision) 是一个通用网页代理，若具备场景感知。arXiv 预印本 arXiv:2401.01614，2024a。
+
+
+Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan Zhuang, Zhanghao Wu, Yonghao Zhuang, Zi Lin, Zhuohan Li, Dacheng Li, Eric P Xing, Hao Zhang, Joseph E Gonzalez, and Ion Stoica. Judging LLM-as-a-Judge with MT-Bench and chatbot arena. June 2023.
+Lianmin Zheng、Wei-Lin Chiang、Ying Sheng、Siyuan Zhuang、Zhanghao Wu、Yonghao Zhuang、Zi Lin、Zhuohan Li、Dacheng Li、Eric P Xing、Hao Zhang、Joseph E Gonzalez 与 Ion Stoica。以 MT-Bench 与聊天机器人竞技场评判 LLM 作为评判者。2023年6月。
+
+
+Longtao Zheng, Zhiyuan Huang, Zhenghai Xue, Xinrun Wang, Bo An, and Shuicheng Yan. Agentstudio: A toolkit for building general virtual agents, 2024b. URL https://arxiv.org/abs/2403.17918.
+Longtao Zheng、Zhiyuan Huang、Zhenghai Xue、Xinrun Wang、Bo An 与 Shuicheng Yan。Agentstudio：构建通用虚拟代理的工具包，2024b。URL https://arxiv.org/abs/2403.17918。
+
+
+Longtao Zheng, Rundong Wang, Xinrun Wang, and Bo An. Synapse: Trajectory-as-exemplar prompting with memory for computer control, 2024c.
+Longtao Zheng、Rundong Wang、Xinrun Wang 与 Bo An。Synapse：带记忆的以轨迹为范例的提示，用于计算机控制，2024c。
+
+
+Shuyan Zhou, Frank F. Xu, Hao Zhu, Xuhui Zhou, Robert Lo, Abishek Sridhar, Xianyi Cheng, Tianyue Ou, Yonatan Bisk, Daniel Fried, Uri Alon, and Graham Neubig. Webarena: A realistic web environment for building autonomous agents, 2023.
+Shuyan Zhou、Frank F. Xu、Hao Zhu、Xuhui Zhou、Robert Lo、Abishek Sridhar、Xianyi Cheng、Tianyue Ou、Yonatan Bisk、Daniel Fried、Uri Alon 与 Graham Neubig。Webarena：用于构建自主代理的现实网络环境，2023。
+
+
+## APPENDIX A LIMITATIONS
+## APPENDIX A LIMITATIONS
+
+
+ANDROIDWORLD currently supports open-source Android apps (>1M downloads) and built-in system apps. While testing on trending apps would be desirable, we found open-source apps often present harder challenges due to their less-optimized UIs. Popular apps typically offer more shortcuts and UI affordances, while open-source apps may require more complex interaction patterns. For example, in Figure 6c, the agent fails by repeatedly searching for a non-existent "delete-all" button instead of recognizing the need to delete notes individually.
+ANDROIDWORLD 目前支持开源 Android 应用（>1M 下载）和内置系统应用。虽然在趋势应用上进行测试会更理想，但我们发现开源应用往往带来更难的挑战，因为它们的 UI 优化程度较低。受欢迎的应用通常提供更多快捷方式和 UI 可用性，而开源应用可能需要更复杂的交互模式。例如，在图 6c 中，智能体反复搜索一个不存在的“删除全部”按钮而未能识别逐个删除便签的需要，从而导致失败。
+
+
+## APPENDIX B ETHICAL CONSIDERATIONS
+## 附录 B 道德考虑
+
+
+Malicious use There is a risk that malicious actors could engineer agents to bypass security measures like CAPTCHAs or engage in activities like spamming. Additionally, they could alter prompts or screen outputs to further harmful objectives.
+恶意使用 存在风险，恶意行为者可能设计代理以绕过安全措施如验证码或从事垃圾邮件等活动。此外，他们还可能修改提示或屏幕输出以推动有害目标。
+
+
+Societal impact Automation agents may transform societal norms, disrupt employment, and modify human behavior. While they can enhance efficiency, this improvement could pose risks if exploited by malevolent forces.
+社会影响 自动化代理可能改变社会规范、扰乱就业并影响人类行为。尽管它们可以提高效率，但若被不良势力利用，这一改进也可能带来风险。
+
+
+## APPENDIX C ANDROIDWORLD ENVIRONMENT
+## 附录 C ANDROIDWORLD 环境
+
+
+### C.1 OBSERVATION SPACE
+### C.1 观测空间
+
+
+In ANDROIDWORLD, the Android screen is represented using a State class, which includes the following attributes:
+在 ANDROIDWORLD 中，Android 屏幕以 State 类表示，包含以下属性：
+
+
+- Pixels: An RGB array representing the current screen capture of the device. The screenshot resolution is ${2400} \times  {1080} \times  3$ .
+- 像素：表示设备当前屏幕截图的 RGB 数组。截图分辨率为 ${2400} \times  {1080} \times  3$ 。
+
+
+- Accessibility tree: A raw representation of the accessibility tree. ${}^{6}$ This UI tree provides a detailed snapshot of all UI elements currently displayed on the screen. We utilize an accessibility forwarding app from AndroidEnv (Toyama et al., 2021), which leverages gRPC to transmit the accessibility tree data efficiently to the device.
+- 无障碍树：无障碍树的原始表示。${}^{6}$ 此 UI 树提供当前屏幕上显示的所有 UI 元素的详细快照。我们使用来自 AndroidEnv 的无障碍转发应用（Toyama 等，2021），它利用 gRPC 将无障碍树数据高效传输到设备。
+
+
+- UI elements: A list of processed UI elements extracted from the children of the accessibility tree. Each UIElement contains attributes such as text, content description, bounding boxes, and various state flags (e.g., clickable, scrollable, focused).
+- UI 元素：从无障碍树的子节点中提取的处理后 UI 元素列表。每个 UIElement 包含文本、内容描述、边界框以及各种状态标志（如可点击、可滚动、聚焦等）。
+
+
+Since Android observations and actions are asynchronous, changes resulting from actions may take some time to manifest. Therefore, instead of using an RL-based interface, which assumes a tight coupling between actions and observations, we design an interface for the agent tailored for asynchronous interaction. This interface implements a get_state method responsible for capturing the current state of the environment, typically after executing an action. This method includes an optional wait_to_stabilize flag, which, when enabled, employs heuristics to ensure the UI elements are not in a transient state, thus providing a stable and accurate snapshot of the environment.
+由于 Android 的观察与操作是异步的，操作产生的变化可能需要一段时间才能显现。因此，我们不使用假设操作与观察紧密耦合的基于强化学习的接口，而是设计了一个面向异步交互的代理接口。该接口实现了 get_state 方法，负责在执行动作后捕获环境的当前状态。此方法包含一个可选的 wait_to_stabilize 标志，启用时会使用启发式方法确保 UI 元素不处于暂态状态，从而提供稳定且准确的环境快照。
+
+
+---
+
+
+
+${}^{6}$ Represented using all current windows; https://developer.android.com/reference/ android/view/accessibility/AccessibilityWindowInfo
+${}^{6}$ 使用所有当前窗口表示；https://developer.android.com/reference/ android/view/accessibility/AccessibilityWindowInfo
+
+
+---
+
+
+
+### C.2 ACTION SPACE
+### C.2 动作空间
+
+
+Actions are stored using a Python dataclass and executed using adb. The action space includes:
+动作使用 Python 数据类存储并通过 adb 执行。动作空间包括：
+
+
+- Direct UI Actions:
+- 直接 UI 动作：
+
+
+- Click-based actions (click, long press): Simulates touch events at specified coordinates
+- 基于点击的动作（点击、长按）：在指定坐标处模拟触摸事件
+
+
+- Text input: Simulates typing in focused text fields
+- 文本输入：在聚焦文本字段中模拟打字
+
+
+- Navigation: Sends home/back key events
+- 导航：发送 home/back 键事件
+
+
+- Scrolling: Executes swipes in four directions (up, down, left, right)
+- 滚动：在四个方向上执行滑动（上/下/左/右）
+
+
+- App launching: Starts specified applications
+- 应用启动：启动指定应用
+
+
+- Task Management Actions:
+- 任务管理操作：
+
+
+- Status: Reports if task is in-progress, complete, or infeasible
+- 状态：报告任务是进行中、完成还是不可行
+
+
+- Answer: Provides responses, which are needed for information retrieval tasks
+- 答案：提供回答，信息检索任务所需
+
+
+- System Actions:
+- 系统操作：
+
+
+- Wait: No-op useful for loading screens and UI transitions
+- 等待：对加载屏和 UI 转换有用的空操作
+
+
+- Unknown: No-op for handling internal errors
+- 未知：用于处理内部错误的空操作
+
+
+---
+
+
+
+ACTION_TYPES = \{
+ACTION_TYPES = {
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#UI Manipulation
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#UI 操作
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"CLICK": "click",
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"CLICK": "click",
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"SCROLL": "scroll",
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"SCROLL": "scroll",
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"INPUT_TEXT": "input_text",
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"INPUT_TEXT": "input_text",
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"NAVIGATE_HOME": "navigate_home",
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"NAVIGATE_HOME": "navigate_home",
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"NAVIGATE_BACK": "navigate_back",
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"NAVIGATE_BACK": "navigate_back",
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"KEYBOARD_ENTER": "keyboard_enter",
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"KEYBOARD_ENTER": "keyboard_enter",
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"OPEN_APP": "open_app",
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"OPEN_APP": "open_app",
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"LONG_PRESS": "long_press",
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"LONG_PRESS": "long_press",
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#Control Flow
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#Control Flow
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"STATUS": "status", # Reports task completion state
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"STATUS": "status", # 报告任务完成状态
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"WAIT": "wait", # Handles UI transitions
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"WAIT": "wait", # 处理 UI 转换
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ANSWER": "answer", # For information retrieval tasks
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ANSWER": "answer", # 供信息检索任务使用
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"UNKNOWN": "unknown" # No-op for internal errors
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"UNKNOWN": "unknown" # 内部错误的空操作
+
+
+@dataclasses.dataclass ()
+@dataclasses.dataclass ()
+
+
+class JSONAction:
+class JSONAction:
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;"""Represents a parsed JSON action.
+&nbsp;&nbsp;&nbsp;&nbsp;"""表示已解析的 JSON 动作。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;#Example
+&nbsp;&nbsp;&nbsp;&nbsp;#示例
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;result_json = \{'action_type': 'click', 'x': %d, 'y': %d\}
+&nbsp;&nbsp;&nbsp;&nbsp;result_json = \{'action_type': 'click', 'x': %d, 'y': %d\}
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;action = JSONAction(**result_json)
+&nbsp;&nbsp;&nbsp;&nbsp;action = JSONAction(**result_json)
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;Attributes:
+&nbsp;&nbsp;&nbsp;&nbsp;属性：
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action_type: The action type.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;动作类型：动作类型。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index: The index to click, if action is a click. Either an index or a <x, y>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;索引：如果动作是点击，则需要点击的索引。应提供一个索引或一个 <x, y>
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should be provided. See x, y attributes below.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;应提供。见下方的 x, y 属性。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x: The x position to click, if the action is a click.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x：如果动作是点击，点击的 x 坐标。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y: The y position to click, if the action is a click.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y：如果动作是点击，点击的 y 坐标。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text: The text to type, if action is type.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text：如果动作是输入文本，则输入的文本。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;direction: The direction to scroll, if action is scroll.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;direction：如果动作是滚动，滚动的方向。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;app_name: The app name to launch, if the action type is 'open_app'.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;app_name：如果动作类型是 'open_app'，要启动的应用名称。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;"""
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;action_type: str
+&nbsp;&nbsp;&nbsp;&nbsp;action_type: 字符串
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;index: int = None
+&nbsp;&nbsp;&nbsp;&nbsp;index：整型 = None
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;x: int = None
+&nbsp;&nbsp;&nbsp;&nbsp;x：整型 = None
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;y: int = None
+&nbsp;&nbsp;&nbsp;&nbsp;y：整型 = None
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;text: str = None
+&nbsp;&nbsp;&nbsp;&nbsp;text：字符串 = None
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;direction: str = None
+&nbsp;&nbsp;&nbsp;&nbsp;direction：字符串 = None
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;goal_status: str = None
+&nbsp;&nbsp;&nbsp;&nbsp;goal_status：字符串 = None
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;app_name: str = None
+&nbsp;&nbsp;&nbsp;&nbsp;app_name：字符串 = None
+
+
+---
+
+
+
+Listing 1: Pseudo-code representation of the action space.
+列表 1：操作空间的伪代码表示。
+
+
+In addition to the UI-based action space described above, AndroidWorld provides a set of high-level APIs for direct device interaction (i.e., sending SMS messages, opening web pages, managing contacts). While the core action space focuses on fundamental UI control capabilities, these supplementary APIs found in env/tools.py enable future research into hybrid interaction approaches that combine both UI-based and programmatic device control.
+除了上面描述的基于 UI 的操作空间，AndroidWorld 还提供一组用于直接设备交互的高级 API（即发送短信、打开网页、管理联系人）。虽然核心操作空间专注于基本的 UI 控制能力，但 env/tools.py 中的这些补充 API 使未来能够研究结合 UI 基于与编程式设备控制的混合交互方法。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_20_49_99142d.jpg"/>
+
+
+
+Figure 4: Native Android UI widget rendering for HTML5 <input> element.
+图 4：针对 HTML5 <input> 元素的本地 Android UI 小部件渲染。
+
+
+### C.3 MOBILEMINIWOB++
+### C.3 MOBILEMINIWOB++
+
+
+Authors manually completed all tasks in MobileMiniWoB++, implemented as a WebView app, to verify solvability on a mobile interface. MobileMiniWoB++ differs from MiniWoB++ due to the touch-based interface, which required different approaches for certain tasks. For instance, highlighting text from the highlight-text tasks involves using Android's long-press and cursor-moving functionalities. HTML5 <input> elements are natively rendered with native Android UI widgets like the date-picker (see Figure 4).
+作者手工完成了 MobileMiniWoB++ 的所有任务，作为一个 WebView 应用实现，以在移动界面上验证可解性。MobileMiniWoB++ 与 MiniWoB++ 的不同之处在于触控界面，这为某些任务需要采用不同的方法。例如，从突出文本任务中高亮文本涉及使用 Android 的长按和光标移动功能。HTML5 <input> 元素原生用本地 Android UI 小部件渲染，如日期选择器（见图 4）。
+
+
+Our implementation of MiniWoB++ contains 92 tasks in total. We exclude the following tasks: chase-circle (requires near-realtime movement, unachievable by humans on emulators), moving-items (too hard to click in emulator), drag-cube (drags will scroll the screen, moving the task out of view), drag-items-grid (elements are not interactable on Android), drag-items (elements are not interactable on Android), drag-shapes (drags will scroll the screen, moving the task out of view), drag-sort-numbers (elements are not interactable on Android), text-editor (cannot underline everything, weird glitch), number-checkboxes (not correctly rendered: only three columns), use-slider-2 (slider implementation not working), use-spinner (slider implementation not working), and click-menu (the menu responsiveness breaks and the task does not behave as intended).
+我们实现的 MiniWoB++ 总共有 92 个任务。我们排除了以下任务：追逐圆圈（需要接近实时移动，模拟器上人类无法实现）、移动项（在模拟器上太难点击）、拖动立方体（拖动会滚动屏幕，将任务移出视野）、拖动项网格（Android 上不可交互的元素）、拖动项（Android 上不可交互的元素）、拖动形状（拖动会滚动屏幕，将任务移出视野）、拖动排序数字（Android 上不可交互的元素）、文本编辑器（无法逐一下划线，出现奇怪的 glitch）、数字复选框（渲染不正确：仅有三列）、使用滑块 2（滑块实现不可用）、使用旋钮（滑块实现不可用）以及点击菜单（菜单响应性会中断，任务表现不如预期）。
+
+
+## APPENDIX D ANDROIDWORLD BENCHMARK DETAILS
+## 附录 D AndroidWorld 基准测试详情
+
+
+### D.1 APP SELECTION
+### D.1 应用选择
+
+
+Our selection of apps (summarized in Table 4) was guided by three main factors: use case, popularity, and the need for consistency and reproducibility.
+我们对应用的选择（见表 4 的摘要）受到三个方面的影响：用例、受欢迎程度，以及一致性与可复现实用性的需求。
+
+
+Use case and categories We analyzed popular app categories in app stores, focusing on productivity, communication, and multimedia. Selected apps had to meet criteria such as not requiring a login and storing data locally on the device. Additionally, we considered apps from categories that the authors commonly used, ensuring the selection was representative of real-world Android usage.
+用例与类别 我们分析了应用商店中流行的应用类别，重点关注生产力、通讯和多媒体。所选应用须符合一些条件，如不需要登录、在设备上本地存储数据。此外，我们还考虑了作者常用类别中的应用，确保选取具有代表性的真实世界 Android 使用情况。
+
+
+Popularity We used download statistics from the Google Play Store to gauge app popularity, selecting apps with over 1 million downloads. Most of the selected apps exceeded this threshold. Less popular apps were also included if they featured common UI patterns and affordances, ensuring they are indicative of typical Android app usage. For instance, Simple Calendar Pro, though less downloaded, has a UI comparable to the widely-used Google Calendar app.
+受欢迎程度 我们使用 Google Play 商店的下载统计来衡量应用的受欢迎程度，选择下载量超过 100 万次的应用。大多数所选应用都超过了这一阈值。若应用较不常见但具有常见的 UI 模式和可用性，也会被纳入，以确保它们代表典型的 Android 应用使用。例如 Simple Calendar Pro 虽然下载量较低，但其 UI 与广泛使用的 Google Calendar 应用相当。
+
+
+Table 4: List of ANDROIDWORLD apps and number of tasks for each one.
+表 4：ANDROIDWORLD 应用及每个应用的任务数量。
+
+
+<table><tr><td>App name</td><td>Description</td><td>#tasks</td></tr><tr><td>Simple Calendar Pro</td><td>A calendar app for creating, deleting, and managing events and appointments.</td><td>17</td></tr><tr><td>Settings</td><td>The Android system settings app for managing device settings such as Bluetooth, Wi-Fi, and brightness.</td><td>15</td></tr><tr><td>Markor</td><td>A note-taking app for creating, editing, deleting, and managing notes and folders.</td><td>14</td></tr><tr><td>Broccoli - Recipe App</td><td>A recipe management app for adding, deleting, and organizing recipes.</td><td>13</td></tr><tr><td>Pro Expense</td><td>An expense tracking app for adding, deleting, and managing expenses.</td><td>9</td></tr><tr><td>Simple SMS Messenger</td><td>An SMS app for sending, replying to, and resending text messages.</td><td>7</td></tr><tr><td>OpenTracks</td><td>A sport tracking app for recording and analyzing activities, durations, and distances.</td><td>6</td></tr><tr><td>Tasks</td><td>A task management app for tracking tasks, due dates, and priorities.</td><td>6</td></tr><tr><td>Clock</td><td>An app with stopwatch and timer functionality.</td><td>4</td></tr><tr><td>Joplin</td><td>A note-taking app.</td><td>4</td></tr><tr><td>Retro Music</td><td>A music player app.</td><td>4</td></tr><tr><td>Simple Gallery Pro</td><td>An app for viewing images.</td><td>4</td></tr><tr><td>Camera</td><td>An app for taking photos and videos.</td><td>3</td></tr><tr><td>Chrome</td><td>A web browser app.</td><td>3</td></tr><tr><td>Contacts</td><td>An app for managing contact information.</td><td>3</td></tr><tr><td>OsmAnd</td><td>A maps and navigation app with support for adding location markers, favorites, and saving tracks.</td><td>3</td></tr><tr><td>VLC</td><td>A media player app for playing media files.</td><td>3</td></tr><tr><td>Audio Recorder</td><td>An app for recording and saving audio clips.</td><td>2</td></tr><tr><td>Files</td><td>A file manager app for the Android filesystem, used for deleting and moving files.</td><td>2</td></tr><tr><td>Simple Draw Pro</td><td>A drawing app for creating and saving drawings.</td><td>1</td></tr></table>
+<table><tbody><tr><td>应用名称</td><td>描述</td><td>#tasks</td></tr><tr><td>Simple Calendar Pro</td><td>用于创建、删除和管理事件与约会的日历应用。</td><td>17</td></tr><tr><td>设置</td><td>用于管理蓝牙、无线网络和亮度等设备设置的 Android 系统设置应用。</td><td>15</td></tr><tr><td>Markor</td><td>用于创建、编辑、删除及管理笔记与文件夹的记笔记应用。</td><td>14</td></tr><tr><td>Broccoli - Recipe App</td><td>用于添加、删除和组织食谱的食谱管理应用。</td><td>13</td></tr><tr><td>Pro Expense</td><td>用于记录、删除和管理支出的支出追踪应用。</td><td>9</td></tr><tr><td>Simple SMS Messenger</td><td>用于发送、回复和重新发送短信的短信应用。</td><td>7</td></tr><tr><td>OpenTracks</td><td>用于记录与分析活动、时长和距离的运动追踪应用。</td><td>6</td></tr><tr><td>Tasks</td><td>用于跟踪任务、到期日与优先级的任务管理应用。</td><td>6</td></tr><tr><td>Clock</td><td>具备秒表和计时器功能的应用。</td><td>4</td></tr><tr><td>Joplin</td><td>记笔记的应用。</td><td>4</td></tr><tr><td>Retro Music</td><td>音乐播放器应用。</td><td>4</td></tr><tr><td>Simple Gallery Pro</td><td>用于查看图片的应用。</td><td>4</td></tr><tr><td>Camera</td><td>用于拍照和录像的应用。</td><td>3</td></tr><tr><td>Chrome</td><td>一个网页浏览器应用。</td><td>3</td></tr><tr><td>Contacts</td><td>用于管理联系信息的应用。</td><td>3</td></tr><tr><td>OsmAnd</td><td>支持添加定位标记、收藏夹和保存轨迹的地图与导航应用。</td><td>3</td></tr><tr><td>VLC</td><td>用于播放媒体文件的媒体播放器应用。</td><td>3</td></tr><tr><td>Audio Recorder</td><td>用于录制并保存音频片段的应用。</td><td>2</td></tr><tr><td>Files</td><td>用于 Android 文件系统的文件管理器应用，用于删除和移动文件。</td><td>2</td></tr><tr><td>Simple Draw Pro</td><td>用于创建并保存绘图的绘画应用。</td><td>1</td></tr></tbody></table>
+
+
+Consistency and reproducibility All apps were sourced from F-Droid, an open-source Android app repository. This allowed us to manage app versions precisely by selecting and distributing specific APKs. We use the newest version of each app at the time of download.
+一致性和可重复性 所有应用均来自 F-Droid，这是一個開源的 Android 應用倉庫。這使我們能通過選取並分發特定 APK 來精確管理應用版本。我們在下載時使用每個應用的最新版本。
+
+
+### D.2 TASK CLASSIFICATION AND GENERATION
+### D.2 計劃分類與生成
+
+
+We categorize tasks into two types: those with side-effects and those without. Tasks with side-effects are those that modify the internal state of the device or applications, such as turning off Wi-Fi or creating a calendar event. These tasks are implemented as distinct Python classes, each with its own parameter generation, initialization, evaluation, and teardown methods.
+我們把任務分為兩類：有副作用的任務與無副作用的任務。具有副作用的任務是指會修改設備或應用程式的內部狀態的任務，例如關閉 Wi-Fi 或建立日曆事件。這些任務以不同的 Python 類實作，每個類都有自己的參數生成、初始化、評估與收尾方法。
+
+
+Below we show an example of the task evaluation for a SendSms task, which involves sending and validating a text message. The pseudocode illustrates the task initialization, success check, and parameter generation methods. Each task has its own random parameter generation method and success logic.
+下面顯示 SendSms 任務的任務評估示例，該任務涉及發送並驗證短信。偽代碼說明了任務初始化、成功檢查與參數生成方法。每個任務都有自己的隨機參數生成方法與成功邏輯。
+
+
+---
+
+
+
+class SendSms (TaskEval):
+class SendSms (TaskEval):
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;"""Task sending and validating a text message has been sent.
+&nbsp;&nbsp;&nbsp;&nbsp;"""任務在發送文本訊息並驗證已發送。"""
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;It checks the SMS telephony database, which is located at:
+&nbsp;&nbsp;&nbsp;&nbsp;它會檢查短信通訊資料庫，該資料庫位於：
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;/data/data/com.android.providers.telephony/databases/mmssms.db."""
+&nbsp;&nbsp;&nbsp;&nbsp;/data/data/com.android.providers.telephony/databases/mmssms.db."""
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;template $=$
+&nbsp;&nbsp;&nbsp;&nbsp;模板 $=$
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Send a text message using Simple SMS Messenger to "
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"使用 Simple SMS Messenger 發送短信至 "
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"\{number\} with message: \{message\}"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"\{number\} 內容為: \{message\}"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;)
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;def initialize_task(self, env: interface.AsyncEnv) -> None:
+&nbsp;&nbsp;&nbsp;&nbsp;def initialize_task(self, env: interface.AsyncEnv) -> None:
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"""Sets up the initial state of the task."""
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"""設置任務的初始狀態。"""
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;super().initialize_task(env)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;super().initialize_task(env)
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear_sms_database(env.base_env)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear_sms_database(env.base_env)
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;def is_successful(self, env: interface.AsyncEnv) -> float:
+&nbsp;&nbsp;&nbsp;&nbsp;def is_successful(self, env: interface.AsyncEnv) -> float:
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"""Checks if the SMS was sent successfully."""
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"""检查短信是否成功发送。"""
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messages = get_messages(env.base_env)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messages = get_messages(env.base_env)
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return check_message_exists(   )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return check_message_exists(   )
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phone_number=self.params["number"],
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phone_number=self.params["number"],
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body=self.params["message"],
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body=self.params["message"],
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+
+
+
+---
+
+
+
+---
+
+
+
+def teardown(self, env: interface.AsyncEnv) -> None:
+def teardown(self, env: interface.AsyncEnv) -> None:
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;"""Clears the SMS database."""
+&nbsp;&nbsp;&nbsp;&nbsp;"""清空短信数据库。"""
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;super().teardown(env)
+&nbsp;&nbsp;&nbsp;&nbsp;super().teardown(env)
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;clear_sms_database(env.base_env)
+&nbsp;&nbsp;&nbsp;&nbsp;clear_sms_database(env.base_env)
+
+
+@classmethod
+@classmethod
+
+
+def generate_random_params(cls) => dict[str, Any]:
+def generate_random_params(cls) => dict[str, Any]:
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;number = generate_random_number()
+&nbsp;&nbsp;&nbsp;&nbsp;number = generate_random_number()
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;message = generate_random_message()
+&nbsp;&nbsp;&nbsp;&nbsp;message = generate_random_message()
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"number": number,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"number": number,
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"message": message,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"message": message,
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;\}
+
+
+
+---
+
+
+
+### D.3 INFORMATION RETRIEVAL TASKS
+### D.3 INFORMATION RETRIEVAL TASKS
+
+
+Tasks without side-effects are Information Retrieval tasks, requiring the agent to answer a question based on the device or app's current state. For these tasks, instead of a Python class, we create a protobuf structure to specify the prompt, parameter values, and initialization and validation logic. We decided to use a structured data format with the belief that it would allow us to define new information retrieval tasks by simply adding new entries, making it easier to scale up the number of tasks without needing to write and maintain Python classes for each one.
+无副作用的任务是信息检索任务，要求代理基于设备或应用的当前状态来回答问题。对于这些任务，我们不是用 Python 类，而是创建一个 protobuf 结构来指定提示、参数值以及初始化和验证逻辑。我们决定使用结构化数据格式，相信它能让我们通过简单添加新条目来定义新的信息检索任务，从而在不需要为每个任务编写与维护 Python 类的情况下更易扩展任务数量。
+
+
+Initialization is defined per app, including only the state relevant to the prompt's answer and exclusion conditions for generating random states. This ensures that no random state contains information that could alter the expected answer. The initial state and prompt are parameterized using random values from the specified task parameters. For validation, we define the expected answer format within the prompt and use a few supported functions ("count", "sum", "identity") to generate the answer from the initial state.
+初始化按应用定义，仅包含提示答案相关的状态以及用于生成随机状态的排除条件。这确保没有任何随机状态包含可能改变预期答案的信息。初始状态和提示通过来自指定任务参数的随机值来参数化。为验证，我们在提示中定义期望答案格式，并使用少量支持的函数（“count”、“sum”、“identity”）从初始状态生成答案。
+
+
+Once an app and its specific logic are programmed, new tasks can be generated using an LLM to generate the task's protobuf. The process is not automatic and requires human review. Common issues with LLM-generated tasks include missing fields, hallucinated fields, incompatible parameter generation, insufficient parameter usage, and non-specific task prompts. We observed that the complexity of the proto structure correlates with an increase in generated task issues. Despite these challenges, we found that editing LLM-generated protobufs can be more efficient than writing a complete task from scratch.
+一旦应用及其特定逻辑被编程完成，就可以使用大语言模型生成任务的 protobuf 来生成新任务。该过程非自动，需要人工审查。LLM 生成的任务的常见问题包括字段缺失、字段臆造、参数生成不兼容、参数使用不足、任务提示不具体。我们注意到，原型结构的复杂度与生成任务问题的数量呈相关性。尽管存在这些挑战，我们发现编辑 LLM 生成的 protobuf 比从头编写完整任务更高效。
+
+
+Below we show a simplified version of the task definition for the SimpleCalendarEventsOnDate task which involves checking which events are on a certain date. It specifies the relevant event, the exclusion conditions for any noisy event, how to determine success, and possible parameter values to be chosen at random that will be used to fill out the task definition.
+下面展示了 SimpleCalendarEventsOnDate 任务定义的简化版本，该任务涉及检查某日期有哪些事件。它指定相关事件、任意嘈杂事件的排除条件、如何判断成功，以及将随机选择的可能参数值用于填充任务定义。
+
+
+---
+
+
+
+tasks \{
+tasks {
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;prompt: "What events do I have (date) in Simple Calendar Pro? Answer with the titles only. If there are
+&nbsp;&nbsp;&nbsp;&nbsp;prompt: "我在 Simple Calendar Pro 中在 (日期) 有哪些事件？只回答标题。如果有
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple titles, format your answer as a comma separated list."
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多个标题，请将答案格式化为以逗号分隔的列表。"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;complexity: 1
+&nbsp;&nbsp;&nbsp;&nbsp;complexity: 1
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;relevant_state \{
+&nbsp;&nbsp;&nbsp;&nbsp;relevant_state {
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Defines information for the goal events.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 定义目标事件的信息。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;state: \{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;state: {
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calendar \{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calendar {
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;events \{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;events {
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_date: "\{date\}"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_date: "\{date\}"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_time: "\{time\}"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_time: "\{time\}"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;duration: "\{duration\}"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;duration: "\{duration\}"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title: "\{title\}"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title: "\{title\}"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\}
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\}
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Non-goal events.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 非目标事件。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exclusion_conditions \{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exclusion_conditions \{
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field: "start_date"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field: "start_date"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;operation: EQUAL TO
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;operation: 相等
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value: "\{date\}"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value: "\{date\}"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\}
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;\}
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;success_criteria \{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;success_criteria \{
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field_transformation \{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field_transformation \{
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;operation: IDENTITY
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;operation: 身份
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field_name: "title"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field_name: "title"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\}
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;match_type: STRING_MATCH
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;match_type: 字符串匹配
+
+
+\}
+
+
+
+task_params \{
+task_params \{
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;name: "time"
+&nbsp;&nbsp;&nbsp;&nbsp;name: "time"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;possible_values: "11:00am"
+&nbsp;&nbsp;&nbsp;&nbsp;possible_values: "11:00am"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;// ...
+
+
+
+\}
+
+
+
+task_params \{
+task_params \{
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;possible_values: "October 15 2023"
+&nbsp;&nbsp;&nbsp;&nbsp;possible_values: "October 15 2023"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;//...
+
+
+
+\}
+
+
+
+task_params \{
+task_params \{
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;name: "duration"
+&nbsp;&nbsp;&nbsp;&nbsp;name: "duration"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;possible_values: "30 m"
+&nbsp;&nbsp;&nbsp;&nbsp;possible_values: "30 m"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;// ...
+
+
+
+\}
+
+
+
+task_params \{
+task_params \{
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;name: "title"
+&nbsp;&nbsp;&nbsp;&nbsp;name: "title"
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;possible_values: "Data Dive"
+&nbsp;&nbsp;&nbsp;&nbsp;possible_values: "Data Dive"
+
+
+\}
+
+
+
+---
+
+
+
+### D.4 HUMANS FOR TASK ANALYSIS
+### D.4 人类用于任务分析
+
+
+During development, we recruited six volunteers with proficient programming skills to analyze task difficulty, duration, and category. Each human was assigned an equal portion of tasks and tasked with identifying bugs during this annotation phase. This process resulted in the discovery and resolution of over 30 bugs.
+在开发过程中，我们招募了六名具备熟练编程能力的志愿者来分析任务难度、时长和类别。每位人工参与者被分配相等数量的任务，并在标注阶段负责发现漏洞。这一过程促成了超过 30 个漏洞的发现与修复。
+
+
+To evaluate human performance, we enlisted two software engineers to complete the tasks using an Android emulator. Participants were provided with task descriptions and attempted to achieve the goals based on their interpretations. Each participant had one attempt per task. The majority of errors stemmed from misinterpretations or minor errors, such as entering an incorrect file extension. Other errors occurred when participants encountered unfamiliar user interfaces, impeding their ability to solve the tasks on their first attempt.
+为了评估人类表现，我们招募了两名软件工程师使用 Android 模拟器来完成任务。参与者获得任务描述，并据此尝试达到目标。每位参与者对每个任务只有一次尝试。大部分错误源于误解或小失误，如输入错误的文件扩展名。还有一些错误发生在参与者遇到不熟悉的用户界面时，妨碍他们首次尝试就解决任务。
+
+
+In both exercises, we informed participants about the intended use of the collected data. Participants were not required to enter any personal information in the tested tasks.
+在两次练习中，我们告知参与者所收集数据的预期用途。参与者在被测试的任务中无需输入个人信息。
+
+
+### D.5 TASK EXAMPLES
+### D.5 任务示例
+
+
+Table 5 lists some additional examples of tasks and highlights which task attributes can be parameterized in unlimited ways.
+表 5 列出一些额外的任务示例，并强调哪些任务属性可以无限制地参数化。
+
+
+## APPENDIX E ANDROIDWORLD AGENT DETAILS
+## 附录 E AndroidWorld 代理细节
+
+
+### E.1 M3A OBSERVATIONS
+### E.1 M3A 观察
+
+
+ANDROIDWORLD consumes the raw screen pixels, the screen shot with Set-of-Mark (SoM) (Yang et al., 2023a) annotations, and a list of UI elements on screen.
+AndroidWorld 捕捉原始屏幕像素、带 Set-of-Mark（SoM）（Yang 等，2023a）标注的屏幕截图，以及屏幕上 UI 元素的列表。
+
+
+---
+
+
+
+Here is a list of descriptions for some UI elements on the current screen:
+以下是对当前屏幕上一些 UI 元素的描述列表：
+
+
+UTelement0: UIElement (text="VLC", content_description=None, class_name="android.widget.EditText",
+UTelement0: UIElement (text="VLC", content_description=None, class_name="android.widget.EditText",
+
+
+bbox_pixels=BoundingBox(x_min=98, x_max=886, y_min=146, y_max=311), ...)
+bbox_pixels=BoundingBox(x_min=98, x_max=886, y_min=146, y_max=311), ...)
+
+
+UIelement1: UIElement (text=None, content_description="Clear search box", '
+UIelement1: UIElement (text=None, content_description="Clear search box", '
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;ImageButton",
+&nbsp;&nbsp;&nbsp;&nbsp;ImageButton",
+
+
+UTelement2: UTElement (text="15:11", content_description="15:11", class_name="android.widget.TextView",
+UTelement2: UTElement (text="15:11", content_description="15:11", class_name="android.widget.TextView",
+
+
+bbox_pixels=BoundingBox(x_min=50, x_max=148, y_min=1, y_max=128), ...)
+bbox_pixels=BoundingBox(x_min=50, x_max=148, y_min=1, y_max=128), ...)
+
+
+... More elements listed ...
+... More elements listed ...
+
+
+... Guidelines on action selection emitted ...
+... Guidelines on action selection emitted ...
+
+
+Now output an action from the above list in the correct JSON format, following the reason why you do that.
+现在从上述列表中输出一个正确的 JSON 格式动作，遵循你这样做的原因。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;Your answer should look like:
+&nbsp;&nbsp;&nbsp;&nbsp;你的回答应当类似于：
+
+
+Reason: ...
+Reason: ...
+
+
+Action: \{"action_type":...\}
+Action: \{"action_type":...\}
+
+
+---
+
+
+
+Listing 2: The prompt format pertaining to screen representation with UI elements.
+Listing 2: 与屏幕表示相关的 UI 元素格式的提示格式。
+
+
+Table 5: Examples of ANDROIDWORLD tasks. We list the task nickname, the task template indicating which task attributes can be parameterized, the initialization logic that is executed before the task starts and pseudo code describing the success evaluation.
+Table 5: ANDROIDWORLD 任务示例。我们列出任务昵称、指示哪些任务属性可参数化的任务模板、在任务开始前执行的初始化逻辑以及描述成功评估的伪代码。
+
+
+<table><tr><td>Task nickname</td><td>Task template</td><td>Initialization logic</td><td>Success evaluation code</td><td></td></tr><tr><td>VlcCreatePlaylist</td><td>Create a playlist in VLC, titled "\{playlist_name\}" with the following files, in order: \{files\}</td><td>Create new mpeg files: files + "noise" files that should not be added. Add them to VLC videos folder.</td><td>execute_sql(vlc_query) == files</td><td></td></tr><tr><td>RecipeAddMultiple RecipesFromImage</td><td>Add the recipes from recipes.jpg in Simple Gallery Pro to the recipe app.</td><td>Write a receipt file with recipes to Simple Gallery.</td><td>sql_rows_exist (expected_recipes)</td><td></td></tr><tr><td>MarkorEditNote</td><td>lit \{file_name\} Markor. \{file_operation\}.</td><td>Generate file with starting content, along with "noise" files not relevant to goal. Note: file_operation can be to add a footer, header, or update note content.</td><td>file_exists(file_name, content=expected_content)</td><td></td></tr><tr><td>ExpenseAddSingle</td><td>Add the following expenses into pro expense: \{expense_csv\}</td><td>Add to the app's SQLite database the expense that should be deleted, along with "noise" expenses that should not be deleted.</td><td>sql_rows_exist (expense_obj)</td><td></td></tr><tr><td>SimpleCalendarDelete EventsOnRelativeDay</td><td>In Simple Calendar Pro, delete all events scheduled for this \{day_of_week\}.</td><td>add to the app's SQLite database calendar events on specified day, along with "noise" events that should not be deleted.</td><td>!sql_rows_exist (expected_events)</td><td></td></tr><tr><td>FilesDeleteFile</td><td>Delete the file \{file_name\} from the Android filesystem located in the \{subfolder\} folder within the sdk_gphone_x86_64 storage area.</td><td>Generate specified file, along with "noise" files that should not be deleted.</td><td>!file_exists(file_name)</td><td></td></tr><tr><td>SportsTrackerActivities CountForWeek</td><td>How many \{category\} activities did I do this week in the OpenTracks app? Express your answer as a single integer.</td><td>add to the app's SQLite database activities for the specified category, along with "noise" activities.</td><td>int (agent_response) == expected_count</td><td></td></tr></table>
+<table><tbody><tr><td>任务昵称</td><td>任务模版</td><td>初始化逻辑</td><td>成功评估代码</td><td></td></tr><tr><td>VlcCreatePlaylist</td><td>在 VLC 中创建一个名为 "\{playlist_name\}" 的播放列表，按顺序包含以下文件：\{files\}</td><td>创建新的 mpeg 文件：files + 不应添加的 "noise" 文件。将它们加入 VLC 视频文件夹。</td><td>execute_sql(vlc_query) == files</td><td></td></tr><tr><td>RecipeAddMultiple RecipesFromImage</td><td>将 Simple Gallery Pro 中的 recipes.jpg 的配方添加到配方应用</td><td>写一个含有配方的收据文件到 Simple Gallery</td><td>sql_rows_exist (expected_recipes)</td><td></td></tr><tr><td>MarkorEditNote</td><td>高亮 \{file_name\} Markor。 \{file_operation\}。</td><td>生成起始内容的文件，以及与目标无关的 "noise" 文件。注意：file_operation 可能是添加页脚、页眉，或更新备注内容。</td><td>file_exists(file_name, content=expected_content)</td><td></td></tr><tr><td>ExpenseAddSingle</td><td>将以下支出加入专业支出：\{expense_csv\}</td><td>向应用的 SQLite 数据库添加应删除的支出，以及不应删除的 "noise" 支出。</td><td>sql_rows_exist (expense_obj)</td><td></td></tr><tr><td>SimpleCalendarDelete EventsOnRelativeDay</td><td>在 Simple Calendar Pro 中，删除本日程的所有\{day_of_week\}的事件。</td><td>向应用的 SQLite 数据库中添加指定日的日历事件，以及不应删除的 "noise" 事件。</td><td>!sql_rows_exist (expected_events)</td><td></td></tr><tr><td>FilesDeleteFile</td><td>从 Android 文件系统中删除 \{subfolder\} 文件夹中的 \{file_name\}，该文件位于 sdk_gphone_x86_64 存储区域。</td><td>生成指定文件，并附带不应删除的 "noise" 文件。</td><td>!file_exists(file_name)</td><td></td></tr><tr><td>SportsTrackerActivities CountForWeek</td><td>本周在 OpenTracks 应用中，我完成了多少项 \{category\} 活动？请用一个整数表示。</td><td>向应用的 SQLite 数据库添加指定类别的活动，以及带有 "noise" 的活动。</td><td>int (agent_response) == expected_count</td><td></td></tr></tbody></table>
+
+
+### E.2 M3A ACTIONS
+### E.2 M3A 行动
+
+
+For the SoM prompting, the screen is annotated based on the UI elements extracted from the accessibility tree, which form the agent's action space. Figure 5 shows one example.
+对于 SoM 提示，屏幕基于无障碍树中提取的 UI 元素标注，形成代理的动作空间。图 5 展示了一个示例。
+
+
+### E.3 ERROR ANALYSIS
+### E.3 错误分析
+
+
+We analyze M3A errors based on broader categories we observe during evaluation.
+我们基于评估中观察到的更广泛类别分析 M3A 错误。
+
+
+Perceptual errors Perceptual errors are caused when the model fails to recognize crucial elements on the screen necessary for task completion.
+感知性错误 当模型未能识别完成任务所需的屏幕关键元素时，会产生感知性错误。
+
+
+For the task below, the model does not recognize that the "All-day" checkbox is currently not checked (see Figure 6a):
+在下面的任务中，模型未识别“全天”复选框当前未选中（见图 6a）：
+
+
+In Simple Calendar Pro, create a recurring calendar event titled 'Review session for Budget Planning' starting on 2023-10-15 at 14h. The event recurs weekly, forever, and lasts for 60 minutes each occurrence. The event description should be 'We will understand software updates. Remember to confirm attendance.'
+在 Simple Calendar Pro 中，创建一个标题为“Review session for Budget Planning”的 recurring 日历事件，起始时间为 2023-10-15 14:00。该事件每周重复，永久重复，每次持续 60 分钟。事件描述应为“We will understand software updates. Remember to confirm attendance.”
+
+
+Reasoning errors Reasoning errors occur when the model misinterprets the task requirements or the current state, leading to incorrect actions.
+推理错误 推理错误发生在模型误解任务要求或当前状态，导致采取错误的行动。
+
+
+For example, in the task below, the model mistakenly believes the note name has already been entered, so it types the note text into the "Name" field and cannot recover from this error (see Figure 6b):
+例如，在下列任务中，模型错误地认为笔记名已输入，因此将笔记文本输入到“Name”字段，无法从此错误中恢复（见图 6b）：
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_20_49_a51532.jpg"/>
+
+
+
+Figure 5: Set-of-marks overlaid on an Android screen.
+图 5：覆盖在 Android 屏幕上的一组标记。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_20_49_fd3ff3.jpg"/>
+
+
+
+Figure 6: Screens illustrating perceptual, reasoning and missing knowledge errors.
+图 6：展示感知、推理和缺失知识错误的屏幕。
+
+
+Create a new note in Markor named ipsum_mNcKd36pDq.txt with the following text: ...
+在 Markor 中创建名为 ipsum_mNcKd36pDq.txt 的新笔记，文本为： ...
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_20_49_ad3bc7.jpg"/>
+
+
+
+Figure 7: Screens illustrating grounding errors.
+图 7：展示着 grounding 错误的屏幕。
+
+
+Here is the agent's reasoning trace:
+以下是代理的推理轨迹：
+
+
+The user wants to create a new note with a specific name and text. The name of the note has already been entered, so all that needs to be done is to enter the text and click on the OK button.
+用户想创建一个具有特定名称和文本的新笔记。笔记的名称已输入好，因此只需输入文本并点击确定按钮即可。
+
+
+Missing knowledge errors Missing knowledge errors occur when the model lacks the necessary understanding of the application's UI to complete a task efficiently.
+缺失知识错误 缺失知识错误发生在模型对应用程序的 UI 缺乏必要理解，无法高效完成任务时。
+
+
+For example, in the task below, the agent does not know how to delete all files at once. It looks for an option to do that instead of deleting each file one by one (see Figure 6c):
+例如，在下面的任务中，智能体不知道如何一次性删除所有文件。它寻找一个执行此操作的选项，而不是逐个删除文件（见图6c）：
+
+
+Delete all files in the current directory.
+删除当前目录中的所有文件。
+
+
+Grounding errors Grounding errors occur when the model fails to correctly interact with the UI elements based on their spatial or contextual positioning.
+对齐错误 对齐错误发生在模型未能基于空间或上下文位置正确与 UI 元素交互时。
+
+
+For the task below, the agent needs to update the Markor note by prepending text to the existing text. Figure 7 illustrates the errors the agent makes. It clicks the entire text field area, highlighted in green, which automatically places the cursor after the current text, resulting in the new text being appended after the current content.
+在下列任务中，智能体需要通过在现有文本前追加文本来更新 Markor 笔记。图7 展示了智能体的错误。它点击整个文本字段区域（绿色高亮），这会自动将光标放在当前文本之后，导致新文本追加在现有内容之后。
+
+
+---
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;Update the Markor note '2023_08_10_neat_wolf.txt' by adding the fol-
+&nbsp;&nbsp;&nbsp;&nbsp;更新标注笔记 '2023_08_10_neat_wolf.txt'，并添加以下文本，以及在现有内容前留一个新空行：
+
+
+lowing text, along with a new blank line before the existing content:
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;"ETBM2jAP6vXqhbpUsfVm", and rename it to 'sure_ocean_uRnI.txt'.
+&nbsp;&nbsp;&nbsp;&nbsp;\t"ETBM2jAP6vXqhbpUsfVm"，并将其重命名为 'sure_ocean_uRnI.txt'。
+
+
+---
+
+
+
+Then, in the next screen, the text has been entered after the existing content, and the agent clicks the save button.
+然后，在下一屏中，文本已在现有内容之后输入，智能体点击保存按钮。
+
+
+### E.4 AGENT ROBUSTNESS EXPERIMENTS
+### E.4 智能体鲁棒性实验
+
+
+We ran the agent on the following tasks (the nicknames shown in the figures in parentheses):
+我们在以下任务上对智能体进行了测试（括号内为图中的昵称）：
+
+
+---
+
+
+
+- MarkorEditNote (EditNote)
+- MarkorEditNote (EditNote)
+
+
+---
+
+
+
+- ExpenseAddSingle (AddExpense)
+- ExpenseAddSingle (AddExpense)
+
+
+- SimpleCalendarDeleteEventsOnRelativeDay (DeleteEvent)
+- SimpleCalendarDeleteEventsOnRelativeDay (DeleteEvent)
+
+
+- FilesDeleteFile (DeleteFile)
+- FilesDeleteFile (DeleteFile)
+
+
+- SportsTrackerActivitiesCountForWeek (CountActivities)
+- SportsTrackerActivitiesCountForWeek (CountActivities)
+
+
+More details about these tasks can be found in Table 5.
+关于这些任务的更多细节，请参见表5。
+
+
+E.5 AGENT STRUGGLES DUE TO TASK PARAMETERIZATION
+E.5 代理人因任务参数化而苦恼
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_20_49_0f635f.jpg"/>
+
+
+
+Figure 8: The expense entry interface features a horizontally scrollable category selector. When certain parameterization seeds require selecting categories that are not initially visible (e.g., "Food""), the agent fails to discover the scrolling interaction required to access them.
+图 8：花费项界面提供水平滚动的类别选择器。当某些参数化种子需要选择初始不可见的类别（例如“Food”）时，代理无法发现访问它们所需的滚动交互。
+
+
+The variance in success rates (Figure 3) across different seeds demonstrates how task parameterization fundamentally changes task difficulty. For instance, in the ExpenseAddSingle task, the seed determines which expense category must be selected (see UI in Figure 8). When the seed specifies readily on-screen visible categories (e.g., "Housing", "Social"), the agent can complete the task. However, when the seed requires categories that are only accessible via horizontal scrolling (e.g., "Food", "Other"), the agent consistently fails due to its inability to discover and execute this UI interaction pattern.
+不同种子下成功率变异（图3）表明任务参数化本质上改变了任务难度。例如，在 ExpenseAddSingle 任务中，种子决定必须选择的支出类别（见图8中的界面）。当种子指明屏幕上直接可见的类别（如 “Housing”、“Social”）时，代理人可以完成任务。然而，当种子要求通过水平滚动才能访问的类别（如 “Food”、“Other”）时，代理总是失败，因为它无法发现并执行这一 UI 交互模式。
+
+
+Similarly, the MarkorEditNote task's difficulty varies based on the seed-determined variant: adding text to the top of a note, adding text to the bottom, or replacing existing text. The "replace" variant requires a more complex sequence of UI interactions (long-press, text selection, deletion, then text entry) compared to the simpler "header" variant. This explains both the complete failure under fixed seeds that happen to select challenging variants, and the higher but variable success rates when using different seeds that allow the agent to encounter various task parameterizations.
+类似地，MarkorEditNote 任务的难度取决于 seed 决定的变体：在笔记顶部添加文本、在底部添加文本，或替换现有文本。"替换"变体需要比简易的"头部"变体更多的 UI 操作序列（长按、文本选择、删除，然后输入文本）。这解释了在固定种子恰好选择具有挑战性变体时的完全失败，以及在使用不同种子使代理遇到各种任务参数化时的成功率更高但可变的原因。
+
+
+### E.6 SEEACT DETAILS
+### E.6 SEEACT DETAILS
+
+
+We modify the SeeAct prompt (Zheng et al., 2024a) to reflect that the environment is Android by inputting elements from the accessibility tree and supporting additional actions (e.g., scrolling). Below we include the updated prompt. We annotate the system, user, and assistant roles that are each provided to the OpenAI API.
+我们修改 SeeAct 提示（Zheng 等, 2024a）以反映环境为 Android，通过输入无障碍树中的元素并支持额外操作（例如滚动）。下面我们给出更新后的提示。我们对系统、用户和助手的角色进行注释，分别提供给 OpenAI API。
+
+
+---
+
+
+
+$>$ Role: SYSTEM
+$>$ 角色：系统
+
+
+3 Imagine that you are imitating humans operating an Android device for a task step by step. At each stage, you
+3 想象自己在逐步模仿人类操作 Android 设备执行一个任务。到每个阶段，你
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;can see the Android screen like humans by a screenshot and know the previous actions before the current
+&nbsp;&nbsp;&nbsp;&nbsp;可以通过截图像人一样看到 Android 屏幕并知道当前之前的操作
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;step decided by yourself through recorded history. You need to decide on the first following action to
+&nbsp;&nbsp;&nbsp;&nbsp;你通过记录的历史自行决定的步骤。你需要决定下一步要采取的第一行动
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;take. You can tap on an element, long-press an element, swipe, input text, open an app, or use the
+&nbsp;&nbsp;&nbsp;&nbsp;你可以轻触一个元素、长按一个元素、滑动、输入文本、打开一个应用，或使用
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;keyboard enter, home, or back key. (For your understanding, they are like 'add shell input tap', 'adb
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;键盘的回车、Home 键或返回键。 (供你理解，它们就像“添加 shell 输入点按”、“adb
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;shell input swipe', 'adb shell input text', 'adb shell am start -n', and 'adb shell input keyevent').
+&nbsp;&nbsp;&nbsp;&nbsp;shell input swipe', 'adb shell input text', 'adb shell am start -n', and 'adb shell input keyevent').
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;One next step means one operation within these actions. Unlike humans, for typing (e.g., in text areas,
+&nbsp;&nbsp;&nbsp;&nbsp;一个后续步骤意味着在这些操作中的一次操作。不像人类，对于打字（例如在文本区域，
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;text boxes), you should try directly typing the input or selecting the choice, bypassing the need for an
+&nbsp;&nbsp;&nbsp;&nbsp;文本框），你应该直接输入或选择选项来尝试，省去需要一个
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;when you deem the task complete or if it requires potentially harmful actions.
+&nbsp;&nbsp;&nbsp;&nbsp;当你认为任务完成或如果它可能需要潜在有害行动时。
+
+
+$>$ Role: USER
+$>$ 角色：用户
+
+
+You are asked to complete the following task: <GOAL>
+请完成下列任务： <GOAL>
+
+
+Previous Actions:
+先前的操作：
+
+
+<PREVIOUS ACTIONS>
+
+
+
+The screenshot below shows the Android screen you see. Follow the following guidance to think step by step
+下方屏幕截图显示你看到的 Android 屏幕。按照以下指引逐步思考
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;before outlining the next action step at the current stage:
+&nbsp;&nbsp;&nbsp;&nbsp;在概述下一个操作步骤之前：
+
+
+(Current Screen Identification)
+(当前屏幕识别)
+
+
+Firstly, think about what the current screen is.
+首先，思考当前屏幕是什么。
+
+
+6 (Previous Action Analysis)
+6 (上一步骤分析)
+
+
+Secondly, combined with the screenshot, analyze each step of the previous action history and their intention
+其次，结合截图，逐一分析上一步操作历史及其意图
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;one by one. Particularly, pay more attention to the last step, which may be more related to what you
+&nbsp;&nbsp;&nbsp;&nbsp;逐条。特别地，更加关注最后一步，它可能与您当前应执行的下一个步骤相关
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;should do now as the next step. Specifically, if the last action involved a INPUT TEXT, always evaluate
+&nbsp;&nbsp;&nbsp;&nbsp;。具体来说，如果最后一个操作涉及输入文本，始终评估
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;whether it necessitates a confirmation step, because typically a single INPUT TEXT action does not make
+&nbsp;&nbsp;&nbsp;&nbsp;是否需要确认步骤，因为通常单次输入文本操作并不会产生
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;effect. (often, simply pressing 'Enter', assuming the default element involved in the last action,
+&nbsp;&nbsp;&nbsp;&nbsp;效果。 (通常，只需按“Enter”，假设最后一个操作涉及的默认元素)
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;unless other clear elements are present for operation).
+&nbsp;&nbsp;&nbsp;&nbsp;，除非存在其他明确的操作元素。)
+
+
+19 (Screenshot Details Analysis)
+19 (截图细节分析)
+
+
+) Closely examine the screenshot to check the status of every part of the screen to understand what you can
+) 仔细检查截图，查看屏幕各部分的状态，以了解你可以做什么
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;operate with and what has been set or completed. You should closely examine the screenshot details to
+&nbsp;&nbsp;&nbsp;&nbsp;与已设置或已完成的内容一起操作。你应仔细检查截图细节以
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;see what steps have been completed by previous actions even though you are given the textual previous
+&nbsp;&nbsp;&nbsp;&nbsp;查看前一次操作已完成的步骤，尽管你已获得文本形式的前述
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;actions. Because the textual history may not clearly and sufficiently record some effects of previous
+&nbsp;&nbsp;&nbsp;&nbsp;历史记录，因为文本历史可能并未清晰充分地记录某些先前
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;actions, you should closely evaluate the status of every part of the screen to understand what you have
+&nbsp;&nbsp;&nbsp;&nbsp;操作的影响，你应仔细评估屏幕各部分的状态以理解你已
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;done.
+&nbsp;&nbsp;&nbsp;&nbsp;完成了什么。
+
+
+(Next Action Based on Android screen and Analysis)
+(基于 Android 屏幕和分析的下一步行动)
+
+
+Then, based on your analysis, in conjunction with human phone operation habits and the logic of app design,
+然后，基于你的分析，结合人工操作习惯和应用设计逻辑，
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;decide on the following action. And clearly outline which element on the Android screen users will
+&nbsp;&nbsp;&nbsp;&nbsp;决定接下来的行动。并清楚地标出 Android 屏幕上用户将
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;operate with as the first next target element, its detailed location, and the corresponding operation.
+&nbsp;&nbsp;&nbsp;&nbsp;作为第一目标元素进行操作的具体位置及相应的操作。
+
+
+To be successful, it is important to follow the following rules:
+要成功，需遵循以下规则：
+
+
+1. You should only issue a valid action given the current observation.
+1. 你应仅在当前观察基础上发出有效动作。
+
+
+2. You should only issue one action at a time
+2. 你应一次只发出一个动作
+
+
+3. For handling the select dropdown elements on a screen, it's not necessary for you to provide completely
+3. 对于处理屏幕上的下拉选择元素，你现在不必提供完全
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;accurate options right now. The full list of options for these elements will be supplied later.
+&nbsp;&nbsp;&nbsp;&nbsp;准确的选项。此类元素的完整选项列表稍后将提供。
+
+
+29
+
+
+
+30 > Role: ASSISTANT
+30 > 角色：助手
+
+
+31 <AGENT RESPONSE TO ABOVE>
+31 <对上述内容的代理回复>
+
+
+33 > Role: USER
+33 > 角色：USER
+
+
+34 (Reiteration)
+34 （重复）
+
+
+First, reiterate your next target element, its detailed location, and the corresponding operation.
+首先，重申你的下一个目标元素、它的详细位置以及相应的操作。
+
+
+37 (Multichoice Question)
+37 （多选题）
+
+
+Below is a multi-choice question, where the choices are elements on the screen. All elements are arranged in
+下面是一道多选题，选项是屏幕上的元素。所有元素按屏幕高度从上到下（从左到右）的顺序排列。这种排列可用于定位它们。根据截图，找出每一个在屏幕上的位置和含义。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;the order based on their height on the screen, from top to bottom (and from left to right). This
+&nbsp;&nbsp;&nbsp;&nbsp;按屏幕高度从上到下（并从左到右）排序。这种
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;arrangement can be used to locate them. From the screenshot, find out where and what each one is on
+&nbsp;&nbsp;&nbsp;&nbsp;排列可用于定位它们。请从截图中找出每个元素在屏幕上的位置及含义，既要考虑文本内容又要注意细节。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;screen, taking into account both their text content and details. Then, determine whether one matches
+&nbsp;&nbsp;&nbsp;&nbsp;屏幕上的位置与含义。然后判断哪个与你的目标元素匹配。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;your target element. Please examine the choices one by one. Choose the matching one. If multiple options
+&nbsp;&nbsp;&nbsp;&nbsp;请逐个检查选项。选出匹配项。如果有多个选项
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;match your answer, choose the most likely one by re-examining the screenshot, the choices, and your
+&nbsp;&nbsp;&nbsp;&nbsp;与你的答案相符，请通过重新检查截图、选项以及你的进一步推理来选择最可能的一个。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;further reasoning. If you would like to perform a swipe action, you can optionally select the choice
+&nbsp;&nbsp;&nbsp;&nbsp;如果你想执行滑动操作，可以可选地选择你将要滑动的选项
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;where you will swipe.
+&nbsp;&nbsp;&nbsp;&nbsp;所在位置。
+
+
+40 A. "Home" icon
+40 A. "首页" 图标
+
+
+B. "Phone" icon
+B. "电话" 图标
+
+
+C. "Messages" icon
+C. "信息" 图标
+
+
+D. "Chrome" icon
+D. "Chrome" 图标
+
+
+E. "Search" icon
+E. "搜索" 图标
+
+
+...
+
+
+
+If none of these elements match your target element, please select Z. None of the other options match the
+如果上述元素没有匹配到目标元素，请选择 Z。其他选项都不匹配
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;correct element.
+&nbsp;&nbsp;&nbsp;&nbsp;正确的元素。
+
+
+48 (Final Answer)
+48（最终答案）
+
+
+Finally, conclude your answer using the format below. Ensure your answer is strictly adhering to the format
+最后，使用下面的格式给出你的答案。确保你的回答严格遵守所提供的格式
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;provided below. Please do not leave any explanation in your answers of the final standardized format
+&nbsp;&nbsp;&nbsp;&nbsp;请不要在最终标准格式的答案中留下任何解释
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;part, and this final part should be clear and certain. The element choice, action, and value should be
+&nbsp;&nbsp;&nbsp;&nbsp;部分，此部分应清晰且确定。元素选择、操作和值应为
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;in three separate lines.
+&nbsp;&nbsp;&nbsp;&nbsp;分三行。
+
+
+Format:
+格式：
+
+
+ELEMENT: The uppercase letter of your choice. (No need for TERMINATE, KEYBOARD ENTER, WAIT, ANSWER, OPEN APP,
+ELEMENT：你所选字母的大写字母。（无需 TERMINATE、KEYBOARD ENTER、WAIT、ANSWER、OPEN APP、
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;NAVIGATE HOME, NAVIGATE BACK; and optional for SWIPE.)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NAVIGATE HOME、NAVIGATE BACK；以及 SWIPE 的可选项。）
+
+
+ACTION: Choose an action from \{CLICK, INPUT TEXT, LONG PRESS, NAVIGATE BACK, TERMINATE, KEYBOARD ENTER, SWIPE,
+ACTION：从 {CLICK、INPUT TEXT、LONG PRESS、NAVIGATE BACK、TERMINATE、KEYBOARD ENTER、SWIPE、
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;WAIT, ANSWER, OPEN APP, NAVIGATE HOME\}.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WAIT、ANSWER、OPEN APP、NAVIGATE HOME} 其中选择一个操作。
+
+
+---
+
+
+
+---
+
+
+
+57 VALUE: Provide additional input based on ACTION.
+57 VALUE：根据 ACTION 提供额外输入。
+
+
+58
+
+
+
+59 The VALUE means:
+59 VALUE 的含义：
+
+
+60 If ACTION == INPUT TEXT, specify the text to be typed.
+60 如果 ACTION == INPUT TEXT，请指定要输入的文本。
+
+
+61 If ACTION == SWIPE, specify the direction: up, down, left, right.
+61 若 ACTION == SWIPE，请指明方向：向上、向下、向左、向右。
+
+
+62 If ACTION == OPEN APP, provide the name of the app to be opened.
+62 若 ACTION == OPEN APP，请提供将要打开的应用名称。
+
+
+63 If ACTION == ANSWER, specify the text of your answer to respond directly to a question or request for
+63 若 ACTION == ANSWER，请说明你对问题或请求直接回答的文本。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;information.
+&nbsp;&nbsp;&nbsp;&nbsp;information.
+
+
+64 For CLICK, LONG PRESS, KEYBOARD ENTER, NAVIGATE HOME, NAVIGATE BACK, WAIT, and TERMINATE, write "None".
+64 对 CLICK、LONG PRESS、KEYBOARD ENTER、NAVIGATE HOME、NAVIGATE BACK、WAIT 和 TERMINATE，写入“None”。
+
+
+---
+
+
+
+## APPENDIX F ANDROIDWORLD TASK LIST
+## APPENDIX F ANDROIDWORLD TASK LIST
+
+
+The table below lists all tasks in ANDROIDWORLD. The maximum number of steps per task ("S") were determined based on human performance analysis, allowing agents approximately twice the number of steps typically required by human annotators to complete each task while preventing infinite loops.
+下表列出 ANDROIDWORLD 的所有任务。每个任务的最大步骤数（“S”）基于人工性能分析确定，允许代理大约为人类标注者完成每个任务所需步骤数的两倍，同时防止进入无限循环。
+
+
+Task completion tasks (e.g., send a message or edit a note) are abbreviated as "TC" and information retrieval tasks are abbreviated as "IR".
+任务完成任务（如发送信息或编辑笔记）缩写为 "TC"，信息检索任务缩写为 "IR"。
+
+
+<table><tr><td>Name</td><td>Template</td><td>Task type</td><td>Validation method</td><td>S</td><td>Apps</td></tr><tr><td>Audio Recorder Record Audio</td><td>Record an audio clip using Audio Recorder app and save it.</td><td>TC</td><td>Filesystem</td><td>12</td><td>audio recorder</td></tr><tr><td>Audio Recorder Record Audio With File Name</td><td>Record an audio clip and save it with name "\{file_name\}" using Audio Recorder app.</td><td>TC</td><td>Filesystem</td><td>20</td><td>audio recorder</td></tr><tr><td>Browser Draw</td><td>Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then create a drawing using the three colors shown at the top and hit submit.</td><td>TC</td><td>UI-elements</td><td>20</td><td>files, chrome</td></tr><tr><td>Browser Maze</td><td>Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then navigate the X to the bottom-right cell, by using the direction buttons.</td><td>TC</td><td>UI-elements</td><td>20</td><td>files, chrome</td></tr><tr><td>Browser Multiply</td><td>Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then click the button 5 times, remember the numbers displayed, and enter their product in the form.</td><td>TC</td><td>UI-elements</td><td>22</td><td>files, chrome</td></tr><tr><td>Camera Take Photo</td><td>Take one photo.</td><td>TC</td><td>Filesystem</td><td>10</td><td>camera</td></tr><tr><td>Camera Take Video</td><td>Take one video.</td><td>TC</td><td>Filesystem</td><td>10</td><td>camera</td></tr><tr><td>Clock Stop Watch Paused Verify</td><td>Pause the stopwatch.</td><td>TC</td><td>UI-elements</td><td>10</td><td>clock</td></tr><tr><td>Clock Stop Watch Running</td><td>Run the stopwatch.</td><td>TC</td><td>UI-elements</td><td>10</td><td>clock</td></tr><tr><td>Clock Timer Entry</td><td>Create a timer with \{hours\} hours, \{minutes\} minutes, and \{seconds\} seconds. Do not start the timer.</td><td>TC</td><td>UI-elements</td><td>10</td><td>clock</td></tr><tr><td>Contacts Add Contact</td><td>Create a new contact for \{name\}. Their number is \{number\}.</td><td>TC</td><td>Database query</td><td>12</td><td>contacts</td></tr></table>
+<table><tbody><tr><td>名称</td><td>模板</td><td>任务类型</td><td>验证方法</td><td>S</td><td>应用</td></tr><tr><td>音频记录器 记录音频</td><td>使用音频记录器应用录制一段音频并保存。</td><td>TC</td><td>文件系统</td><td>12</td><td>音频记录器</td></tr><tr><td>音频记录器 以文件名记录音频</td><td>使用音频记录器应用录制一段音频并以“\{file_name\}”命名后保存。</td><td>TC</td><td>文件系统</td><td>20</td><td>音频记录器</td></tr><tr><td>浏览器绘图</td><td>在下载中打开 Downloads 的 task.html 文件；被提示时用 Chrome 打开。然后用顶部显示的三种颜色进行绘图并点击提交。</td><td>TC</td><td>UI 元素</td><td>20</td><td>文件、Chrome</td></tr><tr><td>浏览器迷宫</td><td>在文件管理器的 Downloads 中打开 task.html；被提示时用 Chrome 打开。然后使用方向按钮将 X 移动到右下角格。</td><td>TC</td><td>UI 元素</td><td>20</td><td>文件、Chrome</td></tr><tr><td>浏览器乘法</td><td>在文件管理器的 Downloads 中打开 task.html；被提示时用 Chrome 打开。然后点击按钮5次，记住显示的数字，并在表单中输入它们的乘积。</td><td>TC</td><td>UI 元素</td><td>22</td><td>文件、Chrome</td></tr><tr><td>相机 拍照</td><td>拍一张照片。</td><td>TC</td><td>文件系统</td><td>10</td><td>相机</td></tr><tr><td>相机 拍摄视频</td><td>拍摄一个视频。</td><td>TC</td><td>文件系统</td><td>10</td><td>相机</td></tr><tr><td>时钟 停止 计时器 暂停 验证</td><td>暂停秒表。</td><td>TC</td><td>UI 元素</td><td>10</td><td>时钟</td></tr><tr><td>时钟 停止 秒表 运行</td><td>启动秒表。</td><td>TC</td><td>UI 元素</td><td>10</td><td>时钟</td></tr><tr><td>时钟计时器 录入</td><td>创建一个计时器，设定 \{hours\} 小时、\{minutes\} 分钟、和 \{seconds\} 秒。不启动计时器。</td><td>TC</td><td>UI 元素</td><td>10</td><td>时钟</td></tr><tr><td>联系人 添加联系人</td><td>为 \{name\} 创建一个新的联系记录。其号码为 \{number\}。</td><td>TC</td><td>数据库查询</td><td>12</td><td>联系人</td></tr></tbody></table>
+
+
+<table><tr><td>Name</td><td>Template</td><td>Task type</td><td>Validation method</td><td>S</td><td>Apps</td></tr><tr><td>Contacts New Contact Draft</td><td>Go to the new contact screen and enter the following details: First Name: \{first\}, Last Name: \{last\}, Phone: \{phone\}, Phone Label: \{phone_label\}. Do NOT hit save.</td><td>TC</td><td>UI-elements</td><td>12</td><td>contacts</td></tr><tr><td>Expense Add Multiple</td><td>Add the following expenses into the pro expense: \{expense_list\}</td><td>TC</td><td>Database query</td><td>40</td><td>expense</td></tr><tr><td>Expense Add Multiple From Gallery</td><td>Add the expenses from expenses.jpg in Simple gallery to pro expense.</td><td>TC</td><td>Database query</td><td>20</td><td>gallery, expense</td></tr><tr><td>Expense Add Multiple From Markor</td><td>Go through the transactions in my_expenses.txt in Markor. Log the reimbursable transactions in the pro expense.</td><td>TC</td><td>Database query</td><td>30</td><td>markor, expense</td></tr><tr><td>Expense Add Single</td><td>Add the following expenses into the pro expense: \{expense_info\}</td><td>TC</td><td>Database query</td><td>12</td><td>expense</td></tr><tr><td>Expense Delete Duplicates</td><td>Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.</td><td>TC</td><td>Database query</td><td>12</td><td>expense</td></tr><tr><td>Expense Delete Duplicates2</td><td>Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.</td><td>TC</td><td>Database query</td><td>18</td><td>expense</td></tr><tr><td>Expense Delete Multiple</td><td>Delete the following expenses from pro expense: \{expense_list\}.</td><td>TC</td><td>Database query</td><td>20</td><td>expense</td></tr><tr><td>Expense Delete Multiple2</td><td>Delete the following expenses from pro expense: \{expense_list\}.</td><td>TC</td><td>Database query</td><td>34</td><td>expense</td></tr><tr><td>Expense Delete Single</td><td>Delete the following expenses from pro expense: \{expense_name\}.</td><td>TC</td><td>Database query</td><td>10</td><td>expense</td></tr><tr><td>Files Delete File</td><td>Delete the file \{file_name\} from the Android filesystem located in the \{subfolder\} folder within the sdk_gphone_x86_64 storage area.</td><td>TC</td><td>Filesystem</td><td>10</td><td>files</td></tr><tr><td>Files Move File</td><td>Move the file \{file_name\} from \{source_folder\} within the sdk_gphone_x86_64 storage area to the \{destination_folder\} within the same sdk_gphone_x86_64 storage area in the Android filesystem.</td><td>TC</td><td>Filesystem</td><td>20</td><td>files</td></tr><tr><td>Markor Add Note Header</td><td>Update the Markor note \{file_name\} by adding the following text, along with a new blank line before the existing content: "\{header\}".</td><td>TC</td><td>Filesystem</td><td>12</td><td>markor</td></tr><tr><td>Markor Change Note Content</td><td>Update the content of \{file_name\} to "\{updated_content\}" in Markor.</td><td>TC</td><td>Filesystem</td><td>12</td><td>markor</td></tr><tr><td>Markor Create Folder</td><td>Create a new folder in Markor named \{folder_name\}.</td><td>TC</td><td>Filesystem</td><td>10</td><td>markor</td></tr><tr><td>Markor Create Note</td><td>Create a new note in Markor named \{file_name\} with the following text: \{text\}</td><td>TC</td><td>Filesystem</td><td>16</td><td>markor</td></tr></table>
+<table><tbody><tr><td>名称</td><td>模板</td><td>任务类型</td><td>验证方法</td><td>S</td><td>应用</td></tr><tr><td>联系人 新建联系人 草稿</td><td>前往新联系人的界面并输入以下信息：名：\{first\}，姓：\{last\}，电话：\{phone\}，电话标签：\{phone_label\}。请勿点击保存。</td><td>TC</td><td>UI 元素</td><td>12</td><td>联系人</td></tr><tr><td>费用 添加多项</td><td>将以下费用添加到专业费用中：\{expense_list\}</td><td>TC</td><td>数据库查询</td><td>40</td><td>费用</td></tr><tr><td>从画廊添加多项费用至专业费用</td><td>将 Simple gallery 中的 expenses.jpg 的费用添加到专业费用中。</td><td>TC</td><td>数据库查询</td><td>20</td><td>画廊，费用</td></tr><tr><td>从 Markor 添加多项费用</td><td>在 Markor 的 my_expenses.txt 中逐笔核对交易。将可报销的交易记录到专业费用中。</td><td>TC</td><td>数据库查询</td><td>30</td><td>markor, 费用</td></tr><tr><td>单次添加费用</td><td>将以下费用添加到专业费用：\{expense_info\}</td><td>TC</td><td>数据库查询</td><td>12</td><td>费用</td></tr><tr><td>删除重复费用</td><td>在专业费用中删除除一个之外的所有相同费用，确保每种唯一费用至少保留一个实例。</td><td>TC</td><td>数据库查询</td><td>12</td><td>费用</td></tr><tr><td>删除重复项2</td><td>在专业费用中删除除一个之外的所有相同费用，确保每种唯一费用至少保留一个实例。</td><td>TC</td><td>数据库查询</td><td>18</td><td>费用</td></tr><tr><td>删除多项</td><td>从专业费用中删除以下费用：\{expense_list\}。</td><td>TC</td><td>数据库查询</td><td>20</td><td>费用</td></tr><tr><td>删除多项2</td><td>从专业费用中删除以下费用：\{expense_list\}。</td><td>TC</td><td>数据库查询</td><td>34</td><td>费用</td></tr><tr><td>删除单个</td><td>从专业费用中删除以下费用：\{expense_name\}。</td><td>TC</td><td>数据库查询</td><td>10</td><td>费用</td></tr><tr><td>文件 删除 文件</td><td>从 Android 文件系统中名为 \{file_name\} 的文件，在 sdk_gphone_x86_64 存储区域的 \{subfolder\} 文件夹内删除。</td><td>TC</td><td>文件系统</td><td>10</td><td>文件</td></tr><tr><td>文件 移动 文件</td><td>将 \{file_name\} 从 sdk_gphone_x86_64 存储区域内的 \{source_folder\} 移动到同一存储区域内的 \{destination_folder\}。</td><td>TC</td><td>文件系统</td><td>20</td><td>文件</td></tr><tr><td>Markor 添加笔记标题</td><td>通过在现有内容前添加一个空行和以下文本来更新 Markor 笔记 \{file_name\}："\{header\}"。</td><td>TC</td><td>文件系统</td><td>12</td><td>markor</td></tr><tr><td>Markor 更改笔记内容</td><td>将 Markor 的 \{file_name\} 内容更新为 "\{updated_content\}"。</td><td>TC</td><td>文件系统</td><td>12</td><td>markor</td></tr><tr><td>Markor 创建文件夹</td><td>在 Markor 中创建一个名为 \{folder_name\} 的新文件夹。</td><td>TC</td><td>文件系统</td><td>10</td><td>markor</td></tr><tr><td>Markor 创建笔记</td><td>在 Markor 中创建一个名为 \{file_name\} 的新笔记，文本为：\{text\}</td><td>TC</td><td>文件系统</td><td>16</td><td>markor</td></tr></tbody></table>
+
+
+<table><tr><td>Name</td><td>Template</td><td>Task type</td><td>Validation <br> method</td><td>S</td><td>Apps</td></tr><tr><td>Markor Create Note And Sms</td><td>Create a new note in Markor named \{file_name\} with the following text: \{text\}. Share the entire content of the note with the phone number \{number\} via SMS using Simple SMS Messenger</td><td>TC</td><td>Filesystem, <br> database <br> query</td><td>18</td><td>markor, sms</td></tr><tr><td>Markor Create Note From Clipboard</td><td>Create a note in Markor named \{file_name\}. Perform a paste operation in the note and save the note.</td><td>TC</td><td>Filesystem</td><td>14</td><td>markor</td></tr><tr><td>Markor Delete All Notes</td><td>Delete all my notes in Markor.</td><td>TC</td><td>Filesystem</td><td>14</td><td>markor</td></tr><tr><td>Markor Delete Newest Note</td><td>Delete the newest note in Markor.</td><td>TC</td><td>Filesystem</td><td>10</td><td>markor</td></tr><tr><td>Markor Delete Note</td><td>Delete the note in Markor named \{file_name\}.</td><td>TC</td><td>Filesystem</td><td>10</td><td>markor</td></tr><tr><td>Markor Edit Note</td><td>Edit \{file_name\} in Markor. \{edit_subcommand\}</td><td>TC</td><td>Filesystem</td><td>12</td><td>markor</td></tr><tr><td>Markor Merge Notes</td><td>Merge the contents of Markor notes \{file1_name\}, \{file2_name\} and \{file3_name\} (in the same order) into a new Markor note named \{new_file_name\} and save it. Add a new line between the content of each note.</td><td>TC</td><td>Filesystem</td><td>78</td><td>markor</td></tr><tr><td>Markor Move Note</td><td>In Markor, move the note \{file_name\} from \{source_folder\} to \{destination_folder\}.</td><td>TC</td><td>Filesystem</td><td>14</td><td>markor</td></tr><tr><td>Markor Transcribe Receipt</td><td>Create a file in Markor, called receipt.md with the transactions from the receipt.png. Use Simple Gallery to view the receipt. Please enter transactions in csv format including the header "Date, Item, Amount".</td><td>TC</td><td>Filesystem</td><td>18</td><td>gallery, markor</td></tr><tr><td>Markor Transcribe Video</td><td>Transcribe the contents of video \{video_name\} by watching it in VLC player (located in Download) and writing the sequence of strings shown on each frame to the text file \{file_name\} in Markor as a comma separated list. For example, if the first frame shows the text "edna" and the second frame shows the text "pineapple", then the text file should contains only the following text: "edna, pineapple".</td><td>TC</td><td>Filesystem</td><td>20</td><td>markor, vlc</td></tr><tr><td>Notes Is Todo</td><td>Is the note titled '\{title\}' in the Joplin app marked as a todo item? Respond with either 'True' if it is a todo or 'False' if not.</td><td>IR</td><td>String match</td><td>10</td><td>joplin</td></tr><tr><td>Notes Meeting Attendee Count</td><td>How many attendees were present in the meeting titled ' \{title\}' in the Joplin app? Express your answer as just a single number.</td><td>IR</td><td>String match</td><td>10</td><td>joplin</td></tr></table>
+<table><tbody><tr><td>名称</td><td>模板</td><td>任务类型</td><td>验证 <br/> 方法</td><td>S</td><td>应用</td></tr><tr><td>Markor 创建笔记并发送短信</td><td>在 Markor 中创建一个名为 \{file_name\} 的新笔记，文本为：\{text\}。通过 Simple SMS Messenger 将笔记的全部内容与号码 \{number\} 通过短信分享</td><td>TC</td><td>文件系统, <br/> 数据库 <br/> 查询</td><td>18</td><td>markor, sms</td></tr><tr><td>从剪贴板创建 Markor 笔记</td><td>在 Markor 中创建一个名为 \{file_name\} 的笔记。在笔记中执行粘贴操作并保存笔记。</td><td>TC</td><td>文件系统</td><td>14</td><td>markor</td></tr><tr><td>删除 Markor 中的所有笔记</td><td>删除我的所有笔记（Markor）。</td><td>TC</td><td>文件系统</td><td>14</td><td>markor</td></tr><tr><td>删除 Markor 最新的笔记</td><td>删除 Markor 中最新的笔记。</td><td>TC</td><td>文件系统</td><td>10</td><td>markor</td></tr><tr><td>删除笔记</td><td>删除 Markor 中名为 \{file_name\} 的笔记。</td><td>TC</td><td>文件系统</td><td>10</td><td>markor</td></tr><tr><td>编辑笔记</td><td>在 Markor 中编辑 \{file_name\}。 \{edit_subcommand\}</td><td>TC</td><td>文件系统</td><td>12</td><td>markor</td></tr><tr><td>合并笔记</td><td>将 Markor 笔记 \{file1_name\}、\{file2_name\} 与 \{file3_name\} 的内容（按相同顺序）合并为一个新的 Markor 笔记，命名为 \{new_file_name\} 并保存。每个笔记之间添加新行。</td><td>TC</td><td>文件系统</td><td>78</td><td>markor</td></tr><tr><td>移动笔记</td><td>在 Markor 中，将笔记 \{file_name\} 从 \{source_folder\} 移动到 \{destination_folder\}。</td><td>TC</td><td>文件系统</td><td>14</td><td>markor</td></tr><tr><td>转写收据</td><td>在 Markor 中创建一个名为 receipt.md 的文件，包含 receipt.png 的交易明细。使用 Simple Gallery 查看收据。请以 csv 格式输入交易记录，其中包含表头 "Date, Item, Amount"。</td><td>TC</td><td>文件系统</td><td>18</td><td> gallery, markor</td></tr><tr><td>转写视频</td><td>通过在 VLC 播放器（位于 Download）观看视频 \{video_name\}，并将每帧显示的字符串序列写入 Markor 中文件 \{file_name\}，以逗号分隔。示例：若第一帧显示 “edna”，第二帧显示 “pineapple”，则文本文件应仅包含： "edna, pineapple"。</td><td>TC</td><td>文件系统</td><td>20</td><td>markor, vlc</td></tr><tr><td>笔记 是 待办</td><td>在 Joplin 应用中，标题为 '\{title\}' 的笔记是否标记为待办项？若是待办，回答 'True'；否则回答 'False'。</td><td>IR</td><td>字符串匹配</td><td>10</td><td>joplin</td></tr><tr><td>笔记 会议 参与者人数</td><td>在 Joplin 应用中，标题为 ' \{title\}' 的会议有多少与会者？仅以单个数字作为答案。</td><td>IR</td><td>字符串匹配</td><td>10</td><td>joplin</td></tr></tbody></table>
+
+
+<table><tr><td>Name</td><td>Template</td><td>Task type</td><td>Validation method</td><td>S</td><td>Apps</td></tr><tr><td>Notes Recipe Ingredient Count</td><td>What quantity of \{ingredient\} do I need for the recipe '\{title\}' in the Joplin app? Express your answer in the format ⟨amount⟩ (unit⟩ without using abbreviations.</td><td>IR</td><td>String match</td><td>10</td><td>joplin</td></tr><tr><td>Notes Todo Item Count</td><td>How many to-dos do I have in the '\{folder\}' folder in the Joplin app? Express your answer as just a single number.</td><td>IR</td><td>String match</td><td>10</td><td>joplin</td></tr><tr><td>Open App Task Eval</td><td>Open the \{app_name\} app. Clear any pop-ups that may appear by granting all permissions that are required.</td><td>TC</td><td>System API</td><td>10</td><td>camera, clock, contacts, settings, dialer</td></tr><tr><td>Osm And Favorite</td><td>Add a favorite location marker for \{location\} in the OsmAnd maps app.</td><td>TC</td><td>Filesystem</td><td>13</td><td>osmand</td></tr><tr><td>Osm And Marker</td><td>Add a location marker for \{location\} in the OsmAnd maps app.</td><td>TC</td><td>Filesystem</td><td>20</td><td>osmand</td></tr><tr><td>Osm And Track</td><td>Save a track with waypoints Ruggell, Liechtenstein, Bendern, Liechtenstein in the OsmAnd maps app in the same order as listed.</td><td>TC</td><td>Filesystem</td><td>120</td><td>osmand</td></tr><tr><td>Recipe Add Multiple Recipes</td><td>Add the following recipes into the Broccoli app: \{recipe_list\}</td><td>TC</td><td>Database query</td><td>68</td><td>recipe</td></tr><tr><td>Recipe Add Multiple Recipes From Image</td><td>Add the recipes from recipes.jpg in Simple gallery to the Broccoli recipe app.</td><td>TC</td><td>Database query</td><td>26</td><td>markor, recipe</td></tr><tr><td>Recipe Add Multiple Recipes From Markor</td><td>Add the recipes from recipes.txt in Markor to the Broccoli recipe app.</td><td>TC</td><td>Database query</td><td>48</td><td>gallery, recipe</td></tr><tr><td>Recipe Add Multiple Recipes From Markor2</td><td>Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.</td><td>TC</td><td>Database query</td><td>52</td><td>recipe</td></tr><tr><td>Recipe Add Single Recipe</td><td>Add the following recipes into the Broccoli app: \{recipe_list\}</td><td>TC</td><td>Database query</td><td>24</td><td>recipe</td></tr><tr><td>Recipe Delete Duplicate Recipes</td><td>Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains</td><td>TC</td><td>Database query</td><td>10</td><td>recipe</td></tr><tr><td>Recipe Delete Duplicate Recipes2</td><td>Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains</td><td>TC</td><td>Database query</td><td>24</td><td>recipe</td></tr><tr><td>Recipe Delete Duplicate Recipes3</td><td>Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains</td><td>TC</td><td>Database query</td><td>34</td><td>recipe</td></tr><tr><td>Recipe Delete Multiple Recipes</td><td>Delete the following recipes from Broccoli app: \{recipe_list\}</td><td>TC</td><td>Database query</td><td>24</td><td>recipe</td></tr></table>
+<table><tbody><tr><td>名称</td><td>模板</td><td>任务类型</td><td>验证方法</td><td>S</td><td>应用</td></tr><tr><td>备注 配方 成分 数量</td><td>我需要多少 \{ingredient\} 来做名为 '\{title\}' 的配方？请以 ⟨数量⟩ (单位⟩ 的格式表达，且不使用缩写。</td><td>IR</td><td>字符串匹配</td><td>10</td><td>joplin</td></tr><tr><td>笔记 待办项数量</td><td>在 Joplin 应用的 '\{folder\}' 文件夹中，我有多少个待办事项？请仅以一个数字表示答案。</td><td>IR</td><td>字符串匹配</td><td>10</td><td>joplin</td></tr><tr><td>打开应用任务评估</td><td>打开 \{app_name\} 应用。通过授予所需的所有权限来清除可能出现的弹出窗口。</td><td>TC</td><td>系统 API</td><td>10</td><td>相机、时钟、联系人、设置、拨号器</td></tr><tr><td>Osm 与 收藏</td><td>在 OsmAnd 地图应用中为 \{location\} 添加一个收藏地点标记。</td><td>TC</td><td>文件系统</td><td>13</td><td>osmand</td></tr><tr><td>Osm 与 标记</td><td>在 OsmAnd 地图应用中为 \{location\} 添加一个地点标记。</td><td>TC</td><td>文件系统</td><td>20</td><td>osmand</td></tr><tr><td>Osm 与 轨迹</td><td>在 OsmAnd 地图应用中按列出的顺序保存带有路线点的轨迹：Ruggell、列支敦士登、本德恩、列支敦士登。</td><td>TC</td><td>文件系统</td><td>120</td><td>osmand</td></tr><tr><td>配方 添加 多个配方</td><td>将以下配方添加到 Broccoli 应用中：\{recipe_list\}</td><td>TC</td><td>数据库查询</td><td>68</td><td>配方</td></tr><tr><td>配方 从图片添加 多个配方</td><td>将 recipes.jpg 中简单图库中的配方添加到 Broccoli 配方应用。</td><td>TC</td><td>数据库查询</td><td>26</td><td>markor, 配方</td></tr><tr><td>从 Markor 添加 多个配方</td><td>将 Markor 中的 recipes.txt 的配方添加到 Broccoli 配方应用。</td><td>TC</td><td>数据库查询</td><td>48</td><td>画廊、配方</td></tr><tr><td>从 Markor2 添加 多个配方</td><td>将 Markor 中耗时 10 分钟准备的配方（recipes.txt）添加到 Broccoli 配方应用。</td><td>TC</td><td>数据库查询</td><td>52</td><td>配方</td></tr><tr><td>添加单个配方</td><td>将以下配方添加到 Broccoli 应用中：\{recipe_list\}</td><td>TC</td><td>数据库查询</td><td>24</td><td>配方</td></tr><tr><td>删除重复的配方</td><td>从 Broccoli 应用中删除所有相同配方的重复项，仅保留至少一个唯一配方实例</td><td>TC</td><td>数据库查询</td><td>10</td><td>配方</td></tr><tr><td>删除重复配方2</td><td>从 Broccoli 应用中删除所有相同配方的重复项，仅保留至少一个唯一配方实例</td><td>TC</td><td>数据库查询</td><td>24</td><td>配方</td></tr><tr><td>删除重复配方3</td><td>从 Broccoli 应用中删除所有相同配方的重复项，仅保留至少一个唯一配方实例</td><td>TC</td><td>数据库查询</td><td>34</td><td>配方</td></tr><tr><td>删除多个配方</td><td>从 Broccoli 应用中删除以下配方：\{recipe_list\}</td><td>TC</td><td>数据库查询</td><td>24</td><td>配方</td></tr></tbody></table>
+
+
+<table><tr><td>Name</td><td>Template</td><td>Task type</td><td>Validation method</td><td>S</td><td>Apps</td></tr><tr><td>Recipe Delete Multiple Recipes With Constraint</td><td>Delete the recipes from Broccoli app that use \{ingredient\} in the directions.</td><td>TC</td><td>Database query</td><td>40</td><td>recipe</td></tr><tr><td>Recipe Delete Multiple Recipes With Noise</td><td>Delete the following recipes from Broccoli app: \{recipe_list\}</td><td>TC</td><td>Database query</td><td>34</td><td>recipe</td></tr><tr><td>Recipe Delete Single Recipe</td><td>Delete the following recipes from Broccoli app: \{recipe_list\}</td><td>TC</td><td>Database query</td><td>10</td><td>recipe</td></tr><tr><td>Recipe Delete Single With Recipe With Noise</td><td>Delete the following recipes from Broccoli app: \{recipe_list\}</td><td>TC</td><td>Database query</td><td>20</td><td>recipe</td></tr><tr><td>Retro Create Playlist</td><td>Create a playlist in Retro Music titled "\{title\}" with the following songs, in order: \{song_list\}</td><td>TC</td><td>Database query</td><td>24</td><td>music</td></tr><tr><td>Retro Playing Queue</td><td>Add the following songs, in order, \{song_list\} to my playing queue in Retro music.</td><td>TC</td><td>Database query</td><td>32</td><td>music</td></tr><tr><td>Retro Playlist Duration</td><td>Create a playlist in Retro Music titled "\{title\}" with a duration between 45 and 50 minutes using the provided songs.</td><td>TC</td><td>Database query</td><td>30</td><td>music</td></tr><tr><td>Retro Save Playlist</td><td>Create a playlist in Retro Music titled "\{title\}" with the following songs, in order: \{song_list\}. Then export the playlist to the Downloads directory on the device.</td><td>TC</td><td>Database query</td><td>50</td><td>music</td></tr><tr><td>Save Copy Of Receipt Task Eval</td><td>Copy \{file_name\} in DCIM and save a copy with the same name in Download</td><td>TC</td><td>Filesystem</td><td>16</td><td>gallery</td></tr><tr><td>Simple Calendar Add One Event</td><td>In Simple calendar, create a calendar event on \{year\}-\{month\}- \{day\} at \{hour\}h with the title '\{event_title\}' and the description '\{event_description\}'. The event should last for \{duration_mins\} mins.</td><td>TC</td><td>Database query</td><td>34</td><td>calendar</td></tr><tr><td>Simple Calendar Add One Event In Two Weeks</td><td>In Simple calendar, create a calendar event in two weeks from today at \{hour\}h with the title '\{event_title\}' and the description '\{event_description\}'. The event should last for \{duration_mins\} mins.</td><td>TC</td><td>Database query</td><td>20</td><td>calendar</td></tr><tr><td>Simple Calendar Add One Event Relative Day</td><td>In Simple calendar, create a calendar event for this \{day_of_week\} at \{hour\}h with the title '\{event_title\}' and the description '\{event_description\}'. The event should last for \{duration_mins\} mins.</td><td>TC</td><td>Database query</td><td>34</td><td>calendar</td></tr><tr><td>Simple Calendar Add One Event Tomorrow</td><td>In Simple calendar, create a calendar event for tomorrow at \{hour\}h with the title '\{event_title\}' and the description '\{event_description\}'. The event should last for \{duration_mins\} mins.</td><td>TC</td><td>Database query</td><td>26</td><td>calendar</td></tr></table>
+<table><tbody><tr><td>名称</td><td>模板</td><td>任务类型</td><td>校验方法</td><td>S</td><td>应用</td></tr><tr><td>配方删除带约束的多个配方</td><td>删除 Broccoli 应用中在指示中使用 \{ingredient\} 的配方。</td><td>TC</td><td>数据库查询</td><td>40</td><td>配方</td></tr><tr><td>带噪声的删除多个配方</td><td>从 Broccoli 应用中删除以下配方：\{recipe_list\}</td><td>TC</td><td>数据库查询</td><td>34</td><td>配方</td></tr><tr><td>删除单个配方</td><td>从 Broccoli 应用中删除以下配方：\{recipe_list\}</td><td>TC</td><td>数据库查询</td><td>10</td><td>配方</td></tr><tr><td>删除单个带噪声的配方</td><td>从 Broccoli 应用中删除以下配方：\{recipe_list\}</td><td>TC</td><td>数据库查询</td><td>20</td><td>配方</td></tr><tr><td>Retro 创建播放列表</td><td>在 Retro Music 中创建标题为 "\{title\}" 的播放列表，按顺序添加以下歌曲：\{song_list\}</td><td>TC</td><td>数据库查询</td><td>24</td><td>音乐</td></tr><tr><td>Retro 播放队列</td><td>按顺序将以下歌曲 \{song_list\} 添加到我的 Retro Music 播放队列中。</td><td>TC</td><td>数据库查询</td><td>32</td><td>音乐</td></tr><tr><td>Retro 播放列表时长</td><td>在 Retro Music 中创建标题为 "\{title\}" 的播放列表，使用提供的歌曲，时长在 45 至 50 分钟之间。</td><td>TC</td><td>数据库查询</td><td>30</td><td>音乐</td></tr><tr><td>Retro 保存播放列表</td><td>在 Retro Music 中创建标题为 "\{title\}" 的播放列表，按顺序添加以下歌曲：\{song_list\}。然后将播放列表导出至设备的 Downloads 目录。</td><td>TC</td><td>数据库查询</td><td>50</td><td>音乐</td></tr><tr><td>保存收据任务评估的副本</td><td>在 DCIM 中复制 \{file_name\}，并在 Downloads 保存同名副本</td><td>TC</td><td>文件系统</td><td>16</td><td>画廊</td></tr><tr><td>简单日历添加一个事件</td><td>在简单日历中，按 \{year\}-\{month\}-\{day\} 的时间 \{hour\} 时创建事件，标题为 '\{event_title\}'，描述为 '\{event_description\}'。事件持续 \{duration_mins\} 分钟。</td><td>TC</td><td>数据库查询</td><td>34</td><td>日历</td></tr><tr><td>简单日历添加两周后的一个事件</td><td>在简单日历中，今天起两周后在 \{hour\} 时创建事件，标题为 '\{event_title\}'，描述为 '\{event_description\}'。事件持续 \{duration_mins\} 分钟。</td><td>TC</td><td>数据库查询</td><td>20</td><td>日历</td></tr><tr><td>简单日历添加一个相对日期的事件</td><td>在简单日历中，为本 \{day_of_week\} 在 \{hour\} 时创建事件，标题为 '\{event_title\}'，描述为 '\{event_description\}'。事件持续 \{duration_mins\} 分钟。</td><td>TC</td><td>数据库查询</td><td>34</td><td>日历</td></tr><tr><td>简单日历添加明日事件</td><td>在简单日历中，明日 \{hour\} 时创建事件，标题为 '\{event_title\}'，描述为 '\{event_description\}'。事件持续 \{duration_mins\} 分钟。</td><td>TC</td><td>数据库查询</td><td>26</td><td>日历</td></tr></tbody></table>
+
+
+<table><tr><td>Name</td><td>Template</td><td>Task type</td><td>Validation method</td><td>S</td><td>Apps</td></tr><tr><td>Simple Calendar Add Repeating Event</td><td>In Simple calendar, create a recurring calendar event titled '\{event_title\}' starting on \{year\}-\{month\}-\{day\} at \{hour\}h. The event recurs \{repeat_rule\}, forever, and lasts for \{duration_mins\} minutes each occurrence. The event description should be '\{event_description\}'.</td><td>TC</td><td>Database query</td><td>28</td><td>calendar</td></tr><tr><td>Simple Calendar Any Events On Date</td><td>Do I have any events \{date\} in Simple calendar? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.</td><td>IR</td><td>Database query</td><td>10</td><td>calendar</td></tr><tr><td>Simple Calendar Delete Events</td><td>In Simple calendar, delete all the calendar events on \{year\}-\{month\}-\{day\}</td><td>TC</td><td>Database query</td><td>14</td><td>calendar</td></tr><tr><td>Simple Calendar Delete Events On Relative Day</td><td>In Simple calendar, delete all events scheduled for this \{day_of_week\}.</td><td>TC</td><td>Database query</td><td>12</td><td>calendar</td></tr><tr><td>Simple Calendar Delete One Event</td><td>In Simple calendar, delete the calendar event on \{year\}-\{month\}-\{day\} at \{hour\}h with the title '\{event_title\}</td><td>TC</td><td>Database query</td><td>12</td><td>calendar</td></tr><tr><td>Simple Calendar Event On Date At Time</td><td>What is on my schedule for \{date\} at \{time\} in Simple calendar? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.</td><td>IR</td><td>Database query</td><td>10</td><td>calendar</td></tr><tr><td>Simple Calendar Events In Next Week</td><td>What events do I have in the next week in Simple calendar? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.</td><td>IR</td><td>Database query</td><td>10</td><td>calendar</td></tr><tr><td>Simple Calendar Events In Time Range</td><td>Do I have any events between \{start_time\} and 8pm \{date\} in Simple calendar? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.</td><td>IR</td><td>Database query</td><td>10</td><td>calendar</td></tr><tr><td>Simple Calendar Events On Date</td><td>What events do I have \{date\} in Simple calendar? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.</td><td>IR</td><td>Database query</td><td>10</td><td>calendar</td></tr><tr><td>Simple Calendar First Event After Start Time</td><td>What is my first event after \{time\} \{date\} in Simple calendar? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.</td><td>IR</td><td>Database query</td><td>10</td><td>calendar</td></tr><tr><td>Simple Calendar Location Of Event</td><td>What is the location of my \{title\} event in Simple calendar? Answer with the location only.</td><td>IR</td><td>Database query</td><td>10</td><td>calendar</td></tr><tr><td>Simple Calendar Next Event</td><td>What is my next upcoming event in Simple calendar? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.</td><td>IR</td><td>Database query</td><td>10</td><td>calendar</td></tr></table>
+<table><tbody><tr><td>名称</td><td>模板</td><td>任务类型</td><td>验证方法</td><td>S</td><td>应用</td></tr><tr><td>简单日历：添加重复事件</td><td>在简单日历中，创建一个标题为 '\{event_title\}' 的重复日历事件，起始于 \{year\}-\{month\}-\{day\} 的 \{hour\} 点。该事件将按 \{repeat_rule\} 规则重复，永久生效，每次持续 \{duration_mins\} 分钟。事件描述应为 '\{event_description\}'。</td><td>TC</td><td>数据库查询</td><td>28</td><td>日历</td></tr><tr><td>简单日历：某日期的事件</td><td>我在简单日历中在 \{date\} 有没有事件？仅回答标题。如果有多个标题，请以逗号分隔列出。</td><td>IR</td><td>数据库查询</td><td>10</td><td>日历</td></tr><tr><td>Simple Calendar 删除事件</td><td>在简单日历中，删除 \{year\}-\{month\}-\{day\} 的所有日历事件</td><td>TC</td><td>数据库查询</td><td>14</td><td>日历</td></tr><tr><td>Simple Calendar 删除相对日期的事件</td><td>在简单日历中，删除这周的所有已安排事件。</td><td>TC</td><td>数据库查询</td><td>12</td><td>日历</td></tr><tr><td>Simple Calendar 删除一个事件</td><td>在简单日历中，删除标题为 '\{event_title\}' 的 \{year\}-\{month\}-\{day\} \{hour\} 点的日历事件</td><td>TC</td><td>数据库查询</td><td>12</td><td>日历</td></tr><tr><td>日历：日期上的事件</td><td>在简单日历中，\{date\} 的 \{time\} 有什么安排？仅回答标题。如果有多个标题，请以逗号分隔列出。</td><td>IR</td><td>数据库查询</td><td>10</td><td>日历</td></tr><tr><td>简单日历：下周的事件</td><td>我在简单日历中下周有哪些事件？仅回答标题。如果有多个标题，请以逗号分隔列出。</td><td>IR</td><td>数据库查询</td><td>10</td><td>日历</td></tr><tr><td>简单日历：时间范围内的事件</td><td>在简单日历中，\{date\} 的 \{start_time\} 到 8pm 之间我有事件吗？仅回答标题。如果有多个标题，请以逗号分隔列出。</td><td>IR</td><td>数据库查询</td><td>10</td><td>日历</td></tr><tr><td>简单日历：某日期的事件</td><td>我在 \{date\} 有哪些事件？仅回答标题。如果有多个标题，请以逗号分隔列出。</td><td>IR</td><td>数据库查询</td><td>10</td><td>日历</td></tr><tr><td>Simple Calendar 开始时间后的第一个事件</td><td>在简单日历中，\{time\} \{date\} 之后的第一个事件是什么？仅回答标题。如果有多个标题，请以逗号分隔列出。</td><td>IR</td><td>数据库查询</td><td>10</td><td>日历</td></tr><tr><td>Simple Calendar 事件地点</td><td>我的 \{title\} 事件在简单日历中的地点是什么？仅回答地点。</td><td>IR</td><td>数据库查询</td><td>10</td><td>日历</td></tr><tr><td>简单日历：下一个事件</td><td>在简单日历中，我的下一个即将到来的事件是什么？仅回答标题。如果有多个标题，请以逗号分隔列出。</td><td>IR</td><td>数据库查询</td><td>10</td><td>日历</td></tr></tbody></table>
+
+
+<table><tr><td>Name</td><td>Template</td><td>Task type</td><td>Validation method</td><td>S</td><td>Apps</td></tr><tr><td>Simple Calendar Next Meeting With Person</td><td>When is my next meeting with \{person\} in Simple calendar? Express your answer in the format (month name) ⟨day⟩ ⟨year⟩ ⟨hour in 24-hour format):⟨minutes⟩.</td><td>IR</td><td>Database query</td><td>10</td><td>calendar</td></tr><tr><td>Simple Draw Pro Create Drawing</td><td>Create a new drawing in Simple Draw Pro. Name it \{file_name\}. Save it in the Pictures folder within the sdk_gphone_x86_64 storage area.</td><td>TC</td><td>Filesystem</td><td>18</td><td>simpledrawpro</td></tr><tr><td>Simple Sms Reply</td><td>Reply to \{number\} with message: \{message\} in Simple SMS Messenger</td><td>TC</td><td>Database query</td><td>12</td><td>sms</td></tr><tr><td>Simple Sms Reply Most Recent</td><td>Reply to the most recent text message using Simple SMS Messenger with message: \{message\}</td><td>TC</td><td>Database query</td><td>12</td><td>sms</td></tr><tr><td>Simple Sms Resend</td><td>Resend the message I just sent to \{name\} in Simple SMS Messenger</td><td>TC</td><td>Database query</td><td>12</td><td>sms</td></tr><tr><td>Simple Sms Send</td><td>Send a text message using Simple SMS Messenger to \{number\} with message: \{message\}</td><td>TC</td><td>Database query</td><td>12</td><td>sms</td></tr><tr><td>Simple Sms Send Clipboard Content</td><td>Send a message to \{number\} with the clipboard content in Simple SMS Messenger</td><td>TC</td><td>Database query</td><td>12</td><td>sms</td></tr><tr><td>Simple Sms Send Received Address</td><td>Text the address of the event to \{name1\} that \{name2\} just sent me in Simple SMS Messenger</td><td>TC</td><td>Database query</td><td>18</td><td>sms</td></tr><tr><td>Sports Tracker Activities Count For Week</td><td>How many \{category\} activities did I do this week in the OpenTracks app? Express your answer as a single integer.</td><td>IR</td><td>String match</td><td>10</td><td>sportstracker</td></tr><tr><td>Sports Tracker Activities On Date</td><td>What activities did I do \{date\} in the OpenTracks app? Answer with the category only. If there are multiples categories, format your answer in a comma separated list.</td><td>IR</td><td>String match</td><td>20</td><td>sportstracker</td></tr><tr><td>Sports Tracker Activity Duration</td><td>How long was my \{category\} activity \{date\} in the OpenTracks app? Express your answer in minutes as a single integer.</td><td>IR</td><td>String match</td><td>12</td><td>sportstracker</td></tr><tr><td>Sports Tracker Longest Distance Activity</td><td>What was the longest distance covered in a \{category\} activity in the Open-Tracks app this week? Express your answer in meters as a single integer.</td><td>IR</td><td>String match</td><td>10</td><td>sportstracker</td></tr><tr><td>Sports Tracker Total Distance For Category Over Interval</td><td>What was the total distance covered for \{category\} activities in the OpenTracks app from \{start_date\} to \{end_date\}? Express your answer in meters as a single integer.</td><td>IR</td><td>String match</td><td>22</td><td>sportstracker</td></tr><tr><td>Sports Tracker Total Duration For Category This Week</td><td>What was the total duration of \{category\} activities in the Open-Tracks app this week? Express your answer in minutes as a single integer.</td><td>IR</td><td>String match</td><td>16</td><td>sportstracker</td></tr><tr><td>System Blue-tooth Turn Off</td><td>Turn bluetooth off.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr></table>
+<table><tbody><tr><td>名称</td><td>模板</td><td>任务类型</td><td>验证方法</td><td>S</td><td>应用</td></tr><tr><td>在简单日历中与某人下次会议</td><td>我的下一次与 \{person\} 的会议何时在简单日历中？请以格式（月份名称） ⟨日⟩ ⟨年⟩ ⟨24 小时制的时⟩:⟨分⟩ 的形式给出答案。</td><td>IR</td><td>数据库查询</td><td>10</td><td>日历</td></tr><tr><td>Simple Draw Pro 创建绘图</td><td>在 Simple Draw Pro 中创建一个新绘图。将其命名为 \{file_name\}。将其保存在 sdk_gphone_x86_64 存储区域的 Pictures 文件夹中。</td><td>TC</td><td>文件系统</td><td>18</td><td>simpledrawpro</td></tr><tr><td>简单短信回复</td><td>在 Simple SMS Messenger 中，对 \{number\} 的回复消息为：\{message\}</td><td>TC</td><td>数据库查询</td><td>12</td><td>sms</td></tr><tr><td>最近的简单短信回复</td><td>使用 Simple SMS Messenger 对最近的短信回复，消息为：\{message\}</td><td>TC</td><td>数据库查询</td><td>12</td><td>sms</td></tr><tr><td>简单短信重新发送</td><td>在 Simple SMS Messenger 中，将我刚发送给 \{name\} 的消息重新发送</td><td>TC</td><td>数据库查询</td><td>12</td><td>sms</td></tr><tr><td>简单短信发送</td><td>在 Simple SMS Messenger 中，向 \{number\} 发送短信，消息为：\{message\}</td><td>TC</td><td>数据库查询</td><td>12</td><td>sms</td></tr><tr><td>简单短信发送剪贴板内容</td><td>在 Simple SMS Messenger 中向 \{number\} 发送剪贴板内容的消息</td><td>TC</td><td>数据库查询</td><td>12</td><td>sms</td></tr><tr><td>简单短信发送已接收地址</td><td>在 Simple SMS Messenger 中，将 \{name1\} 的地址短信给 \{name2\}，他们刚刚发给我的地址</td><td>TC</td><td>数据库查询</td><td>18</td><td>sms</td></tr><tr><td>一周体育追踪活动计数</td><td>本周在 OpenTracks 应用中我完成了多少 \{category\} 类别的活动？请用一个整数表示。</td><td>IR</td><td>字符串匹配</td><td>10</td><td>sportstracker</td></tr><tr><td>日期的体育追踪活动</td><td>我在 OpenTracks 应用中在 \{date\} 做了哪些活动？仅回答类别。如果有多种类别，请用逗号分隔的列表格式化你的回答。</td><td>IR</td><td>字符串匹配</td><td>20</td><td>sportstracker</td></tr><tr><td>体育追踪活动时长</td><td>我在 OpenTracks 应用中 \{date\} 的 \{category\} 活动持续了多久？请以分钟为单位给出一个整数。</td><td>IR</td><td>字符串匹配</td><td>12</td><td>sportstracker</td></tr><tr><td>体育追踪最长距离活动</td><td>本周在 Open-Tracks 应用中，\{category\} 活动的最长距离是多少？请以米为单位给出一个整数。</td><td>IR</td><td>字符串匹配</td><td>10</td><td>sportstracker</td></tr><tr><td>体育追踪类别在区间内的总距离</td><td>从 \{start_date\} 到 \{end_date\}，OpenTracks 应用中 \{category\} 活动的总距离是多少？请以米为单位给出一个整数。</td><td>IR</td><td>字符串匹配</td><td>22</td><td>sportstracker</td></tr><tr><td>体育追踪类别本周总时长</td><td>本周在 Open-Tracks 应用中 \{category\} 活动的总时长是多少？请以分钟为单位给出一个整数。</td><td>IR</td><td>字符串匹配</td><td>16</td><td>sportstracker</td></tr><tr><td>系统蓝牙关闭</td><td>关闭蓝牙。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr></tbody></table>
+
+
+<table><tr><td>Name</td><td>Template</td><td>Task type</td><td>Validation method</td><td>S</td><td>Apps</td></tr><tr><td>System Blue-tooth Turn Off Verify</td><td>Turn bluetooth off.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr><tr><td>System Blue-tooth Turn On</td><td>Turn bluetooth on.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr><tr><td>System Blue-tooth Turn On Verify</td><td>Turn bluetooth on.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr><tr><td>System Brightness Max</td><td>Turn brightness to the max value.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr><tr><td>System Brightness Max Verify</td><td>Turn brightness to the max value.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr><tr><td>System Brightness Min</td><td>Turn brightness to the max value.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr><tr><td>System Brightness Min Verify</td><td>Turn brightness to the max value.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr><tr><td>System Copy To Clipboard</td><td>Copy the following text to the clipboard: \{clipboard_content\}</td><td>TC</td><td>System API</td><td>10</td><td>n/a</td></tr><tr><td>System Wifi Turn Off</td><td>Turn wifi off.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr><tr><td>System Wifi Turn Off Verify</td><td>Turn wifi off.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr><tr><td>System Wifi Turn On</td><td>Turn wifi on.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr><tr><td>System Wifi Turn On Verify</td><td>Turn wifi on.</td><td>TC</td><td>System API</td><td>10</td><td>settings</td></tr><tr><td>Tasks Completed Tasks For Date</td><td>Which tasks have I completed for \{date\} in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.</td><td>IR</td><td>String match</td><td>10</td><td>tasks</td></tr><tr><td>Tasks Due Next Week</td><td>How many tasks do I have due next week in Tasks app? Express your answer as a single integer.</td><td>IR</td><td>String match</td><td>12</td><td>tasks</td></tr><tr><td>Tasks Due On Date</td><td>What tasks do I have due \{date\} in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.</td><td>IR</td><td>String match</td><td>10</td><td>tasks</td></tr><tr><td>Tasks High Priority Tasks</td><td>What are my high priority tasks in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.</td><td>IR</td><td>String match</td><td>10</td><td>tasks</td></tr><tr><td>Tasks High Priority Tasks Due On Date</td><td>Which tasks with high priority are due \{date\} in the Tasks app? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.</td><td>IR</td><td>String match</td><td>10</td><td>tasks</td></tr><tr><td>Tasks Incomplete Tasks On Date</td><td>What incomplete tasks do I have still have to do by \{date\} in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.</td><td>IR</td><td>String match</td><td>10</td><td>tasks</td></tr></table>
+<table><tbody><tr><td>名称</td><td>模板</td><td>任务类型</td><td>验证方法</td><td>S</td><td>应用</td></tr><tr><td>系统蓝牙关闭验证</td><td>将蓝牙关闭。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr><tr><td>系统蓝牙开启</td><td>将蓝牙开启。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr><tr><td>系统蓝牙开启验证</td><td>将蓝牙开启。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr><tr><td>系统亮度最大</td><td>将亮度设为最大值。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr><tr><td>系统亮度最大验证</td><td>将亮度设为最大值。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr><tr><td>系统亮度最小</td><td>将亮度设为最大值。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr><tr><td>系统亮度最小验证</td><td>将亮度设为最大值。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr><tr><td>复制到剪贴板</td><td>将以下文本复制到剪贴板： \{clipboard_content\}</td><td>TC</td><td>系统 API</td><td>10</td><td>n/a</td></tr><tr><td>系统 wifi 关闭</td><td>将 wifi 关闭。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr><tr><td>系统 wifi 关闭验证</td><td>将 wifi 关闭。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr><tr><td>系统 wifi 开启</td><td>将 wifi 开启。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr><tr><td>系统 wifi 开启验证</td><td>将 wifi 开启。</td><td>TC</td><td>系统 API</td><td>10</td><td>设置</td></tr><tr><td>日期已完成的任务</td><td>我在 Tasks 应用中于 \{date\} 完成了哪些任务？仅回答标题。若有多个标题，请用逗号分隔的列表格式。</td><td>IR</td><td>字符串匹配</td><td>10</td><td>任务</td></tr><tr><td>下周到期的任务</td><td>我在 Tasks 应用中下周到期的任务有多少？请以一个整数表示。</td><td>IR</td><td>字符串匹配</td><td>12</td><td>任务</td></tr><tr><td>到日期的任务</td><td>我在 Tasks 应用中于 \{date\} 到期的任务有哪些？仅回答标题。若有多个标题，请用逗号分隔的列表格式。</td><td>IR</td><td>字符串匹配</td><td>10</td><td>任务</td></tr><tr><td>高优先级任务</td><td>在 Tasks 应用中我的高优先级任务有哪些？仅回答标题。若有多个标题，请用逗号分隔的列表格式。</td><td>IR</td><td>字符串匹配</td><td>10</td><td>任务</td></tr><tr><td>到日期的高优先级任务</td><td>在 Tasks 应用中于 \{date\} 到期的高优先级任务有哪些？仅回答标题。若有多个标题，请用逗号分隔的列表格式。</td><td>IR</td><td>字符串匹配</td><td>10</td><td>任务</td></tr><tr><td>日期未完成的任务</td><td>在 Tasks 应用中我还需要在 \{date\} 前完成的未完成任务有哪些？仅回答标题。若有多个标题，请用逗号分隔的列表格式。</td><td>IR</td><td>字符串匹配</td><td>10</td><td>任务</td></tr></tbody></table>
+
+
+<table><tr><td>Name</td><td>Template</td><td>Task type</td><td>Validation method</td><td>S</td><td>Apps</td></tr><tr><td>Turn Off Wifi And Turn On Bluetooth</td><td>Turn off WiFi, then enable bluetooth</td><td>TC</td><td>String match</td><td>20</td><td>settings</td></tr><tr><td>Turn On Wifi And Open App</td><td>Turn on Wifi, then open the \{app_name\} app</td><td>TC</td><td>String match</td><td>20</td><td>settings</td></tr><tr><td>Vlc Create Playlist</td><td>Create a playlist titled \{title\}" with the following files in VLC (located in Internal Memory/VLCVideos), in order: \{video_names\}</td><td>TC</td><td>String match</td><td>28</td><td>vlc</td></tr><tr><td>Vlc Create Two Playlists</td><td>Create a playlist titled "\{title1\}" with the following files in VLC (located in Internal Memory/VLCVideos), in order: \{video_names1\}. And then, create a playlist titled "\{title2\}" with the following files in VLC, in order: \{video_names2\}.</td><td>TC</td><td>String match</td><td>48</td><td>vlc</td></tr></table>
+<table><tbody><tr><td>名称</td><td>模板</td><td>任务类型</td><td>验证方法</td><td>S</td><td>应用</td></tr><tr><td>关闭WIFI并开启蓝牙</td><td>先关闭WiFi，再开启蓝牙</td><td>TC</td><td>字符串匹配</td><td>20</td><td>设置</td></tr><tr><td>开启WiFi并打开应用</td><td>开启WiFi，然后打开 \{app_name\} 应用</td><td>TC</td><td>字符串匹配</td><td>20</td><td>设置</td></tr><tr><td>Vlc 创建播放列表</td><td>创建一个名为 \{title\} 的播放列表，包含以下文件在 VLC 中（位于 Internal Memory/VLCVideos），按顺序：\{video_names\}</td><td>TC</td><td>字符串匹配</td><td>28</td><td>vlc</td></tr><tr><td>Vlc 创建两个播放列表</td><td>创建一个名为 "\{title1\}" 的播放列表，包含以下文件在 VLC 中（位于 Internal Memory/VLCVideos），按顺序：\{video_names1\}。然后，再创建一个名为 "\{title2\}" 的播放列表，包含以下文件在 VLC 中，按顺序：\{video_names2\}。</td><td>TC</td><td>字符串匹配</td><td>48</td><td>vlc</td></tr></tbody></table>

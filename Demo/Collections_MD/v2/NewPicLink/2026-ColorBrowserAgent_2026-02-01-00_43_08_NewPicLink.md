@@ -1,0 +1,712 @@
+# COLORBROWSERAGENT: AN INTELLIGENT GUI AGENT FOR COMPLEX LONG-HORIZON WEB AUTOMATION
+# COLORBROWSERAGENT：用于复杂长程网页自动化的智能 GUI 智能体
+
+
+Jiamu Zhou ${}^{1}$ ; Jihong Wang ${}^{1}$ ; Weiming Zhang ${}^{1,2}$ , Weiwen Liu ${}^{2}$ , Zhuosheng Zhang ${}^{2}$ , Xingyu Lou’i ${}^{ \dagger  }$ Weinan Zhang ${}^{2}$ , Huarong Deng ${}^{1}$ , Jun Wang ${}^{1}$
+Jiamu Zhou ${}^{1}$ ; Jihong Wang ${}^{1}$ ; Weiming Zhang ${}^{1,2}$ , Weiwen Liu ${}^{2}$ , Zhuosheng Zhang ${}^{2}$ , Xingyu Lou’i ${}^{ \dagger  }$ Weinan Zhang ${}^{2}$ , Huarong Deng ${}^{1}$ , Jun Wang ${}^{1}$
+
+
+${}^{1}$ OPPO Research Institute ${}^{2}$ Shanghai Jiao Tong University
+${}^{1}$ OPPO 研究院 ${}^{2}$ 上海交通大学
+
+
+\{zhoujiamu, wangjihong, louxingyu, cody, wangjun7\}@oppo.com \{weimingzhang_2020, zhangzs, wwliu,wnzhang\}@sjtu.edu.cn
+\{zhoujiamu, wangjihong, louxingyu, cody, wangjun7\}@oppo.com \{weimingzhang_2020, zhangzs, wwliu,wnzhang\}@sjtu.edu.cn
+
+
+## ABSTRACT
+## 摘要
+
+
+The web browser serves as a primary interface for daily human activities, making its automation a critical frontier for Human-Centred AI. While Large Language Models (LLMs) have enabled autonomous agents to interact with web GUIs, their reliability in real-world scenarios is hampered by long-horizon instability and the vast heterogeneity of site designs. In this paper, we introduce Col-orBrowserAgent, a framework designed for Collaborative Autonomy in complex web tasks. Our approach integrates two human-centred mechanisms: (1) Progressive Progress Summarization, which mimics human short-term memory to maintain coherence over extended interactions; and (2) Human-in-the-Loop Knowledge Adaptation, which bridges the knowledge gap in diverse environments by soliciting expert intervention only when necessary. This symbiotic design allows the agent to learn from human tips without extensive retraining, effectively combining the scalability of AI with the adaptability of human cognition. Evaluated on the WebArena benchmark using GPT-5, ColorBrowserAgent achieves a state-of-the-art success rate of 71.2%, demonstrating the efficacy of interactive human assistance in robust web automation.
+网页浏览器是人类日常活动的主要界面，其自动化是人本人工智能（Human-Centred AI）的关键前沿。虽然大语言模型（LLMs）使自主智能体能够与网页 GUI 交互，但其在现实场景中的可靠性受到长程不稳定性（long-horizon instability）和网站设计巨大异质性的制约。在本文中，我们推出了 ColorBrowserAgent，这是一个专为复杂网页任务中的协同自主（Collaborative Autonomy）而设计的框架。我们的方法集成了两种以人为本的机制：（1）渐进式进度总结，模仿人类短期记忆以在长时间交互中保持连贯性；（2）人机协同知识适配，通过仅在必要时请求专家干预来弥补不同环境中的知识鸿沟。这种共生设计使智能体能够从人类提示中学习而无需大量重新训练，有效地将 AI 的可扩展性与人类认知的适应性相结合。在 WebArena 基准测试中使用 GPT-5 进行评估，ColorBrowserAgent 实现了 71.2% 的领先成功率，证明了交互式人类辅助在鲁棒网页自动化中的有效性。
+
+
+## 1 Introduction
+## 1 引言
+
+
+The web browser has evolved into the most ubiquitous tool for human-computer interaction, serving as the gateway for everything from information retrieval to complex professional workflows. Consequently, automating browser-based tasks holds immense potential for enhancing human productivity. The recent advent of Large Language Models (LLMs) has accelerated this vision, enabling agents to interpret natural language instructions and manipulate graphical user interfaces (GUIs) directly (Zhang et al. 2025a, 2024). However, the transition from passive tools to fully autonomous agents faces significant hurdles, particularly when navigating the "open world" of the web which is designed primarily for human visual cognition rather than machine parsing.
+网页浏览器已演变为人机交互中最无处不在的工具，是通往从信息检索到复杂专业工作流等一切事物的门户。因此，自动化基于浏览器的任务在提高人类生产力方面具有巨大潜力。大语言模型（LLMs）的最新进展加速了这一愿景，使智能体能够理解自然语言指令并直接操作图形用户界面（GUIs）（Zhang et al. 2025a, 2024）。然而，从被动工具到完全自主智能体的转变面临着重大障碍，特别是在导航主要为人类视觉认知而非机器解析设计的“开放世界”网页时。
+
+
+Two critical challenges limit the efficacy of current agents. First, Long-Horizon Stability is often compromised in complex workflows. Real-world tasks frequently require extended sequences of interactions that exceed the context windows of LLMs, leading to "decision drift" where the agent loses track of its initial goal (Liu et al. 2025a). Second, Site Heterogeneity presents a formidable barrier. The diversity of web design patterns and domain-specific logic confounds generalist models. While humans adapt to novel interfaces intuitively, agents often struggle without specific prior knowledge.
+两个关键挑战限制了当前智能体的效能。首先，长程稳定性在复杂工作流中经常受到损害。现实世界的任务通常需要超出 LLMs 上下文窗口的长序列交互，导致“决策漂移”，即智能体丢失了其初始目标（Liu et al. 2025a）。其次，网站异质性构成了巨大的障碍。网页设计模式的多样性和特定领域的逻辑困扰着通用模型。虽然人类能直观地适应新界面，但智能体在缺乏特定先验知识的情况下往往难以应对。
+
+
+To address these challenges, we propose ColorBrowserAgent, a framework specifically engineered for Collaborative Autonomy. Recognizing that fully autonomous execution is often brittle in heterogeneous environments, we adopt a Human-Centred approach that integrates human expertise into the loop. Our framework features: (1) Progressive Progress Summarization: A memory mechanism that maintains a coherent narrative of the task, akin to human working memory, preventing context overflow in long tasks. (2) Human-in-the-Loop Knowledge Adaptation: A symbiotic mechanism where the agent actively requests human assistance upon detecting anomalies. By capturing expert "tips" in natural language and storing them in an adaptive knowledge base, the system evolves to handle site-specific idiosyncrasies without retraining. This design shifts the paradigm from "replacing" the human to "collaborating" with the human, ensuring robust performance and reduced cognitive load for users.
+为了应对这些挑战，我们提出了 ColorBrowserAgent，这是一个专门为协同自主设计的框架。考虑到在异质环境中完全自主执行往往是脆弱的，我们采用了以人为本的方法，将人类专业知识整合到环路中。我们的框架具有以下特点：（1）渐进式进度总结：一种记忆机制，能保持对任务的连贯叙述，类似于人类的工作记忆，防止长任务中的上下文溢出。（2）人机协同知识适配：一种共生机制，智能体在检测到异常时主动请求人类协助。通过捕获自然语言形式的专家“提示”并将其存储在自适应知识库中，系统无需重新训练即可进化以处理特定网站的特异性。这一设计将范式从“替代”人类转向“协同”人类，确保了鲁棒的性能并降低了用户的认知负荷。
+
+
+---
+
+
+
+*Equal contribution.
+*同等贡献。
+
+
+${}^{ \dagger  }$ Corresponding author.
+${}^{ \dagger  }$ 通讯作者。
+
+
+Preprint. Under review.
+预印本。审稿中。
+
+
+Code is available at https://github.com/MadeAgents/browser-agent.git
+代码可在 https://github.com/MadeAgents/browser-agent.git 获取
+
+
+---
+
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_23_29_28a7e4.jpg"/>
+
+
+
+Figure 1: Challenges in complex web automation and the proposed ColorBrowserAgent framework.
+图 1：复杂网页自动化中的挑战及提出的 ColorBrowserAgent 框架。
+
+
+Our key contributions are summarized as follows:
+我们的主要贡献总结如下：
+
+
+1. Progressive Progress Summarization: We introduce a Summarizer Agent that continuously condenses the interaction history into a fixed-length summary. This mechanism effectively resolves the issue of progress confusion and context overflow in complex long-horizon tasks, preventing decision drift.
+1. 渐进式进度总结：我们引入了一个总结代理，持续将交互历史压缩为固定长度的摘要。该机制有效地解决了复杂长程任务中的进度混淆和上下文溢出问题，防止了决策漂移。
+
+
+2. Human-in-the-Loop Knowledge Adaptation: We introduce a framework that tackles site heterogeneity by incorporating domain-specific expert knowledge. By leveraging VLM-based and rule-based discriminators to identify when human intervention is required, our approach allows the agent to learn and apply site-specific priors without relying on extensive training or labor-intensive manual efforts.
+2. 人机协同知识适配：我们引入了一个通过整合特定领域专家知识来解决站点异构性的框架。通过利用基于VLM和基于规则的判别器来识别何时需要人工干预，我们的方法允许代理学习并应用特定站点的先验知识，而无需依赖大规模训练或繁重的体力劳动。
+
+
+3. Engineering Optimizations and SOTA Performance: We implement critical engineering optimizations-including action space extension and environment-specific mitigation-that are proven to be highly effective in practice. These optimizations significantly enhance system robustness and efficiency. Rigorous evaluation on the WebArena benchmark (Zhou et al. 2023) demonstrates that ColorBrowserAgent achieves a 71.2% success rate, outperforming existing baselines and establishing a new state-of-the-art.
+3. 工程优化与 SOTA 性能：我们实施了关键的工程优化，包括动作空间扩展和针对特定环境的缓解措施，这些优化在实践中被证明非常有效。这些优化显著增强了系统的鲁棒性和效率。在 WebArena 基准测试（Zhou et al. 2023）上的严格评估表明，ColorBrowserAgent 实现了 71.2% 的成功率，超越了现有基准并创下了新的 SOTA 记录。
+
+
+## 2 Related Works
+## 2 相关工作
+
+
+### 2.1 Architectures for LLM-based Web Agents
+### 2.1 基于LLM的Web代理架构
+
+
+The evolution of web automation has transitioned from heuristic-based scripts to autonomous agents powered by Large Language Models (LLMs). Early efforts primarily established evaluation frameworks like WebArena (Zhou et al., 2023) and Mind2Web (Deng et al., 2023), which defined the task space for web navigation. Building on these benchmarks, research has shifted toward specialized agent architectures. WebVoyager (He et al., 2024) and AutoWe-bGLM (Pan et al. 2024) demonstrate the necessity of multimodal perception for parsing complex HTML and visual layouts. More recently, the focus has moved toward Large Action Models (LAMs). For instance, ActionStudio (Zhang et al. 2025a) introduces a lightweight framework for training specialized action tokens, while Zhang et al. (2025b) explore symbiotic cooperation between heterogeneous LLMs to balance reasoning depth with inference efficiency. These works collectively suggest that the bottleneck is shifting from simple instruction following to the precise execution of atomic actions in diverse environments.
+Web 自动化的演进已从基于启发式脚本转向由大语言模型 (LLM) 驱动的自主智能体。早期工作主要建立了如 WebArena (Zhou et al., 2023) 和 Mind2Web (Deng et al., 2023) 等评估框架，定义了 Web 导航的任务空间。基于这些基准，研究重点已转向专门的智能体架构。WebVoyager (He et al., 2024) 和 AutoWebGLM (Pan et al. 2024) 证明了多模态感知对于解析复杂 HTML 和视觉布局的必要性。近期的焦点已转向大动作模型 (LAM)。例如，ActionStudio (Zhang et al. 2025a) 引入了一个用于训练专门动作标记的轻量级框架，而 Zhang et al. (2025b) 探讨了异构 LLM 之间的共生协作，以平衡推理深度与推理效率。这些工作共同表明，瓶颈正从简单的指令遵循转向在多样化环境中对原子动作的精准执行。
+
+
+### 2.2 Long-Horizon Planning and Memory Management
+### 2.2 长程规划与记忆管理
+
+
+Executing complex, multi-step web tasks requires agents to maintain temporal coherence and manage expanding interaction histories. To address the inherent context window limitations of LLMs, recent studies have explored various state-tracking mechanisms. WebExplorer (Liu et al. 2025a) utilizes an "explore-and-evolve" strategy to maintain policy stability over extended durations. To prevent information overload, ReSum (Wu et al. 2025) employs recursive summarization to distill critical state transitions, while Forouzandeh et al. (2025) propose a hierarchical procedural memory to structure long-term goals. These approaches emphasize that effective long-horizon automation relies on the agent's ability to abstract past experiences and maintain a consistent "belief state" of the task progress, a challenge that motivates the integration of structured summarization techniques.
+执行复杂的多步骤网络任务需要智能体保持时间连贯性并管理不断扩展的交互历史。为解决大语言模型固有的上下文窗口限制问题，近期研究探索了各种状态跟踪机制。WebExplorer（Liu 等人，2025a）采用“探索与演进”策略来长期保持策略稳定性。为防止信息过载，ReSum（Wu 等人，2025）采用递归总结来提取关键状态转换，而 Forouzandeh 等人（2025）提出了一种分层程序记忆来构建长期目标。这些方法强调，有效的长期自动化依赖于智能体抽象过去经验并维持任务进度一致“信念状态”的能力，这一挑战促使人们整合结构化总结技术。
+
+
+### 2.3 Environment Adaptation and Feedback Loops
+### 2.3 环境适配与反馈循环
+
+
+A significant challenge in web automation is the high heterogeneity of site structures and the stochastic nature of real-world interfaces. To improve robustness, researchers have integrated external knowledge and human expertise into the agentic loop. KG-RAG (Guan et al., 2025) leverages structured knowledge graphs to assist in cross-domain reasoning. Furthermore, Human-in-the-Loop (HITL) paradigms have been introduced to handle edge cases that exceed the agent's current policy. WebCoach (Liu et al. 2025b) provides a framework for cross-session learning guided by human feedback, enabling agents to adapt to novel UI patterns. Similarly, Meng et al. (2025) demonstrate how sparse corrections can significantly accelerate the acquisition of long-horizon skills. Within this context, the development of mechanisms that can autonomously identify execution uncertainty and seek targeted intervention represents a critical direction for building reliable web agents.
+网络自动化面临的一个重大挑战是网站结构的高度异质性以及现实世界界面的随机性。为提高鲁棒性，研究人员已将外部知识和人类专业知识融入智能体循环。KG - RAG（Guan 等人，2025 年）利用结构化知识图谱辅助跨领域推理。此外，还引入了人在回路（HITL）范式来处理超出智能体现有策略的边缘情况。WebCoach（Liu 等人，2025b）提供了一个在人类反馈指导下进行跨会话学习的框架，使智能体能够适应新的用户界面模式。同样，Meng 等人（2025 年）展示了稀疏修正如何能显著加速长周期技能的获取。在此背景下，开发能够自主识别执行不确定性并寻求有针对性干预的机制，是构建可靠网络智能体的一个关键方向。
+
+
+## 3 System Architecture
+## 3 系统架构
+
+
+To tackle the complexity of long-horizon web tasks, ColorBrowserAgent adopts a Multi-Agent Collaborative Architecture (see Figure 2). This design integrates our core methodologies: Progressive Progress Summarization to manage global context and Human-in-the-Loop Knowledge Adaptation to bridge the knowledge gap caused by site heterogeneity.
+为了应对长程Web任务的复杂性，ColorBrowserAgent采用了多代理协作架构（见图2）。该设计集成了我们的核心方法论：用于管理全局上下文的渐进式进度总结，以及用于弥补站点异构性带来的知识鸿沟的人机协同知识适配。
+
+
+Problem Formulation. We formulate the web automation task as a Partially Observable Markov Decision Process (POMDP) defined by the tuple $\left( {\mathcal{S},\mathcal{A},\mathcal{O},\mathcal{T},\mathcal{R},G}\right)$ . Here, $\mathcal{S}$ denotes the latent environmental state, $\mathcal{A}$ the action space (e.g.,click,type),and $\mathcal{O}$ the multimodal observation space. At each time step $t$ ,the agent receives an observation ${o}_{t} = \left( {{D}_{t},{V}_{t}}\right)$ ,where ${D}_{t}$ is the Accessibility Tree and ${V}_{t}$ is the screenshot overlaid with Set-of-Mark (SoM) annotations (Yang et al. 2023). The agent's decision is conditioned on the cumulative interaction history ${h}_{t} = \left( {{o}_{0},{a}_{0},\ldots ,{o}_{t}}\right)$ . The objective is to learn an optimal policy ${\pi }^{ * }$ that maximizes the expected task success rate:
+问题建模。我们将网页自动化任务建模为一个由元组 $\left( {\mathcal{S},\mathcal{A},\mathcal{O},\mathcal{T},\mathcal{R},G}\right)$ 定义的部分可观测马尔可夫决策过程（POMDP）。在此，$\mathcal{S}$ 表示潜在环境状态，$\mathcal{A}$ 表示动作空间（如点击、输入），$\mathcal{O}$ 表示多模态观测空间。在每个时间步 $t$，智能体接收一个观测值 ${o}_{t} = \left( {{D}_{t},{V}_{t}}\right)$，其中 ${D}_{t}$ 是无障碍树，${V}_{t}$ 是叠加了标记集（SoM）注释的截图（Yang et al. 2023）。智能体的决策基于累积交互历史 ${h}_{t} = \left( {{o}_{0},{a}_{0},\ldots ,{o}_{t}}\right)$。目标是学习一个最优策略 ${\pi }^{ * }$，以最大化预期任务成功率：
+
+
+$$
+{\pi }^{ * } = \underset{\pi }{\arg \max }{\mathbb{E}}_{\tau  \sim  \pi }\left\lbrack  {\mathcal{R}\left( \tau \right)  \mid  G}\right\rbrack \tag{1}
+$$
+
+
+
+where $\tau$ represents the execution trajectory and $\mathcal{R}\left( \cdot \right)  \in  \{ 0,1\}$ is the sparse reward function indicating goal achievement.
+其中 $\tau$ 代表执行轨迹，$\mathcal{R}\left( \cdot \right)  \in  \{ 0,1\}$ 是指示目标达成的稀疏奖励函数。
+
+
+Dual-Agent Control Loop. Directly optimizing the monolithic policy $\pi \left( {{a}_{t} \mid  {h}_{t},G}\right)$ in Eq. 1 is intractable for long-horizon tasks,as the context length $\left| {h}_{t}\right|$ grows linearly with time,leading to context overflow and reasoning degradation. To mitigate this, we propose a factorized Dual-Agent Architecture that approximates the global policy through temporal abstraction and external knowledge augmentation. We decompose the control loop into three coupled functions,reducing the active context complexity from $O\left( t\right)$ to $O\left( 1\right)$ :
+双智能体控制循环。对于长程任务，直接优化等式 1 中的单体策略 $\pi \left( {{a}_{t} \mid  {h}_{t},G}\right)$ 是极其困难的，因为上下文长度 $\left| {h}_{t}\right|$ 随时间线性增长，会导致上下文溢出和推理能力退化。为缓解此问题，我们提出了一种分解的双智能体架构，通过时间抽象和外部知识增强来逼近全局策略。我们将控制循环分解为三个耦合函数，将活跃上下文复杂度从 $O\left( t\right)$ 降低到 $O\left( 1\right)$：
+
+
+1. Context-Aware Knowledge Retrieval: Prior to execution,we retrieve domain-specific constraints ${k}_{t}$ from the Adaptive Knowledge Base $\mathcal{K}$ to bias the policy towards valid actions:
+1. 上下文感知知识检索：在执行之前，我们从自适应知识库 $\mathcal{K}$ 中检索领域特定约束 ${k}_{t}$，以引导策略偏向有效动作：
+
+
+$$
+{k}_{t} = \operatorname{Retrieve}\left( {{o}_{t},\mathcal{K}}\right)
+$$
+
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/02/2026_02_18__00_23_29_e8782c.jpg"/>
+
+
+
+Figure 2: The ColorBrowserAgent Framework. Overview of the dual-agent architecture featuring (1) Progressive Progress Summarization for long-horizon stability, and (2) Human-in-the-Loop Knowledge Adaptation (HITL-KA) for overcoming site heterogeneity.
+图 2：ColorBrowserAgent 框架。双智能体架构概览，其特征包括 (1) 用于长程稳定性的渐进式进度总结，以及 (2) 用于克服站点异质性的人机协同知识自适应（HITL-KA）。
+
+
+2. Progressive State Compression (Summarizer Agent): Instead of processing the full history ${h}_{t}$ ,the Summarizer Agent maintains a compact,recurrent memory state ${m}_{t}$ . This agent acts as a supervisor,updating the summary and providing conditional corrective guidance:
+2. 渐进式状态压缩（总结智能体）：总结智能体不再处理完整历史 ${h}_{t}$，而是维护一个紧凑的循环记忆状态 ${m}_{t}$。该智能体充当监督者，更新总结并提供条件性纠偏指导：
+
+
+$$
+{m}_{t} = {\pi }_{\text{ sum }}\left( {{m}_{t - 1},{o}_{t},{a}_{t - 1},G}\right) \tag{2}
+$$
+
+
+
+3. Knowledge-Grounded Actuation (Operator Agent): The Operator Agent executes precise actions by conditioning solely on the local observation, the global summary, and the retrieved tips, effectively approximating the original policy:
+3. 基于知识的执行（操作智能体）：操作智能体仅根据局部观测、全局总结和检索到的提示来执行精确动作，从而有效地逼近原始策略：
+
+
+$$
+{a}_{t} \sim  {\pi }_{\mathrm{{op}}}\left( {{a}_{t} \mid  {o}_{t},{m}_{t},{k}_{t},G}\right)  \approx  \pi \left( {{a}_{t} \mid  {h}_{t},G}\right)
+$$
+
+
+
+This hierarchical decomposition effectively separates the responsibility of what to do next (global planning via ${\pi }_{\text{ sum }}$ ) from how to do it (execution via ${\pi }_{\text{ op }}$ ). By offloading historical context management to the Summarizer and domain-specific adaptation to the Knowledge Base, the Operator is liberated to focus on immediate, high-fidelity interaction. This synergy ensures that the system maintains decision stability over long horizons while adapting robustly to site-specific heterogeneities.
+这种分层分解有效地将“下一步做什么”（通过 ${\pi }_{\text{ sum }}$ 进行全局规划）与“如何做”（通过 ${\pi }_{\text{ op }}$ 执行）的职责分离。通过将历史上下文管理卸载给总结智能体，将领域特定适配卸载给知识库，操作智能体得以专注于即时、高保真的交互。这种协同作用确保了系统在长程任务中保持决策稳定性，同时能稳健地适应特定的站点异质性。
+
+
+## 4 Core Methodologies
+## 4 核心方法论
+
+
+In this section, we provide a detailed exposition of the core methodologies underpinning ColorBrowserAgent. We first elaborate on the Progressive Progress Summarization mechanism designed to sustain long-horizon coherence. Subsequently, we detail the Human-in-the-Loop Knowledge Adaptation framework that enables the agent to navigate heterogeneous web environments with expert-level proficiency. Finally, we present the Engineering Optimizations implemented to enhance system robustness and execution efficiency.
+在本节中，我们详细阐述支撑 ColorBrowserAgent 的核心方法论。我们首先详细介绍旨在维持长程连贯性的渐进式进度总结机制。随后，我们详述人机协同知识自适应框架，该框架使智能体能够以专家级水平应对异质网页环境。最后，我们介绍为增强系统稳健性和执行效率而实施的工程优化。
+
+
+### 4.1 Progressive Progress Summarization
+### 4.1 渐进式进度总结
+
+
+To maintain stability over tasks requiring extended interaction sequences, ColorBrowserAgent employs a progressive memory compression mechanism. In long-horizon web automation,the trajectory history ${h}_{t}$ ,which comprises raw HTML snapshots,accessibility trees,and interaction logs,grows linearly with time, $O\left( T\right)$ . Feeding this full history to the model rapidly exhausts finite context windows and introduces noise, leading to decision drift where the agent loses track of its initial goal $G$ or repeats invalid actions.
+为了在需要长交互序列的任务中保持稳定性，ColorBrowserAgent 采用了渐进式记忆压缩机制。在长程网页自动化中，由原始 HTML 快照、无障碍树和交互日志组成的轨迹历史 ${h}_{t}$ 随时间 $O\left( T\right)$ 线性增长。将此完整历史输入模型会迅速耗尽有限的上下文窗口并引入噪声，导致决策漂移，使智能体丢失初始目标 $G$ 或重复无效动作。
+
+
+To address this,we introduce a specialized Summarizer Agent $\left( {\pi }_{\text{ sum }}\right)$ that operates in an alternating loop with the Operator Agent $\left( {\pi }_{\mathrm{{op}}}\right)$ . Instead of retaining the full raw history,the Summarizer compresses the trajectory into a structured,updateable state representation ${m}_{t}$ at each time step.
+为解决这一问题，我们引入了一个专门的总结者智能体 $\left( {\pi }_{\text{ sum }}\right)$，它与操作者智能体 $\left( {\pi }_{\mathrm{{op}}}\right)$ 交替循环运行。总结者不再保留完整的原始历史记录，而是在每个时间步将轨迹压缩为结构化、可更新的状态表示 ${m}_{t}$。
+
+
+Formally, consistent with the formulation in Section 3 (Eq. 2), we define the memory update function as:
+形式上，与第 3 节（公式 2）中的表述一致，我们将记忆更新函数定义为：
+
+
+$$
+{m}_{t} = {\pi }_{\text{ sum }}\left( {{m}_{t - 1},{o}_{t},{a}_{t - 1},G}\right)
+$$
+
+
+
+This function is designed to satisfy two critical properties:
+该函数旨在满足两个关键属性：
+
+
+1. Information Fidelity: It must preserve task-relevant facts (e.g., extracted order numbers, prices) and the completion status of sub-goals relative to the global objective $G$ .
+1. 信息保真度：它必须保留与任务相关的关键事实（例如，提取的订单号、价格）以及子目标相对于全局目标 $G$ 的完成状态。
+
+
+2. Length Controllability: It must bound the output length to a near-constant size, ensuring the prompt complexity for the Operator remains $O\left( {\left| {o}_{t}\right|  + \left| {m}_{t}\right| }\right)$ rather than $O\left( T\right)$ .
+2. 长度可控性：它必须将输出长度限制在近乎恒定的大小，确保操作者的提示词复杂度保持在 $O\left( {\left| {o}_{t}\right|  + \left| {m}_{t}\right| }\right)$ 而非 $O\left( T\right)$。
+
+
+Structured Summary Template: To standardize the memory representation and reduce hallucination, we employ a schema-driven template for ${m}_{t}$ (see Appendix A for the full system prompt):
+结构化总结模板：为了标准化记忆表示并减少幻觉，我们为 ${m}_{t}$ 采用了模式驱动的模板（完整系统提示见附录 A）：
+
+
+- Current Progress: An adaptive, hierarchical record of task execution. Rather than a static log, this field dynamically adjusts its granularity based on trajectory length. In the early stages of a sub-goal, it reports fine-grained actions; as the episode progresses, these details are collapsed into a high-level summary, ensuring the memory footprint remains constant despite growing history.
+- 当前进度：任务执行的自适应分层记录。该字段并非静态日志，而是根据轨迹长度动态调整其粒度。在子目标的早期阶段，它报告细粒度动作；随着情节推进，这些细节被折叠成高层摘要，确保尽管历史记录增加，记忆占用仍保持恒定。
+
+
+- Current State Analysis: A strategic assessment of the current page status ${o}_{t}$ ,explicitly verifying whether the agent is on the critical path. It highlights key interactable elements relevant to the immediate sub-goal, effectively filtering out distractions for the Operator Agent.
+- 当前状态分析：对当前页面状态 ${o}_{t}$ 的战略性评估，明确验证智能体是否处于关键路径上。它突出显示与当前子目标相关的关键可交互元素，有效过滤掉对操作者智能体的干扰。
+
+
+- Conditional Corrective Guidance: A dynamic intervention mechanism triggered exclusively upon deviation detection (e.g., cyclic navigation or stalled progress). It injects high-level directives (e.g., Stop searching for "socks", go to checkout immediately) to realign the Operator. This selective activation ensures that the Operator retains autonomy during standard execution while receiving critical course correction during failure modes.
+- 条件纠偏指导：一种仅在检测到偏离（如循环导航或进度停滞）时触发的动态干预机制。它注入高层指令（例如“停止搜索‘袜子’，立即去结账”）以重新校准操作者。这种选择性激活确保了操作者在标准执行期间保持自主权，同时在失败模式下获得关键的路径修正。
+
+
+The concept of using summarization to extend context is also explored in recent works like ReSum (Wu et al., 2025) and WebCoach (Liu et al., 2025b). However, ColorBrowserAgent distinguishes itself by coupling summarization with a dual-agent supervisory role. In our framework, the Summarizer extends beyond passive compression to active intervention via corrective guidance. This architectural separation allows the Operator to focus on precise, immediate execution ("how to click") while the Summarizer maintains global coherence ("what to do next"), effectively mitigating the decision drift inherent in single-agent architectures.
+利用总结来扩展上下文的概念在近期工作中也有探讨，如 ReSum (Wu et al., 2025) 和 WebCoach (Liu et al., 2025b)。然而，ColorBrowserAgent 的不同之处在于将总结与双智能体监管角色相结合。在我们的框架中，总结者超越了被动压缩，通过纠偏指导进行主动干预。这种架构分离使操作者能够专注于精确的即时执行（“如何点击”），而总结者则维持全局一致性（“下一步做什么”），从而有效缓解了单智能体架构固有的决策漂移问题。
+
+
+### 4.2 Human-in-the-Loop Knowledge Adaptation (HITL-KA)
+### 4.2 人机回环知识适配 (HITL-KA)
+
+
+While generalist LLMs demonstrate impressive broad-spectrum reasoning, they fundamentally lack the specific prior knowledge required to navigate the idiosyncratic logic of diverse web environments. Site heterogeneity-manifested in unique DOM structures, non-standard interaction patterns, and domain-specific workflows-presents a "knowledge gap" that generalist models cannot bridge through reasoning alone. To address this without incurring the prohibitive cost of site-specific fine-tuning or labor-intensive manual annotation, we propose the Human-in-the-Loop Knowledge Adaptation (HITL-KA) framework. Unlike static annotation approaches, HITL-KA employs an autonomous trigger mechanism where the agent actively solicits expert intervention only upon detecting execution anomalies. This paradigm ensures that human effort is invested precisely where the model's internal reasoning falls short, effectively transforming transient failures into persistent, reusable knowledge.
+虽然通用大语言模型（LLM）展现了出色的泛化推理能力，但它们从根本上缺乏导航各种网页环境特有逻辑所需的特定先验知识。网站的异质性——体现在独特的 DOM 结构、非标准交互模式和特定领域的工作流中——构成了通用模型无法仅通过推理弥合的“知识差距”。为了在不产生昂贵的特定站点微调或高强度人工标注成本的情况下解决这一问题，我们提出了人机回环知识适配（HITL-KA）框架。与静态标注方法不同，HITL-KA 采用一种自主触发机制，智能体仅在检测到执行异常时才主动请求专家干预。这种模式确保了人力被精确投入到模型内部推理不足的地方，有效地将短暂的失败转化为持久、可重用的知识。
+
+
+#### 4.2.1 HYBRID TRIGGER MECHANISM
+#### 4.2.1 混合触发机制
+
+
+To optimize the trade-off between autonomy and human effort, we employ a hybrid discrimination strategy that solicits expert intervention only when the agent encounters genuine ambiguity or execution failure. This mechanism ensures efficient utilization of human expertise:
+为了优化自主性与人力投入之间的权衡，我们采用了一种混合判别策略，仅当智能体遇到真正的歧义或执行失败时才请求专家干预。该机制确保了人类专业知识的高效利用：
+
+
+1. Rule-Based Discriminator: This module monitors the execution trajectory for deterministic anomalies. It flags detectable failure modes such as cyclic navigation (e.g., visiting the same URL sequence repeatedly), execution stagnation (e.g., no state change after multiple actions), or explicit DOM errors (e.g., "Access Denied" or "Item Out of Stock" notifications).
+1. 基于规则的判别器：该模块监控执行轨迹中的确定性异常。它会标记可检测的失败模式，如循环导航（例如反复访问相同的 URL 序列）、执行停滞（例如多次动作后状态无变化）或明确的 DOM 错误（例如“拒绝访问”或“商品缺货”通知）。
+
+
+2. VLM-Based Discriminator: To capture more subtle semantic mismatches, we utilize a Visual Language Model (VLM) as a critic. It assesses the consistency between the current UI state and the agent's intended action, identifying issues that evade rule-based detection, such as logical inconsistencies (e.g., "button is visible but legally disabled due to missing form data") or semantic irrelevance (e.g., "search results do not match the query intent").
+2. 基于 VLM 的判别器：为了捕捉更细微的语义不匹配，我们利用视觉语言模型 (VLM) 作为评论者。它评估当前 UI 状态与智能体意图动作之间的一致性，识别规避了基于规则检测的问题，例如逻辑不一致（如“按钮可见但在法律上因缺少表单数据而禁用”）或语义无关（如“搜索结果与查询意图不匹配”）。
+
+
+4.2.2 KNOWLEDGE INJECTION AND PERSISTENCE
+4.2.2 知识注入与持久化
+
+
+Upon triggering an alert, the system halts execution and enters an interactive mode. The knowledge adaptation process proceeds in two phases:
+触发警报后，系统停止执行并进入交互模式。知识自适应过程分为两个阶段：
+
+
+1. Expert Intervention: A human expert reviews the failure context-comprising the current screenshot, accessibility tree, and recent action history-and formulates a concise "Knowledge Tip." This tip distills the missing domain knowledge into an executable natural language instruction (e.g., "On this specific checkout page, you must select a shipping method before the 'Place Order' button becomes interactive.").
+1. 专家干预：人类专家审查失败上下文——包括当前屏幕截图、可访问性树和最近的操作历史——并制定简洁的“知识提示”。该提示将缺失的领域知识浓缩为可执行的自然语言指令（例如，“在此特定结账页面上，您必须先选择送货方式，‘下订单’按钮才会变为可交互状态”）。
+
+
+2. Knowledge Base Integration: These tips are indexed and stored in the Adaptive Knowledge Base (AKB). During subsequent executions on the same or semantically similar sites, the agent automatically retrieves relevant tips based on context similarity. This retrieval mechanism effectively biases the policy ${\pi }_{\text{ op }}$ towards valid, domain-compliant actions.
+2. 知识库集成：这些提示被索引并存储在自适应知识库 (AKB) 中。在后续对相同或语义相似站点的执行期间，智能体会根据上下文相似性自动检索相关提示。这种检索机制有效地引导策略 ${\pi }_{\text{ op }}$ 趋向于有效的、符合领域的动作。
+
+
+Through this mechanism, the agent progressively accumulates site-specific logic, transforming the challenge of heterogeneity into a scalable knowledge management task. This allows ColorBrowserAgent to achieve robust performance across diverse environments without the need for model retraining.
+通过这种机制，智能体逐渐积累特定于站点的逻辑，将异构性挑战转变为可扩展的知识管理任务。这使得 ColorBrowserAgent 无需模型重新训练即可在各种环境中实现稳健的性能。
+
+
+### 4.3 Engineering Optimizations
+### 4.3 工程优化
+
+
+In addition to our core methodologies, we implemented several engineering optimizations that proved crucial for deploying agents in real-world environments. While often overlooked in theoretical frameworks, these practical enhancements significantly improve the agent's overall robustness and execution efficiency.
+除了核心方法论，我们还实施了几项工程优化，这些优化对于在真实环境中部署智能体至关重要。虽然在理论框架中经常被忽视，但这些实际增强显著提高了智能体的整体稳健性和执行效率。
+
+
+Action Space Extension: We integrated high-level primitives such as take_note () and calculate () to support multi-step reasoning. take_note() action allows the agent to record information in-place, reducing token consumption and minimizing the risk of context loss during navigation switches. Additionally, recognizing that LLMs often struggle with precise arithmetic operations-a critical requirement for shopping tasks involving price comparisons or budget aggregation-we introduced the calculate () primitive. This offloads numerical computation to a deterministic calculator tool, preventing common "hallucinated math" errors and ensuring efficiency in calculation-intensive subgoals.
+操作空间扩展：我们集成了高层原语，如 take_note() 和 calculate() 以支持多步推理。take_note() 动作允许智能体就地记录信息，减少 Token 消耗并最大限度地降低导航切换期间上下文丢失的风险。此外，认识到 LLM 经常在精确算术运算方面遇到困难——这是涉及价格比较或预算汇总的购物任务的关键要求——我们引入了 calculate() 原语。这将数值计算卸载到确定性的计算器工具中，防止常见的“幻觉数学”错误并确保计算密集型子目标的效率。
+
+
+Robust Error Handling for Environment Anomalies: Real-world web environments often present unpredictable anomalies or platform-specific constraints (e.g., broken search bars, strict rate limits, or non-responsive widgets) that can cause brittle failures for generalist agents. To mitigate this, we implemented generalized robustness strategies:
+针对环境异常的稳健错误处理：真实的 Web 环境经常呈现不可预测的异常或特定于平台的限制（例如，损坏的搜索栏、严格的速率限制或无响应的组件），这些会导致通用智能体出现脆弱的故障。为了缓解这种情况，我们实施了广义稳健性策略：
+
+
+- Autonomous Recovery and Resumption: We introduced a comprehensive monitoring mechanism that detects execution stagnation caused by various environmental factors, such as network instability, API timeouts, or transient site crashes. Upon detection, the agent triggers a controlled self-recovery process-refreshing the session and restoring the execution context-to achieve seamless "checkpoint resumption," ensuring task continuity even in unstable conditions.
+- 自主恢复与恢复执行：我们引入了一种全面的监控机制，可检测由各种环境因素（如网络不稳定、API 超时或瞬态站点崩溃）引起的执行停滞。一旦检测到，智能体会触发受控的自我恢复过程——刷新会话并恢复执行上下文——以实现无缝的“断点续传”，确保即使在不稳定条件下也能保持任务连续性。
+
+
+- Execution Shortcuts via URL Construction: For frequently used actions such as global site search, depending exclusively on UI-driven interactions is often inefficient and prone to errors. To address this, we exploit the Adaptive Knowledge Base to translate search intents directly into URL parameters. For example:
+- 通过 URL 构造的执行捷径：对于常用的操作（如全局站点搜索），仅依赖于 UI 驱动的交互通常效率低下且容易出错。为了解决这个问题，我们利用自适应知识库将搜索意图直接转换为 URL 参数。例如：
+
+
+---
+
+
+
+fill(search_box, keyword) → goto('/search?search=keyword...')
+fill(search_box, keyword) → goto('/search?search=keyword...')
+
+
+---
+
+
+
+This URL "shortcut" approach both dramatically reduces the number of interaction steps and avoids potential UI rendering problems, ensuring more robust and efficient information retrieval.
+这种 URL “捷径”方法既大幅减少了交互步骤的数量，又避免了潜在的 UI 渲染问题，确保了更稳健、高效的信息检索。
+
+
+## 5 Experiments
+## 5 实验
+
+
+In this section, we present a comprehensive evaluation of ColorBrowserAgent. We begin by detailing our experimental setup, including the WebArena benchmark and the implementation details of our environment. Next, we report our main results, demonstrating that ColorBrowserAgent achieves state-of-the-art performance compared to existing baselines. Finally, we conduct a domain-specific analysis and an ablation study to isolate the contributions of our key components-the Summarizer Agent and the Adaptive Knowledge Base.
+在本节中，我们对 ColorBrowserAgent 进行全面评估。我们首先详细介绍实验设置，包括 WebArena 基准测试和环境的实现细节。接下来，我们报告主要结果，证明 ColorBrowserAgent 与现有基准相比实现了最先进的性能。最后，我们进行领域特定分析和消融研究，以分离核心组件——总结者智能体 (Summarizer Agent) 和自适应知识库——的贡献。
+
+
+### 5.1 Experimental Setup
+### 5.1 实验设置
+
+
+We evaluated ColorBrowserAgent on the WebArena benchmark (Zhou et al. 2023), a rigorous evaluation suite for autonomous web agents. The benchmark comprises 812 curated tasks spanning five diverse domains: GitLab, Reddit, Shopping, Shopping Admin, and Map. These domains challenge agents with varying degrees of complexity, from information retrieval to complex state-modifying workflows.
+我们在 WebArena 基准测试（Zhou et al. 2023）上评估了 ColorBrowserAgent，这是一个针对自主网络智能体的严谨评估套件。该基准包含 812 个精心挑选的任务，涵盖五个不同领域：GitLab、Reddit、购物、购物管理和地图。这些领域从信息检索到复杂的状态修改工作流，以不同程度的复杂性挑战智能体。
+
+
+The implementation of ColorBrowserAgent is built upon the BrowserGym framework (Chezelles et al., 2025). To ensure reproducibility and eliminate network variability, we deployed the WebArena environment locally using Docker containers. For map-related tasks, we interfaced with the live OpenStreetMap service to bypass limitations in the local search functionality of the provided map environment. All experiments utilized GPT-5 as the backbone Large Language Model (LLM), with a temperature setting of 0.0 to ensure deterministic decision-making during evaluation.
+ColorBrowserAgent 的实现基于 BrowserGym 框架（Chezelles et al., 2025）。为确保可复现性并消除网络波动，我们使用 Docker 容器在本地部署了 WebArena 环境。对于地图相关任务，我们接入了实时的 OpenStreetMap 服务，以绕过所提供地图环境本地搜索功能的限制。所有实验均使用 GPT-5 作为骨干大语言模型（LLM），并将温度设置为 0.0，以确保评估过程中决策的确定性。
+
+
+### 5.2 Results
+### 5.2 结果
+
+
+Our framework achieved a 71.2% overall task success rate on the WebArena benchmark, establishing a new state-of-the-art (SOTA). As detailed in Table 1. ColorBrowserAgent significantly outperforms existing baselines, including both proprietary commercial models and open-source research prototypes. Notably, it surpasses the previous best open-source model, Claude Code + GBOX MCP, by a margin of 3.2%, validating the efficacy of our architectural innovations.
+我们的框架在 WebArena 基准测试中实现了 71.2% 的总体任务成功率，刷新了当前先进水平（SOTA）。如表 1 所示，ColorBrowserAgent 显著优于现有的基准模型，包括专用商业模型和开源研究原型。值得注意的是，它比之前的最佳开源模型 Claude Code + GBOX MCP 高出 3.2%，验证了我们架构创新的有效性。
+
+
+Table 1: Comparison with State-of-the-Art Agents on WebArena. ColorBrowserAgent achieves the highest success rate among both open-source and closed-source baselines.
+表 1：与 WebArena 上先进智能体的比较。ColorBrowserAgent 在开源和闭源基准模型中均获得了最高的成功率。
+
+
+<table><tr><td>Open-Source</td><td>Agent</td><td>Success Rate</td></tr><tr><td>Yes</td><td>AgentSymbiotic</td><td>52.1%</td></tr><tr><td>Yes</td><td>WebOperator</td><td>54.6%</td></tr><tr><td>No</td><td>OpenAI Operator</td><td>58.1%</td></tr><tr><td>Yes</td><td>IBM CUGA</td><td>61.7%</td></tr><tr><td>No</td><td>DeepSky Agent</td><td>66.9%</td></tr><tr><td>Yes</td><td>Claude Code + GBOX MCP</td><td>68.0%</td></tr><tr><td>Yes</td><td>ColorBrowserAgent (Ours)</td><td>71.2%</td></tr></table>
+<table><tbody><tr><td>开源</td><td>智能体</td><td>成功率</td></tr><tr><td>是</td><td>AgentSymbiotic</td><td>52.1%</td></tr><tr><td>是</td><td>WebOperator</td><td>54.6%</td></tr><tr><td>否</td><td>OpenAI Operator</td><td>58.1%</td></tr><tr><td>是</td><td>IBM CUGA</td><td>61.7%</td></tr><tr><td>否</td><td>DeepSky Agent</td><td>66.9%</td></tr><tr><td>是</td><td>Claude Code + GBOX MCP</td><td>68.0%</td></tr><tr><td>是</td><td>ColorBrowserAgent (本文)</td><td>71.2%</td></tr></tbody></table>
+
+
+#### 5.2.1 DOMAIN-SPECIFIC PERFORMANCE ANALYSIS
+#### 5.2.1 特定领域性能分析
+
+
+A granular analysis of performance across domains (Table 2) reveals distinct strengths of our approach. ColorBrowser-Agent exhibits exceptional robustness in the Reddit (87.4%) and Shopping Admin (76.4%) domains. These environments are characterized by complex, hierarchical navigation paths and strict form-filling logic, where our Adaptive Knowledge Base (AKB) proves critical in guiding the agent through valid interaction sequences.
+各领域的细粒度性能分析（表 2）揭示了我们方法的显著优势。ColorBrowser-Agent 在 Reddit (87.4%) 和 Shopping Admin (76.4%) 领域表现出卓越的鲁棒性。这些环境的特点是具有复杂的层级导航路径和严格的表单填写逻辑，我们的自适应知识库 (AKB) 在引导智能体执行有效交互序列方面发挥了关键作用。
+
+
+The relatively lower performance in the Map domain (55.9%) reflects the inherent difficulty of processing highly dynamic, visual-heavy interfaces where DOM information is sparse. However, ColorBrowserAgent still achieves a substantial improvement over the WebOperator baseline (+16.6%). This gain highlights the effectiveness of our holistic framework-combining robust state tracking with adaptive knowledge retrieval-in maintaining execution stability even when visual grounding is challenging.
+地图领域较低的成功率 (55.9%) 反映了处理 DOM 信息稀疏、高动态且侧重视觉界面的固有难度。然而，ColorBrowserAgent 相比 WebOperator 基准仍实现了实质性提升 (+16.6%)。这一增长突显了我们整体框架的有效性——通过结合稳健的状态跟踪与自适应知识检索，即使在视觉定位具有挑战性时也能保持执行稳定性。
+
+
+Table 2: Success Rates by Task Domain on WebArena Benchmark.
+表 2：WebArena 基准测试各任务领域的成功率。
+
+
+<table><tr><td>Domain</td><td>Number of Tasks</td><td>Success Rate</td></tr><tr><td>Reddit</td><td>111</td><td>87.4%</td></tr><tr><td>Shopping Admin</td><td>182</td><td>76.4%</td></tr><tr><td>Shopping</td><td>187</td><td>72.9%</td></tr><tr><td>GitLab</td><td>204</td><td>65.7%</td></tr><tr><td>Map</td><td>128</td><td>55.9%</td></tr><tr><td>Overall</td><td>812</td><td>71.2%</td></tr></table>
+<table><tbody><tr><td>领域</td><td>任务数量</td><td>成功率</td></tr><tr><td>Reddit</td><td>111</td><td>87.4%</td></tr><tr><td>购物管理</td><td>182</td><td>76.4%</td></tr><tr><td>购物</td><td>187</td><td>72.9%</td></tr><tr><td>GitLab</td><td>204</td><td>65.7%</td></tr><tr><td>地图</td><td>128</td><td>55.9%</td></tr><tr><td>总计</td><td>812</td><td>71.2%</td></tr></tbody></table>
+
+
+### 5.3 Ablation Study
+### 5.3 消融实验
+
+
+To rigorously quantify the contribution of each core component, we conducted an ablation study on WebArena-Lite (Liu et al. 2024), a representative subset of 165 tasks mirroring the full benchmark's distribution. We evaluated four system variants, all utilizing GPT-5 to isolate architectural impacts:
+为了严谨地量化各核心组件的贡献，我们在 WebArena-Lite（Liu et al. 2024）上进行了消融实验。该数据集包含 165 个任务，是反映完整基准分布的代表性子集。我们评估了四种系统变体，均采用 GPT-5 以排除架构影响：
+
+
+- Baseline (Vanilla Agent): A standard agent architecture relying solely on raw observation history and GPT- 5's inherent reasoning, devoid of our proposed modules.
+- 基线（原生智能体）：标准的智能体架构，仅依赖原始观测历史和 GPT-5 的固有推理，不包含我们提出的任何模块。
+
+
+- Knowledge-Only: The baseline augmented with the Adaptive Knowledge Base (AKB) (Section 3.2), enabling domain-specific knowledge retrieval but lacking memory compression.
+- 仅知识模块：在基线基础上增强了自适应知识库（AKB）（第 3.2 节），支持特定领域的知识检索，但缺乏记忆压缩。
+
+
+- Summarizer-Only: The baseline augmented with the Summarizer Agent (Section 3.1), enabling progressive summarization and corrective guidance, but lacking external knowledge injection.
+- 仅总结模块：在基线基础上增强了总结智能体（第 3.1 节），支持渐进式总结和纠错引导，但缺乏外部知识注入。
+
+
+- ColorBrowserAgent (Full): The complete framework integrating both AKB and the Summarizer Agent.
+- ColorBrowserAgent（全量）：集成 AKB 和总结智能体的完整框架。
+
+
+Table 3: Ablation Study Results on WebArena-Lite (165 tasks). All variants use GPT-5 as the backbone LLM.
+表 3：WebArena-Lite（165 个任务）上的消融实验结果。所有变体均使用 GPT-5 作为骨干大语言模型。
+
+
+<table><tr><td>Method</td><td>Summarizer</td><td>Knowledge</td><td>Success Rate</td><td>$\Delta$</td></tr><tr><td>Baseline (Vanilla)</td><td>✘</td><td>✘</td><td>61.7%</td><td>-</td></tr><tr><td>Knowledge-Only</td><td>✘</td><td>✓</td><td>68.8%</td><td>+7.1%</td></tr><tr><td>Summarizer-Only</td><td>✓</td><td>✘</td><td>65.4%</td><td>+3.7%</td></tr><tr><td>ColorBrowserAgent (Full)</td><td>✓</td><td>✓</td><td>72.6%</td><td>+10.9%</td></tr></table>
+<table><tbody><tr><td>方法</td><td>总结器</td><td>知识</td><td>成功率</td><td>$\Delta$</td></tr><tr><td>基线 (Vanilla)</td><td>✘</td><td>✘</td><td>61.7%</td><td>-</td></tr><tr><td>仅知识</td><td>✘</td><td>✓</td><td>68.8%</td><td>+7.1%</td></tr><tr><td>仅总结器</td><td>✓</td><td>✘</td><td>65.4%</td><td>+3.7%</td></tr><tr><td>ColorBrowserAgent (全量)</td><td>✓</td><td>✓</td><td>72.6%</td><td>+10.9%</td></tr></tbody></table>
+
+
+The results (Table 3) provide key insights into our architectural design:
+结果（表 3）为我们的架构设计提供了关键见解：
+
+
+1. Criticality of Domain Knowledge: The Knowledge-Only variant yields the largest individual gain (+7.1%), highlighting that "knowing how to interact" (site-specific priors) is often more limiting than "knowing what to do" for generalist agents. The AKB effectively bridges this heterogeneity gap.
+1. 领域知识的关键性：仅知识（Knowledge-Only）变体获得了最大的单项增益（+7.1%），这凸显了对于通用智能体而言，“知道如何交互”（特定站点的先验知识）往往比“知道做什么”更具局限性。AKB 有效地弥合了这种异构性差距。
+
+
+2. Importance of Long-Term Coherence: The Summarizer-Only variant improves performance by +3.7%. Qualitative analysis shows it is decisive for tasks exceeding 15 steps, where the Baseline frequently succumbs to context overflow and hallucination.
+2. 长期一致性的重要性：仅总结器（Summarizer-Only）变体将性能提升了 +3.7%。定性分析表明，这对于超过 15 个步骤的任务具有决定性作用，在这些任务中，基线模型经常会陷入上下文溢出和幻觉。
+
+
+## 6 Practical Insights and Future Directions
+## 6 实践见解与未来方向
+
+
+The development and deployment of ColorBrowserAgent have yielded valuable insights into the design of human-centred autonomous systems, shedding light on the pragmatic challenges of integrating agents into human workflows.
+ColorBrowserAgent 的开发和部署为以人为本的自主系统的设计提供了宝贵的见解，揭示了将智能体集成到人类工作流中的实际挑战。
+
+
+Engineering for Trustworthy Collaboration. While novel architectures often capture the spotlight, our experience underscores that rigorous engineering optimization is the bedrock of user trust. Seemingly mundane enhancements—such as robust error handling for network timeouts, atomic action primitives, and defensive navigation strategies-are essential for transforming an agent from a fragile prototype into a reliable digital partner. In a human-centred context, reliability is not just a metric but a prerequisite for adoption; users will only delegate tasks to agents that demonstrate consistent stability in real-world conditions.
+为值得信赖的协作而工程化。虽然新颖的架构往往占据聚光灯，但我们的经验强调，严谨的工程优化是用户信任的基石。看似平凡的增强功能——如针对网络超时的鲁棒错误处理、原子动作原语和防御性导航策略——对于将智能体从脆弱的原型转化为可靠的数字伙伴至关重要。在以人为本的环境中，可靠性不仅是一项指标，更是被采纳的前提；用户只会将任务委派给在现实条件下表现出持续稳定性的智能体。
+
+
+Symbiotic Human-AI Collaboration. Our results validate that Human-in-the-Loop (HITL) integration is not merely a fallback mechanism but a powerful paradigm for Collaborative Autonomy. By allowing the agent to request help, we create a symbiotic loop: the AI scales execution for standard tasks, while the human provides high-level intuition for edge cases. A critical avenue for future research is optimizing this interaction cost-developing methods to dynamically identify the "minimal viable intervention" so that the system maximizes the leverage of expert priors while minimizing human cognitive load. The ultimate goal is an agent that learns from its user's guidance, progressively requiring less intervention over time.
+人机共生协作。我们的结果证明，人机回环（HITL）集成不仅是一种后备机制，更是协作自主的一种强大范式。通过允许智能体请求帮助，我们创建了一个共生闭环：AI 扩展了标准任务的执行规模，而人类为边缘案例提供高层直觉。未来研究的一个关键途径是优化这种交互成本——开发动态识别“最小可行干预”的方法，以便系统在最大化利用专家先验知识的同时，最小化人类的认知负荷。最终目标是实现一种能够从用户指导中学习、并随时间推移逐渐减少干预的智能体。
+
+
+Foundation Models as Reasoning Engines. Finally, our findings reaffirm the critical role of strong foundation models in interpreting human intent. The agent's ability to generalize to novel sites relies heavily on the reasoning capabilities of the underlying LLM. We observe that a capable model (like GPT-5) serves as the bridge between abstract human instructions and concrete interface actions. As these models evolve, we envision a future where agents can infer not just "how" to click, but "why" a user prefers a certain workflow, leading to more personalized and intuitive automation.
+作为推理引擎的基础模型。最后，我们的发现再次确认了强大的基础模型在解释人类意图方面的关键作用。智能体泛化到新站点的能力严重依赖于底层大语言模型（LLM）的推理能力。我们观察到，一个能力强的模型（如 GPT-5）充当了抽象的人类指令与具体的界面动作之间的桥梁。随着这些模型的演进，我们预见到未来智能体不仅能推断“如何”点击，还能推断用户“为什么”偏好某种工作流，从而实现更个性化和直观的自动化。
+
+
+## 7 Conclusion
+## 7 结论
+
+
+In this work, we introduced ColorBrowserAgent, a framework designed to bridge the gap between autonomous potential and human-centric reliability in web automation. By synthesizing Progressive Progress Summarization with Human-in-the-Loop Knowledge Adaptation, we have established a new state-of-the-art on the WebArena benchmark, demonstrating that agentic systems can be both robust and adaptable through collaboration.
+在这项工作中，我们介绍了 ColorBrowserAgent，这是一个旨在弥合 Web 自动化中自主潜力与以人为本的可靠性之间差距的框架。通过将渐进式进度总结与人机回环知识适配相结合，我们在 WebArena 基准测试上刷新了记录，证明了智能体系统可以通过协作同时具备鲁棒性和适应性。
+
+
+Our findings challenge the prevailing reliance on purely "black-box" autonomy, suggesting instead that a Collaborative Autonomy approach—where strong foundation models are augmented with structured memory and expert-guided priors-offers a more viable path to production-grade utility. This design philosophy prioritizes the human user, ensuring that the agent remains a transparent, controllable, and evolving tool.
+我们的发现挑战了目前对纯“黑盒”自主性的依赖，转而表明协作自主方法——即通过结构化记忆和专家引导的先验知识增强强大的基础模型——为生产级实用性提供了一条更可行的路径。这种设计理念优先考虑人类用户，确保智能体始终是一个透明、可控且不断进化的工具。
+
+
+As we look forward, the transition from static automation to dynamic, lifelong learning represents the next great leap. We envision future agents that not only execute tasks but also actively curate their own understanding of the web through interaction, evolving from passive tools into adaptive digital partners that grow alongside their human users.
+展望未来，从静态自动化向动态、终身学习的转变代表了下一次飞跃。我们设想未来的智能体不仅能执行任务，还能通过交互主动维护自己对网络的理解，从被动工具进化为与人类用户共同成长的适应性数字伙伴。
+
+
+## References
+## 参考文献
+
+
+Jianguo Zhang, Thai Hoang, Ming Zhu, Zuxin Liu, Shiyu Wang, Tulika Awalgaonkar, Akshara Prabhakar, Haolin Chen, Weiran Yao, Zhiwei Liu, Juntao Tan, Juan Carlos Niebles, Shelby Heinecke, Huan Wang, Silvio Savarse, and Caiming Xiong. Actionstudio: A lightweight framework for data and training of large action models. arXiv preprint arXiv:2503.22673, 2025a.
+Jianguo Zhang, Thai Hoang, Ming Zhu, Zuxin Liu, Shiyu Wang, Tulika Awalgaonkar, Akshara Prabhakar, Haolin Chen, Weiran Yao, Zhiwei Liu, Juntao Tan, Juan Carlos Niebles, Shelby Heinecke, Huan Wang, Silvio Savarse, 和 Caiming Xiong. Actionstudio: A lightweight framework for data and training of large action models. arXiv preprint arXiv:2503.22673, 2025a.
+
+
+Chaoyun Zhang, Shilin He, Jiaxu Qian, Bowen Li, Liqun Li, Si Qin, Yu Kang, Minghua Ma, Guyue Liu, Qingwei Lin, Saravan Rajmohan, Dongmei Zhang, and Qi Zhang. Large language model-brained gui agents: A survey. arXiv preprint arXiv:2411.18279, 2024.
+Chaoyun Zhang, Shilin He, Jiaxu Qian, Bowen Li, Liqun Li, Si Qin, Yu Kang, Minghua Ma, Guyue Liu, Qingwei Lin, Saravan Rajmohan, Dongmei Zhang, 和 Qi Zhang. Large language model-brained gui agents: A survey. arXiv preprint arXiv:2411.18279, 2024.
+
+
+Junteng Liu, Yunji Li, Chi Zhang, Jingyang Li, Aili Chen, Ke Ji, Weiyu Cheng, Zijia Wu, Chengyu Du, Qidi Xu, Jiayuan Song, Zhengmao Zhu, Wenhu Chen, Pengyu Zhao, and Junxian He. Webexplorer: Explore and evolve for training long-horizon web agents. arXiv preprint arXiv:2509.06501, 2025a.
+Junteng Liu, Yunji Li, Chi Zhang, Jingyang Li, Aili Chen, Ke Ji, Weiyu Cheng, Zijia Wu, Chengyu Du, Qidi Xu, Jiayuan Song, Zhengmao Zhu, Wenhu Chen, Pengyu Zhao, and Junxian He. Webexplorer: 针对长程网络智能体训练的探索与演进。arXiv 预印本 arXiv:2509.06501, 2025a。
+
+
+Shuyan Zhou, Frank F. Xu, Hao Zhu, Xuhui Zhou, Robert Lo, Abishek Sridhar, and Graham Neubig. Webarena: A realistic web environment for building autonomous agents. arXiv preprint arXiv:2307.13854, 2023. URL https: //arxiv.org/abs/2307.13854
+Shuyan Zhou, Frank F. Xu, Hao Zhu, Xuhui Zhou, Robert Lo, Abishek Sridhar, and Graham Neubig. Webarena: 用于构建自主智能体的真实网络环境。arXiv 预印本 arXiv:2307.13854, 2023. URL https://arxiv.org/abs/2307.13854
+
+
+Xiang Deng, Yu Gu, Boyuan Zheng, Shijie Chen, Samuel Stevens, Boshi Wang, Huan Sun, and Yu Su. Mind2web: Towards a generalist agent for the web. arXiv preprint arXiv:2306.06070, 2023.
+Xiang Deng, Yu Gu, Boyuan Zheng, Shijie Chen, Samuel Stevens, Boshi Wang, Huan Sun, and Yu Su. Mind2web: 迈向通用的网络智能体。arXiv 预印本 arXiv:2306.06070, 2023。
+
+
+Hongliang He, Wenlin Yao, Kaixin Ma, Wenhao Yu, Yong Dai, Hongming Zhang, Zhenzhong Lan, and Dong Yu. WebVoyager: Building an end-to-end web agent with large multimodal models. In Lun-Wei Ku, Andre Martins, and Vivek Srikumar, editors, Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 6864-6890, Bangkok, Thailand, August 2024. Association for Computational Linguistics. doi: 10.18653/v1/2024.acl-long.371. URL https://aclanthology.org/2024.acl-long.371/
+Hongliang He, Wenlin Yao, Kaixin Ma, Wenhao Yu, Yong Dai, Hongming Zhang, Zhenzhong Lan, and Dong Yu. WebVoyager: 利用多模态大模型构建端到端网络智能体。收录于 Lun-Wei Ku, Andre Martins, 和 Vivek Srikumar 编辑，第 62 届计算语言学协会年会论文集（第一卷：长论文），第 6864-6890 页，泰国曼谷，2024 年 8 月。计算语言学协会。doi: 10.18653/v1/2024.acl-long.371. URL https://aclanthology.org/2024.acl-long.371/
+
+
+Lu Pan et al. Autowebglm: Bootstrap and leverage a large language model for autonomous web navigation. arXiv preprint arXiv:2404.03648, 2024.
+Lu Pan 等. Autowebglm: 自主网络导航大语言模型的引导与利用。arXiv 预印本 arXiv:2404.03648, 2024。
+
+
+Li Zhang et al. Symbiotic cooperation between large and small language models for web agents. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025b.
+Li Zhang 等. 网络智能体中大小语言模型的共生协作。IEEE/CVF 计算机视觉与模式识别会议 (CVPR) 论文集，2025b。
+
+
+Te-Lin Wu et al. Resum: Recursive summarization for unlocking long-context web intelligence. International Conference on Learning Representations (ICLR), 2025.
+Te-Lin Wu 等. Resum: 通过递归摘要解锁长上下文网络智能。国际学习表征会议 (ICLR), 2025。
+
+
+Mehran Forouzandeh et al. Hierarchical procedural memory for coherent decision making in web agents. arXiv preprint arXiv:2501.04321, 2025.
+Mehran Forouzandeh 等. 用于网络智能体连贯决策的分层程序记忆。arXiv 预印本 arXiv:2501.04321, 2025。
+
+
+Siyuan Guan et al. Kg-rag: Knowledge graph augmented retrieval for complex web reasoning. AAAI Conference on Artificial Intelligence, 2025.
+Siyuan Guan 等. Kg-rag: 用于复杂网络推理的知识图谱增强检索。AAAI 人工智能大会，2025。
+
+
+Xiao Liu et al. Webcoach: Learning from human feedback via cross-session memory guidance. Nature Machine Intelligence (In Press), 2025b.
+Xiao Liu 等. Webcoach: 通过跨会话记忆引导从人类反馈中学习。Nature Machine Intelligence (待出版), 2025b。
+
+
+Yuan Meng et al. Growing with your embodied agent: A human-in-the-loop lifelong code generation framework for long-horizon manipulation skills. arXiv preprint arXiv:2509.18597, 2025.
+Yuan Meng 等. 与你的具身智能体共同成长：针对长程操作技能的人机回环终身代码生成框架。arXiv 预印本 arXiv:2509.18597, 2025。
+
+
+Jianwei Yang, Hao Zhang, Feng Li, Xueyan Zou, Chunyuan Li, and Jianfeng Gao. Set-of-mark prompting unleashes extraordinary visual grounding in gpt-4v. arXiv preprint arXiv:2310.11441, 2023.
+Jianwei Yang, Hao Zhang, Feng Li, Xueyan Zou, Chunyuan Li, and Jianfeng Gao. 标记集提示激发了 GPT-4V 卓越的视觉定位能力。arXiv 预印本 arXiv:2310.11441, 2023。
+
+
+Thibault Le Sellier De Chezelles, Maxime Gasse, Alexandre Drouin, Massimo Caccia, Léo Boisvert, Megh Thakkar, Tom Marty, Rim Assouel, Sahar Omidi Shayegan, Lawrence Keunho Jang, Xing Han Lù, Ori Yoran, Dehan Kong, Frank F. Xu, Siva Reddy, Quentin Cappart, Graham Neubig, Ruslan Salakhutdinov, Nicolas Chapados, and Alexandre Lacoste. The browsergym ecosystem for web agent research, 2025. URL https://arxiv.org/abs/2412.05467
+Thibault Le Sellier De Chezelles, Maxime Gasse, Alexandre Drouin, Massimo Caccia, Léo Boisvert, Megh Thakkar, Tom Marty, Rim Assouel, Sahar Omidi Shayegan, Lawrence Keunho Jang, Xing Han Lù, Ori Yoran, Dehan Kong, Frank F. Xu, Siva Reddy, Quentin Cappart, Graham Neubig, Ruslan Salakhutdinov, Nicolas Chapados, and Alexandre Lacoste. 用于网络智能体研究的 BrowserGym 生态系统，2025. URL https://arxiv.org/abs/2412.05467
+
+
+Xiao Liu, Tianjie Zhang, Yu Gu, Iat Long Iong, Yifan Xu, Xixuan Song, Shudan Zhang, Hanyu Lai, Xinyi Liu, Hanlin Zhao, Jiadai Sun, Xinyue Yang, Yu Yang, Zehan Qi, Shuntian Yao, Xueqiao Sun, Siyi Cheng, Qinkai Zheng, Hao Yu, Hanchen Zhang, Wenyi Hong, Ming Ding, Lihang Pan, Xiaotao Gu, Aohan Zeng, Zhengxiao Du, Chan Hee Song, Yu Su, Yuxiao Dong, and Jie Tang. Visualagentbench: Towards large multimodal models as visual foundation agents. arXiv preprint arXiv:2408.06327, 2024.
+Xiao Liu, Tianjie Zhang, Yu Gu, Iat Long Iong, Yifan Xu, Xixuan Song, Shudan Zhang, Hanyu Lai, Xinyi Liu, Hanlin Zhao, Jiadai Sun, Xinyue Yang, Yu Yang, Zehan Qi, Shuntian Yao, Xueqiao Sun, Siyi Cheng, Qinkai Zheng, Hao Yu, Hanchen Zhang, Wenyi Hong, Ming Ding, Lihang Pan, Xiaotao Gu, Aohan Zeng, Zhengxiao Du, Chan Hee Song, Yu Su, Yuxiao Dong, and Jie Tang. Visualagentbench: Towards large multimodal models as visual foundation agents. arXiv preprint arXiv:2408.06327, 2024.
+
+
+## A Summarizer Agent System Prompt
+## 总结智能体系统提示词
+
+
+This appendix provides the core system prompt used for the Summarizer Agent. This prompt is designed to enforce the structured memory compression and conditional guidance mechanisms described in Section 4.1.
+本附录提供了用于总结智能体的核心系统提示词。该提示词旨在执行第 4.1 节中描述的结构化记忆压缩和条件引导机制。
+
+
+## Summarizer Agent System Prompt
+## 总结智能体系统提示词
+
+
+## Role:
+## 角色：
+
+
+You are a Progress Summarization Agent. Your role is to analyze the current execution context and generate a concise, actionable summary that helps a browser automation agent decide its next step toward achieving the user's goal.
+你是一个进度总结智能体。你的角色是分析当前的执行上下文，并生成简洁且具操作性的总结，以帮助浏览器自动化智能体决定实现用户目标的下一步行动。
+
+
+## Inputs Provided:
+## 提供的输入：
+
+
+- goal: The ultimate task objective the user wants to accomplish.
+- goal：用户想要完成的最终任务目标。
+
+
+- axtree_txt: The accessibility tree of the current webpage, describing its structure and interactive elements.
+- axtree_txt：当前网页的可访问性树，描述了其结构和交互元素。
+
+
+- screenshot: A visual rendering of the current webpage with overlaid DOM element markers - such as bounding boxes labeled with element IDs, indices, or accessibility names-that spatially align with the nodes in axtree_txt. This allows visual grounding of UI components referenced in the accessibility tree.
+- screenshot：当前网页的视觉渲染图，叠加了 DOM 元素标记（例如带有元素 ID、索引或可访问性名称的边界框），这些标记在空间上与 axtree_txt 中的节点对齐。这实现了对可访问性树中所引用的 UI 组件的视觉定位。
+
+
+- action_history: Sequence of actions already performed by the browser agent.
+- action_history：浏览器智能体已经执行的操作序列。
+
+
+- previous_summary: The progress summary from the previous step.
+- previous_summary：上一步的进度总结。
+
+
+## Output Requirements:
+## 输出要求：
+
+
+Generate a structured, succinct progress summary with exactly three sections:
+生成一个结构化、简洁的进度总结，必须包含以下三个部分：
+
+
+- Current Progress
+- 当前进度
+
+
+- State clearly which sub-goals or key steps (relative to goal) have been completed.
+- 清楚地说明哪些子目标或关键步骤（相对于目标）已经完成。
+
+
+- If no relevant actions have been taken yet, state: No progress made yet.
+- 若尚未采取相关行动，请说明：暂无进展。
+
+
+- Current State Analysis
+- 当前状态分析
+
+
+- Assess whether the current page is on the critical path toward goal.
+- 评估当前页面是否处于实现目标的关键路径上。
+
+
+- Identify relevant interactive elements from axtree_txt that are essential for progressing (e.g., input fields, buttons, links). Include their identifiers (e.g., id, name, or visible text) and current state (e.g., enabled/disabled, filled/empty, visible/invisible).
+- 从 axtree_txt 中识别对进展至关重要的相关交互元素（如输入框、按钮、链接）。包括其标识符（如 id、名称或可见文本）和当前状态（如已启用/已禁用、已填充/为空、可见/不可见）。
+
+
+- If the agent appears off-track (e.g., error page, login wall, irrelevant content), explicitly flag this and suggest recovery (e.g., Page seems unrelated to goal consider navigating back or restarting.).
+- 若代理偏离轨道（如错误页面、登录墙、无关内容），请明确标记并建议恢复方案（如：页面似乎与目标无关，考虑后退或重新开始。）。
+
+
+- Next-step Guidance (Conditional Section)
+- 下一步指引（条件性部分）
+
+
+- Only include this section if the browser agent has clearly deviated from the task goal or taken a counterproductive action.
+- 仅在浏览器代理明显偏离任务目标或采取了产生负面影响的操作时，才包含此部分。
+
+
+- Provide 1-2 concrete, executable recommendations for the browser agent's immediate next action.
+- 为浏览器代理的下一步即时行动提供 1-2 条具体的、可执行的建议。
+
+
+- Actions must reference specific, existing elements from the axtree_txt (e.g., Click button with id="submit-order", Type "wireless headphones" into input field labeled "search").
+- 行动必须引用 axtree_txt 中特定的现有元素（如：点击 id="submit-order" 的按钮，在标记为 "search" 的输入框中输入 "wireless headphones"）。
+
+
+- If the goal has been fully achieved, state clearly: Task completed. (This may appear in Current Progress instead.)
+- 若目标已完全实现，请明确说明：任务已完成。（此内容也可能出现在“当前进展”中。）
+
+
+## Formatting Rules:
+## 格式规则：
+
+
+- Always include Current Progress and Current State Analysis.
+- 务必包含“当前进展”和“当前状态分析”。
+
+
+- Include Next-step Guidance only when deviation or error is detected.
+- 仅在检测到偏差或错误时包含“下一步指引”。
+
+
+- Keep language precise, objective, and free of speculation.
+- 语言保持精准、客观，不进行推测。
+
+
+- Base all conclusions strictly on the provided inputs—do not assume or hallucinate elements, states, or outcomes.
+- 所有结论必须严格基于提供的输入——不得假设或幻觉不存在的元素、状态或结果。
+
+
+## Example Output:
+## 示例输出：
+
+
+Current Progress: Completed account login and arrived at the checkout page.
+当前进度：已完成账号登录并到达结账页面。
+
+
+Current State Analysis: The marked screenshot shows a shipping address form (input field labeled address-input, currently empty) and a Place Order button (marker ID: submit-btn, enabled). The axtree confirms these elements are focusable and editable.
+当前状态分析：标记的截图显示了一个收货地址表单（标签为 address-input 的输入框，目前为空）和一个“下单”按钮（标记 ID 为 submit-btn，已启用）。axtree 确认这些元素是可聚焦且可编辑的。
+
+
+## B Knowledge Tips of Shopping Website
+## B 购物网站知识提示
+
+
+This appendix provides an example for the Shopping Website, which is generated by the Human-in-the-Loop Knowledge Adaptation mechanism.
+本附录提供了购物网站的一个示例，该示例由人机回环知识自适应机制生成。
+
+
+## Knowledge Tips of Shopping Website
+## 购物网站知识提示
+
+
+Here are tips for using this website:
+以下是使用本网站的提示：
+
+
+1. This website provides very detailed category of products. You can hover categories on the top menu to see subcategories.
+1. 本网站提供非常详细的产品分类。您可以将鼠标悬停在顶部菜单的分类上以查看子分类。
+
+
+2. If you need to find information about your previous purchases, you can go My Account ¿ My Orders, and find order by date, order number, or any other available information 3. An order is considered out of delivery if it is marked as "processing" in the order status
+2. 如果您需要查找过往购买信息，可以前往“我的账户”¿“我的订单”，按日期、订单号或任何其他可用信息查找订单。3. 如果订单状态标记为“处理中”，则视为尚未发货。
+
+
+4. When the task asks you to draft an email. DO NOT send the email. Just draft it and provide the content in the last message
+4. 当任务要求您起草电子邮件时，请勿发送该邮件。只需起草并在此后的最后一条消息中提供内容即可。
+
+
+5. For questions ONLY about **Nintendo Switch game cards** please navigate back to the url of the product you end up choosing. This is because the benchmark evalautes using the page you are on for the Nintendo task. If you are own the wrong product page it will assume you selected that product.
+5. 对于仅针对 **Nintendo Switch 游戏卡** 的问题，请导航回您最终选择的产品 URL。这是因为基准测试会根据您在 Nintendo 任务中所处的页面进行评估。如果您处于错误的产品页面，它将认为您选择了该产品。
+
+
+6. When asked to "show me products under a price" the benchmark evaluates based on the url. so just ensure the price is under the price asked for in the url.
+6. 当被要求“向我展示低于某一价格的产品”时，基准测试根据 URL 进行评估，因此只需确保 URL 中的价格低于要求的价格即可。
+
+
+7. When asked about product type don't return the acutal product name but rather the type of product it is. Ex: If the most common products are "harry potter" and "twilight" the product type is "books".
+7. 当被问及产品类型时，请勿返回实际的产品名称，而应返回其所属的产品类型。例如：如果最常见的产品是“哈利·波特”和“暮光之城”，则产品类型为“书籍”。
+
+
+8. **For SHOPPING/BROWSING tasks**: When asked to browse products in a particular category, navigate using the dropdown menus (not search) when possible. This may require hovering over nested dropdowns (e.g., hover over "Electronics" $\rightarrow$ hover over "Computers" $\rightarrow$ click "Laptops"). Use the hover tool to reveal these nested menus before clicking.
+8. **对于购物/浏览任务**：当被要求浏览特定类别的产品时，请尽可能使用下拉菜单（而非搜索）进行导航。这可能需要悬停在嵌套下拉菜单上（例如：悬停在“电子产品”上 $\rightarrow$ 悬停在“计算机”上 $\rightarrow$ 点击“笔记本电脑”）。在点击之前，请使用悬停工具显现这些嵌套菜单。
+
+
+9. Task wording can contain typos or singular/plural mismatches. Treat singular terms like "order" or "transaction" as potentially plural. If multiple entries match the described criteria, summarize all of them, list each matching item with its key details, make the quantity explicit, and when the question asks for an amount/total, include the combined sum alongside the itemized numbers. Never assume "the most recent one" unless the instructions explicitly say so.
+9. 任务措辞可能包含拼写错误或单复数不匹配。请将“订单”或“交易”等单数术语视为可能为复数。如果多个条目符合所述标准，请汇总所有条目，列出每个匹配项及其关键细节，明确数量，并且当问题询问金额/总额时，请在列出各项数字的同时包含合并总和。除非指令明确说明，否则切勿假设是“最近的一个”。
