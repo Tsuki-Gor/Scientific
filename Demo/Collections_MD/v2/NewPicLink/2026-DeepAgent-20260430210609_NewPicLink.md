@@ -1,0 +1,1212 @@
+# DeepAgent: A General Reasoning Agent with Scalable Toolsets
+# DeepAgent：一种具备可扩展工具集的通用推理智能体
+
+
+Xiaoxi Li*
+李晓曦*
+
+
+Renmin University of China
+中国人民大学
+
+
+Beijing, China
+中国北京
+
+
+xiaoxi_li@ruc.edu.cn
+
+
+
+Wenxiang Jiao
+焦文祥
+
+
+Jiarui Jin
+金嘉瑞
+
+
+Xiaohongshu Inc.
+小红书科技有限公司
+
+
+Beijing, China
+中国北京
+
+
+Guanting Dong
+董冠廷
+
+
+Jiajie Jin
+金佳杰
+
+
+Renmin University of China
+中国人民大学
+
+
+Beijing, China
+中国北京
+
+
+Yinuo Wang
+王一诺
+
+
+Tsinghua University
+清华大学
+
+
+Beijing, China
+中国北京
+
+
+Hao Wang
+王浩
+
+
+Xiaohongshu Inc.
+小红书科技有限公司
+
+
+Beijing, China
+中国北京
+
+
+Yutao Zhu
+朱郁韬
+
+
+Renmin University of China
+中国人民大学
+
+
+Beijing, China
+中国北京
+
+
+Ji-Rong Wen
+文继荣
+
+
+Renmin University of China
+中国人民大学
+
+
+Beijing, China
+中国北京
+
+
+jrwen@ruc.edu.cn
+
+
+
+Yuan Lu
+陆原
+
+
+Xiaohongshu Inc.
+小红书科技有限公司
+
+
+Beijing, China
+中国北京
+
+
+luyuan3@xiaohongshu.com
+
+
+
+Zhicheng Dou ${}^{ \dagger  }$
+窦志成 ${}^{ \dagger  }$
+
+
+Renmin University of China
+中国人民大学
+
+
+Beijing, China
+中国北京
+
+
+dou@ruc.edu.cn
+
+
+
+## Abstract
+## 摘要
+
+
+Large reasoning models have demonstrated strong problem-solving abilities, yet real-world tasks often require external tools and long-horizon interactions. Existing agent frameworks typically follow predefined workflows, which limit autonomous and global task completion. In this paper, we introduce DeepAgent, an end-to-end deep reasoning agent that performs autonomous thinking, tool discovery, and action execution within a single, coherent reasoning process. To manage long-horizon interactions, we introduce an autonomous memory folding mechanism that compresses past interactions into structured episodic, working, and tool memories, reducing error accumulation while preserving critical information. To teach general-purpose tool use efficiently and stably, we develop an end-to-end reinforcement learning strategy, namely ToolPO, that leverages LLM-simulated APIs and applies tool-call advantage attribution to assign fine-grained credit to the tool invocation tokens. Extensive experiments on eight benchmarks, including general tool-use tasks (ToolBench, API-Bank, TMDB, Spotify, ToolHop) and downstream applications (ALFWorld, WebShop, GAIA, HLE), demonstrate that DeepAgent consistently outperforms baselines across both labeled-tool and open-set tool retrieval scenarios. The code and demo are available at https://github.com/RUC-NLPIR/DeepAgent.
+大型推理模型展现出了强大的问题解决能力，但现实任务往往需要外部工具和长程交互。现有的智能体框架通常遵循预定义的工作流，这限制了其自主完成全局任务的能力。在本文中，我们提出了 DeepAgent，这是一个端到端的深度推理智能体，能够在单一且连贯的推理过程中执行自主思考、工具发现和动作执行。为了管理长程交互，我们引入了一种自主记忆折叠机制，将过去的交互压缩为结构化的情景记忆、工作记忆和工具记忆，在减少错误累积的同时保留关键信息。为了高效且稳定地教授通用工具使用，我们开发了一种端到端强化学习策略，即 ToolPO，它利用大模型模拟的 API，并应用工具调用优势归因，为工具调用标记分配细粒度的信用。在包括通用工具使用任务（ToolBench、API-Bank、TMDB、Spotify、ToolHop）和下游应用（ALFWorld、WebShop、GAIA、HLE）在内的八个基准测试上的广泛实验表明，DeepAgent 在标记工具和开放集工具检索场景下均持续优于基准模型。代码和演示地址：https://github.com/RUC-NLPIR/DeepAgent。
+
+
+## CCS Concepts
+## CCS 概念
+
+
+- Computing methodologies $\rightarrow$ Planning and scheduling.
+- 计算方法 $\rightarrow$ 规划与调度。
+
+
+## Keywords
+## 关键词
+
+
+Large Reasoning Models, Autonomous Agents, Tool Retrieval, Memory Mechanism, Reinforcement Learning
+大型推理模型，自主智能体，工具检索，记忆机制，强化学习
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_08_50_fbdc3c.jpg"/>
+
+
+
+Figure 1: Overall performance on (a) general tool usage tasks and (b) downstream applications (best score as 100%).
+图 1：在 (a) 通用工具使用任务和 (b) 下游应用中的整体表现（最高分记为 100%）。
+
+
+## ACM Reference Format:
+## ACM 引用格式：
+
+
+Xiaoxi Li, Wenxiang Jiao, Jiarui Jin, Guanting Dong, Jiajie Jin, Yinuo Wang, Hao Wang, Yutao Zhu, Ji-Rong Wen, Yuan Lu, and Zhicheng Dou. 2026. DeepAgent: A General Reasoning Agent with Scalable Toolsets. In Proceedings of the ACM Web Conference 2026 (WWW '26), April 13-17, 2026, Dubai, United Arab Emirates. ACM, New York, NY, USA, 12 pages. https: //doi.org/10.1145/3774904.3792460
+Xiaoxi Li, Wenxiang Jiao, Jiarui Jin, Guanting Dong, Jiajie Jin, Yinuo Wang, Hao Wang, Yutao Zhu, Ji-Rong Wen, Yuan Lu, and Zhicheng Dou. 2026. DeepAgent: A General Reasoning Agent with Scalable Toolsets. In Proceedings of the ACM Web Conference 2026 (WWW '26), April 13-17, 2026, Dubai, United Arab Emirates. ACM, New York, NY, USA, 12 pages. https: //doi.org/10.1145/3774904.3792460
+
+
+## 1 Introduction
+## 1 引言
+
+
+The rapid advancement of Large Language Models (LLMs) has inspired the development of LLM-powered agents, which have found broad applications in scenarios such as web information seeking, software engineering, and personal assistance [19, 39]. Most existing agents follow predefined workflows (e.g., ReAct [68] and Plan-and-Solve [52]) with iterative "Reason-Act-Observe" loops (Figure 2(a)). Although effective in simpler tasks, these approaches suffer from several critical limitations: (1) lack of autonomy in execution steps and overall procedure; (2) inability to dynamically discover tools during task execution; (3) deficiency in fully autonomous management of interactive memory; and (4) insufficient depth and coherence in reasoning about the entire task. These limitations hinder agents from real-world problems, particularly for complex tasks that demand general and multiple tool-use.
+大型语言模型（LLMs）的飞速发展推动了 LLM 驱动智能体的开发，这些智能体已广泛应用于网络信息搜索、软件工程和个人助理等场景 [19, 39]。大多数现有智能体遵循预定义的流程（如 ReAct [68] 和 Plan-and-Solve [52]），采用迭代式的“推理-行动-观察”循环（图 2(a)）。尽管这些方法在简单任务中表现有效，但仍存在几个关键局限：(1) 执行步骤和整体流程缺乏自主性；(2) 无法在任务执行过程中动态发现工具；(3) 缺乏对交互式记忆的完全自主管理；(4) 对整个任务的推理深度和连贯性不足。这些局限性阻碍了智能体在现实世界问题中的应用，特别是在需要通用且多种工具协作的复杂任务中。
+
+
+---
+
+
+
+*Work done during internship at Xiaohongshu Inc.
+*工作完成于小红书科技有限公司实习期间。
+
+
+${}^{ \dagger  }$ Corresponding author.
+${}^{ \dagger  }$ 通讯作者。
+
+
+---
+
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_08_50_8b3be7.jpg"/>
+
+
+
+Figure 2: Comparison of agent paradigms: (a) Traditional agents with predefined workflows, (b) Deep Research agents that can autonomously call limited tools, and (c) Our DeepAgent, a fully autonomous reasoning agent that dynamically discovers and invokes helpful tools, all within a continuous agentic reasoning process.
+图 2：智能体范式对比：(a) 具有预定义工作流的传统智能体，(b) 可自主调用有限工具的深度研究智能体，以及 (c) 我们的 DeepAgent，一种在持续的智能体推理过程中动态发现并调用有用工具的完全自主推理智能体。
+
+
+Recently, the advent of Large Reasoning Models (LRMs) has demonstrated the capability to solve complex problems in domains like mathematics, programming, and scientific reasoning through a step-by-step "slow thinking" process [2, 30, 55]. However, many real-world tasks necessitate the use of external tools for their completion. Recent approaches integrate tool use into reasoning [25, 29, 72], but typically rely on a small, fixed tool set such as search, browsing, and coding (Figure 2(b)), limiting their generality.
+近期，大型推理模型（LRMs）的出现展示了通过逐步“慢思考”过程解决数学、编程和科学推理等领域复杂问题的能力 [2, 30, 55]。然而，许多现实任务需要借助外部工具才能完成。现有研究将工具使用整合进推理过程 [25, 29, 72]，但通常依赖于搜索、浏览和编码等少量固定工具集（图 2(b)），限制了其通用性。
+
+
+To address these challenges, we introduce DeepAgent, an end-to-end deep reasoning agent that can complete an entire task by dynamically retrieving and calling tools within a single, coherent agentic reasoning process. As depicted in Figure 2(c), DeepAgent operates by autonomously thinking, searching for tools, and executing actions. This paradigm shifts away from traditional, predefined workflows that rely on predefined tools, task planning, and iterative tool use. Instead, DeepAgent maintains a global perspective on the entire task, unconstrained by the need to deliberate on specific, isolated operations. Tools are not pre-retrieved in advance but are dynamically discovered on an as-needed basis, thereby fully unlocking the autonomous potential of the large reasoning model.
+为应对这些挑战，我们引入了 DeepAgent，这是一种端到端的深度推理智能体，能够在单一连贯的智能体推理过程中，通过动态检索和调用工具来完成整个任务。如图 2(c) 所示，DeepAgent 通过自主思考、搜索工具和执行行动来运作。这种范式摆脱了依赖预定义工具、任务规划和迭代式工具使用的传统预定义工作流。相反，DeepAgent 对整个任务保持全局视角，不受限于对特定孤立操作的审议。工具无需预先检索，而是根据需要动态发现，从而充分释放了大型推理模型的自主潜力。
+
+
+To facilitate robust exploration in long-horizon environments, we equip DeepAgent with Autonomous Memory Folding. This strategy allows the agent to dynamically consolidate its reasoning process and interaction history into a structured memory schema. Beyond reducing token overhead, this mechanism enables the agent to "take a breath"-pausing to reconsider strategies and avoid erroneous paths. To minimize information loss during consolidation, we introduce a brain-inspired memory architecture comprising episodic, working, and tool memory, all structured with an agent-usable data schema to ensure the stability and utility of the folded memory.
+为了促进在长程环境中的稳健探索，我们为 DeepAgent 配备了自主记忆折叠（Autonomous Memory Folding）功能。该策略允许智能体将其推理过程和交互历史动态整合为结构化的记忆模式。除了降低 Token 开销外，该机制还使智能体能够“喘口气”——即暂停下来重新审视策略，避免走入错误路径。为最大限度减少整合过程中的信息丢失，我们引入了一种受大脑启发的记忆架构，包含情景记忆、工作记忆和工具记忆，并采用智能体可用的数据模式进行结构化，以确保折叠记忆的稳定性和实用性。
+
+
+To enhance DeepAgent's proficiency in mastering these mechanisms, we propose ToolPO, an end-to-end reinforcement learning (RL) training method tailored for general tool use. Existing agentic RL training in general domains presents two significant challenges: (1) The reliance on a multitude of real-world APIs during training can lead to instability, slow execution, and high costs. To prevent this, we leverage LLM-simulated APIs, which enhance the stability and efficiency of the training process. (2) A sparse reward based solely on the final outcome is often insufficient to guarantee the accuracy of intermediate tool calls. We address this by implementing tool-call advantage attribution, which precisely assigns credit to the specific tokens responsible for correct tool invocations, thereby providing a more granular and effective learning signal.
+为提升 DeepAgent 掌握这些机制的熟练度，我们提出了 ToolPO，这是一种专为通用工具使用而设计的端到端强化学习（RL）训练方法。现有通用领域的智能体强化学习训练面临两大挑战：(1) 训练过程中对大量现实世界 API 的依赖可能导致不稳定、执行缓慢且成本高昂。为避免这种情况，我们利用 LLM 模拟的 API，提高了训练过程的稳定性和效率。(2) 仅基于最终结果的稀疏奖励通常不足以保证中间工具调用的准确性。我们通过实施工具调用优势归因（tool-call advantage attribution）来解决这一问题，该方法能精确地将贡献度分配给负责正确工具调用的特定 Token，从而提供更细粒度且有效的学习信号。
+
+
+We conduct extensive experiments on a wide range of benchmarks. For (1) General Tool-Use Tasks, we evaluate DeepAgent on ToolBench, API-Bank, TMDB, Spotify, and ToolHop, which feature toolsets scaling from tens to over ten thousand distinct tools. For (2) Downstream Applications, we test its performance on ALFWorld, WebShop, GAIA, and Humanity's Last Exam (HLE), which require the use of domain-specific toolsets. The overall results in Figure 1 show that DeepAgent achieves superior performance across all scenarios.
+我们在广泛的基准测试上进行了大量实验。针对 (1) 通用工具使用任务，我们在 ToolBench、API-Bank、TMDB、Spotify 和 ToolHop 上评估了 DeepAgent，这些任务的工具集规模从数十个到超过一万个不等。针对 (2) 下游应用，我们在 ALFWorld、WebShop、GAIA 和 Humanity's Last Exam (HLE) 上测试了其性能，这些任务需要使用特定领域的工具集。图 1 中的总体结果表明，DeepAgent 在所有场景中均实现了卓越的性能。
+
+
+Our main contributions are summarized as follows:
+我们的主要贡献总结如下：
+
+
+(1) We propose DeepAgent, the first agentic framework that enables reasoning models to autonomously think, discover tools, and execute actions within a unified reasoning process, empowering LRMs to harness toolsets of arbitrary scale and generalize to complex real-world tasks.
+(1) 我们提出了 DeepAgent，这是首个使推理模型能够在统一推理过程中自主思考、发现工具并执行动作的智能体框架，赋能大型推理模型 (LRM) 利用任意规模的工具集，并泛化至复杂的现实世界任务。
+
+
+(2) We introduce an autonomous memory folding mechanism, complemented by a brain-inspired memory design. This endows the agent with the ability to "take a breath" and reconsider its exploration strategies following unsuccessful attempts.
+(2) 我们引入了一种自主记忆折叠机制，并辅以受大脑启发的记忆设计。这赋予了智能体在尝试失败后“喘息”并重新审视其探索策略的能力。
+
+
+(3) We propose an end-to-end reinforcement learning training methodology for general-purpose tool use, ensuring stability and efficiency in large-scale tool execution during training, as well as accuracy in tool invocation during reasoning.
+(3) 我们提出了一种用于通用工具使用的端到端强化学习训练方法，确保了训练期间大规模工具执行的稳定性和效率，以及推理过程中工具调用的准确性。
+
+
+(4) We conduct extensive experiments across eight benchmarks, demonstrating DeepAgent's superior tool-use capabilities and high adaptability to real-world tasks.
+(4) 我们在八个基准测试上进行了广泛实验，证明了 DeepAgent 卓越的工具使用能力及其对现实世界任务的高度适应性。
+
+
+## 2 Related Work
+## 2 相关工作
+
+
+### 2.1 Large Reasoning Models
+### 2.1 大型推理模型
+
+
+Large Reasoning Models (LRMs) [4, 16] have demonstrated significant performance improvements in mathematical, scientific, and coding tasks by employing step-by-step slow thinking processes before generating final responses. Existing research has explored various approaches to elicit extended Chain-of-Thought (CoT) reasoning [60] from models, including data synthesis for Supervised Fine-Tuning (SFT) [36, 54], and end-to-end RL [4]. Additionally, substantial work has investigated optimization strategies for reasoning models, such as advanced RL training algorithms [58] and improving reasoning efficiency [66]. However, models relying solely on parametric knowledge face inherent limitations and cannot interact with the real world. Recent studies have begun exploring tool-augmented reasoning approaches, including Search-o1 [25], Search-R1 [18], ToRL [29], DeepResearcher [72], and SimpleTIR [64]. However, these methods typically support only a limited set of research-oriented tools, such as web search, page browsing, and code execution, which constrains their applicability to real-world scenarios that demand access to more diverse tools.
+大型推理模型 (LRM) [4, 16] 通过在生成最终响应前采用逐步的慢思考过程，在数学、科学和编码任务中展现了显著的性能提升。现有研究探索了多种激发模型进行扩展思维链 (CoT) [60] 推理的方法，包括用于监督微调 (SFT) 的数据合成 [36, 54] 以及端到端强化学习 [4]。此外，大量工作研究了推理模型的优化策略，例如先进的强化学习训练算法 [58] 和提高推理效率 [66]。然而，仅依赖参数化知识的模型面临固有局限，无法与现实世界交互。近期研究已开始探索工具增强的推理方法，包括 Search-o1 [25]、Search-R1 [18]、ToRL [29]、DeepResearcher [72] 和 SimpleTIR [64]。然而，这些方法通常仅支持有限的一组研究导向型工具（如网络搜索、页面浏览和代码执行），这限制了它们在需要访问更多样化工具的现实场景中的适用性。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_08_50_f4ed2d.jpg"/>
+
+
+
+Figure 3: Overview of the DeepAgent framework. The main reasoning model autonomously discovers tools, executes actions, and folds previous memory to restart with structured memories, all within a unified thinking process. The DeepAgent is trained end-to-end with ToolPO, an RL method that uses a tool simulator to simulate large-scale real-world tool APIs, and rewards both final task success and correct intermediate tool calls through fine-grained advantage attribution.
+图 3：DeepAgent 框架概览。主推理模型在统一的思维过程中自主发现工具、执行动作，并折叠既往记忆以利用结构化记忆重新开始。DeepAgent 通过 ToolPO 进行端到端训练，这是一种利用工具模拟器来模拟大规模现实世界工具 API 的强化学习方法，并通过细粒度的优势归因奖励最终任务成功和正确的中间工具调用。
+
+
+### 2.2 Autonomous Agents
+### 2.2 自主智能体
+
+
+LLM-powered autonomous agents accomplish real-world tasks by invoking external tools to interact with their environment $\lbrack 6,7,{13} -$ 15, 20, 22, 27, 28, 31, 38, 46, 49, 57, 61, 71]. Current agent methodologies, including ReAct [68], Plan-and-Solve [52], Reflextion [44], and CodeAct [56], predominantly follow predefined workflows with fixed execution patterns. This rigid structure limits their ability to fully leverage the autonomous decision-making and deep reasoning capabilities of advanced reasoning models. Recent efforts have investigated training LLMs to autonomously invoke tools through data synthesis and SFT methods [9, 63] and RL training frameworks [3, 5, 8, 10, 17, 23, 32, 48, 59]. However, most existing methods rely on pre-selected, labeled tools, which limit their applicability to real-world scenarios. Real-world tasks are highly variable and require access to diverse toolsets that cannot be predetermined, aligning with the emerging Model Context Protocol (MCP) [12] paradigm. Although some prior work has explored tool retrieval mechanisms [37, 42, 53], most approaches conduct only a single upfront retrieval step and incorporate the retrieved tools, with limited exploration of dynamic tool discovery during task execution. Therefore, we aim to develop a deep reasoning agent capable of dynamically discovering and invoking helpful tools from scalable toolsets to address more generalized real-world tasks.
+基于大语言模型的自主智能体通过调用外部工具与环境交互来完成现实世界任务 $\lbrack 6,7,{13} -$ 15, 20, 22, 27, 28, 31, 38, 46, 49, 57, 61, 71]。当前的智能体方法，包括 ReAct [68]、Plan-and-Solve [52]、Reflextion [44] 和 CodeAct [56]，主要遵循具有固定执行模式的预定义工作流。这种僵化的结构限制了它们充分利用先进推理模型的自主决策和深度推理能力。近期工作研究了通过数据合成和 SFT 方法 [9, 63] 以及强化学习训练框架 [3, 5, 8, 10, 17, 23, 32, 48, 59] 来训练大语言模型自主调用工具。然而，大多数现有方法依赖于预先选择和标记的工具，这限制了它们在现实场景中的适用性。现实世界任务高度多变，需要访问无法预先确定的多样化工具集，这与新兴的模型上下文协议 (MCP) [12] 范式相一致。尽管一些先前工作探索了工具检索机制 [37, 42, 53]，但大多数方法仅执行单次预检索步骤并整合检索到的工具，对任务执行过程中动态工具发现的探索有限。因此，我们旨在开发一种深度推理智能体，能够从可扩展的工具集中动态发现并调用有用的工具，以解决更通用的现实世界任务。
+
+
+## 3 Methodology
+## 3 方法论
+
+
+### 3.1 Problem Formulation
+### 3.1 问题形式化
+
+
+We frame the agent's task as a sequential decision-making process. The agent receives a user-provided question $Q$ and an instruction $I$ , and interacts with an environment over a series of steps $t = 1,\ldots ,T$ to accomplish the specified goal. The environment provides access to a collection of tools $\mathcal{T}$ at an arbitrary scale.
+我们将智能体的任务构建为一个序列决策过程。智能体接收用户提供的问题 $Q$ 和指令 $I$，并通过一系列步骤 $t = 1,\ldots ,T$ 与环境交互以实现既定目标。环境提供对任意规模工具集合 $\mathcal{T}$ 的访问权限。
+
+
+At each step $t$ ,the agent’s state ${s}_{t}$ consists of the history of all previous actions and their resulting observations,i.e., ${s}_{t} = \; \left( {{a}_{1},{o}_{1},\ldots ,{a}_{t - 1},{o}_{t - 1}}\right)$ . The agent,driven by a policy $\pi$ parameterized by $\theta$ ,selects an action ${a}_{t}$ based on the current state,the user question, and the instruction:
+在每个步骤 $t$ 中，智能体的状态 ${s}_{t}$ 由之前所有动作及其产生的结果观察组成，即 ${s}_{t} = \; \left( {{a}_{1},{o}_{1},\ldots ,{a}_{t - 1},{o}_{t - 1}}\right)$。智能体在由 $\theta$ 参数化的策略 $\pi$ 驱动下，根据当前状态、用户问题和指令选择一个动作 ${a}_{t}$：
+
+
+$$
+{a}_{t} \sim  {\pi }_{\theta }\left( {\cdot  \mid  {s}_{t},Q,I}\right) . \tag{1}
+$$
+
+
+
+An action ${a}_{t}$ can be one of four types:
+动作 ${a}_{t}$ 可分为四种类型：
+
+
+- Internal Thought $\left( {a}_{t}^{\text{ think }}\right)$ : A textual reasoning step generated by the LRM to analyze the problem or plan its next steps. The corresponding observation ${o}_{t}$ is typically empty.
+- 内部思考 $\left( {a}_{t}^{\text{ think }}\right)$：由 LRM 生成的文本推理步骤，用于分析问题或规划后续步骤。相应的观察 ${o}_{t}$ 通常为空。
+
+
+- Tool Search $\left( {a}_{t}^{\text{ search }}\right)$ : A natural language query ${q}_{s}$ to find relevant tools from $\mathcal{T}$ . The observation ${o}_{t}$ is a list of retrieved tools.
+- 工具搜索 $\left( {a}_{t}^{\text{ search }}\right)$：用于从 $\mathcal{T}$ 中查找相关工具的自然语言查询 ${q}_{s}$。观察 ${o}_{t}$ 为检索到的工具列表。
+
+
+- Tool Call $\left( {a}_{t}^{\text{ call }}\right)$ : The invocation of a specific tool $\tau  \in  \mathcal{T}$ with a set of arguments. The observation ${o}_{t}$ is the execution result returned by the tool.
+- 工具调用 $\left( {a}_{t}^{\text{ call }}\right)$：调用带有特定参数的工具 $\tau  \in  \mathcal{T}$。观察 ${o}_{t}$ 为工具返回的执行结果。
+
+
+- Memory Fold ( ${a}_{t}^{\text{ fold }}$ ): A special action to compress the interaction history ${s}_{t}$ into a structured memory summary. The subsequent state ${s}_{t + 1}$ is then initialized with this compressed memory.
+- 记忆折叠 ( ${a}_{t}^{\text{ fold }}$ )：一种将交互历史 ${s}_{t}$ 压缩为结构化记忆摘要的特殊动作。随后的状态 ${s}_{t + 1}$ 将以此压缩后的记忆进行初始化。
+
+
+The sequence of states, actions, and observations forms a trajectory $\tau  = \left( {{s}_{1},{a}_{1},{o}_{1},\ldots ,{s}_{T},{a}_{T},{o}_{T}}\right)$ . The process terminates when the agent completes the task or reaches a maximum step limit. Suppose $R\left( \tau \right)$ is a reward function that evaluates the overall success of the trajectory $\tau$ ,the objective is to learn an optimal policy ${\pi }_{\theta }^{ * }$ that maximizes the expected cumulative reward for a given task:
+状态、动作和观察的序列构成一条轨迹 $\tau  = \left( {{s}_{1},{a}_{1},{o}_{1},\ldots ,{s}_{T},{a}_{T},{o}_{T}}\right)$。当智能体完成任务或达到最大步数限制时，过程终止。假设 $R\left( \tau \right)$ 是评估轨迹 $\tau$ 整体成功率的奖励函数，目标是学习一个最优策略 ${\pi }_{\theta }^{ * }$，以最大化给定任务的期望累积奖励：
+
+
+$$
+{\pi }_{\theta }^{ * } = \arg \mathop{\max }\limits_{{\pi }_{\theta }}{\mathbb{E}}_{\tau  \sim  {\pi }_{\theta }}\left\lbrack  {R\left( \tau \right) }\right\rbrack  . \tag{2}
+$$
+
+
+
+### 3.2 Overview of the DeepAgent Framework
+### 3.2 DeepAgent 框架概览
+
+
+As illustrated in Figure 3, the DeepAgent framework is architected around a main reasoning process, which is supported by several auxiliary mechanisms to ensure robustness and efficiency.
+如图 3 所示，DeepAgent 框架围绕一个核心推理过程构建，并辅以多种辅助机制以确保系统的稳健性和效率。
+
+
+- Main Reasoning Process: The core of DeepAgent is a powerful large reasoning model that drives the entire task-completion process. In a single stream of thought, the LRM autonomously reasons about the task, dynamically discovers necessary tools, executes actions, and manages its own memory. This unified approach departs from traditional, rigid agent workflows, allowing the LRM to maintain a global perspective on the task.
+- 核心推理过程：DeepAgent 的核心是一个强大的大型推理模型（LRM），它驱动整个任务完成过程。在单一的思维流中，LRM 自主地对任务进行推理、动态发现所需工具、执行动作并管理自身记忆。这种统一的方法摒弃了传统僵化的智能体工作流，使 LRM 能够保持对任务的全局视角。
+
+
+- Auxiliary Mechanisms: DeepAgent employs an auxiliary LLM to handle complex interactions with large toolsets and manage long histories. This background model enhances system stability by: (1) filtering and summarizing retrieved tool documentation if it's too lengthy, (2) denoising and condensing verbose information returned from tool calls, and (3) compressing long interaction histories into a structured memory. This division of labor allows the main LRM to concentrate on high-level strategic reasoning.
+- 辅助机制：DeepAgent 采用一个辅助 LLM 来处理与大规模工具集的复杂交互并管理长历史记录。该后台模型通过以下方式增强系统稳定性：(1) 在工具文档过长时进行过滤和摘要，(2) 对工具调用返回的冗长信息进行去噪和精简，以及 (3) 将长交互历史压缩为结构化记忆。这种分工使核心 LRM 能够专注于高层战略推理。
+
+
+### 3.3 Autonomous Tool Search and Calling
+### 3.3 自主工具搜索与调用
+
+
+DeepAgent's main LRM performs all actions by generating specific textual prompts within its continuous reasoning process. These actions are then intercepted and executed by the system.
+DeepAgent 的核心 LRM 通过在其连续推理过程中生成特定的文本提示来执行所有动作。这些动作随后会被系统拦截并执行。
+
+
+Tool Search. When the agent determines it needs a tool, it generates a tool search query ${q}_{s}$ encapsulated within special tokens: <tool_search> ${q}_{s}$ </tool_search>. The system's tool retriever operates via dense retrieval. First, we build an index by pre-computing an embedding $E\left( {d}_{i}\right)$ for the documentation ${d}_{i}$ of each tool ${\tau }_{i} \in  \mathcal{T}$ using an embedding model $E$ . During inference,given the query ${q}_{s}$ , the system retrieves the top- $k$ tools by ranking them based on the cosine similarity $\operatorname{sim}\left( {\cdot , \cdot  }\right)$ :
+工具搜索。当智能体确定需要工具时，它会生成一个封装在特殊标记中的工具搜索查询 ${q}_{s}$：<tool_search> ${q}_{s}$ </tool_search>。系统的工具检索器通过稠密检索运行。首先，我们通过使用嵌入模型 $E$ 为每个工具 ${\tau }_{i} \in  \mathcal{T}$ 的文档 ${d}_{i}$ 预计算嵌入 $E\left( {d}_{i}\right)$ 来构建索引。在推理过程中，给定查询 ${q}_{s}$，系统通过基于余弦相似度 $\operatorname{sim}\left( {\cdot , \cdot  }\right)$ 对工具进行排序，检索出前 $k$ 个工具：
+
+
+$$
+{\mathcal{T}}_{\text{ retrieved }} = \mathop{\operatorname{top-k}}\limits_{{{\tau }_{i} \in  \mathcal{T}}}\left( {\operatorname{sim}\left( {E\left( {q}_{s}\right) ,E\left( {d}_{i}\right) }\right) }\right) . \tag{3}
+$$
+
+
+
+The retrieved tool documentation is then processed by the auxiliary LLM -summarized if too lengthy, otherwise provided directly-and returned to the main LRM's context: <tool_search_result> relevant tools </tool_search_result>.
+检索到的工具文档随后由辅助大语言模型进行处理（如果过长则进行摘要，否则直接提供），并返回给主大语言推理模型（LRM）的上下文：<tool_search_result> 相关工具 </tool_search_result>。
+
+
+Tool Call. To execute a tool, the agent generates a structured call including the tool's name and arguments: <tool_call> \{"name": "tool_name", "arguments": ...\}</tool_call>. The framework parses this call, executes the tool, and captures the output. This output is, if necessary, summarized by the auxiliary LLM to ensure it is concise and helpful, before being fed back into the reasoning context: <tool_call_result> helpful information </tool_call_result>.
+工具调用。为了执行工具，智能体生成一个包含工具名称和参数的结构化调用：<tool_call> \{"name": "tool_name", "arguments": ...\}</tool_call>。框架解析此调用、执行工具并捕获输出。如有必要，该输出会由辅助大语言模型进行摘要，以确保其简洁且有帮助，然后再反馈回推理上下文中：<tool_call_result> 有用信息 </tool_call_result>。
+
+
+### 3.4 Autonomous Memory Folding and Brain-Inspired Memory Schema
+### 3.4 自主记忆折叠与类脑记忆模式
+
+
+The agent can trigger memory folding at any logical point in its reasoning process-such as after completing a sub-task or realizing an exploration path was incorrect-by generating a special token: <fold_thought>. Upon detecting this token, the system initiates the memory folding process. The auxiliary LLM (parameterized by ${\theta }_{\text{ aux }}$ ) processes the entire preceding interaction history ${s}_{t}$ and generates three structured memory components in parallel:
+智能体可以在其推理过程的任何逻辑节点触发记忆折叠——例如在完成子任务后或意识到探索路径错误时——通过生成特殊标记：<fold_thought>。检测到此标记后，系统启动记忆折叠过程。辅助大语言模型（由 ${\theta }_{\text{ aux }}$ 参数化）处理整个先前的交互历史 ${s}_{t}$，并并行生成三个结构化记忆组件：
+
+
+$$
+\left( {{M}_{E},{M}_{W},{M}_{T}}\right)  = {f}_{\text{ compress }}\left( {{s}_{t};{\theta }_{\text{ aux }}}\right) . \tag{4}
+$$
+
+
+
+These compressed episodic $\left( {M}_{E}\right)$ ,working $\left( {M}_{W}\right)$ ,and tool $\left( {M}_{T}\right)$ memories then replace the raw interaction history, enabling the agent to proceed with a refreshed and condensed view of its progress while avoiding entrapment in incorrect exploration paths.
+这些压缩后的情景记忆 $\left( {M}_{E}\right)$、工作记忆 $\left( {M}_{W}\right)$ 和工具记忆 $\left( {M}_{T}\right)$ 随后会替换原始交互历史，使智能体能够以更新且精简的视角继续推进任务，同时避免陷入错误的探索路径。
+
+
+Inspired by human cognitive systems, the structured memory ${M}_{t}$ is composed of three distinct components that are generated in parallel: ${M}_{t} = \left( {{M}_{E},{M}_{W},{M}_{T}}\right)$ ,where ${M}_{E},{M}_{W},{M}_{T}$ denote episodic, working, and tool memories, respectively.
+受人类认知系统启发，结构化记忆 ${M}_{t}$ 由三个并行生成的不同组件组成：${M}_{t} = \left( {{M}_{E},{M}_{W},{M}_{T}}\right)$，其中 ${M}_{E},{M}_{W},{M}_{T}$ 分别表示情景记忆、工作记忆和工具记忆。
+
+
+- Episodic Memory $\left( {M}_{E}\right)$ : This component serves as a high-level log of the task, recording key events, major decision points, and sub-task completions. It provides the agent with long-term context regarding the overall task structure and its overarching goals.
+- 情景记忆 $\left( {M}_{E}\right)$：该组件作为任务的高级日志，记录关键事件、主要决策点和子任务完成情况。它为智能体提供有关整体任务结构及其宏观目标的长期上下文。
+
+
+- Working Memory $\left( {M}_{W}\right)$ : This contains the most recent information, such as the current sub-goal, obstacles encountered, and near-term plans. It is the core component that ensures the continuity of the agent's reasoning across the memory fold.
+- 工作记忆 $\left( {M}_{W}\right)$：包含最近的信息，如当前子目标、遇到的障碍和近期计划。它是确保智能体在记忆折叠后推理连续性的核心组件。
+
+
+- Tool Memory $\left( {M}_{T}\right)$ : This consolidates all tool-related interactions, including which tools have been used, how they were invoked, and their effectiveness. It allows the agent to learn from its experiences, refining its tool selection and usage strategies.
+- 工具记忆 $\left( {M}_{T}\right)$：整合了所有与工具相关的交互，包括已使用的工具、调用方式及其有效性。它使智能体能够从经验中学习，从而优化其工具选择和使用策略。
+
+
+To ensure that the compressed memory is stable and easily parsed by the agent, we employ an agent-usable data schema in JSON format instead of unstructured natural language. It offers two main benefits: maintaining a controllable and predictable structure, and mitigating the loss of critical details that can occur when summarizing long-form text. Details of the data schema are in Appendix C.
+为确保压缩后的记忆稳定且易于被智能体解析，我们采用 JSON 格式的智能体可用数据模式，而非非结构化的自然语言。它具有两大优势：保持结构的可控性和可预测性，并减少在总结长文本时可能发生的关键细节丢失。数据模式的详细信息见附录 C。
+
+
+### 3.5 End-to-end RL Training with ToolPO
+### 3.5 基于 ToolPO 的端到端强化学习训练
+
+
+We train DeepAgent end-to-end with Tool Policy Optimization (ToolPO), an RL approach designed for general tool-using agents.
+我们使用工具策略优化（ToolPO）对 DeepAgent 进行端到端训练，这是一种专为通用工具使用智能体设计的强化学习方法。
+
+
+Training Data Collection. We first collect a diverse training dataset spanning four categories. To instill general tool-use capabilities, we use ToolBench [37]. For real-world interaction, we leverage ALFWorld [45] and WebShop [67]. To enhance deep research skills, we incorporate data from WebDancer [61] and WebShaperQA [50]. Lastly, to improve mathematical reasoning with code, we use DeepMath [11]. Further details are available in Appendix A.1.
+训练数据收集。我们首先收集了一个涵盖四个类别的多样化训练数据集。为灌输通用工具使用能力，我们使用了 ToolBench [37]。对于现实世界交互，我们利用了 ALFWorld [45] 和 WebShop [67]。为增强深度研究技能，我们整合了来自 WebDancer [61] 和 WebShaperQA [50] 的数据。最后，为提升代码辅助的数学推理能力，我们使用了 DeepMath [11]。更多详细信息请参阅附录 A.1。
+
+
+Tool Simulator. Training an agent that interacts with thousands of real-world APIs is often impractical due to instability, latency, and cost. To address this, we develop an LLM-based Tool Simulator.
+工具模拟器。由于不稳定性、延迟和成本问题，训练一个与数千个真实世界 API 交互的智能体往往不切实际。为解决此问题，我们开发了一个基于大语言模型的工具模拟器。
+
+
+Table 1: Main results on general tool usage tasks, encompassing scenarios with both labeled tools and open-set tool retrieval over large-scale toolsets. We report Pass@1 metric for all tasks. For 32B models, the best results are in bold and the second are underlined. Results from larger or closed-sourced models are in gray color for reference.
+表 1：通用工具使用任务的主要结果，涵盖了标记工具场景及大规模工具集上的开放集工具检索场景。我们报告了所有任务的 Pass@1 指标。对于 32B 模型，最佳结果以粗体显示，次佳结果加下划线。来自更大规模或闭源模型的结果以灰色显示，仅供参考。
+
+
+<table><tr><td rowspan="2">Method</td><td rowspan="2">Backbone</td><td colspan="2">ToolBench</td><td colspan="2">API-Bank</td><td colspan="2">TMDB</td><td colspan="2">Spotify</td><td colspan="2">ToolHop</td></tr><tr><td>Success</td><td>Path</td><td>Success</td><td>Path</td><td>Success</td><td>Path</td><td>Success</td><td>Path</td><td>Correct</td><td>Path</td></tr><tr><td colspan="12">Scenario 1: Completing Tasks w/ Ground-truth Tools</td></tr><tr><td colspan="12">Workflow-based Methods</td></tr><tr><td>ReAct</td><td>Qwen2.5-32B</td><td>41.0</td><td>64.7</td><td>60.4</td><td>68.3</td><td>46.0</td><td>65.3</td><td>29.8</td><td>56.3</td><td>37.6</td><td>49.1</td></tr><tr><td>CodeAct</td><td>Qwen2.5-32B</td><td>53.0</td><td>68.3</td><td>62.4</td><td>70.6</td><td>48.0</td><td>67.4</td><td>33.3</td><td>58.7</td><td>34.7</td><td>48.8</td></tr><tr><td>Plan-and-Solve</td><td>Qwen2.5-32B</td><td>52.0</td><td>65.4</td><td>58.4</td><td>67.5</td><td>51.0</td><td>71.6</td><td>28.1</td><td>54.8</td><td>39.2</td><td>49.7</td></tr><tr><td>ReAct</td><td>QwQ-32B</td><td>52.0</td><td>61.6</td><td>73.3</td><td>78.6</td><td>43.0</td><td>65.3</td><td>47.4</td><td>69.4</td><td>47.4</td><td>51.6</td></tr><tr><td>CodeAct</td><td>QwQ-32B</td><td>54.0</td><td>63.4</td><td>74.3</td><td>79.4</td><td>55.0</td><td>74.5</td><td>52.6</td><td>75.4</td><td>43.2</td><td>53.4</td></tr><tr><td>Plan-and-Solve</td><td>QwQ-32B</td><td>55.0</td><td>64.7</td><td>70.3</td><td>75.4</td><td>48.0</td><td>61.3</td><td>49.1</td><td>70.6</td><td>45.4</td><td>50.6</td></tr><tr><td>ReAct</td><td>Qwen2.5-72B</td><td>56.0</td><td>69.3</td><td>73.3</td><td>78.6</td><td>47.0</td><td>67.7</td><td>57.9</td><td>76.6</td><td>44.8</td><td>55.4</td></tr><tr><td>ReAct</td><td>GPT-40</td><td>52.0</td><td>53.9</td><td>79.2</td><td>83.3</td><td>77.0</td><td>89.3</td><td>47.4</td><td>70.6</td><td>40.0</td><td>53.7</td></tr><tr><td>ReAct</td><td>DeepSeek-R1</td><td>57.0</td><td>68.3</td><td>71.3</td><td>76.2</td><td>76.0</td><td>89.0</td><td>64.9</td><td>81.3</td><td>50.2</td><td>61.8</td></tr><tr><td colspan="12">Autonomous Tool Usage within Reasoning</td></tr><tr><td>DeepAgent-32B-Base</td><td>QwQ-32B</td><td>63.0</td><td>74.3</td><td>76.2</td><td>81.0</td><td>85.0</td><td>92.0</td><td>70.2</td><td>89.3</td><td>49.1</td><td>59.8</td></tr><tr><td>DeepAgent-32B-RL</td><td>QwQ-32B</td><td>69.0</td><td>78.6</td><td>75.3</td><td>80.2</td><td>89.0</td><td>94.8</td><td>75.4</td><td>92.0</td><td>51.3</td><td>62.5</td></tr><tr><td colspan="12">Scenario 2: Completing Tasks w/ Open-Set Tool Retrieval</td></tr><tr><td colspan="12">Workflow-based Methods</td></tr><tr><td>ReAct</td><td>Qwen2.5-32B</td><td>55.0</td><td>20.8</td><td>16.0</td><td>42.0</td><td>11.0</td><td>34.5</td><td>7.0</td><td>25.4</td><td>13.2</td><td>17.9</td></tr><tr><td>CodeAct</td><td>Owen2.5-32B</td><td>51.0</td><td>19.0</td><td>22.0</td><td>49.6</td><td>19.0</td><td>46.8</td><td>10.5</td><td>31.6</td><td>12.7</td><td>17.4</td></tr><tr><td>Plan-and-Solve</td><td>Owen2.5-32B</td><td>54.0</td><td>20.4</td><td>18.0</td><td>42.8</td><td>15.0</td><td>40.5</td><td>8.8</td><td>26.3</td><td>12.0</td><td>16.3</td></tr><tr><td>ReAct</td><td>OwO-32B</td><td>44.0</td><td>19.0</td><td>20.0</td><td>52.7</td><td>18.0</td><td>40.3</td><td>22.8</td><td>45.5</td><td>27.1</td><td>22.3</td></tr><tr><td>CodeAct</td><td>QwQ-32B</td><td>48.0</td><td>21.6</td><td>16.0</td><td>45.0</td><td>31.0</td><td>52.8</td><td>24.6</td><td>49.6</td><td>29.0</td><td>26.1</td></tr><tr><td>Plan-and-Solve</td><td>OwQ-32B</td><td>45.0</td><td>19.6</td><td>18.0</td><td>44.3</td><td>24.0</td><td>46.8</td><td>19.3</td><td>42.7</td><td>25.7</td><td>20.8</td></tr><tr><td>ReAct</td><td>Owen2.5-72B</td><td>52.0</td><td>21.6</td><td>14.0</td><td>38.9</td><td>28.0</td><td>50.7</td><td>21.1</td><td>48.5</td><td>21.1</td><td>19.9</td></tr><tr><td>ReAct</td><td>GPT-40</td><td>41.0</td><td>28.9</td><td>18.0</td><td>42.8</td><td>35.0</td><td>56.8</td><td>17.5</td><td>26.3</td><td>24.1</td><td>28.6</td></tr><tr><td>ReAct</td><td>DeepSeek-R1</td><td>47.0</td><td>22.3</td><td>12.0</td><td>57.3</td><td>34.0</td><td>53.1</td><td>29.8</td><td>51.7</td><td>36.2</td><td>32.9</td></tr><tr><td colspan="12">Autonomous Tool Retrieval and Usage within Reasoning</td></tr><tr><td>DeepAgent-32B-Base</td><td>OwO-32B</td><td>60.0</td><td>35.7</td><td>22.0</td><td>61.8</td><td>52.0</td><td>71.8</td><td>49.1</td><td>68.6</td><td>38.4</td><td>40.3</td></tr><tr><td>DeepAgent-32B-RL</td><td>QwQ-32B</td><td>64.0</td><td>37.2</td><td>24.0</td><td>64.9</td><td>55.0</td><td>74.3</td><td>50.9</td><td>74.4</td><td>40.6</td><td>40.5</td></tr></table>
+<table><tbody><tr><td rowspan="2">方法</td><td rowspan="2">骨干模型</td><td colspan="2">ToolBench</td><td colspan="2">API-Bank</td><td colspan="2">TMDB</td><td colspan="2">Spotify</td><td colspan="2">ToolHop</td></tr><tr><td>成功</td><td>路径</td><td>成功</td><td>路径</td><td>成功</td><td>路径</td><td>成功</td><td>路径</td><td>正确</td><td>路径</td></tr><tr><td colspan="12">场景 1：使用真值工具完成任务</td></tr><tr><td colspan="12">基于工作流的方法</td></tr><tr><td>ReAct</td><td>Qwen2.5-32B</td><td>41.0</td><td>64.7</td><td>60.4</td><td>68.3</td><td>46.0</td><td>65.3</td><td>29.8</td><td>56.3</td><td>37.6</td><td>49.1</td></tr><tr><td>CodeAct</td><td>Qwen2.5-32B</td><td>53.0</td><td>68.3</td><td>62.4</td><td>70.6</td><td>48.0</td><td>67.4</td><td>33.3</td><td>58.7</td><td>34.7</td><td>48.8</td></tr><tr><td>Plan-and-Solve</td><td>Qwen2.5-32B</td><td>52.0</td><td>65.4</td><td>58.4</td><td>67.5</td><td>51.0</td><td>71.6</td><td>28.1</td><td>54.8</td><td>39.2</td><td>49.7</td></tr><tr><td>ReAct</td><td>QwQ-32B</td><td>52.0</td><td>61.6</td><td>73.3</td><td>78.6</td><td>43.0</td><td>65.3</td><td>47.4</td><td>69.4</td><td>47.4</td><td>51.6</td></tr><tr><td>CodeAct</td><td>QwQ-32B</td><td>54.0</td><td>63.4</td><td>74.3</td><td>79.4</td><td>55.0</td><td>74.5</td><td>52.6</td><td>75.4</td><td>43.2</td><td>53.4</td></tr><tr><td>Plan-and-Solve</td><td>QwQ-32B</td><td>55.0</td><td>64.7</td><td>70.3</td><td>75.4</td><td>48.0</td><td>61.3</td><td>49.1</td><td>70.6</td><td>45.4</td><td>50.6</td></tr><tr><td>ReAct</td><td>Qwen2.5-72B</td><td>56.0</td><td>69.3</td><td>73.3</td><td>78.6</td><td>47.0</td><td>67.7</td><td>57.9</td><td>76.6</td><td>44.8</td><td>55.4</td></tr><tr><td>ReAct</td><td>GPT-4o</td><td>52.0</td><td>53.9</td><td>79.2</td><td>83.3</td><td>77.0</td><td>89.3</td><td>47.4</td><td>70.6</td><td>40.0</td><td>53.7</td></tr><tr><td>ReAct</td><td>DeepSeek-R1</td><td>57.0</td><td>68.3</td><td>71.3</td><td>76.2</td><td>76.0</td><td>89.0</td><td>64.9</td><td>81.3</td><td>50.2</td><td>61.8</td></tr><tr><td colspan="12">推理过程中的自主工具使用</td></tr><tr><td>DeepAgent-32B-Base</td><td>QwQ-32B</td><td>63.0</td><td>74.3</td><td>76.2</td><td>81.0</td><td>85.0</td><td>92.0</td><td>70.2</td><td>89.3</td><td>49.1</td><td>59.8</td></tr><tr><td>DeepAgent-32B-RL</td><td>QwQ-32B</td><td>69.0</td><td>78.6</td><td>75.3</td><td>80.2</td><td>89.0</td><td>94.8</td><td>75.4</td><td>92.0</td><td>51.3</td><td>62.5</td></tr><tr><td colspan="12">场景 2：使用开放集工具检索完成任务</td></tr><tr><td colspan="12">基于工作流的方法</td></tr><tr><td>ReAct</td><td>Qwen2.5-32B</td><td>55.0</td><td>20.8</td><td>16.0</td><td>42.0</td><td>11.0</td><td>34.5</td><td>7.0</td><td>25.4</td><td>13.2</td><td>17.9</td></tr><tr><td>CodeAct</td><td>Qwen2.5-32B</td><td>51.0</td><td>19.0</td><td>22.0</td><td>49.6</td><td>19.0</td><td>46.8</td><td>10.5</td><td>31.6</td><td>12.7</td><td>17.4</td></tr><tr><td>Plan-and-Solve</td><td>Qwen2.5-32B</td><td>54.0</td><td>20.4</td><td>18.0</td><td>42.8</td><td>15.0</td><td>40.5</td><td>8.8</td><td>26.3</td><td>12.0</td><td>16.3</td></tr><tr><td>ReAct</td><td>QwQ-32B</td><td>44.0</td><td>19.0</td><td>20.0</td><td>52.7</td><td>18.0</td><td>40.3</td><td>22.8</td><td>45.5</td><td>27.1</td><td>22.3</td></tr><tr><td>CodeAct</td><td>QwQ-32B</td><td>48.0</td><td>21.6</td><td>16.0</td><td>45.0</td><td>31.0</td><td>52.8</td><td>24.6</td><td>49.6</td><td>29.0</td><td>26.1</td></tr><tr><td>Plan-and-Solve</td><td>QwQ-32B</td><td>45.0</td><td>19.6</td><td>18.0</td><td>44.3</td><td>24.0</td><td>46.8</td><td>19.3</td><td>42.7</td><td>25.7</td><td>20.8</td></tr><tr><td>ReAct</td><td>Qwen2.5-72B</td><td>52.0</td><td>21.6</td><td>14.0</td><td>38.9</td><td>28.0</td><td>50.7</td><td>21.1</td><td>48.5</td><td>21.1</td><td>19.9</td></tr><tr><td>ReAct</td><td>GPT-4o</td><td>41.0</td><td>28.9</td><td>18.0</td><td>42.8</td><td>35.0</td><td>56.8</td><td>17.5</td><td>26.3</td><td>24.1</td><td>28.6</td></tr><tr><td>ReAct</td><td>DeepSeek-R1</td><td>47.0</td><td>22.3</td><td>12.0</td><td>57.3</td><td>34.0</td><td>53.1</td><td>29.8</td><td>51.7</td><td>36.2</td><td>32.9</td></tr><tr><td colspan="12">推理过程中的自主工具检索与使用</td></tr><tr><td>DeepAgent-32B-Base</td><td>QwQ-32B</td><td>60.0</td><td>35.7</td><td>22.0</td><td>61.8</td><td>52.0</td><td>71.8</td><td>49.1</td><td>68.6</td><td>38.4</td><td>40.3</td></tr><tr><td>DeepAgent-32B-RL</td><td>QwQ-32B</td><td>64.0</td><td>37.2</td><td>24.0</td><td>64.9</td><td>55.0</td><td>74.3</td><td>50.9</td><td>74.4</td><td>40.6</td><td>40.5</td></tr></tbody></table>
+
+
+This simulator, powered by an auxiliary LLM, mimics the responses of real-world APIs (e.g., RapidAPI). This approach provides a stable, efficient, and low-cost environment for robust RL training.
+该模拟器由辅助大模型驱动，旨在模拟真实世界 API（如 RapidAPI）的响应。这种方法为稳健的强化学习训练提供了一个稳定、高效且低成本的环境。
+
+
+Global and Tool-Call Advantage Attribution. For each input prompt, we sample a group of $K$ trajectories $\left\{  {{\tau }_{1},\ldots ,{\tau }_{K}}\right\}$ . ToolPO defines two distinct reward components. The first is a reward for overall task success, ${R}_{\text{ succ }}\left( \tau \right)$ ,which is a task-success score that reflects the quality of the final outcome (e.g., the accuracy of the final answer). The second is a tool-call reward, ${R}_{\text{ action }}\left( \tau \right)$ ,which reflects the quality of intermediate actions. This action-level reward is composed of rewards for correct tool invocations and efficient memory folding. Specifically, ${R}_{\text{ action }}\left( \tau \right)  = {\lambda }_{1}\mathop{\sum }\limits_{{t = 1}}^{T}C\left( {a}_{t}^{\text{ call }}\right)  + {\lambda }_{2}{S}_{\text{ pref }}\left( \tau \right)$ ,where $C\left( {a}_{t}^{\text{ call }}\right)$ is 1 if a tool call is correct and 0 otherwise. ${S}_{\text{ pref }}\left( \tau \right)$ is a preference score encouraging efficient use of memory folding, defined by comparing a trajectory with folding $\left( {\tau }_{\text{ fold }}\right)$ to one without $\left( {\tau }_{\text{ direct }}\right)  : {S}_{\text{ pref }} = \left( {L\left( {\tau }_{\text{ direct }}\right)  - L\left( {\tau }_{\text{ fold }}\right) }\right) /\left( {L\left( {\tau }_{\text{ direct }}\right)  + L\left( {\tau }_{\text{ fold }}\right) }\right)$ .
+全局与工具调用优势归因。对于每个输入提示，我们采样一组 $K$ 轨迹 $\left\{  {{\tau }_{1},\ldots ,{\tau }_{K}}\right\}$。ToolPO 定义了两个不同的奖励组件。第一个是整体任务成功奖励 ${R}_{\text{ succ }}\left( \tau \right)$，即反映最终结果质量（例如最终答案的准确性）的任务成功分数。第二个是工具调用奖励 ${R}_{\text{ action }}\left( \tau \right)$，反映中间动作的质量。该动作级奖励由正确工具调用奖励和高效内存折叠奖励组成。具体而言，${R}_{\text{ action }}\left( \tau \right)  = {\lambda }_{1}\mathop{\sum }\limits_{{t = 1}}^{T}C\left( {a}_{t}^{\text{ call }}\right)  + {\lambda }_{2}{S}_{\text{ pref }}\left( \tau \right)$，其中 $C\left( {a}_{t}^{\text{ call }}\right)$ 在工具调用正确时为 1，否则为 0。${S}_{\text{ pref }}\left( \tau \right)$ 是鼓励高效使用内存折叠的偏好分数，通过比较带有折叠 $\left( {\tau }_{\text{ fold }}\right)$ 的轨迹与不带折叠 $\left( {\tau }_{\text{ direct }}\right)  : {S}_{\text{ pref }} = \left( {L\left( {\tau }_{\text{ direct }}\right)  - L\left( {\tau }_{\text{ fold }}\right) }\right) /\left( {L\left( {\tau }_{\text{ direct }}\right)  + L\left( {\tau }_{\text{ fold }}\right) }\right)$ 的轨迹来定义。
+
+
+Based on these rewards, we compute two separate group-relative advantages. The task success advantage for trajectory ${\tau }_{k}$ is:
+基于这些奖励，我们计算两个独立的组相对优势。轨迹 ${\tau }_{k}$ 的任务成功优势为：
+
+
+$$
+{A}_{\text{ succ }}\left( {\tau }_{k}\right)  = {R}_{\text{ succ }}\left( {\tau }_{k}\right)  - \frac{1}{K}\mathop{\sum }\limits_{{j = 1}}^{K}{R}_{\text{ succ }}\left( {\tau }_{j}\right) , \tag{5}
+$$
+
+
+
+which is attributed to all generated tokens in ${\tau }_{k}$ ,providing a global learning signal. Similarly, the action-level advantage is:
+该优势归因于 ${\tau }_{k}$ 中生成的所有标记，提供了一个全局学习信号。类似地，动作级优势为：
+
+
+$$
+{A}_{\text{ action }}\left( {\tau }_{k}\right)  = {R}_{\text{ action }}\left( {\tau }_{k}\right)  - \frac{1}{K}\mathop{\sum }\limits_{{j = 1}}^{K}{R}_{\text{ action }}\left( {\tau }_{j}\right) . \tag{6}
+$$
+
+
+
+Crucially, this advantage is attributed only to the specific tokens that constitute the tool call and memory folding actions. This fine-grained credit assignment provides a more targeted signal for learning correct and efficient tool use.
+关键在于，该优势仅归因于构成工具调用和内存折叠动作的特定标记。这种细粒度的信用分配为学习正确且高效的工具使用提供了更具针对性的信号。
+
+
+Optimization Objective. The total advantage for a given token ${y}_{i}$ in trajectory ${\tau }_{k}$ is the sum of the global and local advantages:
+优化目标。给定轨迹 ${\tau }_{k}$ 中标记 ${y}_{i}$ 的总优势是全局优势与局部优势之和：
+
+
+$$
+A\left( {y}_{i}\right)  = {A}_{\text{ succ }}\left( {\tau }_{k}\right)  + M\left( {y}_{i}\right)  \cdot  {A}_{\text{ action }}\left( {\tau }_{k}\right) , \tag{7}
+$$
+
+
+
+where $M\left( {y}_{i}\right)$ is a mask that is 1 if ${y}_{i}$ is part of a tool-call or memory-fold token sequence, and 0 otherwise. ToolPO then optimizes the policy using a clipped surrogate objective function:
+其中 $M\left( {y}_{i}\right)$ 是一个掩码，若 ${y}_{i}$ 属于工具调用或内存折叠标记序列，则为 1，否则为 0。随后，ToolPO 使用裁剪代理目标函数优化策略：
+
+
+$$
+{\mathcal{L}}_{\text{ ToolPO }}\left( \theta \right)  =
+$$
+
+
+
+$$
+{\mathbb{E}}_{{\tau }_{k}}\left\lbrack  {\mathop{\sum }\limits_{{i = 1}}^{\left| {\tau }_{k}\right| }\min \left( {{\rho }_{i}\left( \theta \right) A\left( {y}_{i}\right) ,\operatorname{clip}\left( {{\rho }_{i}\left( \theta \right) ,1 - \epsilon ,1 + \epsilon }\right) A\left( {y}_{i}\right) }\right) }\right\rbrack  . \tag{8}
+$$
+
+
+
+Here, ${\rho }_{i}\left( \theta \right)  = \frac{{\pi }_{\theta }\left( {{y}_{i} \mid  {y}_{ < i},s}\right) }{{\pi }_{{\theta }_{\text{ old }}}\left( {{y}_{i} \mid  {y}_{ < i},s}\right) }$ is the probability ratio for token ${y}_{i}$ . This objective encourages the model to increase the probability of both intermediate actions and end-to-end task accomplishment that exhibit positive relative advantage, thereby ensuring stable and effective policy updates.
+此处，${\rho }_{i}\left( \theta \right)  = \frac{{\pi }_{\theta }\left( {{y}_{i} \mid  {y}_{ < i},s}\right) }{{\pi }_{{\theta }_{\text{ old }}}\left( {{y}_{i} \mid  {y}_{ < i},s}\right) }$ 是标记 ${y}_{i}$ 的概率比。该目标函数鼓励模型增加那些表现出正相对优势的中间动作和端到端任务完成的概率，从而确保策略更新的稳定与有效。
+
+
+Table 2: Main results on downstream task applications, spanning Embodied AI (ALFWorld), Online Shopping (WebShop), General AI Assistants (GAIA), and Humanity's Last Exam (HLE). We report Pass@1 for all tasks. For 32B models, the best results are in bold and the second are underlined. Results from larger or closed-sourced models are in gray color for reference.
+表 2：下游任务应用的主要结果，涵盖具身智能 (ALFWorld)、在线购物 (WebShop)、通用 AI 助手 (GAIA) 以及人类终极考试 (HLE)。我们报告所有任务的 Pass@1。对于 32B 模型，最佳结果以粗体显示，次佳结果加下划线。来自更大规模或闭源模型的结果以灰色显示，仅供参考。
+
+
+<table><tr><td rowspan="2">Method</td><td rowspan="2">Backbone</td><td colspan="2">ALFWorld</td><td colspan="2">WebShop</td><td colspan="4">GAIA</td><td colspan="3">HLE</td></tr><tr><td>Success</td><td>Path</td><td>Success</td><td>Score</td><td>Text</td><td>MM</td><td>File</td><td>All</td><td>Text</td><td>MM</td><td>All</td></tr><tr><td colspan="13">Completing Tasks w/ Task-specific Toolsets</td></tr><tr><td colspan="13">Workflow-based Methods</td></tr><tr><td>ReAct</td><td>Qwen2.5-32B</td><td>60.4</td><td>79.1</td><td>6.0</td><td>28.8</td><td>25.2</td><td>16.7</td><td>13.2</td><td>21.2</td><td>6.5</td><td>7.1</td><td>6.6</td></tr><tr><td>CodeAct</td><td>Qwen2.5-32B</td><td>65.7</td><td>83.3</td><td>12.4</td><td>34.5</td><td>28.2</td><td>20.8</td><td>18.4</td><td>24.8</td><td>7.5</td><td>8.0</td><td>7.6</td></tr><tr><td>Reflextion</td><td>Qwen2.5-32B</td><td>66.4</td><td>86.0</td><td>9.2</td><td>31.6</td><td>29.1</td><td>20.8</td><td>18.4</td><td>25.5</td><td>5.9</td><td>5.3</td><td>5.8</td></tr><tr><td>Plan-and-Solve</td><td>Qwen2.5-32B</td><td>63.4</td><td>80.4</td><td>7.6</td><td>29.3</td><td>27.2</td><td>16.7</td><td>15.8</td><td>23.0</td><td>7.2</td><td>6.2</td><td>7.0</td></tr><tr><td>ReAct</td><td>QwQ-32B</td><td>82.1</td><td>87.8</td><td>17.2</td><td>45.3</td><td>35.0</td><td>8.3</td><td>36.8</td><td>31.5</td><td>13.2</td><td>8.8</td><td>12.2</td></tr><tr><td>CodeAct</td><td>QwQ-32B</td><td>78.4</td><td>86.2</td><td>18.0</td><td>46.4</td><td>38.8</td><td>20.8</td><td>31.6</td><td>34.5</td><td>14.2</td><td>8.0</td><td>12.8</td></tr><tr><td>Reflextion</td><td>QwQ-32B</td><td>85.1</td><td>88.4</td><td>21.6</td><td>50.4</td><td>37.9</td><td>20.8</td><td>36.8</td><td>35.2</td><td>11.9</td><td>7.1</td><td>10.8</td></tr><tr><td>Plan-and-Solve</td><td>QwQ-32B</td><td>79.1</td><td>84.7</td><td>16.0</td><td>43.8</td><td>36.9</td><td>16.7</td><td>34.2</td><td>33.3</td><td>12.9</td><td>9.7</td><td>12.2</td></tr><tr><td>AgentLM*</td><td>Llama2-70B</td><td>86.0</td><td>-</td><td>-</td><td>64.9</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>ReAct</td><td>Qwen2.5-72B</td><td>86.5</td><td>86.5</td><td>22.0</td><td>44.5</td><td>32.0</td><td>20.8</td><td>31.6</td><td>30.3</td><td>9.0</td><td>8.0</td><td>8.8</td></tr><tr><td>ReAct</td><td>DeepSeek-R1</td><td>79.1</td><td>85.8</td><td>19.6</td><td>49.7</td><td>43.7</td><td>29.2</td><td>39.5</td><td>40.6</td><td>14.2</td><td>8.8</td><td>13.0</td></tr><tr><td>ReAct</td><td>GPT-40</td><td>65.7</td><td>87.8</td><td>15.6</td><td>52.5</td><td>35.0</td><td>16.7</td><td>36.8</td><td>32.7</td><td>13.2</td><td>10.6</td><td>12.6</td></tr><tr><td>ReAct</td><td>Claude-4</td><td>93.3</td><td>91.5</td><td>20.4</td><td>56.6</td><td>56.3</td><td>37.5</td><td>52.6</td><td>52.7</td><td>15.5</td><td>16.8</td><td>15.8</td></tr><tr><td colspan="13">Autonomous Tool Usage within Reasoning</td></tr><tr><td>Deep Research</td><td>OpenAI (o3)</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>67.4</td><td>-</td><td>-</td><td>26.6</td></tr><tr><td>WebThinker</td><td>QwQ-32B</td><td>-</td><td>-</td><td>-</td><td>-</td><td>48.5</td><td>25.0</td><td>13.2</td><td>37.0</td><td>14.2</td><td>8.8</td><td>13.0</td></tr><tr><td>HiRA</td><td>QwQ-32B</td><td>84.3</td><td>87.6</td><td>23.2</td><td>51.9</td><td>44.7</td><td>33.3</td><td>42.1</td><td>42.5</td><td>14.5</td><td>10.6</td><td>13.6</td></tr><tr><td>DeepAgent-32B-Base</td><td>QwQ-32B</td><td>88.1</td><td>91.4</td><td>32.0</td><td>55.4</td><td>49.5</td><td>37.5</td><td>44.7</td><td>46.7</td><td>19.1</td><td>13.3</td><td>17.8</td></tr><tr><td>DeepAgent-32B-RL</td><td>QwQ-32B</td><td>91.8</td><td>92.0</td><td>34.4</td><td>56.3</td><td>58.3</td><td>33.3</td><td>52.6</td><td>53.3</td><td>21.7</td><td>15.0</td><td>20.2</td></tr></table>
+<table><tbody><tr><td rowspan="2">方法</td><td rowspan="2">骨干模型</td><td colspan="2">ALFWorld</td><td colspan="2">WebShop</td><td colspan="4">GAIA</td><td colspan="3">HLE</td></tr><tr><td>成功率</td><td>路径</td><td>成功率</td><td>得分</td><td>文本</td><td>多模态</td><td>文件</td><td>全部</td><td>文本</td><td>多模态</td><td>全部</td></tr><tr><td colspan="13">利用特定任务工具集完成任务</td></tr><tr><td colspan="13">基于工作流的方法</td></tr><tr><td>ReAct</td><td>Qwen2.5-32B</td><td>60.4</td><td>79.1</td><td>6.0</td><td>28.8</td><td>25.2</td><td>16.7</td><td>13.2</td><td>21.2</td><td>6.5</td><td>7.1</td><td>6.6</td></tr><tr><td>CodeAct</td><td>Qwen2.5-32B</td><td>65.7</td><td>83.3</td><td>12.4</td><td>34.5</td><td>28.2</td><td>20.8</td><td>18.4</td><td>24.8</td><td>7.5</td><td>8.0</td><td>7.6</td></tr><tr><td>Reflextion</td><td>Qwen2.5-32B</td><td>66.4</td><td>86.0</td><td>9.2</td><td>31.6</td><td>29.1</td><td>20.8</td><td>18.4</td><td>25.5</td><td>5.9</td><td>5.3</td><td>5.8</td></tr><tr><td>Plan-and-Solve</td><td>Qwen2.5-32B</td><td>63.4</td><td>80.4</td><td>7.6</td><td>29.3</td><td>27.2</td><td>16.7</td><td>15.8</td><td>23.0</td><td>7.2</td><td>6.2</td><td>7.0</td></tr><tr><td>ReAct</td><td>QwQ-32B</td><td>82.1</td><td>87.8</td><td>17.2</td><td>45.3</td><td>35.0</td><td>8.3</td><td>36.8</td><td>31.5</td><td>13.2</td><td>8.8</td><td>12.2</td></tr><tr><td>CodeAct</td><td>QwQ-32B</td><td>78.4</td><td>86.2</td><td>18.0</td><td>46.4</td><td>38.8</td><td>20.8</td><td>31.6</td><td>34.5</td><td>14.2</td><td>8.0</td><td>12.8</td></tr><tr><td>Reflextion</td><td>QwQ-32B</td><td>85.1</td><td>88.4</td><td>21.6</td><td>50.4</td><td>37.9</td><td>20.8</td><td>36.8</td><td>35.2</td><td>11.9</td><td>7.1</td><td>10.8</td></tr><tr><td>Plan-and-Solve</td><td>QwQ-32B</td><td>79.1</td><td>84.7</td><td>16.0</td><td>43.8</td><td>36.9</td><td>16.7</td><td>34.2</td><td>33.3</td><td>12.9</td><td>9.7</td><td>12.2</td></tr><tr><td>AgentLM*</td><td>Llama2-70B</td><td>86.0</td><td>-</td><td>-</td><td>64.9</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>ReAct</td><td>Qwen2.5-72B</td><td>86.5</td><td>86.5</td><td>22.0</td><td>44.5</td><td>32.0</td><td>20.8</td><td>31.6</td><td>30.3</td><td>9.0</td><td>8.0</td><td>8.8</td></tr><tr><td>ReAct</td><td>DeepSeek-R1</td><td>79.1</td><td>85.8</td><td>19.6</td><td>49.7</td><td>43.7</td><td>29.2</td><td>39.5</td><td>40.6</td><td>14.2</td><td>8.8</td><td>13.0</td></tr><tr><td>ReAct</td><td>GPT-4o</td><td>65.7</td><td>87.8</td><td>15.6</td><td>52.5</td><td>35.0</td><td>16.7</td><td>36.8</td><td>32.7</td><td>13.2</td><td>10.6</td><td>12.6</td></tr><tr><td>ReAct</td><td>Claude-3.5</td><td>93.3</td><td>91.5</td><td>20.4</td><td>56.6</td><td>56.3</td><td>37.5</td><td>52.6</td><td>52.7</td><td>15.5</td><td>16.8</td><td>15.8</td></tr><tr><td colspan="13">推理过程中的自主工具使用</td></tr><tr><td>Deep Research</td><td>OpenAI (o3)</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>67.4</td><td>-</td><td>-</td><td>26.6</td></tr><tr><td>WebThinker</td><td>QwQ-32B</td><td>-</td><td>-</td><td>-</td><td>-</td><td>48.5</td><td>25.0</td><td>13.2</td><td>37.0</td><td>14.2</td><td>8.8</td><td>13.0</td></tr><tr><td>HiRA</td><td>QwQ-32B</td><td>84.3</td><td>87.6</td><td>23.2</td><td>51.9</td><td>44.7</td><td>33.3</td><td>42.1</td><td>42.5</td><td>14.5</td><td>10.6</td><td>13.6</td></tr><tr><td>DeepAgent-32B-Base</td><td>QwQ-32B</td><td>88.1</td><td>91.4</td><td>32.0</td><td>55.4</td><td>49.5</td><td>37.5</td><td>44.7</td><td>46.7</td><td>19.1</td><td>13.3</td><td>17.8</td></tr><tr><td>DeepAgent-32B-RL</td><td>QwQ-32B</td><td>91.8</td><td>92.0</td><td>34.4</td><td>56.3</td><td>58.3</td><td>33.3</td><td>52.6</td><td>53.3</td><td>21.7</td><td>15.0</td><td>20.2</td></tr></tbody></table>
+
+
+## 4 Experimental Settings
+## 4 实验设置
+
+
+### 4.1 Tasks and Datasets
+### 4.1 任务与数据集
+
+
+We conduct extensive experiments on a wide range of benchmarks, including general tool-use and downstream applications.
+我们针对广泛的基准测试进行了大量实验，涵盖通用工具使用及下游应用。
+
+
+General Tool-Use. These benchmarks cover toolsets from tens to $> {10}\mathrm{k}$ tools,and thus stress scalability. They evaluate core capabilities for general tool use, including tool planning, tool retrieval, and accurate multi-step tool calling. We use ToolBench [37] (16k+ real-world APIs; G3 subset with multi-step/multi-tool calls), API-Bank [24] (314 dialogues; 73 APIs; 753 calls), RestBench [47] (TMDB: 54 tools, 2.3 calls/question; Spotify: 40 tools, 2.6 calls/question), and ToolHop [69] (3,912 executable tools; 3-7 calls/task). We evaluate two settings: provided ground-truth tools and open-set tool retrieval from the full toolset.
+通用工具使用。这些基准测试涵盖了从数十个到 $> {10}\mathrm{k}$ 个工具的工具集，旨在强调可扩展性。它们评估了通用工具使用的核心能力，包括工具规划、工具检索以及精确的多步工具调用。我们使用了 ToolBench [37]（1.6万+个真实世界 API；包含多步/多工具调用的 G3 子集）、API-Bank [24]（314 个对话；73 个 API；753 次调用）、RestBench [47]（TMDB：54 个工具，每个问题 2.3 次调用；Spotify：40 个工具，每个问题 2.6 次调用）以及 ToolHop [69]（3,912 个可执行工具；每个任务 3-7 次调用）。我们评估了两种设置：提供真值工具（ground-truth tools）和从完整工具集中进行开放集工具检索。
+
+
+Downstream Applications. We also evaluate downstream applications with domain-specific toolsets: ALFWorld [45] (text embodied tasks with nine actions, e.g., move/take), WebShop [67] (shopping with 'search' and 'click'), GAIA [33] (web search/browsing, VQA, code, file reading), and Humanity's Last Exam (HLE) [35] (code, search, browsing, VQA). These tasks test long-horizon interaction in more realistic environments, requiring state tracking, error recovery, and coordination across heterogeneous tools; we equip agents with task-specific toolsets.
+下游应用。我们还评估了具有特定领域工具集的下游应用：ALFWorld [45]（包含九种动作的文本具身任务，如移动/拾取）、WebShop [67]（通过“搜索”和“点击”进行购物）、GAIA [33]（网络搜索/浏览、VQA、代码、文件读取）以及 Humanity's Last Exam (HLE) [35]（代码、搜索、浏览、VQA）。这些任务在更真实的场景中测试长程交互，需要状态跟踪、错误恢复以及跨异构工具的协调；我们为智能体配备了特定任务的工具集。
+
+
+### 4.2 Baselines
+### 4.2 基线方法
+
+
+Our baselines include: (1) Workflow-based Methods: ReAct [68] alternates explicit reasoning with environment actions in a Reason-Act-Observe loop. CodeAct [56] expresses actions as executable Python code that runs in an interpreter. Plan-and-Solve [52] first sketches a high-level plan and then executes it step by step. Reflexion [43] enhances learning through verbal self-reflection after failed attempts. AgentLM [70] uses instruction tuning to enhance general agent capabilities of LLMs. (2) Autonomous Tool Usage within Reasoning: WebThinker [26] interleaves thinking with web search and deep web exploration. HiRA [21] introduces a hierarchical agent architecture where a meta planner decomposes tasks, a coordinator routes subtasks, and specialized executors solve them with dual-channel memory. OpenAI Deep Research [34] is an agentic system based on reasoning models.
+我们的基线方法包括：(1) 基于工作流的方法：ReAct [68] 在“推理-行动-观察”循环中交替进行显式推理与环境交互。CodeAct [56] 将动作表示为在解释器中运行的可执行 Python 代码。Plan-and-Solve [52] 先勾勒出高层计划，然后逐步执行。Reflexion [43] 通过失败尝试后的口头自我反思来增强学习。AgentLM [70] 利用指令微调来增强大语言模型的通用智能体能力。(2) 推理过程中的自主工具使用：WebThinker [26] 将思考与网络搜索及深度网页探索交织在一起。HiRA [21] 引入了一种分层智能体架构，其中元规划器分解任务，协调器分配子任务，专门的执行器通过双通道记忆解决任务。OpenAI Deep Research [34] 是一种基于推理模型的智能体系统。
+
+
+### 4.3 Implementation Details
+### 4.3 实现细节
+
+
+We use QwQ-32B [51] as DeepAgent's backbone model, with Qwen2.5- 32B-Instruct [40] as the auxiliary model in our main results. Text generation employs a maximum of 81,920 tokens with temperature 0.7, top_p 0.8, top_k 20, and repetition penalty 1.05. Web search and page browsing are implemented using Google Serper API and
+我们使用 QwQ-32B [51] 作为 DeepAgent 的骨干模型，并在主要结果中使用 Qwen2.5-32B-Instruct [40] 作为辅助模型。文本生成采用最大 81,920 个 token，温度系数为 0.7，top_p 为 0.8，top_k 为 20，重复惩罚为 1.05。网络搜索和页面浏览通过 Google Serper API 实现，并
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_08_50_1b6870.jpg"/>
+
+
+
+Figure 4: Visualization of training dynamics, including (a) reward scores and (b) validation scores across training steps.
+图 4：训练动态可视化，包括训练步数下的 (a) 奖励分数和 (b) 验证分数。
+
+
+Table 3: Ablation studies on the components of DeepAgent, where the best results are in bold.
+表 3：DeepAgent 组件的消融实验，最优结果已加粗。
+
+
+<table><tr><td rowspan="2">Method</td><td colspan="2">Tool-Usage</td><td colspan="2">Application</td><td rowspan="2">Avg.</td></tr><tr><td>ToolB.</td><td>ToolH.</td><td>WebS.</td><td>GAIA</td></tr><tr><td>DeepAgent-32B-RL</td><td>64.0</td><td>40.6</td><td>34.4</td><td>53.3</td><td>48.1</td></tr><tr><td>w/o Training (Base)</td><td>60.0</td><td>38.4</td><td>32.0</td><td>46.7</td><td>44.3</td></tr><tr><td>w/o Memory Folding</td><td>63.0</td><td>36.6</td><td>32.4</td><td>44.7</td><td>44.2</td></tr><tr><td>w/o Tool Simulation</td><td>62.0</td><td>35.2</td><td>33.6</td><td>48.5</td><td>44.8</td></tr><tr><td>w/o Tool Adv. Attribution</td><td>62.0</td><td>39.6</td><td>33.2</td><td>49.5</td><td>46.1</td></tr></table>
+<table><tbody><tr><td rowspan="2">方法</td><td colspan="2">工具使用</td><td colspan="2">应用</td><td rowspan="2">平均值</td></tr><tr><td>ToolB.</td><td>ToolH.</td><td>WebS.</td><td>GAIA</td></tr><tr><td>DeepAgent-32B-RL</td><td>64.0</td><td>40.6</td><td>34.4</td><td>53.3</td><td>48.1</td></tr><tr><td>无训练（基座）</td><td>60.0</td><td>38.4</td><td>32.0</td><td>46.7</td><td>44.3</td></tr><tr><td>无记忆折叠</td><td>63.0</td><td>36.6</td><td>32.4</td><td>44.7</td><td>44.2</td></tr><tr><td>无工具模拟</td><td>62.0</td><td>35.2</td><td>33.6</td><td>48.5</td><td>44.8</td></tr><tr><td>无工具优势归因</td><td>62.0</td><td>39.6</td><td>33.2</td><td>49.5</td><td>46.1</td></tr></tbody></table>
+
+
+Jina Reader API, respectively. The VQA tool is based on Qwen2.5- VL-32B-Instruct [1]. Tool retrieval is performed using bge-large-en-v1.5 [62]. Training consists of 100 steps of ToolPO with batch size ${64},{\lambda }_{1} = {\lambda }_{2} = 1$ ,rollout size $K = 8$ ,and maximum sequence length 32,768. Additional details are provided in Appendix B. All experiments are conducted on 64 NVIDIA H20-141GB GPUs.
+Jina Reader API。VQA工具基于Qwen2.5-VL-32B-Instruct [1]。工具检索使用bge-large-en-v1.5 [62]。训练包含100步ToolPO，批大小为${64},{\lambda }_{1} = {\lambda }_{2} = 1$，展开大小为$K = 8$，最大序列长度为32,768。更多细节见附录B。所有实验均在64块NVIDIA H20-141GB GPU上进行。
+
+
+## 5 Experimental Results
+## 5 实验结果
+
+
+### 5.1 Main Results on General Tool Usage Tasks
+### 5.1 通用工具使用任务的主要结果
+
+
+Table 1 summarizes results on general tool-use tasks and yields three observations. (1) DeepAgent's End-to-End Reasoning Surpasses Workflow-Based Methods. DeepAgent consistently outperforms workflow-based agents. On labeled-tool tasks, DeepAgent- 32B-RL reaches 89.0% on TMDB and 75.4% on Spotify, exceeding the best 32B baselines (55.0% and 52.6%). This highlights the advantage of end-to-end agentic reasoning over rigid, predefined action loops. (2) DeepAgent Maintains Robustness in Open-Set Scenarios. Gains are larger in open-set settings where tool discovery is required: on ToolBench and ToolHop, DeepAgent-32B-RL achieves 64.0% and 40.6%, surpassing the best baselines (54.0% and 29.0%). This suggests that on-demand tool discovery within the reasoning process is both more robust and more scalable in realistic open-set tool environments. (3) ToolPO Training Further Improves Tool-Usage Capabilities. ToolPO yields consistent improvements over the base model, increasing ToolBench success by up to 6.0% and Spotify (labeled) by 5.2%. These gains indicate that our RL training better aligns intermediate tool calls with end-task success.
+表1总结了通用工具使用任务的结果，得出三点观察。（1）DeepAgent的端到端推理优于基于工作流的方法。DeepAgent始终优于基于工作流的智能体。在标记工具任务中，DeepAgent-32B-RL在TMDB和Spotify上分别达到89.0%和75.4%，超过了最佳32B基线（55.0%和52.6%）。这凸显了端到端智能体推理相较于僵化、预定义动作循环的优势。（2）DeepAgent在开放集场景中保持稳健性。在需要工具发现的开放集设置中，增益更为显著：在ToolBench和ToolHop上，DeepAgent-32B-RL分别达到64.0%和40.6%，超过了最佳基线（54.0%和29.0%）。这表明在推理过程中按需发现工具在现实的开放集工具环境中更稳健且更具可扩展性。（3）ToolPO训练进一步提升了工具使用能力。ToolPO在基础模型上实现了持续改进，ToolBench成功率最高提升6.0%，Spotify（标记）提升5.2%。这些增益表明我们的强化学习训练能更好地将中间工具调用与最终任务成功对齐。
+
+
+Table 4: Effectiveness analysis of autonomous tool retrieval strategy in open-set scenarios compared to pre-retrieved tool methods. Numbers in parentheses indicate toolset sizes.
+表4：在开放集场景中，自主工具检索策略与预检索工具方法的有效性分析。括号中的数字表示工具集大小。
+
+
+<table><tr><td>Method</td><td>ToolB. (16k)</td><td>ToolH. (3.9k)</td><td>TMDB (54)</td><td>Spotify (40)</td><td>Avg.</td></tr><tr><td colspan="6">ReAct Workflow</td></tr><tr><td>Input Retrieved Tool</td><td>35.0</td><td>25.4</td><td>14.0</td><td>15.0</td><td>22.4</td></tr><tr><td>Auto. Tool Retrieval</td><td>34.0</td><td>37.1</td><td>18.0</td><td>27.8</td><td>28.0</td></tr><tr><td colspan="6">Plan-and-Solve Workflow</td></tr><tr><td>Input Retrieved Tool</td><td>37.0</td><td>24.8</td><td>19.0</td><td>16.0</td><td>24.2</td></tr><tr><td>Auto. Tool Retrieval</td><td>45.0</td><td>25.7</td><td>24.0</td><td>19.3</td><td>28.5</td></tr><tr><td colspan="6">End-to-end Agentic Reasoning (DeepAgent)</td></tr><tr><td>Input Retrieved Tool</td><td>53.0</td><td>37.0</td><td>34.0</td><td>43.9</td><td>42.0</td></tr><tr><td>Auto. Tool Retrieval</td><td>64.0</td><td>40.6</td><td>55.0</td><td>50.9</td><td>52.6</td></tr></table>
+<table><tbody><tr><td>方法</td><td>ToolB. (16k)</td><td>ToolH. (3.9k)</td><td>TMDB (54)</td><td>Spotify (40)</td><td>平均值</td></tr><tr><td colspan="6">ReAct 工作流</td></tr><tr><td>输入检索工具</td><td>35.0</td><td>25.4</td><td>14.0</td><td>15.0</td><td>22.4</td></tr><tr><td>自动工具检索</td><td>34.0</td><td>37.1</td><td>18.0</td><td>27.8</td><td>28.0</td></tr><tr><td colspan="6">规划与求解工作流</td></tr><tr><td>输入检索工具</td><td>37.0</td><td>24.8</td><td>19.0</td><td>16.0</td><td>24.2</td></tr><tr><td>自动工具检索</td><td>45.0</td><td>25.7</td><td>24.0</td><td>19.3</td><td>28.5</td></tr><tr><td colspan="6">端到端智能体推理 (DeepAgent)</td></tr><tr><td>输入检索工具</td><td>53.0</td><td>37.0</td><td>34.0</td><td>43.9</td><td>42.0</td></tr><tr><td>自动工具检索</td><td>64.0</td><td>40.6</td><td>55.0</td><td>50.9</td><td>52.6</td></tr></tbody></table>
+
+
+### 5.2 Main Results on Downstream Applications
+### 5.2 下游应用的主要结果
+
+
+Table 2 reports the downstream results that require long-horizon interaction and more complex environment dynamics. (1) The autonomous reasoning paradigm generally outperforms the workflow-based methods. Methods that integrate tool use into continuous reasoning outperform workflow-based agents. On GAIA, DeepAgent-32B-Base (46.7) and HiRA (42.5) exceed the best work-flow baseline CodeAct (34.5); on WebShop, DeepAgent-32B-Base scores 32.0 vs. 18.0. This supports that long-horizon tasks benefit from flexible, integrated reasoning-and-action rather than fixed workflows. (2) DeepAgent demonstrates superior performance across various application tasks. DeepAgent achieves the best performance among 32B models: 53.3 on GAIA (vs. 42.5 for HiRA) and 91.8% on ALFWorld (vs. 84.3). We attribute this to DeepAgent's coherent reasoning process and its support for robust long-horizon interaction (e.g., autonomous memory folding). (3) ToolPO training further improves performance on downstream applications. ToolPO further improves downstream performance: GAIA ${46.7} \rightarrow  {53.3}\left( {+{6.6}}\right)$ and ALFWorld 88.1% $\rightarrow  {91.8}\% \left( {+{3.7}}\right)$ . This shows the tool-use improvements learned by ToolPO transfer to interactive downstream settings.
+表2报告了需要长程交互和更复杂环境动态的下游任务结果。(1) 自主推理范式总体上优于基于工作流的方法。将工具使用整合到持续推理中的方法优于基于工作流的智能体。在GAIA上，DeepAgent-32B-Base (46.7) 和 HiRA (42.5) 超过了最佳工作流基线CodeAct (34.5)；在WebShop上，DeepAgent-32B-Base得分为32.0，而CodeAct为18.0。这支持了长程任务受益于灵活、集成的推理与行动，而非固定工作流的观点。(2) DeepAgent在各类应用任务中表现出卓越性能。DeepAgent在32B模型中取得了最佳表现：GAIA上为53.3（HiRA为42.5），ALFWorld上为91.8%（HiRA为84.3%）。我们将其归功于DeepAgent连贯的推理过程及其对稳健长程交互（如自主记忆折叠）的支持。(3) ToolPO训练进一步提升了下游应用的性能。ToolPO进一步提升了下游表现：GAIA ${46.7} \rightarrow  {53.3}\left( {+{6.6}}\right)$ 和 ALFWorld 88.1% $\rightarrow  {91.8}\% \left( {+{3.7}}\right)$。这表明ToolPO学习到的工具使用改进可以迁移到交互式下游场景中。
+
+
+### 5.3 Analysis of Training Dynamics
+### 5.3 训练动态分析
+
+
+Figure 4 shows the training dynamics of DeepAgent, including the reward scores and validation scores across training steps. As shown in the figure, (1) DeepAgent trained with ToolPO achieves higher upper bounds on both reward and validation scores compared to the commonly used GRPO. (2) Moreover, the training reward exhibits less fluctuation than GRPO, demonstrating better training stability. This indicates that using tool simulators instead of directly training with unstable real-world APIs, along with employing tool-call process supervision, enables more stable and effective training of tool-usage capabilities.
+图4展示了DeepAgent的训练动态，包括各训练步的奖励分数和验证分数。如图所示，(1) 与常用的GRPO相比，使用ToolPO训练的DeepAgent在奖励和验证分数上均达到了更高的上限。(2) 此外，训练奖励的波动比GRPO更小，表现出更好的训练稳定性。这表明，使用工具模拟器代替直接在不稳定的真实API上进行训练，并结合工具调用过程监督，能够更稳定、有效地训练工具使用能力。
+
+
+### 5.4 Ablation Studies
+### 5.4 消融研究
+
+
+We conduct ablation studies in Table 3 to validate the effectiveness of each component in DeepAgent. (1) Importance of ToolPO Training: Removing ToolPO training (the Base model) results in the most significant performance drop (from 48.1 to 44.3). This
+我们在表3中进行了消融研究，以验证DeepAgent中各组件的有效性。(1) ToolPO训练的重要性：移除ToolPO训练（Base模型）导致了最显著的性能下降（从48.1降至44.3）。这
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_08_50_673ba7.jpg"/>
+
+
+
+Figure 5: Scaling analysis of performance with respect to maximum action limits on WebShop and GAIA datasets.
+图5：WebShop和GAIA数据集上性能随最大行动限制变化的缩放分析。
+
+
+highlights the central role of our end-to-end RL method in enhancing tool use and complex task completion. (2) Effectiveness of Memory Folding: The absence of memory folding also leads to a substantial performance decline (average score drops to 44.2), particularly on the long-horizon task GAIA (from 53.3 to 44.7). This confirms that the autonomous memory folding mechanism, allowing the agent to "take a breath" and replan, is crucial for robust long-term interaction. (3) Contribution of Training Strategies: Removing the tool simulator and tool-call advantage attribution both lead to performance degradation. This validates that the tool simulator enables more stable training, and fine-grained advantage attribution provides precise learning signals.
+凸显了我们端到端强化学习方法在增强工具使用和复杂任务完成方面的核心作用。(2) 记忆折叠的有效性：缺失记忆折叠同样导致了性能的大幅下降（平均分降至44.2），特别是在长程任务GAIA上（从53.3降至44.7）。这证实了允许智能体“喘息”并重新规划的自主记忆折叠机制，对于稳健的长期交互至关重要。(3) 训练策略的贡献：移除工具模拟器和工具调用优势归因均会导致性能退化。这验证了工具模拟器实现了更稳定的训练，而细粒度的优势归因提供了精确的学习信号。
+
+
+### 5.5 Effectiveness of Tool Retrieval Strategies
+### 5.5 工具检索策略的有效性
+
+
+To compare pre-retrieving tools versus autonomous discovery during task execution, we conduct experiments shown in Table 4. We find: (1) The on-demand nature of dynamic tool discovery yields superior performance and robust scalability. Autonomous tool retrieval during reasoning consistently outperforms pre-retrieved tools across all frameworks, demonstrating the superiority of on-demand tool access in open-set scenarios. Performance gains are most pronounced on large toolsets like ToolBench (16k tools) and ToolHop (3.9k tools), indicating robust scalability for real-world tasks. (2) DeepAgent synergizes better with dynamic retrieval. Combined with autonomous tool retrieval, our framework achieves the best results by a large margin, scoring 52.6 on average versus 28.5 for the best workflow-based method. This demonstrates that DeepAgent's architecture is uniquely suited for dynamic tool discovery.
+为了比较预检索工具与任务执行期间自主发现工具的效果，我们进行了表4所示的实验。我们发现：(1) 动态工具发现的按需特性带来了卓越的性能和稳健的可扩展性。在推理过程中自主检索工具在所有框架中均持续优于预检索工具，证明了按需工具访问在开放集场景中的优越性。在ToolBench（1.6万个工具）和ToolHop（3900个工具）等大型工具集上，性能提升最为显著，表明其对现实世界任务具有稳健的可扩展性。(2) DeepAgent与动态检索的协同效果更好。结合自主工具检索，我们的框架以较大优势取得了最佳结果，平均得分52.6，而最佳工作流方法为28.5。这证明了DeepAgent的架构非常适合动态工具发现。
+
+
+### 5.6 Scaling Analysis of Action Limits
+### 5.6 行动限制的缩放分析
+
+
+Figure 5 illustrates the performance of DeepAgent and ReAct on the WebShop and GAIA datasets as the maximum action limit is varied. The results yield several key insights. (1) DeepAgent consistently and significantly outperforms the ReAct baseline across all tested action limits on both datasets, demonstrating its superior effectiveness. (2) For both agents, performance generally improves as the maximum number of actions increases. This suggests that complex tasks benefit from a longer interaction horizon, allowing for more thorough exploration and reasoning. (3) DeepAgent exhibits stronger scalability. As the action limit increases, the performance gap between DeepAgent and ReAct widens, particularly on WebShop. This sustained gain suggests DeepAgent strategically selects effective, task-relevant actions, avoiding the wasteful steps that limit ReAct's scalability.
+图5展示了DeepAgent和ReAct在WebShop和GAIA数据集上随最大动作限制变化时的性能表现。结果揭示了几个关键洞察：(1) 在两个数据集的所有测试动作限制下，DeepAgent始终显著优于ReAct基线，证明了其卓越的有效性。(2) 对于两个智能体，性能通常随最大动作数的增加而提升。这表明复杂任务受益于更长的交互周期，从而允许更充分的探索与推理。(3) DeepAgent展现出更强的可扩展性。随着动作限制的增加，DeepAgent与ReAct之间的性能差距进一步拉大，特别是在WebShop上。这种持续的增益表明DeepAgent能策略性地选择与任务相关的有效动作，避免了限制ReAct可扩展性的无效步骤。
+
+
+Table 5: Performance with different reasoning model backbones: MOE-based models with 30B and 235B parameters.
+表5：不同推理模型主干的性能：参数量为30B和235B的MOE模型。
+
+
+<table><tr><td rowspan="2">Method</td><td colspan="2">Tool-Usage</td><td colspan="3">Application</td><td rowspan="2">Avg.</td></tr><tr><td>ToolB. ToolH.</td><td></td><td>ALF.</td><td>WebS.</td><td>GAIA</td></tr><tr><td colspan="7">Qwen3-30B-A3B-Thinking</td></tr><tr><td>ReAct</td><td>52.0</td><td>22.0</td><td>67.9</td><td>18.4</td><td>34.5</td><td>35.7</td></tr><tr><td>Plan-and-Solve</td><td>50.0</td><td>23.6</td><td>68.7</td><td>20.4</td><td>35.2</td><td>37.0</td></tr><tr><td>DeepAgent (Base)</td><td>59.0</td><td>47.5</td><td>69.4</td><td>31.4</td><td>39.4</td><td>46.9</td></tr><tr><td colspan="7">Owen3-235B-A22B-Thinking</td></tr><tr><td>ReAct</td><td>61.0</td><td>40.9</td><td>79.9</td><td>21.6</td><td>36.4</td><td>45.1</td></tr><tr><td>Plan-and-Solve</td><td>63.0</td><td>43.0</td><td>78.4</td><td>24.4</td><td>38.4</td><td>46.0</td></tr><tr><td>DeepAgent (Base)</td><td>67.0</td><td>48.2</td><td>85.8</td><td>37.2</td><td>51.5</td><td>55.7</td></tr></table>
+<table><tbody><tr><td rowspan="2">方法</td><td colspan="2">工具使用</td><td colspan="3">应用</td><td rowspan="2">平均值</td></tr><tr><td>ToolB. ToolH.</td><td></td><td>ALF.</td><td>WebS.</td><td>GAIA</td></tr><tr><td colspan="7">Qwen3-30B-A3B-Thinking</td></tr><tr><td>ReAct</td><td>52.0</td><td>22.0</td><td>67.9</td><td>18.4</td><td>34.5</td><td>35.7</td></tr><tr><td>Plan-and-Solve</td><td>50.0</td><td>23.6</td><td>68.7</td><td>20.4</td><td>35.2</td><td>37.0</td></tr><tr><td>DeepAgent (基础版)</td><td>59.0</td><td>47.5</td><td>69.4</td><td>31.4</td><td>39.4</td><td>46.9</td></tr><tr><td colspan="7">Owen3-235B-A22B-Thinking</td></tr><tr><td>ReAct</td><td>61.0</td><td>40.9</td><td>79.9</td><td>21.6</td><td>36.4</td><td>45.1</td></tr><tr><td>Plan-and-Solve</td><td>63.0</td><td>43.0</td><td>78.4</td><td>24.4</td><td>38.4</td><td>46.0</td></tr><tr><td>DeepAgent (基础版)</td><td>67.0</td><td>48.2</td><td>85.8</td><td>37.2</td><td>51.5</td><td>55.7</td></tr></tbody></table>
+
+
+### 5.7 Generalization Across Different Backbones
+### 5.7 不同主干模型的泛化能力
+
+
+Table 5 shows the performance of DeepAgent with different backbone large reasoning models, including Qwen3-30B-A3B-Thinking and Qwen3-235B-A22B-Thinking [65]. (1) DeepAgent consistently outperforms workflow-based methods. With both the 30B and 235B MoE-based reasoning models as backbones, DeepAgent maintains a significant performance margin over ReAct and Plan-and-Solve, demonstrating the generalizability of its agentic reasoning approach. (2) DeepAgent scales effectively with larger models. While all methods benefit from scaling the backbone from a ${30}\mathrm{\;B}$ to a 235B model, DeepAgent shows the largest absolute performance gains on complex application tasks.
+表5展示了DeepAgent在不同主干推理大模型下的表现，包括Qwen3-30B-A3B-Thinking和Qwen3-235B-A22B-Thinking [65]。(1) DeepAgent的表现始终优于基于工作流的方法。无论是以30B还是235B的MoE推理模型作为主干，DeepAgent在性能上均显著领先于ReAct和Plan-and-Solve，证明了其智能体推理方法的通用性。(2) DeepAgent能随模型规模扩大而有效提升。尽管所有方法都能从主干模型扩展至${30}\mathrm{\;B}$及235B规模中获益，但DeepAgent在复杂应用任务上展现出了最大的绝对性能增益。
+
+
+## 6 Conclusion
+## 6 结论
+
+
+In this work, we introduce DeepAgent, an end-to-end reasoning agent that unifies thinking, tool discovery, and execution into a single, coherent agentic reasoning process. To enable robust long-horizon interaction, we propose an autonomous memory folding mechanism that compresses interaction history into a structured memory, allowing the agent to "take a breath" and reconsider its strategy. We also introduce ToolPO, an end-to-end RL method that leverages LLM simulated APIs for stable training and fine-grained advantage attribution for precise credit assignment to tool invocations. Extensive experiments on general tool-use and downstream applications demonstrate that DeepAgent significantly outperforms various baseline agents, particularly in open-set scenarios requiring dynamic tool discovery over scalable toolsets. This work opens new avenues for developing more general and scalable LLM agents for broader real-world applications.
+本文介绍了DeepAgent，这是一个端到端的推理智能体，将思考、工具发现与执行统一为一个连贯的智能体推理过程。为实现稳健的长程交互，我们提出了一种自主记忆折叠机制，将交互历史压缩为结构化记忆，使智能体能够“喘息”并重新审视其策略。我们还引入了ToolPO，这是一种端到端强化学习方法，利用大语言模型模拟API进行稳定训练，并对工具调用进行细粒度的优势归因，从而实现精确的信用分配。在通用工具使用和下游应用上的大量实验表明，DeepAgent显著优于各类基准智能体，特别是在需要跨可扩展工具集进行动态工具发现的开放集场景中。这项工作为开发更通用、可扩展的大语言模型智能体以应用于更广泛的现实场景开辟了新途径。
+
+
+## Acknowledgments
+## 致谢
+
+
+This work was supported by the National Natural Science Foundation of China No. 62272467, and the China Postdoctoral Science Foundation under Grant Number 2025T180440. The work was partially done at the Engineering Research Center of Next-Generation Intelligent Search and Recommendation, MOE.
+本研究获国家自然科学基金（项目编号：62272467）及中国博士后科学基金（项目编号：2025T180440）资助。部分工作在教育部下一代智能搜索与推荐工程研究中心完成。
+
+
+## References
+## 参考文献
+
+
+[1] Shuai Bai, Keqin Chen, Xuejing Liu, Jialin Wang, Wenbin Ge, Sibo Song, Kai Dang, Peng Wang, Shijie Wang, Jun Tang, Humen Zhong, Yuanzhi Zhu, Ming-Hsuan Yang, Zhaohai Li, Jianqiang Wan, Pengfei Wang, Wei Ding, Zheren Fu, Yiheng Xu, Jiabo Ye, Xi Zhang, Tianbao Xie, Zesen Cheng, Hang Zhang, Zhibo Yang, Haiyang Xu, and Junyang Lin. 2025. Qwen2.5-VL Technical Report. CoRR abs/2502.13923 (2025). arXiv:2502.13923 doi:10.48550/ARXIV.2502.13923
+[1] Shuai Bai, Keqin Chen, Xuejing Liu, Jialin Wang, Wenbin Ge, Sibo Song, Kai Dang, Peng Wang, Shijie Wang, Jun Tang, Humen Zhong, Yuanzhi Zhu, Ming-Hsuan Yang, Zhaohai Li, Jianqiang Wan, Pengfei Wang, Wei Ding, Zheren Fu, Yiheng Xu, Jiabo Ye, Xi Zhang, Tianbao Xie, Zesen Cheng, Hang Zhang, Zhibo Yang, Haiyang Xu, and Junyang Lin. 2025. Qwen2.5-VL Technical Report. CoRR abs/2502.13923 (2025). arXiv:2502.13923 doi:10.48550/ARXIV.2502.13923
+
+
+[2] Qiguang Chen, Libo Qin, Jinhao Liu, Dengyun Peng, Jiannan Guan, Peng Wang, Mengkang Hu, Yuhang Zhou, Te Gao, and Wanxiang Che. 2025. Towards Reasoning Era: A Survey of Long Chain-of-Thought for Reasoning Large Language Models. CoRR abs/2503.09567 (2025). arXiv:2503.09567 doi:10.48550/ARXIV.2503.09567
+[2] Qiguang Chen, Libo Qin, Jinhao Liu, Dengyun Peng, Jiannan Guan, Peng Wang, Mengkang Hu, Yuhang Zhou, Te Gao, and Wanxiang Che. 2025. Towards Reasoning Era: A Survey of Long Chain-of-Thought for Reasoning Large Language Models. CoRR abs/2503.09567 (2025). arXiv:2503.09567 doi:10.48550/ARXIV.2503.09567
+
+
+[3] Yifei Chen, Guanting Dong, and Zhicheng Dou. 2025. Toward Effective Tool-Integrated Reasoning via Self-Evolved Preference Learning. arXiv:2509.23285 [cs.AI] https://arxiv.org/abs/2509.23285
+[3] Yifei Chen, Guanting Dong, and Zhicheng Dou. 2025. Toward Effective Tool-Integrated Reasoning via Self-Evolved Preference Learning. arXiv:2509.23285 [cs.AI] https://arxiv.org/abs/2509.23285
+
+
+[4] DeepSeek-AI, Daya Guo, Dejian Yang, Haowei Zhang, Junxiao Song, Ruoyu Zhang, Runxin Xu, Qihao Zhu, Shirong Ma, Peiyi Wang, Xiao Bi, Xiaokang Zhang, Xingkai Yu, Yu Wu, Z. F. Wu, Zhibin Gou, Zhihong Shao, Zhuoshu Li, Ziyi Gao, Aixin Liu, Bing Xue, Bingxuan Wang, Bochao Wu, Bei Feng, Chengda Lu, Chenggang Zhao, Chengqi Deng, Chenyu Zhang, Chong Ruan, Damai Dai, Deli Chen, Dongjie Ji, Erhang Li, Fangyun Lin, Fucong Dai, Fuli Luo, Guangbo Hao, Guanting Chen, Guowei Li, H. Zhang, Han Bao, Hanwei Xu, Haocheng Wang, Honghui Ding, Huajian Xin, Huazuo Gao, Hui Qu, Hui Li, Jianzhong Guo, Jiashi Li, Jiawei Wang, Jingchang Chen, Jingyang Yuan, Junjie Qiu, Junlong Li, J. L. Cai, Jiaqi Ni, Jian Liang, Jin Chen, Kai Dong, Kai Hu, Kaige Gao, Kang Guan, Kexin Huang, Kuai Yu, Lean Wang, Lecong Zhang, Liang Zhao, Litong Wang, Liyue Zhang, Lei Xu, Leyi Xia, Mingchuan Zhang, Minghua Zhang, Minghui Tang, Meng Li, Miaojun Wang, Mingming Li, Ning Tian, Panpan Huang, Peng Zhang, Qiancheng Wang, Qinyu Chen, Qiushi Du, Ruiqi Ge, Ruisong Zhang, Ruizhe Pan, Runji Wang, R. J. Chen, R. L. Jin, Ruyi Chen, Shanghao Lu, Shangyan Zhou, Shanhuang Chen, Shengfeng Ye, Shiyu Wang, Shuiping Yu, Shunfeng Zhou, Shuting Pan, and S. S. Li. 2025. DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning. CoRR abs/2501.12948 (2025). arXiv:2501.12948 doi:10.48550/ARXIV.2501.12948
+[4] DeepSeek-AI, Daya Guo, Dejian Yang, Haowei Zhang, Junxiao Song, Ruoyu Zhang, Runxin Xu, Qihao Zhu, Shirong Ma, Peiyi Wang, Xiao Bi, Xiaokang Zhang, Xingkai Yu, Yu Wu, Z. F. Wu, Zhibin Gou, Zhihong Shao, Zhuoshu Li, Ziyi Gao, Aixin Liu, Bing Xue, Bingxuan Wang, Bochao Wu, Bei Feng, Chengda Lu, Chenggang Zhao, Chengqi Deng, Chenyu Zhang, Chong Ruan, Damai Dai, Deli Chen, Dongjie Ji, Erhang Li, Fangyun Lin, Fucong Dai, Fuli Luo, Guangbo Hao, Guanting Chen, Guowei Li, H. Zhang, Han Bao, Hanwei Xu, Haocheng Wang, Honghui Ding, Huajian Xin, Huazuo Gao, Hui Qu, Hui Li, Jianzhong Guo, Jiashi Li, Jiawei Wang, Jingchang Chen, Jingyang Yuan, Junjie Qiu, Junlong Li, J. L. Cai, Jiaqi Ni, Jian Liang, Jin Chen, Kai Dong, Kai Hu, Kaige Gao, Kang Guan, Kexin Huang, Kuai Yu, Lean Wang, Lecong Zhang, Liang Zhao, Litong Wang, Liyue Zhang, Lei Xu, Leyi Xia, Mingchuan Zhang, Minghua Zhang, Minghui Tang, Meng Li, Miaojun Wang, Mingming Li, Ning Tian, Panpan Huang, Peng Zhang, Qiancheng Wang, Qinyu Chen, Qiushi Du, Ruiqi Ge, Ruisong Zhang, Ruizhe Pan, Runji Wang, R. J. Chen, R. L. Jin, Ruyi Chen, Shanghao Lu, Shangyan Zhou, Shanhuang Chen, Shengfeng Ye, Shiyu Wang, Shuiping Yu, Shunfeng Zhou, Shuting Pan, and S. S. Li. 2025. DeepSeek-R1: 通过强化学习激励大语言模型的推理能力. CoRR abs/2501.12948 (2025). arXiv:2501.12948 doi:10.48550/ARXIV.2501.12948
+
+
+[5] Guanting Dong, Licheng Bao, Zhongyuan Wang, Kangzhi Zhao, Xiaoxi Li, Jiajie Jin, Jinghan Yang, Hangyu Mao, Fuzheng Zhang, Kun Gai, Guorui Zhou, Yutao Zhu, Ji-Rong Wen, and Zhicheng Dou. 2025. Agentic Entropy-Balanced Policy Optimization. arXiv:2510.14545 [cs.LG] https://arxiv.org/abs/2510.14545
+[5] Guanting Dong, Licheng Bao, Zhongyuan Wang, Kangzhi Zhao, Xiaoxi Li, Jiajie Jin, Jinghan Yang, Hangyu Mao, Fuzheng Zhang, Kun Gai, Guorui Zhou, Yutao Zhu, Ji-Rong Wen, and Zhicheng Dou. 2025. 智能体熵平衡策略优化. arXiv:2510.14545 [cs.LG] https://arxiv.org/abs/2510.14545
+
+
+[6] Guanting Dong, Yifei Chen, Xiaoxi Li, Jiajie Jin, Hongjin Qian, Yutao Zhu, Hangyu Mao, Guorui Zhou, Zhicheng Dou, and Ji-Rong Wen. 2025. Tool-Star: Empowering LLM-Brained Multi-Tool Reasoner via Reinforcement Learning. CoRR abs/2505.16410 (2025). arXiv:2505.16410 doi:10.48550/ARXIV.2505.16410
+[6] Guanting Dong, Yifei Chen, Xiaoxi Li, Jiajie Jin, Hongjin Qian, Yutao Zhu, Hangyu Mao, Guorui Zhou, Zhicheng Dou, and Ji-Rong Wen. 2025. Tool-Star: 通过强化学习赋能具备大模型大脑的多工具推理器. CoRR abs/2505.16410 (2025). arXiv:2505.16410 doi:10.48550/ARXIV.2505.16410
+
+
+[7] Guanting Dong, Jiajie Jin, Xiaoxi Li, Yutao Zhu, Zhicheng Dou, and Ji-Rong Wen. 2025. RAG-Critic: Leveraging Automated Critic-Guided Agentic Workflow for Retrieval Augmented Generation. In Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), ACL 2025, Vienna, Austria, July 27 - August 1, 2025, Wanxiang Che, Joyce Nabende, Ekaterina Shutova, and Mohammad Taher Pilehvar (Eds.). Association for Computational Linguistics, 3551-3578. https://aclanthology.org/2025.acl-long.179/
+[7] Guanting Dong, Jiajie Jin, Xiaoxi Li, Yutao Zhu, Zhicheng Dou, and Ji-Rong Wen. 2025. RAG-Critic: 利用自动化评论家引导的智能体工作流优化检索增强生成. 载于：第63届计算语言学协会年会论文集（第1卷：长论文），ACL 2025，奥地利维也纳，2025年7月27日至8月1日，Wanxiang Che, Joyce Nabende, Ekaterina Shutova, and Mohammad Taher Pilehvar (编). 计算语言学协会，3551-3578. https://aclanthology.org/2025.acl-long.179/
+
+
+[8] Guanting Dong, Hangyu Mao, Kai Ma, Licheng Bao, Yifei Chen, Zhongyuan Wang, Zhongxia Chen, Jiazhen Du, Huiyang Wang, Fuzheng Zhang, Guorui Zhou, Yutao Zhu, Ji-Rong Wen, and Zhicheng Dou. 2025. Agentic Reinforced Policy Optimization. CoRR abs/2507.19849 (2025). arXiv:2507.19849 doi:10.48550/ ARXIV.2507.19849
+[8] Guanting Dong, Hangyu Mao, Kai Ma, Licheng Bao, Yifei Chen, Zhongyuan Wang, Zhongxia Chen, Jiazhen Du, Huiyang Wang, Fuzheng Zhang, Guorui Zhou, Yutao Zhu, Ji-Rong Wen, and Zhicheng Dou. 2025. Agentic Reinforced Policy Optimization. CoRR abs/2507.19849 (2025). arXiv:2507.19849 doi:10.48550/ ARXIV.2507.19849
+
+
+[9] Runnan Fang, Shihao Cai, Baixuan Li, Jialong Wu, Guangyu Li, Wenbiao Yin, Xinyu Wang, Xiaobin Wang, Liangcai Su, Zhen Zhang, Shibin Wu, Zhengwei Tao, Yong Jiang, Pengjun Xie, Fei Huang, and Jingren Zhou. 2025. Towards https://arxiv.org/abs/2509.13311
+[9] Runnan Fang, Shihao Cai, Baixuan Li, Jialong Wu, Guangyu Li, Wenbiao Yin, Xinyu Wang, Xiaobin Wang, Liangcai Su, Zhen Zhang, Shibin Wu, Zhengwei Tao, Yong Jiang, Pengjun Xie, Fei Huang, and Jingren Zhou. 2025. Towards https://arxiv.org/abs/2509.13311
+
+
+[10] Jiazhan Feng, Shijue Huang, Xingwei Qu, Ge Zhang, Yujia Qin, Baoquan Zhong, Chengquan Jiang, Jinxin Chi, and Wanjun Zhong. 2025. ReTool: Reinforcement Learning for Strategic Tool Use in LLMs. arXiv:2504.11536 [cs.CL] https://arxiv.org/abs/2504.11536
+[10] Jiazhan Feng, Shijue Huang, Xingwei Qu, Ge Zhang, Yujia Qin, Baoquan Zhong, Chengquan Jiang, Jinxin Chi, and Wanjun Zhong. 2025. ReTool: Reinforcement Learning for Strategic Tool Use in LLMs. arXiv:2504.11536 [cs.CL] https://arxiv.org/abs/2504.11536
+
+
+[11] Zhiwei He, Tian Liang, Jiahao Xu, Qiuzhi Liu, Xingyu Chen, Yue Wang, Linfeng Song, Dian Yu, Zhenwen Liang, Wenxuan Wang, Zhuosheng Zhang, Rui Wang, Zhaopeng Tu, Haitao Mi, and Dong Yu. 2025. DeepMath-103K: A Large-Scale, Challenging, Decontaminated, and Verifiable Mathematical Dataset for Advancing Reasoning. (2025). arXiv:2504.11456 [cs.CL] https://arxiv.org/abs/2504.11456
+[11] Zhiwei He, Tian Liang, Jiahao Xu, Qiuzhi Liu, Xingyu Chen, Yue Wang, Linfeng Song, Dian Yu, Zhenwen Liang, Wenxuan Wang, Zhuosheng Zhang, Rui Wang, Zhaopeng Tu, Haitao Mi, and Dong Yu. 2025. DeepMath-103K: A Large-Scale, Challenging, Decontaminated, and Verifiable Mathematical Dataset for Advancing Reasoning. (2025). arXiv:2504.11456 [cs.CL] https://arxiv.org/abs/2504.11456
+
+
+[12] Xinyi Hou, Yanjie Zhao, Shenao Wang, and Haoyu Wang. 2025. Model Context Protocol (MCP): Landscape, Security Threats, and Future Research Directions. CoRR abs/2503.23278 (2025). arXiv:2503.23278 doi:10.48550/ARXIV.2503.23278
+[12] Xinyi Hou, Yanjie Zhao, Shenao Wang, and Haoyu Wang. 2025. Model Context Protocol (MCP): Landscape, Security Threats, and Future Research Directions. CoRR abs/2503.23278 (2025). arXiv:2503.23278 doi:10.48550/ARXIV.2503.23278
+
+
+[13] Mengkang Hu, Tianxing Chen, Qiguang Chen, Yao Mu, Wenqi Shao, and Ping Luo. 2024. HiAgent: Hierarchical Working Memory Management for Solving Long-Horizon Agent Tasks with Large Language Model. arXiv:2408.09559 [cs.CL] https://arxiv.org/abs/2408.09559
+[13] Mengkang Hu, Tianxing Chen, Qiguang Chen, Yao Mu, Wenqi Shao, and Ping Luo. 2024. HiAgent: Hierarchical Working Memory Management for Solving Long-Horizon Agent Tasks with Large Language Model. arXiv:2408.09559 [cs.CL] https://arxiv.org/abs/2408.09559
+
+
+[14] Mengkang Hu, Bowei Xia, Yuran Wu, Ailing Yu, Yude Zou, Oiguang Chen, Shijian Wang, Jiarui Jin, Kexin Li, Wenxiang Jiao, Yuan Lu, and Ping Luo. 2025. Agent2World: Learning to Generate Symbolic World Models via Adaptive Multi-Agent Feedback. arXiv:2512.22336 [cs.AI] https://arxiv.org/abs/2512.22336
+[14] Mengkang Hu, Bowei Xia, Yuran Wu, Ailing Yu, Yude Zou, Oiguang Chen, Shijian Wang, Jiarui Jin, Kexin Li, Wenxiang Jiao, Yuan Lu, and Ping Luo. 2025. Agent2World: Learning to Generate Symbolic World Models via Adaptive Multi-Agent Feedback. arXiv:2512.22336 [cs.AI] https://arxiv.org/abs/2512.22336
+
+
+[15] Mengkang Hu, Pu Zhao, Can Xu, Qingfeng Sun, Jianguang Lou, Qingwei Lin, Ping Luo, and Saravan Rajmohan. 2025. AgentGen: Enhancing Planning Abilities for Large Language Model based Agent via Environment and Task Generation. arXiv:2408.00764 [cs.CL] https://arxiv.org/abs/2408.00764
+[15] Mengkang Hu, Pu Zhao, Can Xu, Qingfeng Sun, Jianguang Lou, Qingwei Lin, Ping Luo, and Saravan Rajmohan. 2025. AgentGen: Enhancing Planning Abilities for Large Language Model based Agent via Environment and Task Generation. arXiv:2408.00764 [cs.CL] https://arxiv.org/abs/2408.00764
+
+
+[16] Aaron Jaech, Adam Kalai, Adam Lerer, Adam Richardson, Ahmed El-Kishky, Aiden Low, Alec Helyar, Aleksander Madry, Alex Beutel, Alex Carney, et al. 2024. OpenAI o1 System Card. arXiv preprint arXiv:2412.16720 (2024).
+[16] Aaron Jaech, Adam Kalai, Adam Lerer, Adam Richardson, Ahmed El-Kishky, Aiden Low, Alec Helyar, Aleksander Madry, Alex Beutel, Alex Carney, et al. 2024. OpenAI o1 System Card. arXiv preprint arXiv:2412.16720 (2024).
+
+
+[17] Dongfu Jiang, Yi Lu, Zhuofeng Li, Zhiheng Lyu, Ping Nie, Haozhe Wang, Alex Su, Hui Chen, Kai Zou, Chao Du, Tianyu Pang, and Wenhu Chen. 2025. VerlTool: Towards Holistic Agentic Reinforcement Learning with Tool Use. arXiv:2509.01055 [cs.AI] https://arxiv.org/abs/2509.01055
+[17] Dongfu Jiang, Yi Lu, Zhuofeng Li, Zhiheng Lyu, Ping Nie, Haozhe Wang, Alex Su, Hui Chen, Kai Zou, Chao Du, Tianyu Pang, and Wenhu Chen. 2025. VerlTool: Towards Holistic Agentic Reinforcement Learning with Tool Use. arXiv:2509.01055 [cs.AI] https://arxiv.org/abs/2509.01055
+
+
+[18] Bowen Jin, Hansi Zeng, Zhenrui Yue, Dong Wang, Hamed Zamani, and Jiawei Han. 2025. Search-R1: Training LLMs to Reason and Leverage Search Engines with Reinforcement Learning. CoRR abs/2503.09516 (2025). arXiv:2503.09516 doi:10.48550/ARXIV.2503.09516
+[18] Bowen Jin, Hansi Zeng, Zhenrui Yue, Dong Wang, Hamed Zamani, and Jiawei Han. 2025. Search-R1: Training LLMs to Reason and Leverage Search Engines with Reinforcement Learning. CoRR abs/2503.09516 (2025). arXiv:2503.09516 doi:10.48550/ARXIV.2503.09516
+
+
+[19] Haolin Jin, Linghan Huang, Haipeng Cai, Jun Yan, Bo Li, and Huaming Chen. 2024. From LLMs to LLM-based Agents for Software Engineering: A Survey of Current, Challenges and Future. CoRR abs/2408.02479 (2024). arXiv:2408.02479 doi:10.48550/ARXIV.2408.02479
+[19] Haolin Jin, Linghan Huang, Haipeng Cai, Jun Yan, Bo Li, and Huaming Chen. 2024. From LLMs to LLM-based Agents for Software Engineering: A Survey of Current, Challenges and Future. CoRR abs/2408.02479 (2024). arXiv:2408.02479 doi:10.48550/ARXIV.2408.02479
+
+
+[20] Jiajie Jin, Xiaoxi Li, Guanting Dong, Yuyao Zhang, Yutao Zhu, Yongkang Wu, Zhonghua Li, Ye Qi, and Zhicheng Dou. 2025. Hierarchical Document Refinement for Long-context Retrieval-augmented Generation. In Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), ACL 2025, Vienna, Austria, July 27 - August 1, 2025, Wanxiang Che, Joyce Nabende, Ekaterina Shutova, and Mohammad Taher Pilehvar (Eds.). Association for Computational Linguistics, 3502-3520. https://aclanthology.org/2025.acl-long.176/
+[20] Jiajie Jin, Xiaoxi Li, Guanting Dong, Yuyao Zhang, Yutao Zhu, Yongkang Wu, Zhonghua Li, Ye Qi, and Zhicheng Dou. 2025. Hierarchical Document Refinement for Long-context Retrieval-augmented Generation. In Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), ACL 2025, Vienna, Austria, July 27 - August 1, 2025, Wanxiang Che, Joyce Nabende, Ekaterina Shutova, and Mohammad Taher Pilehvar (Eds.). Association for Computational Linguistics, 3502-3520. https://aclanthology.org/2025.acl-long.176/
+
+
+[21] Jiajie Jin, Xiaoxi Li, Guanting Dong, Yuyao Zhang, Yutao Zhu, Zhao Yang, Hongjin Qian, and Zhicheng Dou. 2025. Decoupled Planning and Execution: A Hierarchical Reasoning Framework for Deep Search. CoRR abs/2507.02652 (2025). arXiv:2507.02652 doi:10.48550/ARXIV.2507.02652
+[21] Jiajie Jin, Xiaoxi Li, Guanting Dong, Yuyao Zhang, Yutao Zhu, Zhao Yang, Hongjin Qian, and Zhicheng Dou. 2025. Decoupled Planning and Execution: A Hierarchical Reasoning Framework for Deep Search. CoRR abs/2507.02652 (2025). arXiv:2507.02652 doi:10.48550/ARXIV.2507.02652
+
+
+[22] Jiajie Jin, Yuyao Zhang, Yimeng Xu, Hongjin Qian, Yutao Zhu, and Zhicheng Dou. 2025. FinSight: Towards Real-World Financial Deep Research. arXiv:2510.16844 [cs.CL] https://arxiv.org/abs/2510.16844
+[22] Jiajie Jin, Yuyao Zhang, Yimeng Xu, Hongjin Qian, Yutao Zhu, and Zhicheng Dou. 2025. FinSight: Towards Real-World Financial Deep Research. arXiv:2510.16844 [cs.CL] https://arxiv.org/abs/2510.16844
+
+
+[23] Minki Kang, Wei-Ning Chen, Dongge Han, Huseyin A. Inan, Lukas Wutschitz, Yanzhi Chen, Robert Sim, and Saravan Rajmohan. 2025. ACON: Optimizing Context Compression for Long-horizon LLM Agents. arXiv:2510.00615 [cs.AI] https://arxiv.org/abs/2510.00615
+[23] Minki Kang, Wei-Ning Chen, Dongge Han, Huseyin A. Inan, Lukas Wutschitz, Yanzhi Chen, Robert Sim, and Saravan Rajmohan. 2025. ACON: Optimizing Context Compression for Long-horizon LLM Agents. arXiv:2510.00615 [cs.AI] https://arxiv.org/abs/2510.00615
+
+
+[24] Minghao Li, Yingxiu Zhao, Bowen Yu, Feifan Song, Hangyu Li, Haiyang Yu, Zhoujun Li, Fei Huang, and Yongbin Li. 2023. API-Bank: A Comprehensive Benchmark for Tool-Augmented LLMs. In Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing, EMNLP 2023, Singapore, December 6-10, 2023, Houda Bouamor, Juan Pino, and Kalika Bali (Eds.). Association for Computational Linguistics, 3102-3116. doi:10.18653/V1/2023.EMNLP-MAIN.187
+[24] Minghao Li, Yingxiu Zhao, Bowen Yu, Feifan Song, Hangyu Li, Haiyang Yu, Zhoujun Li, Fei Huang, and Yongbin Li. 2023. API-Bank: A Comprehensive Benchmark for Tool-Augmented LLMs. In Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing, EMNLP 2023, Singapore, December 6-10, 2023, Houda Bouamor, Juan Pino, and Kalika Bali (Eds.). Association for Computational Linguistics, 3102-3116. doi:10.18653/V1/2023.EMNLP-MAIN.187
+
+
+[25] Xiaoxi Li, Guanting Dong, Jiajie Jin, Yuyao Zhang, Yujia Zhou, Yutao Zhu, Peitian Zhang, and Zhicheng Dou. 2025. Search-01: Agentic Search-Enhanced Large Reasoning Models. CoRR abs/2501.05366 (2025). arXiv:2501.05366 doi:10.48550/ ARXIV.2501.05366
+[25] Xiaoxi Li, Guanting Dong, Jiajie Jin, Yuyao Zhang, Yujia Zhou, Yutao Zhu, Peitian Zhang, and Zhicheng Dou. 2025. Search-01: Agentic Search-Enhanced Large Reasoning Models. CoRR abs/2501.05366 (2025). arXiv:2501.05366 doi:10.48550/ ARXIV.2501.05366
+
+
+[26] Xiaoxi Li, Jiajie Jin, Guanting Dong, Hongjin Qian, Yutao Zhu, Yongkang Wu, Ji-Rong Wen, and Zhicheng Dou. 2025. WebThinker: Empowering Large Reasoning Models with Deep Research Capability. CoRR abs/2504.21776 (2025). arXiv:2504.21776 doi:10.48550/ARXIV.2504.21776
+[26] Xiaoxi Li, Jiajie Jin, Guanting Dong, Hongjin Qian, Yutao Zhu, Yongkang Wu, Ji-Rong Wen, and Zhicheng Dou. 2025. WebThinker: Empowering Large Reasoning Models with Deep Research Capability. CoRR abs/2504.21776 (2025). arXiv:2504.21776 doi:10.48550/ARXIV.2504.21776
+
+
+[27] Xiaoxi Li, Jiajie Jin, Yujia Zhou, Yongkang Wu, Zhonghua Li, Ye Qi, and Zhicheng Dou. 2025. RetroLLM: Empowering Large Language Models to Retrieve Fine-grained Evidence within Generation. In Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), ACL 2025, Vienna, Austria, July 27 - August 1, 2025, Wanxiang Che, Joyce Nabende, Ekaterina Shutova, and Mohammad Taher Pilehvar (Eds.). Association for Computational Linguistics, 16754-16779. https://aclanthology.org/2025.acl-long.819/
+[27] Xiaoxi Li, Jiajie Jin, Yujia Zhou, Yongkang Wu, Zhonghua Li, Ye Qi, and Zhicheng Dou. 2025. RetroLLM: Empowering Large Language Models to Retrieve Fine-grained Evidence within Generation. In Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), ACL 2025, Vienna, Austria, July 27 - August 1, 2025, Wanxiang Che, Joyce Nabende, Ekaterina Shutova, and Mohammad Taher Pilehvar (Eds.). Association for Computational Linguistics, 16754-16779. https://aclanthology.org/2025.acl-long.819/
+
+
+[28] Xiaoxi Li, Yujia Zhou, and Zhicheng Dou. 2024. UniGen: A Unified Generative Framework for Retrieval and Question Answering with Large Language Models. In Thirty-Eighth AAAI Conference on Artificial Intelligence, AAAI 2024, Thirty-Sixth Conference on Innovative Applications of Artificial Intelligence, IAAI 2024, Fourteenth Symposium on Educational Advances in Artificial Intelligence, EAAI 2014, February 20-27, 2024, Vancouver, Canada, Michael J. Wooldridge, Jennifer G. Dy, and Sriraam Natarajan (Eds.). AAAI Press, 8688-8696. doi:10.1609/AAAI. V38I8.28714
+[28] Xiaoxi Li, Yujia Zhou, and Zhicheng Dou. 2024. UniGen: A Unified Generative Framework for Retrieval and Question Answering with Large Language Models. In Thirty-Eighth AAAI Conference on Artificial Intelligence, AAAI 2024, Thirty-Sixth Conference on Innovative Applications of Artificial Intelligence, IAAI 2024, Fourteenth Symposium on Educational Advances in Artificial Intelligence, EAAI 2014, February 20-27, 2024, Vancouver, Canada, Michael J. Wooldridge, Jennifer G. Dy, and Sriraam Natarajan (Eds.). AAAI Press, 8688-8696. doi:10.1609/AAAI. V38I8.28714
+
+
+[29] Xuefeng Li, Haoyang Zou, and Pengfei Liu. 2025. ToRL: Scaling Tool-Integrated RL. arXiv:2503.23383 [cs.CL] https://arxiv.org/abs/2503.23383
+[29] Xuefeng Li, Haoyang Zou, and Pengfei Liu. 2025. ToRL: Scaling Tool-Integrated RL. arXiv:2503.23383 [cs.CL] https://arxiv.org/abs/2503.23383
+
+
+[30] Zhong-Zhi Li, Duzhen Zhang, Ming-Liang Zhang, Jiaxin Zhang, Zengyan Liu, Yuxuan Yao, Haotian Xu, Junhao Zheng, Pei-Jie Wang, Xiuyi Chen, Yingying Zhang, Fei Yin, Jiahua Dong, Zhijiang Guo, Le Song, and Cheng-Lin Liu. 2025. From System 1 to System 2: A Survey of Reasoning Large Language Models. CoRR abs/2502.17419 (2025). arXiv:2502.17419 doi:10.48550/ARXIV.2502.17419
+[30] Zhong-Zhi Li, Duzhen Zhang, Ming-Liang Zhang, Jiaxin Zhang, Zengyan Liu, Yuxuan Yao, Haotian Xu, Junhao Zheng, Pei-Jie Wang, Xiuyi Chen, Yingying Zhang, Fei Yin, Jiahua Dong, Zhijiang Guo, Le Song, and Cheng-Lin Liu. 2025. From System 1 to System 2: A Survey of Reasoning Large Language Models. CoRR abs/2502.17419 (2025). arXiv:2502.17419 doi:10.48550/ARXIV.2502.17419
+
+
+[31] Junteng Liu, Yunji Li, Chi Zhang, Jingyang Li, Aili Chen, Ke Ji, Weiyu Cheng, Zijia Wu, Chengyu Du, Qidi Xu, Jiayuan Song, Zhengmao Zhu, Wenhu Chen, Pengyu Zhao, and Junxian He. 2025. WebExplorer: Explore and Evolve for Training Long-Horizon Web Agents. CoRR abs/2509.06501 (2025). arXiv:2509.06501 doi:10. 48550/ARXIV.2509.06501
+[31] Junteng Liu, Yunji Li, Chi Zhang, Jingyang Li, Aili Chen, Ke Ji, Weiyu Cheng, Zijia Wu, Chengyu Du, Qidi Xu, Jiayuan Song, Zhengmao Zhu, Wenhu Chen, Pengyu Zhao, and Junxian He. 2025. WebExplorer: Explore and Evolve for Training Long-Horizon Web Agents. CoRR abs/2509.06501 (2025). arXiv:2509.06501 doi:10. 48550/ARXIV.2509.06501
+
+
+[32] Zichen Liu, Anya Sims, Keyu Duan, Changyu Chen, Simon Yu, Xiangxin Zhou, Haotian Xu, Shaopan Xiong, Bo Liu, Chenmien Tan, Chuen Yang Beh, Weixun Wang, Hao Zhu, Weiyan Shi, Diyi Yang, Michael Shieh, Yee Whye Teh, Wee Sun Lee, and Min Lin. 2025. GEM: A Gym for Agentic LLMs. arXiv:2510.01051 [cs.LG] https://arxiv.org/abs/2510.01051
+[32] Zichen Liu, Anya Sims, Keyu Duan, Changyu Chen, Simon Yu, Xiangxin Zhou, Haotian Xu, Shaopan Xiong, Bo Liu, Chenmien Tan, Chuen Yang Beh, Weixun Wang, Hao Zhu, Weiyan Shi, Diyi Yang, Michael Shieh, Yee Whye Teh, Wee Sun Lee, and Min Lin. 2025. GEM: A Gym for Agentic LLMs. arXiv:2510.01051 [cs.LG] https://arxiv.org/abs/2510.01051
+
+
+[33] Grégoire Mialon, Clémentine Fourrier, Thomas Wolf, Yann LeCun, and Thomas Scialom. 2024. GAIA: a benchmark for General AI Assistants. In The Twelfth International Conference on Learning Representations, ICLR 2024, Vienna, Austria, May 7-11, 2024. OpenReview.net. https://openreview.net/forum?id=fibxvahvs3
+[33] Grégoire Mialon, Clémentine Fourrier, Thomas Wolf, Yann LeCun, and Thomas Scialom. 2024. GAIA: a benchmark for General AI Assistants. In The Twelfth International Conference on Learning Representations, ICLR 2024, Vienna, Austria, May 7-11, 2024. OpenReview.net. https://openreview.net/forum?id=fibxvahvs3
+
+
+[34] OpenAI. 2025. Introducing deep research. https://openai.com/index/introducing-deep-research.
+[34] OpenAI. 2025. Introducing deep research. https://openai.com/index/introducing-deep-research.
+
+
+[35] Long Phan, Alice Gatti, Ziwen Han, Nathaniel Li, Josephina Hu, Hugh Zhang, Sean Shi, Michael Choi, Anish Agrawal, Arnav Chopra, Adam Khoja, Ryan Kim, Jason Hausenloy, Oliver Zhang, Mantas Mazeika, Daron Anderson, Tung Nguyen, Mobeen Mahmood, Fiona Feng, Steven Y. Feng, Haoran Zhao, Michael Yu, Varun Gangal, Chelsea Zou, Zihan Wang, Jessica P. Wang, Pawan Kumar, Oleksandr Pokutnyi, Robert Gerbicz, Serguei Popov, John-Clark Levin, Mstyslav Kazakov, Johannes Schmitt, Geoff Galgon, Alvaro Sanchez, Yongki Lee, Will Yeadon, Scott Sauers, Marc Roth, Chidozie Agu, Søren Riis, Fabian Giska, Saiteja Utpala, Zachary Giboney, Gashaw M. Goshu, Joan of Arc Xavier, Sarah-Jane Crowson, Mohinder Maheshbhai Naiya, Noah Burns, Lennart Finke, Zerui Cheng, Hyunwoo Park, Francesco Fournier-Facio, John Wydallis, Mark Nandor, Ankit Singh, Tim Gehrunger, Jiaqi Cai, Ben McCarty, Darling Duclosel, Jungbae Nam, Jennifer Zampese, Ryan G. Hoerr, Aras Bacho, Gautier Abou Loume, Abdallah Galal, Hangrui Cao, Alexis C. Garretson, Damien Sileo, Qiuyu Ren, Doru Cojoc, Pavel Arkhipov, Usman Qazi, Lianghui Li, Sumeet Motwani, Christian Schröder de Witt, Edwin Taylor, Johannes Veith, Eric Singer, Taylor D. Hartman, Paolo Rissone, Jaehyeok Jin, Jack Wei Lun Shi, Chris G. Willcocks, Joshua Robinson, Aleksandar Mikov, Ameya Prabhu, Longke Tang, Xavier Alapont, Justine Leon Uro, Kevin Zhou, Emily de Oliveira Santos, Andrey Pupasov Maksimov, Edward Vendrow, Kengo Zenitani, Julien Guillod, Yuqi Li, Joshua Vendrow, Vladyslav Kuchkin, and Ng Ze-An. 2025. Humanity's Last Exam. CoRR abs/2501.14249 (2025). arXiv:2501.14249 doi:10.48550/ARXIV.2501.14249
+[35] Long Phan, Alice Gatti, Ziwen Han, Nathaniel Li, Josephina Hu, Hugh Zhang, Sean Shi, Michael Choi, Anish Agrawal, Arnav Chopra, Adam Khoja, Ryan Kim, Jason Hausenloy, Oliver Zhang, Mantas Mazeika, Daron Anderson, Tung Nguyen, Mobeen Mahmood, Fiona Feng, Steven Y. Feng, Haoran Zhao, Michael Yu, Varun Gangal, Chelsea Zou, Zihan Wang, Jessica P. Wang, Pawan Kumar, Oleksandr Pokutnyi, Robert Gerbicz, Serguei Popov, John-Clark Levin, Mstyslav Kazakov, Johannes Schmitt, Geoff Galgon, Alvaro Sanchez, Yongki Lee, Will Yeadon, Scott Sauers, Marc Roth, Chidozie Agu, Søren Riis, Fabian Giska, Saiteja Utpala, Zachary Giboney, Gashaw M. Goshu, Joan of Arc Xavier, Sarah-Jane Crowson, Mohinder Maheshbhai Naiya, Noah Burns, Lennart Finke, Zerui Cheng, Hyunwoo Park, Francesco Fournier-Facio, John Wydallis, Mark Nandor, Ankit Singh, Tim Gehrunger, Jiaqi Cai, Ben McCarty, Darling Duclosel, Jungbae Nam, Jennifer Zampese, Ryan G. Hoerr, Aras Bacho, Gautier Abou Loume, Abdallah Galal, Hangrui Cao, Alexis C. Garretson, Damien Sileo, Qiuyu Ren, Doru Cojoc, Pavel Arkhipov, Usman Qazi, Lianghui Li, Sumeet Motwani, Christian Schröder de Witt, Edwin Taylor, Johannes Veith, Eric Singer, Taylor D. Hartman, Paolo Rissone, Jaehyeok Jin, Jack Wei Lun Shi, Chris G. Willcocks, Joshua Robinson, Aleksandar Mikov, Ameya Prabhu, Longke Tang, Xavier Alapont, Justine Leon Uro, Kevin Zhou, Emily de Oliveira Santos, Andrey Pupasov Maksimov, Edward Vendrow, Kengo Zenitani, Julien Guillod, Yuqi Li, Joshua Vendrow, Vladyslav Kuchkin, and Ng Ze-An. 2025. 人类的终极考试 (Humanity's Last Exam). CoRR abs/2501.14249 (2025). arXiv:2501.14249 doi:10.48550/ARXIV.2501.14249
+
+
+[36] Yiwei Qin, Xuefeng Li, Haoyang Zou, Yixiu Liu, Shijie Xia, Zhen Huang, Yixin Ye, Weizhe Yuan, Hector Liu, Yuanzhi Li, et al. 2024. O1 Replication Journey: A Strategic Progress Report-Part 1. arXiv preprint arXiv:2410.18982 (2024).
+[36] Yiwei Qin, Xuefeng Li, Haoyang Zou, Yixiu Liu, Shijie Xia, Zhen Huang, Yixin Ye, Weizhe Yuan, Hector Liu, Yuanzhi Li, 等. 2024. O1 复现之旅：战略进展报告——第一部分 (O1 Replication Journey: A Strategic Progress Report-Part 1). arXiv 预印本 arXiv:2410.18982 (2024).
+
+
+[37] Yujia Qin, Shihao Liang, Yining Ye, Kunlun Zhu, Lan Yan, Yaxi Lu, Yankai Lin, Xin Cong, Xiangru Tang, Bill Qian, Sihan Zhao, Lauren Hong, Runchu Tian, Ruobing Xie, Jie Zhou, Mark Gerstein, Dahai Li, Zhiyuan Liu, and Maosong Sun. 2024. ToolLLM: Facilitating Large Language Models to Master 16000+ Real-world APIs. In The Twelfth International Conference on Learning Representations, ICLR 2024, Vienna, Austria, May 7-11, 2024. OpenReview.net. https://openreview.net/forum? id=dHng2O0Jjr
+[37] Yujia Qin, Shihao Liang, Yining Ye, Kunlun Zhu, Lan Yan, Yaxi Lu, Yankai Lin, Xin Cong, Xiangru Tang, Bill Qian, Sihan Zhao, Lauren Hong, Runchu Tian, Ruobing Xie, Jie Zhou, Mark Gerstein, Dahai Li, Zhiyuan Liu, and Maosong Sun. 2024. ToolLLM：赋能大语言模型掌握 16000+ 真实世界 API (ToolLLM: Facilitating Large Language Models to Master 16000+ Real-world APIs). 载于：第十二届国际学习表征会议 (ICLR 2024), 奥地利维也纳, 2024年5月7-11日. OpenReview.net. https://openreview.net/forum?id=dHng2O0Jjr
+
+
+[38] Changle Qu, Sunhao Dai, Xiaochi Wei, Hengyi Cai, Shuaiqiang Wang, Dawei Yin, Jun Xu, and Ji-Rong Wen. 2025. From Exploration to Mastery: Enabling LLMs to Master Tools via Self-Driven Interactions. In The Thirteenth International Conference on Learning Representations, ICLR 2025, Singapore, April 24-28, 2025. OpenReview.net. https://openreview.net/forum?id=QKBu1BOAwd
+[38] Changle Qu, Sunhao Dai, Xiaochi Wei, Hengyi Cai, Shuaiqiang Wang, Dawei Yin, Jun Xu, and Ji-Rong Wen. 2025. 从探索到精通：通过自驱动交互使大语言模型掌握工具 (From Exploration to Mastery: Enabling LLMs to Master Tools via Self-Driven Interactions). 载于：第十三届国际学习表征会议 (ICLR 2025), 新加坡, 2025年4月24-28日. OpenReview.net. https://openreview.net/forum?id=QKBu1BOAwd
+
+
+[39] Changle Qu, Sunhao Dai, Xiaochi Wei, Hengyi Cai, Shuaiqiang Wang, Dawei Yin, Jun Xu, and Ji-Rong Wen. 2025. Tool learning with large language models: a survey. Frontiers Comput. Sci. 19, 8 (2025), 198343. doi:10.1007/S11704-024-40678- 2
+[39] Changle Qu, Sunhao Dai, Xiaochi Wei, Hengyi Cai, Shuaiqiang Wang, Dawei Yin, Jun Xu, and Ji-Rong Wen. 2025. 大语言模型工具学习：综述 (Tool learning with large language models: a survey). 《计算机科学前沿》(Frontiers Comput. Sci.) 19, 8 (2025), 198343. doi:10.1007/S11704-024-40678-2
+
+
+[40] Qwen, :, An Yang, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, Chengyuan Li, Dayiheng Liu, Fei Huang, Haoran Wei, Huan Lin, Jian Yang, Jianhong Tu, Jianwei Zhang, Jianxin Yang, Jiaxi Yang, Jingren Zhou, Junyang Lin, Kai Dang, Keming Lu, Keqin Bao, Kexin Yang, Le Yu, Mei Li, Mingfeng Xue, Pei Zhang, Qin Zhu, Rui Men, Runji Lin, Tianhao Li, Tingyu Xia, Xingzhang Ren, Xuancheng Ren, Yang Fan, Yang Su, Yichang Zhang, Yu Wan, Yuqiong Liu, Zeyu Cui, Zhenru Zhang, and Zihan Qiu. 2024. Qwen2.5 Technical Report. arXiv:2412.15115 [cs.CL] https://arxiv.org/abs/2412.15115
+[40] An Yang, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, Chengyuan Li, Dayiheng Liu, Fei Huang, Haoran Wei, Huan Lin, Jian Yang, Jianhong Tu, Jianwei Zhang, Jianxin Yang, Jiaxi Yang, Jingren Zhou, Junyang Lin, Kai Dang, Keming Lu, Keqin Bao, Kexin Yang, Le Yu, Mei Li, Mingfeng Xue, Pei Zhang, Qin Zhu, Rui Men, Runji Lin, Tianhao Li, Tingyu Xia, Xingzhang Ren, Xuancheng Ren, Yang Fan, Yang Su, Yichang Zhang, Yu Wan, Yuqiong Liu, Zeyu Cui, Zhenru Zhang, and Zihan Qiu. 2024. Qwen2.5 技术报告。arXiv:2412.15115 [cs.CL] https://arxiv.org/abs/2412.15115
+
+
+[41] Guangming Sheng, Chi Zhang, Zilingfeng Ye, Xibin Wu, Wang Zhang, Ru Zhang, Yanghua Peng, Haibin Lin, and Chuan Wu. 2024. HybridFlow: A Flexible and Efficient RLHF Framework. arXiv preprint arXiv: 2409.19256 (2024).
+[41] Guangming Sheng, Chi Zhang, Zilingfeng Ye, Xibin Wu, Wang Zhang, Ru Zhang, Yanghua Peng, Haibin Lin, and Chuan Wu. 2024. HybridFlow：一个灵活高效的 RLHF 框架。arXiv 预印本 arXiv: 2409.19256 (2024)。
+
+
+[42] Zhengliang Shi, Yuhan Wang, Lingyong Yan, Pengjie Ren, Shuaiqiang Wang, Dawei Yin, and Zhaochun Ren. 2025. Retrieval Models Aren't Tool-Savvy: Benchmarking Tool Retrieval for Large Language Models. In Findings of the Association for Computational Linguistics, ACL 2025, Vienna, Austria, July 27 - August 1, 2025, Wanxiang Che, Joyce Nabende, Ekaterina Shutova, and Mohammad Taher Pilehvar (Eds.). Association for Computational Linguistics, 24497- 24524. https://aclanthology.org/2025.findings-acl.1258/
+[42] Zhengliang Shi, Yuhan Wang, Lingyong Yan, Pengjie Ren, Shuaiqiang Wang, Dawei Yin, and Zhaochun Ren. 2025. 检索模型不擅长工具使用：大语言模型工具检索基准测试。载于：计算语言学协会研究成果，ACL 2025，奥地利维也纳，2025年7月27日至8月1日，Wanxiang Che, Joyce Nabende, Ekaterina Shutova, and Mohammad Taher Pilehvar (编)。计算语言学协会，24497-24524。https://aclanthology.org/2025.findings-acl.1258/
+
+
+[43] Noah Shinn, Federico Cassano, Ashwin Gopinath, Karthik Narasimhan, and Shunyu Yao. 2023. Reflexion: language agents with verbal reinforcement learning. In Advances in Neural Information Processing Systems 36: Annual Conference on Neural Information Processing Systems 2023, NeurIPS 2023, New Orleans, LA, USA, December 10 - 16, 2023, Alice Oh, Tristan Naumann, Amir Globerson, Kate Saenko, Moritz Hardt, and Sergey Levine (Eds.). http://papers.nips.cc/paper_files/paper/ 2023/hash/1b44b878bb782e6954cd888628510e90-Abstract-Conference.html
+[43] Noah Shinn, Federico Cassano, Ashwin Gopinath, Karthik Narasimhan, and Shunyu Yao. 2023. Reflexion：基于语言反馈强化学习的语言智能体。载于：第36届神经信息处理系统大会论文集，NeurIPS 2023，美国路易斯安那州新奥尔良，2023年12月10日至16日，Alice Oh, Tristan Naumann, Amir Globerson, Kate Saenko, Moritz Hardt, and Sergey Levine (编)。http://papers.nips.cc/paper_files/paper/ 2023/hash/1b44b878bb782e6954cd888628510e90-Abstract-Conference.html
+
+
+[44] Noah Shinn, Federico Cassano, Ashwin Gopinath, Karthik Narasimhan, and Shunyu Yao. 2024. Reflexion: Language agents with verbal reinforcement learning. Advances in Neural Information Processing Systems 36 (2024).
+[44] Noah Shinn, Federico Cassano, Ashwin Gopinath, Karthik Narasimhan, and Shunyu Yao. 2024. Reflexion：基于语言反馈强化学习的语言智能体。第36届神经信息处理系统大会 (2024)。
+
+
+[45] Mohit Shridhar, Xingdi Yuan, Marc-Alexandre Côté, Yonatan Bisk, Adam Trischler, and Matthew J. Hausknecht. 2021. ALFWorld: Aligning Text and Embodied Environments for Interactive Learning. In 9th International Conference on Learning Representations, ICLR 2021, Virtual Event, Austria, May 3-7, 2021. OpenReview.net. https://openreview.net/forum?id=0IOX0YcCdTn
+[45] Mohit Shridhar, Xingdi Yuan, Marc-Alexandre Côté, Yonatan Bisk, Adam Trischler, and Matthew J. Hausknecht. 2021. ALFWorld：对齐文本与具身环境以实现交互式学习。载于：第9届国际学习表征会议，ICLR 2021，虚拟会议，奥地利，2021年5月3日至7日。OpenReview.net。https://openreview.net/forum?id=0IOX0YcCdTn
+
+
+[46] Xiaoshuai Song, Haofei Chang, Guanting Dong, Yutao Zhu, Zhicheng Dou, and Ji-Rong Wen. 2026. EnvScaler: Scaling Tool-Interactive Environments for LLM Agent via Programmatic Synthesis. arXiv:2601.05808 [cs.CL] https://arxiv.org/ abs/2601.05808
+[46] Xiaoshuai Song, Haofei Chang, Guanting Dong, Yutao Zhu, Zhicheng Dou, and Ji-Rong Wen. 2026. EnvScaler：通过程序化合成扩展大模型智能体的工具交互环境。arXiv:2601.05808 [cs.CL] https://arxiv.org/ abs/2601.05808
+
+
+[47] Yifan Song, Weimin Xiong, Dawei Zhu, Cheng Li, Ke Wang, Ye Tian, and Sujian Li. 2023. RestGPT: Connecting Large Language Models with Real-World Applications via RESTful APIs. CoRR abs/2306.06624 (2023). arXiv:2306.06624 doi:10.48550/ ARXIV.2306.06624
+[47] Yifan Song, Weimin Xiong, Dawei Zhu, Cheng Li, Ke Wang, Ye Tian, and Sujian Li. 2023. RestGPT：通过 RESTful API 将大语言模型连接至现实世界应用。CoRR abs/2306.06624 (2023)。arXiv:2306.06624 doi:10.48550/ ARXIV.2306.06624
+
+
+[48] Weiwei Sun, Miao Lu, Zhan Ling, Kang Liu, Xuesong Yao, Yiming Yang, and Jiecao Chen. 2025. Scaling Long-Horizon LLM Agent via Context-Folding. arXiv:2510.11967 [cs.CL] https://arxiv.org/abs/2510.11967
+[48] Weiwei Sun, Miao Lu, Zhan Ling, Kang Liu, Xuesong Yao, Yiming Yang, and Jiecao Chen. 2025. Scaling Long-Horizon LLM Agent via Context-Folding. arXiv:2510.11967 [cs.CL] https://arxiv.org/abs/2510.11967
+
+
+[49] Jiejun Tan, Zhicheng Dou, Yan Yu, Jiehan Cheng, Qiang Ju, Jian Xie, and Ji-Rong Wen. 2025. HierSearch: A Hierarchical Enterprise Deep Search Framework Integrating Local and Web Searches. arXiv:2508.08088 [cs.IR] https://arxiv.org/
+[49] Jiejun Tan, Zhicheng Dou, Yan Yu, Jiehan Cheng, Qiang Ju, Jian Xie, and Ji-Rong Wen. 2025. HierSearch: A Hierarchical Enterprise Deep Search Framework Integrating Local and Web Searches. arXiv:2508.08088 [cs.IR] https://arxiv.org/
+
+
+[50] Zhengwei Tao, Jialong Wu, Wenbiao Yin, Junkai Zhang, Baixuan Li, Haiyang Shen, Kuan Li, Liwen Zhang, Xinyu Wang, Yong Jiang, Pengjun Xie, Fei Huang, and Jingren Zhou. 2025. WebShaper: Agentically Data Synthesizing via Information-Seeking Formalization. CoRR abs/2507.15061 (2025). arXiv:2507.15061 doi:10. 48550/ARXIV.2507.15061
+[50] Zhengwei Tao, Jialong Wu, Wenbiao Yin, Junkai Zhang, Baixuan Li, Haiyang Shen, Kuan Li, Liwen Zhang, Xinyu Wang, Yong Jiang, Pengjun Xie, Fei Huang, and Jingren Zhou. 2025. WebShaper: Agentically Data Synthesizing via Information-Seeking Formalization. CoRR abs/2507.15061 (2025). arXiv:2507.15061 doi:10. 48550/ARXIV.2507.15061
+
+
+[51] Qwen Team. 2024. Qwq: Reflect deeply on the boundaries of the unknown. Hugging Face (2024).
+[51] Qwen Team. 2024. Qwq: Reflect deeply on the boundaries of the unknown. Hugging Face (2024).
+
+
+[52] Lei Wang, Wanyu Xu, Yihuai Lan, Zhiqiang Hu, Yunshi Lan, Roy Ka-Wei Lee, and Ee-Peng Lim. 2023. Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models. In Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), ACL 2023, Toronto, Canada, July 9-14, 2023, Anna Rogers, Jordan L. Boyd-Graber, and Naoaki Okazaki (Eds.). Association for Computational Linguistics, 2609-2634. doi:10.18653/V1/2023.ACL-LONG.147
+[52] Lei Wang, Wanyu Xu, Yihuai Lan, Zhiqiang Hu, Yunshi Lan, Roy Ka-Wei Lee, and Ee-Peng Lim. 2023. Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models. In Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), ACL 2023, Toronto, Canada, July 9-14, 2023, Anna Rogers, Jordan L. Boyd-Graber, and Naoaki Okazaki (Eds.). Association for Computational Linguistics, 2609-2634. doi:10.18653/V1/2023.ACL-LONG.147
+
+
+[53] Renxi Wang, Xudong Han, Lei Ji, Shu Wang, Timothy Baldwin, and Haonan Li. 2025. ToolGen: Unified Tool Retrieval and Calling via Generation. In The Thirteenth International Conference on Learning Representations, ICLR 2025, Singapore, April 24-28, 2025. OpenReview.net. https://openreview.net/forum?id= XLMAMmowdY
+[53] Renxi Wang, Xudong Han, Lei Ji, Shu Wang, Timothy Baldwin, and Haonan Li. 2025. ToolGen: Unified Tool Retrieval and Calling via Generation. In The Thirteenth International Conference on Learning Representations, ICLR 2025, Singapore, April 24-28, 2025. OpenReview.net. https://openreview.net/forum?id= XLMAMmowdY
+
+
+[54] Shijian Wang, Runhao Fu, Siyi Zhao, Qingqin Zhan, Xingjian Wang, Jiarui Jin, Yuan Lu, Hanqian Wu, and Cunjian Chen. 2025. Synthetic Curriculum Reinforces Compositional Text-to-Image Generation. arXiv preprint arXiv:2511.18378 (2025).
+[54] Shijian Wang, Runhao Fu, Siyi Zhao, Qingqin Zhan, Xingjian Wang, Jiarui Jin, Yuan Lu, Hanqian Wu, and Cunjian Chen. 2025. Synthetic Curriculum Reinforces Compositional Text-to-Image Generation. arXiv preprint arXiv:2511.18378 (2025).
+
+
+[55] Shijian Wang, Jiarui Jin, Xingjian Wang, Linxin Song, Runhao Fu, Hecheng Wang, Zongyuan Ge, Yuan Lu, and Xuelian Cheng. 2025. Video-Thinker: Sparking" Thinking with Videos" via Reinforcement Learning. arXiv preprint arXiv:2510.23473 (2025).
+[55] Shijian Wang, Jiarui Jin, Xingjian Wang, Linxin Song, Runhao Fu, Hecheng Wang, Zongyuan Ge, Yuan Lu, and Xuelian Cheng. 2025. Video-Thinker: Sparking" Thinking with Videos" via Reinforcement Learning. arXiv preprint arXiv:2510.23473 (2025).
+
+
+[56] Xingyao Wang, Yangyi Chen, Lifan Yuan, Yizhe Zhang, Yunzhu Li, Hao Peng, and Heng Ji. 2024. Executable Code Actions Elicit Better LLM Agents. In Forty-first International Conference on Machine Learning, ICML 2024, Vienna, Austria, July 21-27, 2024. OpenReview.net. https://openreview.net/forum?id=jJ9BoXAfFa
+[56] Xingyao Wang, Yangyi Chen, Lifan Yuan, Yizhe Zhang, Yunzhu Li, Hao Peng, and Heng Ji. 2024. Executable Code Actions Elicit Better LLM Agents. In Forty-first International Conference on Machine Learning, ICML 2024, Vienna, Austria, July 21-27, 2024. OpenReview.net. https://openreview.net/forum?id=jJ9BoXAfFa
+
+
+[57] Yinuo Wang, Mining Tan, Wenxiang Jiao, Xiaoxi Li, Hao Wang, Xuanyu Zhang, Yuan Lu, and Weiming Dong. 2026. TourPlanner: A Competitive Consensus Framework with Constraint-Gated Reinforcement Learning for Travel Planning. arXiv:2601.04698 [cs.AI] https://arxiv.org/abs/2601.04698
+[57] Yinuo Wang, Mining Tan, Wenxiang Jiao, Xiaoxi Li, Hao Wang, Xuanyu Zhang, Yuan Lu, and Weiming Dong. 2026. TourPlanner: A Competitive Consensus Framework with Constraint-Gated Reinforcement Learning for Travel Planning. arXiv:2601.04698 [cs.AI] https://arxiv.org/abs/2601.04698
+
+
+[58] Yinuo Wang, Likun Wang, Yuxuan Jiang, Wenjun Zou, Tong Liu, Xujie Song, Wenxuan Wang, Liming Xiao, Jiang Wu, Jingliang Duan, and Shengbo Eben Li. 2024. Diffusion Actor-Critic with Entropy Regulator. arXiv:2405.15177 [cs.LG] https://arxiv.org/abs/2405.15177
+[58] Yinuo Wang, Likun Wang, Yuxuan Jiang, Wenjun Zou, Tong Liu, Xujie Song, Wenxuan Wang, Liming Xiao, Jiang Wu, Jingliang Duan, and Shengbo Eben Li. 2024. Diffusion Actor-Critic with Entropy Regulator. arXiv:2405.15177 [cs.LG] https://arxiv.org/abs/2405.15177
+
+
+[59] Zihan Wang, Kangrui Wang, Qineng Wang, Pingyue Zhang, Linjie Li, Zhengyuan Yang, Xing Jin, Kefan Yu, Minh Nhat Nguyen, Licheng Liu, Eli Gottlieb, Yiping Lu, Kyunghyun Cho, Jiajun Wu, Li Fei-Fei, Lijuan Wang, Yejin Choi, and Manling Reinforcement Learning. CoRR abs/2504.20073 (2025). arXiv:2504.20073 doi:10. 48550/ARXIV.2504.20073
+[59] Zihan Wang, Kangrui Wang, Qineng Wang, Pingyue Zhang, Linjie Li, Zhengyuan Yang, Xing Jin, Kefan Yu, Minh Nhat Nguyen, Licheng Liu, Eli Gottlieb, Yiping Lu, Kyunghyun Cho, Jiajun Wu, Li Fei-Fei, Lijuan Wang, Yejin Choi, and Manling Reinforcement Learning. CoRR abs/2504.20073 (2025). arXiv:2504.20073 doi:10. 48550/ARXIV.2504.20073
+
+
+[60] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Brian Ichter, Fei Xia, Ed H. Chi, Quoc V. Le, and Denny Zhou. 2022. Chain-of-Thought Prompting Elicits Reasoning in Large Language Models. In Advances in Neural Information Processing Systems 35: Annual Conference on Neural Information Processing Systems 2022, NeurIPS 2022, New Orleans, LA, USA, November 28 - December 9, 2022, Sanmi Koyejo, S. Mohamed, A. Agarwal, Danielle Belgrave, K. Cho, and A. Oh (Eds.). http://papers.nips.cc/paper_files/paper/2022/hash/ 9d5609613524ecf4f15af0f7b31abca4-Abstract-Conference.html
+[60] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Brian Ichter, Fei Xia, Ed H. Chi, Quoc V. Le, and Denny Zhou. 2022. 思维链提示激发大语言模型的推理能力。载于：第35届神经信息处理系统大会论文集 (NeurIPS 2022)，美国新奥尔良，2022年11月28日至12月9日，Sanmi Koyejo, S. Mohamed, A. Agarwal, Danielle Belgrave, K. Cho, and A. Oh (编)。http://papers.nips.cc/paper_files/paper/2022/hash/ 9d5609613524ecf4f15af0f7b31abca4-Abstract-Conference.html
+
+
+[61] Jialong Wu, Baixuan Li, Runnan Fang, Wenbiao Yin, Liwen Zhang, Zhengwei Tao, Dingchu Zhang, Zekun Xi, Yong Jiang, Pengjun Xie, Fei Huang, and Jingren Zhou. 2025. WebDancer: Towards Autonomous Information Seeking Agency. CoRR abs/2505.22648 (2025). arXiv:2505.22648 doi:10.48550/ARXIV.2505.22648
+[61] Jialong Wu, Baixuan Li, Runnan Fang, Wenbiao Yin, Liwen Zhang, Zhengwei Tao, Dingchu Zhang, Zekun Xi, Yong Jiang, Pengjun Xie, Fei Huang, and Jingren Zhou. 2025. WebDancer：迈向自主信息检索智能体。CoRR abs/2505.22648 (2025). arXiv:2505.22648 doi:10.48550/ARXIV.2505.22648
+
+
+[62] Shitao Xiao, Zheng Liu, Peitian Zhang, Niklas Muennighoff, Defu Lian, and Jian-Yun Nie. 2024. C-Pack: Packed Resources For General Chinese Embeddings. In Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval, SIGIR 2024, Washington DC, USA, July 14-18, 2024, Grace Hui Yang, Hongning Wang, Sam Han, Claudia Hauff, Guido Zuccon, and Yi Zhang (Eds.). ACM, 641-649. doi:10.1145/3626772.3657878
+[62] Shitao Xiao, Zheng Liu, Peitian Zhang, Niklas Muennighoff, Defu Lian, and Jian-Yun Nie. 2024. C-Pack：通用中文嵌入的打包资源。载于：第47届国际ACM信息检索研究与发展会议论文集 (SIGIR 2024)，美国华盛顿特区，2024年7月14日至18日，Grace Hui Yang, Hongning Wang, Sam Han, Claudia Hauff, Guido Zuccon, and Yi Zhang (编)。ACM, 641-649. doi:10.1145/3626772.3657878
+
+
+[63] Yang Xiao, Mohan Jiang, Jie Sun, Keyu Li, Jifan Lin, Yumin Zhuang, Ji Zeng, Shijie Xia, Qishuo Hua, Xuefeng Li, Xiaojie Cai, Tongyu Wang, Yue Zhang, Liming Liu, Xia Wu, Jinlong Hou, Yuan Cheng, Wenjie Li, Xiang Wang, Dequan Wang, and Pengfei Liu. 2025. LIMI: Less is More for Agency. arXiv:2509.17567 [cs.AI] https://arxiv.org/abs/2509.17567
+[63] Yang Xiao, Mohan Jiang, Jie Sun, Keyu Li, Jifan Lin, Yumin Zhuang, Ji Zeng, Shijie Xia, Qishuo Hua, Xuefeng Li, Xiaojie Cai, Tongyu Wang, Yue Zhang, Liming Liu, Xia Wu, Jinlong Hou, Yuan Cheng, Wenjie Li, Xiang Wang, Dequan Wang, and Pengfei Liu. 2025. LIMI：智能体的“少即是多”。arXiv:2509.17567 [cs.AI] https://arxiv.org/abs/2509.17567
+
+
+[64] Zhenghai Xue, Longtao Zheng, Qian Liu, Yingru Li, Xiaosen Zheng, Zejun Ma, and Bo An. 2025. Simpletir: End-to-end reinforcement learning for multi-turn tool-integrated reasoning. arXiv preprint arXiv:2509.02479 (2025).
+[64] Zhenghai Xue, Longtao Zheng, Qian Liu, Yingru Li, Xiaosen Zheng, Zejun Ma, and Bo An. 2025. Simpletir：用于多轮工具集成推理的端到端强化学习。arXiv 预印本 arXiv:2509.02479 (2025)。
+
+
+[65] An Yang, Anfeng Li, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, Chang Gao, Chengen Huang, Chenxu Lv, Chujie Zheng, Dayiheng Liu, Fan Zhou, Fei Huang, Feng Hu, Hao Ge, Haoran Wei, Huan Lin, Jialong Tang, Jian Yang, Jianhong Tu, Jianwei Zhang, Jian Yang, Jiaxi Yang, Jingren Zhou, Junyang Lin, Kai Dang, Keqin Bao, Kexin Yang, Le Yu, Lianghao Deng, Mei Li, Mingfeng Xue, Mingze Li, Pei Zhang, Peng Wang, Qin Zhu, Rui Men, Ruize Gao, Shixuan Liu, Shuang Luo, Tianhao Li, Tianyi Tang, Wenbiao Yin, Xingzhang Ren, Xinyu Wang, Xinyu Zhang, Xuancheng Ren, Yang Fan, Yang Su, Yichang Zhang, Yinger Zhang, Yu Wan, Yuqiong Liu, Zekun Wang, Zeyu Cui, Zhenru Zhang, Zhipeng Zhou, and Zihan Qiu. 2025. Qwen3 Technical Report. CoRR abs/2505.09388 (2025). arXiv:2505.09388 doi:10.48550/ARXIV.2505.09388
+[65] An Yang, Anfeng Li, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, Chang Gao, Chengen Huang, Chenxu Lv, Chujie Zheng, Dayiheng Liu, Fan Zhou, Fei Huang, Feng Hu, Hao Ge, Haoran Wei, Huan Lin, Jialong Tang, Jian Yang, Jianhong Tu, Jianwei Zhang, Jian Yang, Jiaxi Yang, Jingren Zhou, Junyang Lin, Kai Dang, Keqin Bao, Kexin Yang, Le Yu, Lianghao Deng, Mei Li, Mingfeng Xue, Mingze Li, Pei Zhang, Peng Wang, Qin Zhu, Rui Men, Ruize Gao, Shixuan Liu, Shuang Luo, Tianhao Li, Tianyi Tang, Wenbiao Yin, Xingzhang Ren, Xinyu Wang, Xinyu Zhang, Xuancheng Ren, Yang Fan, Yang Su, Yichang Zhang, Yinger Zhang, Yu Wan, Yuqiong Liu, Zekun Wang, Zeyu Cui, Zhenru Zhang, Zhipeng Zhou, and Zihan Qiu. 2025. Qwen3 技术报告. CoRR abs/2505.09388 (2025). arXiv:2505.09388 doi:10.48550/ARXIV.2505.09388
+
+
+[66] Wenkai Yang, Shuming Ma, Yankai Lin, and Furu Wei. 2025. Towards Thinking-Optimal Scaling of Test-Time Compute for LLM Reasoning. CoRR abs/2502.18080 (2025). arXiv:2502.18080 doi:10.48550/ARXIV.2502.18080
+[66] Wenkai Yang, Shuming Ma, Yankai Lin, and Furu Wei. 2025. 面向大语言模型推理的测试时计算思维最优扩展. CoRR abs/2502.18080 (2025). arXiv:2502.18080 doi:10.48550/ARXIV.2502.18080
+
+
+[67] Shunyu Yao, Howard Chen, John Yang, and Karthik Narasimhan. 2022. WebShop: Towards Scalable Real-World Web Interaction with Grounded Language Agents. In Advances in Neural Information Processing Systems 35: Annual Conference on Neural Information Processing Systems 2022, NeurIPS 2022, New Orleans, LA, USA, November 28 - December 9, 2022, Sanmi Koyejo, S. Mohamed, A. Agarwal, Danielle Belgrave, K. Cho, and A. Oh (Eds.). http://papers.nips.cc/paper_files/paper/2022/ hash/82ad13ec01f9fe44c01cb91814fd7b8c-Abstract-Conference.html
+[67] Shunyu Yao, Howard Chen, John Yang, and Karthik Narasimhan. 2022. WebShop：迈向基于基础语言智能体的可扩展现实世界网络交互. 载于：第35届神经信息处理系统大会论文集 (NeurIPS 2022), 美国路易斯安那州新奥尔良, 2022年11月28日-12月9日, Sanmi Koyejo, S. Mohamed, A. Agarwal, Danielle Belgrave, K. Cho, and A. Oh (编). http://papers.nips.cc/paper_files/paper/2022/ hash/82ad13ec01f9fe44c01cb91814fd7b8c-Abstract-Conference.html
+
+
+[68] Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, and Yuan Cao. 2022. React: Synergizing reasoning and acting in language models. arXiv preprint arXiv:2210.03629 (2022).
+[68] Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, and Yuan Cao. 2022. React：协同语言模型中的推理与行动. arXiv 预印本 arXiv:2210.03629 (2022).
+
+
+[69] Junjie Ye, Zhengyin Du, Xuesong Yao, Weijian Lin, Yufei Xu, Zehui Chen, Zaiyuan Wang, Sining Zhu, Zhiheng Xi, Siyu Yuan, Tao Gui, Qi Zhang, Xuanjing Huang, and Jiecao Chen. 2025. ToolHop: A Query-Driven Benchmark for Evaluating Large Language Models in Multi-Hop Tool Use. In Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), ACL 2025, Vienna, Austria, July 27 - August 1, 2025, Wanxiang Che, Joyce Nabende, Ekaterina Shutova, and Mohammad Taher Pilehvar (Eds.). Association for Computational Linguistics, 2995-3021. https://aclanthology.org/2025.acl-long.150/
+[69] Junjie Ye, Zhengyin Du, Xuesong Yao, Weijian Lin, Yufei Xu, Zehui Chen, Zaiyuan Wang, Sining Zhu, Zhiheng Xi, Siyu Yuan, Tao Gui, Qi Zhang, Xuanjing Huang, and Jiecao Chen. 2025. ToolHop：用于评估大语言模型多跳工具使用能力的查询驱动基准. 载于：第63届计算语言学协会年会论文集 (第1卷：长论文), ACL 2025, 奥地利维也纳, 2025年7月27日-8月1日, Wanxiang Che, Joyce Nabende, Ekaterina Shutova, and Mohammad Taher Pilehvar (编). 计算语言学协会, 2995-3021. https://aclanthology.org/2025.acl-long.150/
+
+
+[70] Aohan Zeng, Mingdao Liu, Rui Lu, Bowen Wang, Xiao Liu, Yuxiao Dong, and Jie Tang. 2024. AgentTuning: Enabling Generalized Agent Abilities for LLMs. In Findings of the Association for Computational Linguistics, ACL 2024, Bangkok, Thailand and virtual meeting, August 11-16, 2024, Lun-Wei Ku, Andre Martins, and Vivek Srikumar (Eds.). Association for Computational Linguistics, 3053-3077. doi:10.18653/V1/2024.FINDINGS-ACL.181
+[70] Aohan Zeng, Mingdao Liu, Rui Lu, Bowen Wang, Xiao Liu, Yuxiao Dong, and Jie Tang. 2024. AgentTuning：赋能大语言模型的通用智能体能力. 载于：计算语言学协会研究发现, ACL 2024, 泰国曼谷及线上会议, 2024年8月11-16日, Lun-Wei Ku, Andre Martins, and Vivek Srikumar (编). 计算语言学协会, 3053-3077. doi:10.18653/V1/2024.FINDINGS-ACL.181
+
+
+[71] Qianchi Zhang, Hainan Zhang, Liang Pang, Hongwei Zheng, Yongxin Tong, and Zhiming Zheng. 2025. Less is More: Compact Clue Selection for Efficient Retrieval-Augmented Generation Reasoning. arXiv:2502.11811 [cs.CL] https: //arxiv.org/abs/2502.11811
+[71] Qianchi Zhang, Hainan Zhang, Liang Pang, Hongwei Zheng, Yongxin Tong, and Zhiming Zheng. 2025. Less is More: Compact Clue Selection for Efficient Retrieval-Augmented Generation Reasoning. arXiv:2502.11811 [cs.CL] https: //arxiv.org/abs/2502.11811
+
+
+[72] Yuxiang Zheng, Dayuan Fu, Xiangkun Hu, Xiaojie Cai, Lyumanshan Ye, Pengrui Lu, and Pengfei Liu. 2025. DeepResearcher: Scaling Deep Research via Reinforcement Learning in Real-world Environments. arXiv preprint arXiv:2504.03160 (2025).
+[72] Yuxiang Zheng, Dayuan Fu, Xiangkun Hu, Xiaojie Cai, Lyumanshan Ye, Pengrui Lu, and Pengfei Liu. 2025. DeepResearcher: Scaling Deep Research via Reinforcement Learning in Real-world Environments. arXiv preprint arXiv:2504.03160 (2025).
+
+
+## Appendix
+## 附录
+
+
+## A Datasets
+## A 数据集
+
+
+### A.1 Training Data
+### A.1 训练数据
+
+
+We collected a diverse training dataset spanning four task categories to instill comprehensive agent capabilities.
+我们收集了一个涵盖四个任务类别的多样化训练数据集，旨在培养全面的智能体能力。
+
+
+- General Tool-Use: We sample $1\mathrm{k}$ instances for labeled-tool scenarios and $1\mathrm{k}$ for tool-retrieval from the ToolBench [37] training set. This data is intended to instill a generalized ability to use diverse tools and leverage large toolsets through retrieval.
+- 通用工具使用：我们从 ToolBench [37] 训练集中采样了 $1\mathrm{k}$ 个标记工具场景实例和 $1\mathrm{k}$ 个工具检索实例。这些数据旨在培养模型使用多样化工具的通用能力，并通过检索利用大型工具集。
+
+
+- Real-World Interaction: We utilize 500 instances from ALF-World [45] and 500 from WebShop [67], sampled from their training sets, to teach the model to interact effectively with environments, manage state transitions, and achieve user goals.
+- 现实世界交互：我们利用从 ALF-World [45] 和 WebShop [67] 训练集中采样的各 500 个实例，教导模型与环境进行有效交互、管理状态转换并实现用户目标。
+
+
+- Deep Research: We include 200 instances from WebDancer [61] and 500 from WebShaperQA [50] to enhance the model's proficiency in using web search and page browsing for in-depth information gathering.
+- 深度研究：我们纳入了 200 个来自 WebDancer [61] 和 500 个来自 WebShaperQA [50] 的实例，以增强模型利用网络搜索和页面浏览进行深度信息收集的熟练度。
+
+
+- Mathematical Reasoning: We collect 0.9k problems from the DeepMath dataset [11] to strengthen the model's ability to use code as a tool for complex mathematical computations.
+- 数学推理：我们从 DeepMath 数据集 [11] 中收集了 0.9k 个问题，以加强模型将代码作为工具进行复杂数学计算的能力。
+
+
+### A.2 Benchmarks
+### A.2 基准测试
+
+
+We conduct extensive experiments on a wide range of benchmarks, including general tool-use and downstream applications.
+我们在一系列广泛的基准测试上进行了深入实验，包括通用工具使用和下游应用。
+
+
+General Tool-Use. These benchmarks encompass a broad range of distinct tools (from tens to over ten thousand), thus offering a testbed for evaluating different approaches to toolset scaling.
+通用工具使用。这些基准测试涵盖了广泛的不同工具（从几十个到超过一万个），从而为评估不同的工具集扩展方法提供了测试平台。
+
+
+- ToolBench [37]: A large-scale benchmark containing over 16,000 real-world REST APIs spanning 49 categories. Test subsets include 100 test cases, designed to evaluate LLMs in both single-tool and complex multi-tool scenarios.
+- ToolBench [37]：一个大规模基准测试，包含跨越 49 个类别的 16,000 多个真实世界 REST API。测试子集包含 100 个测试用例，旨在评估大语言模型在单工具和复杂多工具场景下的表现。
+
+
+- API-Bank [24]: A comprehensive benchmark for tool-augmented LLMs. It features a runnable evaluation system with 73 API tools and a large training set (over 2,200 dialogues across 2,211 APIs from 1,008 domains), assessing LLMs' capabilities in planning, retrieving, and calling APIs.
+- API-Bank [24]：一个针对工具增强型大语言模型的综合基准测试。它具有一个可运行的评估系统，包含 73 个 API 工具和一个大型训练集（涵盖 1,008 个领域、2,211 个 API 的 2,200 多段对话），用于评估大语言模型在规划、检索和调用 API 方面的能力。
+
+
+- TMDB [47]: A sub-scenario of RestBench focused on the TMDB movie database, consisting of 100 questions that utilize 54 local tools and require an average of 2.3 sequential API calls.
+- TMDB [47]：RestBench 的一个子场景，专注于 TMDB 电影数据库，由 100 个问题组成，这些问题利用了 54 个本地工具，平均需要 2.3 次顺序 API 调用。
+
+
+- Spotify [47]: A sub-scenario of RestBench simulating a Spotify music player, featuring 57 questions and 40 local tools, demanding an average of 2.6 sequential API calls to complete the tasks.
+- Spotify [47]：RestBench 的一个子场景，模拟 Spotify 音乐播放器，包含 57 个问题和 40 个本地工具，完成任务平均需要 2.6 次顺序 API 调用。
+
+
+- ToolHop [69]: A multi-hop reasoning dataset comprising 995 complex questions. It leverages 3,912 locally executable tools and requires between 3 to 7 sequential tool calls per task.
+- ToolHop [69]：一个包含995个复杂问题的多跳推理数据集。它利用了3,912个本地可执行工具，且每个任务需要3到7次连续的工具调用。
+
+
+Downstream Applications. These benchmarks test the capability of different approaches in handling complex real-world tasks, which often require the use of domain-specific toolsets.
+下游应用。这些基准测试旨在评估不同方法处理复杂现实任务的能力，这些任务通常需要使用特定领域的工具集。
+
+
+- ALFWorld [45]: A benchmark for simple Embodied AI tasks set in a text environment. Agents must complete objectives using a finite set of low-level embodied actions (eg., move, take) to test navigation and object manipulation.
+- ALFWorld [45]：一个用于文本环境中简单具身智能任务的基准测试。智能体必须使用有限的底层具身动作（如移动、拾取）来完成目标，以测试其导航与物体操作能力。
+
+
+- WebShop [67]: A challenging online shopping environment that provides 12,087 crowd-sourced tasks over a catalog of 1.18 million products. Agents interact with the simulated e-commerce website using core APIs: search[Query] and choose[Text Button].
+- WebShop [67]：一个极具挑战性的在线购物环境，在包含118万种产品的目录中提供了12,087个众包任务。智能体通过核心API：search[Query]和choose[Text Button]与模拟的电子商务网站进行交互。
+
+
+- GAIA [33]: A complex benchmark for General AI Assistants, consisting of 466 real-world questions (with a 300-question held-out test set). It requires the flexible application of a broad general-purpose toolset including web browsing, code execution, multimodal processing, and file handling.
+- GAIA [33]：一个针对通用人工智能助手的复杂基准测试，包含466个现实世界问题（含300个留存测试集问题）。它要求灵活应用广泛的通用工具集，包括网页浏览、代码执行、多模态处理和文件处理。
+
+
+- Humanity's Last Exam (HLE) [35]: A benchmark featuring 2,500 highly difficult, multi-disciplinary questions (graduate-level). It primarily evaluates the model's intrinsic deep reasoning and multi-modal understanding capabilities, as the questions are designed to be insoluble by simple external search tools.
+- 人类终极考试 (HLE) [35]：一个包含2,500个高难度、跨学科问题（研究生水平）的基准测试。它主要评估模型的内在深度推理和多模态理解能力，因为这些问题被设计为无法通过简单的外部搜索工具解决。
+
+
+Table 6: A case study of DeepAgent for multi-step, multi-tool tasks on ToolBench, showing only key actions.
+表6：DeepAgent在ToolBench上处理多步骤、多工具任务的案例研究，仅展示关键动作。
+
+
+Example of DeepAgent on a Multi-Tool Task
+DeepAgent处理多工具任务的示例
+
+
+User Query:
+用户查询：
+
+
+I'm organizing a film festival and I need assistance in finding the best films. Can you search for videos related to 'documentary' on Vimeo? Additionally, fetch the related people in the 'cinema' category to invite them as guest speakers. Finally, provide me with a streaming link for a YouTube video with the ID 'UxxajLWwzqY'.
+我正在筹办一个电影节，需要协助寻找最好的电影。你能帮我在Vimeo上搜索与“纪录片”相关的视频吗？此外，请获取“电影”类别下的相关人员以便邀请他们作为演讲嘉宾。最后，请提供ID为“UxxajLWwzqY”的YouTube视频的流媒体链接。
+
+
+DeepAgent Processing Output
+DeepAgent处理输出
+
+
+---
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;Okay, I need to solve three tasks: find documentaries on Vimeo, find
+&nbsp;&nbsp;&nbsp;&nbsp;好的，我需要解决三个任务：在Vimeo上查找纪录片，查找
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;cinema-related people on Vimeo, and get a YouTube streaming link. I'll
+&nbsp;&nbsp;&nbsp;&nbsp;Vimeo上与电影相关的人员，并获取YouTube流媒体链接。我将
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;start by searching for the right tools.
+&nbsp;&nbsp;&nbsp;&nbsp;先搜索合适的工具。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tool_search> Vimeo video search for documentaries </tool_search>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tool_search> Vimeo纪录片视频搜索 </tool_search>
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;The search returned several tools. search_videos and get_videos_by_tag
+&nbsp;&nbsp;&nbsp;&nbsp;搜索返回了几个工具。search_videos和get_videos_by_tag
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;seem most relevant. I'll use the search tool first to find documentaries.
+&nbsp;&nbsp;&nbsp;&nbsp;看起来最相关。我将先使用搜索工具来查找纪录片。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tool_call> \{"name": "search_videos", "arguments": \{"query": "documen-
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tool_call> \{"name": "search_videos", "arguments": \{"query": "documen-
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;tary", "sort": "most_liked"\}\} </tool_call> The tool returned a list of pop-
+&nbsp;&nbsp;&nbsp;&nbsp;tary", "sort": "most_liked"\}\} </tool_call> 工具返回了热门纪录片
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;ular documentary videos. Now for the second task: finding people in
+&nbsp;&nbsp;&nbsp;&nbsp;视频列表。现在进行第二个任务：查找“电影”类别中的人物。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;the 'cinema' category. Since there is no direct tool to search for people,
+&nbsp;&nbsp;&nbsp;&nbsp;由于没有直接搜索人物的工具，我将尝试搜索带有“电影”
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;I will try searching for videos with the 'cinema' tag and identify their
+&nbsp;&nbsp;&nbsp;&nbsp;标签的视频，并从中识别出它们的创作者。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;creators.
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tool_call> \{"name": "get_videos_by_tag", "arguments": \{"tag": "cinema",
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tool_call> \{"name": "get_videos_by_tag", "arguments": \{"tag": "cinema",
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"sort": "most_liked"\}\} </tool_call> This call returned videos tagged with
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"sort": "most_liked"\}\} </tool_call> 此调用返回了带有“电影”标签的
+
+
+'cinema' and included user information for each video, such as "John
+视频，并包含了每个视频的用户信息，例如“John Doe”
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;Doe" and "Jane Smith", who are potential guest speakers.
+&nbsp;&nbsp;&nbsp;&nbsp;和“Jane Smith”，他们是潜在的演讲嘉宾。
+
+
+Finally, for the YouTube streaming link, I'll first verify the video ID
+最后，关于 YouTube 直播链接，我将首先使用 YouTube 搜索工具
+
+
+exists using the YouTube search tool.
+验证视频 ID 是否存在。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;<tool_call> \{"name": "search_for_youtube_v3", "arguments": \{"part":
+&nbsp;&nbsp;&nbsp;&nbsp;<tool_call> \{"name": "search_for_youtube_v3", "arguments": \{"part":
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;"snippet", "type": "video", "q": "UxxajLWwzqY"\}\} </tool_call> The tool
+&nbsp;&nbsp;&nbsp;&nbsp;"snippet", "type": "video", "q": "UxxajLWwzqY"\}\} </tool_call> 工具
+
+
+confirmed the video ID is valid. I can now construct the streaming link.
+确认了视频 ID 有效。现在我可以构建直播链接了。
+
+
+I will now consolidate all the information to answer the user's query.
+我将整合所有信息来回答用户的查询。
+
+
+Final Answer:
+最终答案：
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;1. Documentaries on Vimeo: Found nature and space documentaries.
+&nbsp;&nbsp;&nbsp;&nbsp;1. Vimeo 纪录片：已找到自然与太空类纪录片。
+
+
+2. Cinema Guest Speakers: John Doe, Jane Smith with Vimeo profiles.
+2. 电影嘉宾：John Doe、Jane Smith，附带 Vimeo 个人资料。
+
+
+3. YouTube Link: https://www.youtube.com/watch?v=UxxajLWwzqY
+3. YouTube 链接：https://www.youtube.com/watch?v=UxxajLWwzqY
+
+
+---
+
+
+
+## B Implementation Details
+## B 实现细节
+
+
+For DeepAgent, we use QwQ-32B [51] as the main reasoning model for the results in Table 1 and Table 2, and Qwen3-30B-A3B-Thinking- 2507 [65] with Qwen3-235B-A22B-Thinking-2507 [65] in Table 5. We use Qwen2.5-32B-Instruct [40] as the auxiliary model for (1) filtering lengthy tool search results and execution outputs (this is also applied to all baselines), (2) simulating RapidAPIs during ToolPO training, and (3) generating folded memory from interaction history. For the baselines, we use either QwQ-32B or Qwen2.5-32B-Instruct as the backbone model. Text generation for all models uses a maximum of 81,920 tokens, with a temperature of 0.7 , top_p of 0.8 , top_k of 20, and a repetition penalty of 1.05 . The maximum number of actions is set to 50 .
+对于 DeepAgent，我们在表 1 和表 2 的结果中采用 QwQ-32B [51] 作为主要推理模型，在表 5 中采用 Qwen3-30B-A3B-Thinking-2507 [65] 和 Qwen3-235B-A22B-Thinking-2507 [65]。我们使用 Qwen2.5-32B-Instruct [40] 作为辅助模型，用于 (1) 过滤冗长的工具搜索结果和执行输出（此项也应用于所有基线模型），(2) 在 ToolPO 训练期间模拟 RapidAPI，以及 (3) 从交互历史中生成折叠记忆。对于基线模型，我们使用 QwQ-32B 或 Qwen2.5-32B-Instruct 作为骨干模型。所有模型的文本生成最大长度为 81,920 个 token，温度系数为 0.7，top_p 为 0.8，top_k 为 20，重复惩罚系数为 1.05。最大动作数设定为 50。
+
+
+Web search and page browsing are implemented using the Google Serper API and Jina Reader API, respectively. The VQA tool is based on Qwen2.5-VL-32B-Instruct [1], which takes a question and an image as input and outputs a model-generated response. Tool retrieval is performed using bge-large-en-v1.5 [62]. All tool documentation follows the standard OpenAI function definition format: \{"name": "...", "description": "...", "parameters": \{"type": "object", "properties": \{"param1": \{"type": "...", "description": "..."\}, ..., "required": ["param1"]\}\}. This format is used for building the toolset index and for all prompts given to the agents.
+网络搜索和页面浏览分别通过 Google Serper API 和 Jina Reader API 实现。VQA 工具基于 Qwen2.5-VL-32B-Instruct [1]，它以问题和图像作为输入，并输出模型生成的响应。工具检索使用 bge-large-en-v1.5 [62] 执行。所有工具文档均遵循标准的 OpenAI 函数定义格式：\{"name": "...", "description": "...", "parameters": \{"type": "object", "properties": \{"param1": \{"type": "...", "description": "..."\}, ..., "required": ["param1"]\}\}。此格式用于构建工具集索引以及提供给智能体的所有提示词。
+
+
+Training consists of 100 steps of ToolPO with a batch size of 64, ${\lambda }_{1} = {\lambda }_{2} = 1$ ,rollout size $K = 8$ ,and a maximum sequence length of 32,768. The maximum number of actions is 50 . The training framework is based on VeRL [41] for multi-node distributed training. All experiments are conducted on 64 NVIDIA H20-141GB GPUs.
+训练包含 100 步 ToolPO，批次大小为 64，${\lambda }_{1} = {\lambda }_{2} = 1$，展开大小 $K = 8$，最大序列长度为 32,768。最大动作数为 50。训练框架基于用于多节点分布式训练的 VeRL [41]。所有实验均在 64 张 NVIDIA H20-141GB GPU 上进行。
+
+
+## C Memory Schema
+## C 记忆模式
+
+
+Our brain-inspired memory architecture contains three components: episodic, working, and tool memory. To support stable memory folding and reduce information loss, we define each component with a fixed JSON schema, enabling reliable parsing and use of compressed memories for long-horizon reasoning.
+我们受大脑启发的记忆架构包含三个组件：情景记忆、工作记忆和工具记忆。为了支持稳定的记忆折叠并减少信息丢失，我们为每个组件定义了固定的 JSON 模式，从而实现可靠的解析，并利用压缩记忆进行长程推理。
+
+
+Episodic Memory Schema. Episodic memory records high-level task progression (milestones, decisions, outcomes) to preserve long-term context. The format is: \{"task_description": "A general summary of what the reasoning history has been doing and the overall goals it has been striving for.", "key_events": [\{"step": "step number", "description": "A detailed description of the specific action taken, decision made, or milestone achieved at this step, including relevant context and reasoning behind the choice.", "outcome": "A detailed account of the direct result, observation, or feedback received from this action or decision, including any new information gained or changes in the task state."\}], "current_progress": "A general summary of the current progress of the task, including what has been completed and what is left to be done."\}
+情景记忆模式。情景记忆记录高层任务进展（里程碑、决策、结果）以保留长期上下文。格式为：\{"task_description": "对推理历史所做工作及整体奋斗目标的概括。", "key_events": [\{"step": "步骤编号", "description": "对该步骤所采取的具体行动、做出的决策或达成的里程碑的详细描述，包括相关背景和选择背后的推理。", "outcome": "对该行动或决策产生的直接结果、观察或反馈的详细说明，包括获得的任何新信息或任务状态的变化。"}], "current_progress": "对任务当前进展的概括，包括已完成部分和剩余工作。"\}
+
+
+Working Memory Schema. Working memory captures the immediate goal, active challenges, and next actions to maintain continuity across folds. The format is: \{"immediate_goal": "A clear summary of the current subgoal-what you are actively working toward at this moment.", "current_challenges": "A concise summary of the main obstacles or difficulties you are presently encountering.", "next_actions": [\{type": "tool_call or planning ordecision", description": "Anticipate and describe the next concrete action you intend to take to advance the task."\}]\}
+工作记忆模式。工作记忆捕捉即时目标、当前挑战和下一步行动，以保持折叠间的连续性。格式为：\{"immediate_goal": "对当前子目标的清晰总结——即你此刻正在积极努力实现的目标。", "current_challenges": "对你目前遇到的主要障碍或困难的简明总结。", "next_actions": [\{"type": "工具调用或规划或决策", "description": "预测并描述你打算采取的下一步具体行动以推进任务。"\}]\}
+
+
+Tool Memory Schema. Tool memory consolidates tool-use experience (success rates, effective parameters, common errors) and derives reusable rules. The format is: \{"tools_used": [\{"tool_name": "string", "success_rate": "float", "effective_parameters": ["param1", "param2"], "common_errors": ["error_type1", "error_type2"], "response_pattern": "description of typical output", "experience": "Reflect and summarize your experience, including both successes and failures."\}], "derived_rules": ["When X condition occurs, prefer tool Y", "Tool Z works best with parameter A set to B"]\}
+工具记忆模式。工具记忆整合工具使用经验（成功率、有效参数、常见错误）并推导出可复用的规则。格式为：\{"tools_used": [\{"tool_name": "字符串", "success_rate": "浮点数", "effective_parameters": ["参数1", "参数2"], "common_errors": ["错误类型1", "错误类型2"], "response_pattern": "典型输出描述", "experience": "反思并总结你的经验，包括成功和失败的案例。"}], "derived_rules": ["当出现 X 条件时，优先使用工具 Y", "工具 Z 在参数 A 设为 B 时效果最佳"]\}
+
+
+## D Case Study
+## D 案例研究
+
+
+To illustrate the effectiveness of our DeepAgent framework in handling complex, multi-step tasks that require coordinated use of multiple tools, we present a detailed case in Table 6. This example demonstrates how DeepAgent autonomously navigates tool selection, executes sequential actions, and synthesizes results to provide comprehensive solutions to user queries.
+为了展示我们的 DeepAgent 框架在处理需要协同使用多种工具的复杂多步任务时的有效性，我们在表 6 中展示了一个详细案例。该示例演示了 DeepAgent 如何自主导航工具选择、执行顺序操作并综合结果，从而为用户查询提供全面的解决方案。

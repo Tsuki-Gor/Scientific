@@ -1,0 +1,584 @@
+# MoMaStage: Skill-State Graph Guided Planning and Closed-Loop Execution for Long-Horizon Indoor Mobile Manipulation
+# MoMaStage：用于长程室内移动操作的技能-状态图引导规划与闭环执行
+
+
+Chenxu Li*, Zixuan Chen*, Yetao Li, Jiapeng Xu, Hongyu Ding, Jieqi Shi, Jing Huo, Yang Gao
+Chenxu Li*, Zixuan Chen*, Yetao Li, Jiapeng Xu, Hongyu Ding, Jieqi Shi, Jing Huo, Yang Gao
+
+
+Abstract-Indoor mobile manipulation (MoMA) enables robots to translate natural language instructions into physical actions, yet long-horizon execution remains challenging due to cascading errors and limited generalization across diverse environments. Learning-based approaches often fail to maintain logical consistency over extended horizons, while methods relying on explicit scene representations impose rigid structural assumptions that reduce adaptability in dynamic settings. To address these limitations, we propose MoMaStage, a structured vision-language framework for long-horizon MoMA that eliminates the need for explicit scene mapping. MoMaStage grounds a Vision-Language Model (VLM) within a Hierarchical Skill Library and a topology-aware Skill-State Graph, constraining task decomposition and skill composition within a feasible transition space. This structured grounding ensures that generated plans remain logically consistent and topologically valid with respect to the agent's evolving physical state. To enhance robustness, MoMaStage incorporates a closed-loop execution mechanism that monitors proprioceptive feedback and triggers graph-constrained semantic replanning when deviations are detected, maintaining alignment between planned skills and physical outcomes. Extensive experiments in physics-rich simulations and real-world environments demonstrate that MoMaStage outperforms state-of-the-art baselines, achieving substantially higher planning success, reducing token overhead, and significantly improving overall task success rates in long-horizon mobile manipulation. Video demonstrations are available on the project website: https://chenxuli-cxli.github.io/MoMaStage/
+摘要——室内移动操作（MoMA）使机器人能够将自然语言指令转化为物理动作，但由于级联误差和在多样化环境中的泛化能力有限，长程执行仍具挑战性。基于学习的方法往往难以在长程任务中保持逻辑一致性，而依赖显式场景表示的方法则施加了僵化的结构假设，降低了在动态环境中的适应性。为解决这些局限，我们提出了MoMaStage，这是一个用于长程MoMA的结构化视觉-语言框架，无需显式场景映射。MoMaStage将视觉-语言模型（VLM）锚定在分层技能库和拓扑感知技能-状态图中，将任务分解和技能组合限制在可行的转换空间内。这种结构化锚定确保了生成的计划在逻辑上保持一致，并在智能体不断演变的物理状态下保持拓扑有效性。为增强鲁棒性，MoMaStage引入了一种闭环执行机制，通过监测本体感受反馈，并在检测到偏差时触发图约束的语义重规划，从而保持规划技能与物理结果之间的一致性。在物理仿真和真实环境中的大量实验表明，MoMaStage优于现有最先进的基线方法，在长程移动操作中实现了更高的规划成功率，降低了Token开销，并显著提升了整体任务成功率。视频演示可在项目网站查看：https://chenxuli-cxli.github.io/MoMaStage/
+
+
+## I. INTRODUCTION
+## I. 引言
+
+
+Indoor long-horizon mobile manipulation (MoMa) requires robots to accomplish tasks through extended sequences of navigation and object interaction within complex and dynamic environments such as homes and kitchens [1], [2]. These tasks tightly couple perception, decision-making, and control over long horizons while the agent interacts with changing environmental states. Although imitation learning approaches [3], [4], [5] have shown advantages over classical planning and control pipelines in terms of visual robustness and short-horizon dexterity, scaling these policies to long-horizon mobile manipulation remains challenging.
+室内长程移动操作（MoMa）要求机器人在家庭和厨房等复杂动态环境中，通过一系列连续的导航和物体交互来完成任务 [1], [2]。在智能体与不断变化的环境状态进行交互时，这些任务需要在较长时间范围内紧密结合感知、决策和控制。尽管模仿学习方法 [3], [4], [5] 在视觉鲁棒性和短程灵活性方面表现出优于传统规划和控制流程的优势，但将这些策略扩展到长程移动操作仍然具有挑战。
+
+
+Long-horizon mobile manipulation is bottlenecked by the combinatorial explosion of task complexity. This increases expert data collection costs, limits the generalization of end-to-end policies [6], [7], and exacerbates compounding errors. While prior map-based symbolic planning methods [8], [9], [10], [11] attempt to address this, they are hindered by rigid assumptions, limited real-world semantic understanding, and computational overhead from explicit mapping.
+长期移动操作受到任务复杂性组合爆炸的瓶颈限制。这增加了专家数据收集成本，限制了端到端策略的泛化能力 [6], [7]，并加剧了累积误差。虽然先前基于地图的符号规划方法 [8], [9], [10], [11] 试图解决这一问题，但它们受到僵化假设、有限的现实世界语义理解以及显式映射带来的计算开销的阻碍。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_09_58_2a7dd1.jpg"/>
+
+
+
+Fig. 1: We propose MoMaStage, a framework for long-horizon mobile manipulation that drives VLMs to translate instructions into valid skill chains via a Skill-State Graph and a hierarchical skill library, with closed-loop proprioceptive verification for guided replanning upon failure.
+图1：我们提出了MoMaStage，这是一个用于长程移动操作的框架，通过技能-状态图和分层技能库引导VLM将指令转化为有效的技能链，并具备闭环本体感受验证功能，以便在失败时进行引导式重规划。
+
+
+Recently, the integration of Vision-Language Models (VLMs) [12], [13], [14] has presented a highly promising alternative. These models possess vast internalized knowledge and demonstrate strong capabilities in grounding natural language instructions into sequential sub-tasks. However, purely VLM-driven agents often act without structural constraints. Frequently, open-loop language planners [15], [16], [17] may generate semantically plausible but physically inconsistent skill sequences. This is because executability depends not only on the current subtask, but also on the accumulated effects of previous skills which are often ignored by current methods [18], [19], [20].
+近年来，视觉语言模型（VLMs）[12], [13], [14] 的集成提供了一种极具前景的替代方案。这些模型拥有丰富的内化知识，并在将自然语言指令转化为顺序子任务方面展现出强大的能力。然而，纯粹由 VLM 驱动的智能体往往在缺乏结构约束的情况下运行。开环语言规划器 [15], [16], [17] 经常会生成语义合理但物理上不一致的技能序列。这是因为可执行性不仅取决于当前子任务，还取决于先前技能的累积效应，而现有方法往往忽略了这一点 [18], [19], [20]。
+
+
+To bridge this critical gap, we propose MoMaStage, a structured closed-loop framework driven by VLMs, designed for indoor long-horizon mobile manipulation without requiring explicit scene mapping, as shown in Figure 1 Our key insight is that, for long-horizon mobile manipulation, the critical missing abstraction is not a richer, explicit scene graph, but rather a state-grounded skill transition model that explicitly tracks how each semantic skill alters the robot-task state. Guided by this insight, our framework systematically constrains the generative reasoning of the VLM by introducing a Hierarchical Skill Library and a topology-aware Skill-State Graph. Inspired by classical precondition-effect reasoning, we reformulate open-loop VLM planning into a state-grounded skill transition process. Unlike computationally heavy symbolic world models, our approach introduces a lightweight embodiment-state grounding interface that seamlessly embeds the robot's evolving physical constraints directly into the structured graph.
+为了弥补这一关键差距，我们提出了MoMaStage，这是一个由VLM驱动的结构化闭环框架，专为室内长程移动操作设计，无需显式场景映射，如图1所示。我们的核心见解是，对于长程移动操作，缺失的关键抽象并非更丰富、显式的场景图，而是一个状态锚定的技能转换模型，该模型能明确追踪每个语义技能如何改变机器人-任务状态。受此启发，我们的框架通过引入分层技能库和拓扑感知技能-状态图，系统地约束了VLM的生成式推理。受经典前提-效果推理的启发，我们将开环VLM规划重构为一种状态锚定的技能转换过程。与计算量巨大的符号世界模型不同，我们的方法引入了一种轻量级的具身状态锚定接口，将机器人不断演变的物理约束无缝嵌入到结构化图中。
+
+
+---
+
+
+
+*Equal Contribution
+*同等贡献
+
+
+All authors are with Nanjing University, China. Emails: \{chenxuli, 241300010, 522025330117, hongyuding\}@smail.nju.edu.cn, \{chenzx, isjieqi, huojing, gaoy\}@nju.edu.cn
+所有作者均来自中国南京大学。电子邮箱：\{chenxuli, 241300010, 522025330117, hongyuding\}@smail.nju.edu.cn, \{chenzx, isjieqi, huojing, gaoy\}@nju.edu.cn
+
+
+---
+
+
+
+Furthermore, executing long-horizon plans in the real world requires dynamic adaptability. To ensure robust execution, MoMaStage features a closed-loop mechanism that decouples physical safety from semantic reasoning. The system uses high-frequency proprioceptive ego-state monitoring to evaluate task progress and ensure immediate safety without inducing inference latency. Only when significant execution anomalies occur does it trigger semantic verification [21], [22], allowing the VLM to replan the skill sequence [18] and recover from out-of-distribution disruptions.
+此外，在现实世界中执行长程任务规划需要具备动态适应能力。为确保执行的鲁棒性，MoMaStage 采用了一种将物理安全与语义推理相解耦的闭环机制。该系统利用高频本体感知自我状态监测来评估任务进度，并在不引入推理延迟的前提下确保即时安全。仅在出现重大执行异常时，系统才会触发语义验证 [21], [22]，从而允许 VLM 重新规划技能序列 [18]，并从分布外干扰中恢复。
+
+
+In summary, our primary contributions are as follows:
+总之，我们的主要贡献如下：
+
+
+- We present MoMaStage, a map-free and VLM-driven framework for indoor long-horizon mobile manipulation, which unifies instruction understanding, skill-chain generation, execution, and feedback-driven refinement into a closed-loop decision-making pipeline.
+- 我们提出了 MoMaStage，这是一个无需地图且由 VLM 驱动的室内长程移动操作框架，它将指令理解、技能链生成、执行以及基于反馈的优化统一为一个闭环决策流程。
+
+
+- We introduce a state-grounded skill planning and execution mechanism built on a Skill-State Graph and a hierarchical skill library, which enforces cumulative state feasibility over VLM-generated skill chains and enables robust failure recovery through lightweight ego-state monitoring and targeted semantic replanning.
+- 我们引入了一种基于技能-状态图（Skill-State Graph）和分层技能库的状态接地（state-grounded）技能规划与执行机制，该机制在 VLM 生成的技能链之上强制执行累积状态可行性，并通过轻量级自我状态监测和针对性语义重规划实现鲁棒的故障恢复。
+
+
+- We validate MoMaStage through extensive mobile manipulation experiments in complex simulations and dynamic real-world environments, demonstrating significant improvements in planning validity, execution robustness, and long-horizon task completion over representative baselines.
+- 我们通过在复杂仿真和动态现实环境中的大量移动操作实验验证了 MoMaStage，证明其在规划有效性、执行鲁棒性以及长程任务完成度方面较代表性基线有显著提升。
+
+
+## II. RELATED WORK
+## II. 相关工作
+
+
+## A. Mobile Manipulation and Skill Learning
+## A. 移动操作与技能学习
+
+
+Mobile manipulation has progressed from fixed-base tabletop settings toward household deployment and everyday activities [23]. Systems such as Mobile ALOHA [24] enable whole-body bimanual control, while HomeRobot [1] introduces the Open-Vocabulary Mobile Manipulation (OVMM) benchmark for pick-and-place in unseen environments, and OK-Robot [25] achieves zero-shot performance by composing open-knowledge models. At the policy level, large-scale VLA architectures, including RT-1 [6], RT-2 [12], VIMA [26], RoboAgent [27], Octo [7], OpenVLA [14], and DP-VLA [20], learn end-to-end language-conditioned policies, while imitation learning methods such as Implicit Behavioral Cloning [28], BeT [29], ACT [3], Diffusion Policy [4], UMI [30], and DP3 [5] provide visuomotor control. Furthermore, approaches like SPiRL [31] demonstrate the effectiveness of skill priors for accelerating downstream tasks. However, these monolithic policies struggle to maintain logical consistency over long horizons, as decisions made at one stage often depend on latent state constraints accumulated from earlier interactions, making them brittle to error propagation.
+移动操作已从固定基座的桌面设置发展到家庭应用和日常活动中 [23]。像 Mobile ALOHA [24] 这样的系统实现了全身双手机器人控制，而 HomeRobot [1] 则针对在未知环境中的拾取和放置任务引入了开放词汇移动操作（OVMM）基准，OK-Robot [25] 通过组合开放知识模型实现了零样本性能。在策略层面，包括 RT-1 [6]、RT-2 [12]、VIMA [26]、RoboAgent [27]、Octo [7]、OpenVLA [14] 和 DP-VLA [20] 在内的大规模视觉语言动作（VLA）架构学习端到端的语言条件策略，而诸如隐式行为克隆 [28]、BeT [29]、ACT [3]、扩散策略 [4]、UMI [30] 和 DP3 [5] 等模仿学习方法则提供视觉运动控制。此外，像 SPiRL [31] 这样的方法证明了技能先验在加速下游任务方面的有效性。然而，这些整体策略难以在长时程任务中保持逻辑一致性，因为某一阶段做出的决策通常依赖于早期交互积累的潜在状态约束，这使得它们容易受到误差传播的影响。
+
+
+## B. VLMs for Task Planning and Long-Horizon Execution
+## B. 用于任务规划与长程执行的 VLM
+
+
+LLMs and VLMs have shown strong capabilities for task decomposition and semantic reasoning [15], [16], and reward-driven skill synthesis [32], [33]. They serve as zero-shot planners via code generation [34], PDDL representations [17], [11], or structured programs [35]. Embodied agents such as PaLM-E [13], DeCo [19], VoxPoser [36], and OWMM-Agent [2] integrate visual inputs with sequential sub-task generation, while ReAct [37] synergizes reasoning and acting. To ground these planners, SayPlan [9] leverages 3D scene graphs for large-scale LLM planning, and GRID [38] encodes scene graphs via graph attention networks to iteratively decompose instructions into subtasks. Recent work also explores execution-verifiable planning through specialized scene graphs [10]. Despite these advances, VLM-driven agents remain susceptible to physical hallucinations, often proposing invalid transitions that violate accumulated robot states.
+大语言模型（LLMs）和视觉语言模型（VLMs）在任务分解和语义推理[15]、[16]以及奖励驱动的技能合成[32]、[33]方面表现出强大的能力。它们通过代码生成[34]、规划描述语言（PDDL）表示[17]、[11]或结构化程序[35]作为零样本规划器。具身智能体，如PaLM - E[13]、DeCo[19]、VoxPoser[36]和OWMM - Agent[2]将视觉输入与顺序子任务生成相结合，而ReAct[37]则将推理和行动协同起来。为了使这些规划器落地，SayPlan[9]利用3D场景图进行大规模大语言模型规划，GRID[38]通过图注意力网络对场景图进行编码，将指令迭代分解为子任务。近期的工作还通过专门的场景图探索可执行验证的规划[10]。尽管取得了这些进展，但视觉语言模型驱动的智能体仍然容易出现物理幻觉，常常提出违反机器人累积状态的无效过渡。
+
+
+## C. Closed-Loop Replanning and State Verification
+## C. 闭环重规划与状态验证
+
+
+Open-loop execution is brittle in dynamic environments. Classical TAMP [8] addresses this through rigorous state tracking, while learning-based frameworks such as Reflexion [39] and KnowNo [40] introduce verbal reinforcement and uncertainty quantification for failure handling. More recently, RePLan [18] uses a VLM to detect execution failures and triggers targeted replanning, while AHA [21] introduces a dedicated VLM fine-tuned to identify and explain manipulation errors, and frameworks like Code-as-Monitor [22] utilize constraint-aware visual programming for reactive failure detection. These approaches, however, rely on continuous or frequent VLM queries that incur significant inference latency, making them difficult to scale to long-horizon mobile manipulation, where timely feedback and lightweight recovery are essential.
+开环执行在动态环境中十分脆弱。经典 TAMP [8] 通过严格的状态跟踪来解决这一问题，而基于学习的框架（如 Reflexion [39] 和 KnowNo [40]）则引入了语言反馈和不确定性量化来处理故障。近期，RePLan [18] 利用 VLM 检测执行故障并触发针对性重规划，AHA [21] 引入了专门微调以识别并解释操作错误的 VLM，而 Code-as-Monitor [22] 等框架则利用约束感知视觉编程进行反应式故障检测。然而，这些方法依赖持续或频繁的 VLM 查询，导致显著的推理延迟，难以扩展至长程移动操作任务，而该任务对及时的反馈和轻量级的恢复至关重要。
+
+
+## III. METHOD
+## III. 方法
+
+
+In this section, we present the overall design of Mo-MaStage. As illustrated in Figure 2, the framework consists of three key modules designed to ensure logical feasibility, physical consistency, and execution robustness in long-horizon mobile manipulation. 1) Structured Skill Grounding. We construct a Hierarchical Skill Library together with a Skill-State Graph to explicitly model skill preconditions and state transitions. This structured representation provides a formal grounding space that constrains high-level reasoning and prevents logically invalid skill compositions. 2) Graph-Constrained Planning and Verification. Conditioned on the Skill Graph, the Vision-Language Model (VLM) decomposes natural language instructions into executable skill sequences. A post-hoc verification step based on the Skill-State Graph ensures that the generated plan satisfies global state consistency and transition feasibility. 3) Closed-Loop Execution and Replanning. During execution, the system continuously monitors ego-state transitions to detect deviations from expected outcomes. Upon failure, graph-grounded replanning is triggered to maintain logical validity and physical consistency throughout long-horizon task execution.
+本节将介绍 MoMaStage 的整体设计。如图 2 所示，该框架包含三个关键模块，旨在确保长程移动操作任务的逻辑可行性、物理一致性及执行鲁棒性。1) 结构化技能基础（Structured Skill Grounding）。我们构建了分层技能库及技能-状态图，以显式建模技能前置条件与状态转换。这种结构化表示提供了一个形式化的基础空间，用以约束高层推理并防止逻辑无效的技能组合。2) 图约束规划与验证（Graph-Constrained Planning and Verification）。在技能图的约束下，视觉语言模型（VLM）将自然语言指令分解为可执行的技能序列。基于技能-状态图的事后验证步骤确保了生成的计划满足全局状态一致性和转换可行性。3) 闭环执行与重规划（Closed-Loop Execution and Replanning）。在执行过程中，系统持续监测自身状态转换，以检测是否偏离预期结果。一旦发生故障，系统将触发基于图的重规划，从而在长程任务执行过程中保持逻辑有效性与物理一致性。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_09_58_66ec87.jpg"/>
+
+
+
+Fig. 2: Overview of the MoMaStage framework. Given multi-modal inputs, the system integrates graph-constrained planning with closed-loop execution. (a) The VLM-based planner decomposes long-horizon instructions into semantic skill sequences, restricted by the topological constraints of the Skill Graph. (b) A post-hoc feasibility check is performed using the Skill-State Graph to ensure global state consistency. (c) During execution, the system monitors ego-state transitions and triggers graph-grounded replanning to autonomously recover from failures (e.g., grasping or navigation errors).
+图 2：MoMaStage 框架概览。系统接收多模态输入，将图约束规划与闭环执行相结合。(a) 基于 VLM 的规划器在技能图拓扑约束下，将长程指令分解为语义技能序列。(b) 利用技能-状态图进行事后可行性检查，以确保全局状态一致性。(c) 执行期间，系统监测自身状态转换，并触发基于图的重规划，从而从故障（如抓取或导航错误）中自主恢复。
+
+
+## A. Structured Skill Grounding
+## A. 结构化技能基础
+
+
+To systematically organize the agent's capabilities and model their transition dynamics, we propose a structured representation comprising a Hierarchical Skill Library and an augmented Skill-State Graph.
+为了系统地组织智能体的能力并建模其转换动态，我们提出了一种包含分层技能库和增强型技能-状态图的结构化表示方法。
+
+
+1) Hierarchical Skill Library: The library $\mathcal{S}$ is organized into two levels of granularity to balance execution flexibility and semantic reasoning:
+1) 分层技能库：技能库 $\mathcal{S}$ 按两个粒度级别进行组织，以平衡执行灵活性与语义推理能力：
+
+
+Action-Level Skills ( ${\mathcal{S}}_{\text{ action }}$ ): These fine-grained primitives (e.g., joint-level control, basic motion) are decoupled from scene semantics. They serve as foundational execution units yet lacking predefined execution orders.
+动作级技能（ ${\mathcal{S}}_{\text{ action }}$ ）：这些细粒度原语（如关节级控制、基础运动）与场景语义解耦。它们作为基础执行单元，但缺乏预定义的执行顺序。
+
+
+Semantic-Level Skills ( ${\mathcal{S}}_{\text{ semantic }}$ ): Tightly coupled with scene semantics, these skills possess explicit contextual preconditions and sequential relationships. A semantic skill is instantiated through end-to-end training, sequential composition of action primitives, or post-training refinement.
+语义级技能（ ${\mathcal{S}}_{\text{ semantic }}$ ）：这些技能与场景语义紧密耦合，具有明确的上下文前置条件和顺序关系。语义技能通过端到端训练、动作原语的顺序组合或训练后优化来实现。
+
+
+2) Skill-State Graph: We model the feasible transitions and state-transition dynamics among semantic skills via a Skill-State Graph $\mathcal{G} = \left( {\mathcal{V},\mathcal{E}}\right)$ . Each node ${v}_{i} \in  \mathcal{V}$ represents a skill ${s}_{i} \in  {\mathcal{S}}_{\text{ semantic }}$ ,and a directed edge $\left( {{v}_{i},{v}_{j}}\right)  \in  \mathcal{E}$ denotes a feasible local transition. However, a purely topological graph is insufficient for stable long-horizon operations, as it only captures adjacent connectivity. In practice, skill executability depends on the cumulative embodiment state; for instance, a "pick" command is invalid if the gripper is already occupied, regardless of the topological adjacency.
+2) 技能-状态图：我们通过技能-状态图 $\mathcal{G} = \left( {\mathcal{V},\mathcal{E}}\right)$ 对语义技能之间的可行转换及状态转换动态进行建模。每个节点 ${v}_{i} \in  \mathcal{V}$ 代表一个技能 ${s}_{i} \in  {\mathcal{S}}_{\text{ semantic }}$ ，有向边 $\left( {{v}_{i},{v}_{j}}\right)  \in  \mathcal{E}$ 表示一个可行的局部转换。然而，纯拓扑图不足以支持稳定的长程操作，因为它仅捕获了相邻连通性。在实践中，技能的可执行性取决于累积的具身状态；例如，如果夹爪已被占用，即使在拓扑上相邻，“抓取”指令也是无效的。
+
+
+To ensure state-traceable execution, we augment each node with a precondition state $C$ and a state variation function $\Delta$ . For a dual-arm mobile robot, the precondition state is a tuple:
+为确保状态可追踪的执行，我们为每个节点增加了前置条件状态 $C$ 和状态变化函数 $\Delta$ 。对于双臂移动机器人，前置条件状态为一个元组：
+
+
+$$
+C = \left( {{L}_{\text{ scene }},{O}_{\text{ left }},{O}_{\text{ right }}}\right) , \tag{1}
+$$
+
+
+
+where ${L}_{\text{ scene }}$ denotes the robot’s location,and ${O}_{\text{ left }},{O}_{\text{ right }}$ denote objects held by the grippers ( $\varnothing$ for empty,underscore - for wildcard).
+其中 ${L}_{\text{ scene }}$ 表示机器人的位置， ${O}_{\text{ left }},{O}_{\text{ right }}$ 表示夹爪持有的物体（ $\varnothing$ 表示空，下划线 - 表示通配符）。
+
+
+The resulting state variation induced by skill execution is mathematically formulated as:
+由技能执行引起的状态变化在数学上表述为：
+
+
+$$
+\Delta  = \left( {{f}_{\text{ scene }},{f}_{\text{ left }},{f}_{\text{ right }}}\right) . \tag{2}
+$$
+
+
+
+The transformation functions are defined by the following operations:
+转换函数由以下操作定义：
+
+
+- Navigation: ${f}_{\text{ scene }}$ applies ${MOVE}\left( {A,B}\right)$ to transition the base from location $A$ to $B$ ,or $\varnothing$ for no displacement.
+- 导航： ${f}_{\text{ scene }}$ 应用 ${MOVE}\left( {A,B}\right)$ 将基座从位置 $A$ 移动到 $B$ ，或 $\varnothing$ 表示无位移。
+
+
+- Manipulation: ${f}_{\text{ left }}$ and ${f}_{\text{ right }}$ utilize ${ADD}\left( a\right)$ to transition a gripper from $\varnothing$ to object $a$ (requiring an empty initial state),and ${SUB}\left( a\right)$ to reset a gripper from $a$ to $\varnothing$ (requiring the object $a$ to be present). An $\varnothing$ operation indicates no state change.
+- 操作：${f}_{\text{ left }}$ 和 ${f}_{\text{ right }}$ 利用 ${ADD}\left( a\right)$ 将夹爪从 $\varnothing$ 移动至物体 $a$（要求初始状态为空），而 ${SUB}\left( a\right)$ 则将夹爪从 $a$ 重置回 $\varnothing$（要求物体 $a$ 存在）。$\varnothing$ 操作表示无状态变化。
+
+
+By recursively applying $\Delta$ to the initial state $C$ along a proposed edge sequence, the system can dynamically verify global state consistency. Importantly, the proposed Skill-State Graph is not intended to be a full symbolic world model. Instead, it serves as a lightweight execution-consistency interface between high-level VLM reasoning and embodied skill execution. By only modeling the state variables that are most critical to long-horizon executability, our design preserves sufficient structure to reject invalid plans while avoiding the engineering overhead and brittleness of full scene-level symbolic reconstruction.
+通过沿建议的边序列将 $\Delta$ 递归应用于初始状态 $C$，系统能够动态验证全局状态的一致性。重要的是，所提出的技能-状态图并非旨在成为完整的符号化世界模型。相反，它充当了高层 VLM 推理与具身技能执行之间轻量级的执行一致性接口。通过仅对长程可执行性最关键的状态变量进行建模，我们的设计在保留足够结构以拒绝无效规划的同时，避免了全场景级符号重建带来的工程开销和脆弱性。
+
+
+## B. Graph-Guided Planning and Verification
+## B. 图引导的规划与验证
+
+
+Given a long-horizon natural language instruction $I$ and the current visual observation ${O}_{vis}$ ,our objective is to generate a semantic skill sequence $\mathbf{s} = \left\lbrack  {{s}_{1},{s}_{2},\ldots ,{s}_{T}}\right\rbrack$ that maximizes task-consistent likelihood under the VLM planning while satisfying graph connectivity and cumulative state feasibility. We propose a two-stage framework: topology-aware semantic planning followed by state-driven logical verification.
+给定长程自然语言指令 $I$ 和当前视觉观测 ${O}_{vis}$，我们的目标是生成一个语义技能序列 $\mathbf{s} = \left\lbrack  {{s}_{1},{s}_{2},\ldots ,{s}_{T}}\right\rbrack$，在满足图连通性和累积状态可行性的前提下，最大化 VLM 规划下的任务一致性概率。我们提出了一个两阶段框架：拓扑感知语义规划与状态驱动逻辑验证。
+
+
+1) Topology-Aware Semantic Planning: We formulate task decomposition as a structural routing problem over the skill space, guided by a multimodal reasoning engine. Rather than treating the Vision-Language Model (VLM) as a black-box planner, we constrain its reasoning within the feasible transitions defined by the Skill-State Graph.
+1) 拓扑感知语义规划：我们将任务分解表述为技能空间上的结构化路由问题，并由多模态推理引擎引导。我们没有将视觉语言模型（VLM）视为黑盒规划器，而是将其推理限制在技能-状态图定义的合法转换范围内。
+
+
+The reasoning engine operates on three primary inputs: the instruction $I$ ,the visual observation ${O}_{vis}$ ,and a topological subgraph ${\mathcal{G}}_{\text{ topo }} \subset  \mathcal{G}$ . Notably, ${\mathcal{G}}_{\text{ topo }}$ contains only the skill nodes and their adjacency relationships, omitting state-level attributes $\left( {C\text{ and }\Delta }\right)$ . By withholding explicit 3D scene models and symbolic object descriptions, we force the model to rely on the environmental affordances and robot capabilities encapsulated in the graph's connectivity. Conditioned on these inputs, the VLM parses the high-level task into a candidate skill sequence $\widehat{\mathbf{s}} = \left\lbrack  {{\widehat{s}}_{1},{\widehat{s}}_{2},\ldots ,{\widehat{s}}_{K}}\right\rbrack$ ,representing a topologically valid path through the skill space.
+推理引擎基于三个主要输入运行：指令 $I$、视觉观测 ${O}_{vis}$ 以及拓扑子图 ${\mathcal{G}}_{\text{ topo }} \subset  \mathcal{G}$。值得注意的是，${\mathcal{G}}_{\text{ topo }}$ 仅包含技能节点及其邻接关系，省略了状态级属性 $\left( {C\text{ and }\Delta }\right)$。通过隐去显式的 3D 场景模型和符号化物体描述，我们强制模型依赖于图中封装的环境可供性与机器人能力。在这些条件的约束下，VLM 将高层任务解析为候选技能序列 $\widehat{\mathbf{s}} = \left\lbrack  {{\widehat{s}}_{1},{\widehat{s}}_{2},\ldots ,{\widehat{s}}_{K}}\right\rbrack$，代表了技能空间中一条拓扑有效的路径。
+
+
+2) State-Driven Feasibility Verification: Once a candidate sequence $\widehat{\mathbf{s}}$ is generated,we perform a post-hoc verification using the full attributes of the Skill-State Graph to ensure long-horizon consistency. This stage transcends local adjacency by evaluating the cumulative state-transition chain.
+2) 状态驱动的可行性验证：一旦生成候选序列 $\widehat{\mathbf{s}}$，我们便利用技能-状态图的完整属性进行事后验证，以确保长程一致性。该阶段通过评估累积的状态转换链，超越了局部邻接关系的限制。
+
+
+Starting from the initial robot state ${C}_{0}$ ,the system recursively applies the state variation ${\Delta }_{i}$ of each skill ${\widehat{s}}_{i}$ to compute the subsequent state ${C}_{i + 1}$ . A candidate plan is deemed feasible if and only if:
+从初始机器人状态 ${C}_{0}$ 开始，系统递归应用每个技能 ${\widehat{s}}_{i}$ 的状态变化 ${\Delta }_{i}$ 来计算后续状态 ${C}_{i + 1}$。候选规划被视为可行，当且仅当：
+
+
+$$
+\forall i \in  \{ 1,\ldots ,K\} \text{ ,is\_compatible }\left( {{C}_{i - 1},\operatorname{precondition}\left( {\widehat{s}}_{i}\right) }\right) \tag{3}
+$$
+
+
+
+where the compatibility check ensures that gripper states $\left( {{O}_{\text{ left }},{O}_{\text{ right }}}\right)$ and location constraints $\left( {L}_{\text{ scene }}\right)$ satisfy the skill's preconditions. If a state conflict is detected-such as attempting a "pick" operation while the gripper is occupied-the plan is rejected, and the system triggers a re-decomposition or adjustment within the VLM, ensuring the final output $\mathbf{s}$ is both topologically and logically sound.
+其中兼容性检查确保夹爪状态 $\left( {{O}_{\text{ left }},{O}_{\text{ right }}}\right)$ 和位置约束 $\left( {L}_{\text{ scene }}\right)$ 满足技能的前置条件。如果检测到状态冲突（例如在夹爪已占用时尝试“抓取”操作），则该规划被拒绝，系统会触发 VLM 进行重新分解或调整，从而确保最终输出 $\mathbf{s}$ 在拓扑和逻辑上均合理。
+
+
+## C. Closed-Loop Execution and Replanning
+## C. 闭环执行与重规划
+
+
+To ensure robust task completion in dynamic and uncertain environments, we implement a closed-loop execution mechanism. This stage integrates real-time state monitoring with graph-constrained recovery, enabling the agent to adaptively respond to execution deviations.
+为确保在动态和不确定环境中稳健地完成任务，我们实现了闭环执行机制。该阶段将实时状态监控与图约束恢复相结合，使智能体能够自适应地响应执行偏差。
+
+
+1) State-Aware Execution Monitoring: During the execution of the validated skill sequence $\mathbf{s}$ ,the system performs continuous state verification to ensure alignment between the physical environment and the planned logic. For each skill ${s}_{i}$ ,we employ a dual-layered monitoring process:
+1) 状态感知执行监控：在执行已验证的技能序列 $\mathbf{s}$ 期间，系统会进行持续的状态验证，以确保物理环境与规划逻辑的一致性。对于每个技能 ${s}_{i}$ ，我们采用双层监控流程：
+
+
+- Ego-State Monitoring: Tracks the robot's proprioceptive data (e.g., joint encoders and gripper tactile sensors) to confirm the physical success of primitive actions, such as ensuring an object is successfully grasped $\left( {ADD}\right)$ or released $\left( {SUB}\right)$ .
+- 自我状态监控：追踪机器人的本体感觉数据（如关节编码器和末端触觉传感器），以确认原始动作的物理成功，例如确保物体被成功抓取 $\left( {ADD}\right)$ 或释放 $\left( {SUB}\right)$ 。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_09_58_cc3c27.jpg"/>
+
+
+
+Fig. 3: Overview of the real-world experimental setup.
+图 3：真实世界实验设置概览。
+
+
+- Semantic Verification: Utilizes the VLM to perform post-execution scene checks, verifying that the environmental state matches the expected state variation ${\Delta }_{i}$ .
+- 语义验证：利用 VLM 执行执行后的场景检查，验证环境状态是否符合预期的状态变化 ${\Delta }_{i}$ 。
+
+
+If the observed state ${C}_{obs}$ satisfies the expected outcome defined by ${\Delta }_{i}$ ,the agent proceeds to the next skill ${s}_{i + 1}$ . Otherwise, an execution deviation is flagged.
+如果观测到的状态 ${C}_{obs}$ 满足 ${\Delta }_{i}$ 定义的预期结果，智能体将继续执行下一个技能 ${s}_{i + 1}$ 。否则，系统会标记执行偏差。
+
+
+2) Graph-Constrained Dynamic Replanning: When a deviation or failure is detected (e.g., a pick failure or a blocked navigation path), MoMaStage does not simply restart the task. Instead, it triggers a dynamic replanning process anchored in the Skill-State Graph $\mathcal{G}$ .
+2) 图约束动态重规划：当检测到偏差或失败（例如抓取失败或导航路径受阻）时，MoMaStage 不会简单地重启任务，而是触发一个锚定在技能-状态图 $\mathcal{G}$ 中的动态重规划过程。
+
+
+The current state ${C}_{obs}$ is designated as the initial state. The system then performs a localized search or re-queries the VLM-based planner to identify a corrective path in $\mathcal{G}$ that can transition the robot from ${C}_{obs}$ to a state that satisfies the preconditions of the remaining sub-tasks. By leveraging the Skill-State Graph as the search space for replanning, the system ensures that the recovered sequence remains logically consistent and respects physical embodiment constraints. This graph-grounded feedback loop enables the agent to recover from failures autonomously, maintaining high success rates in long-horizon mobile manipulation tasks.
+当前状态 ${C}_{obs}$ 被指定为初始状态。随后，系统执行局部搜索或重新查询基于 VLM 的规划器，以在 $\mathcal{G}$ 中识别出一条修正路径，使机器人能够从 ${C}_{obs}$ 转换到满足剩余子任务前提条件的状态。通过利用技能-状态图作为重规划的搜索空间，系统确保了恢复后的序列在逻辑上保持一致，并遵循物理具身约束。这种基于图的反馈循环使智能体能够自主从失败中恢复，从而在长程移动操作任务中保持高成功率。
+
+
+## IV. EXPERIMENTS
+## IV. 实验
+
+
+To evaluate the effectiveness of our proposed framework, MoMaStage, we conduct comprehensive experiments in both real-world environments and a simulated benchmark. Specifically, we address the following research questions: 1) Can MoMaStage be effectively deployed in real-world long-horizon mobile manipulation tasks, and does its closed-loop replanning mechanism effectively mitigate compounding execution errors compared to existing baselines? 2) How robust is the framework's planning capability across diverse simulated environments, and how do different low-level skill configurations influence overall long-horizon execution success? 3) How does explicit topological grounding via the Skill-State Graph contribute to planning efficiency, and what do failure analyses reveal about the boundaries between high-level semantic reasoning and low-level physical limitations?
+为了评估我们提出的 MoMaStage 框架的有效性，我们在真实世界环境和模拟基准测试中进行了全面实验。具体而言，我们探讨了以下研究问题：1) MoMaStage 能否有效地部署在真实世界的长程移动操作任务中？与现有基线相比，其闭环重规划机制能否有效缓解累积的执行误差？2) 该框架的规划能力在不同的模拟环境中表现如何？不同的底层技能配置如何影响长程执行的整体成功率？3) 通过技能-状态图进行的显式拓扑接地如何促进规划效率？失败分析揭示了高级语义推理与低级物理限制之间的边界在哪里？
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_09_58_da0187.jpg"/>
+
+
+
+Fig. 4: Quantitative and qualitative evaluation of MoMaStage on the real-world robot platform. (a) MoMaStage maintains a higher success rate over long-horizon subtasks compared to baselines. (b) Trajectory-level execution details showing the system's robustness through successful replanning. (c) A step-by-step demonstration of a long-horizon task, illustrating adaptive replanning when unexpected failures occur.
+图 4：MoMaStage 在真实机器人平台上的定量与定性评估。(a) 与基线相比，MoMaStage 在长程子任务中保持了更高的成功率。(b) 轨迹级执行细节，展示了系统通过成功重规划所体现的鲁棒性。(c) 长程任务的分步演示，展示了在发生意外失败时的自适应重规划过程。
+
+
+## A. Experimental Setup
+## A. 实验设置
+
+
+Real-World Setup. Experiments are conducted in a $3 \times  3\mathrm{\;m}$ workspace divided into Cupboard, Dining table, and Pantry scenes (Figure 3). This segmentation is purely illustrative, as no environmental mapping is performed. We deploy our framework on the Agilex Cobot Magic platform, featuring four Agilex Piper arms and a Tracer mobile base. For multi-view observations, the robot uses four cameras: three Orbbec Dabai cameras (two wrist-mounted, one overhead) for manipulation, and an Intel RealSense D435i for both manipulation and navigation. The Skill-State Graph includes 16 semantic-level skills (6 pick, 6 place, 4 navigation) and 10 action-level skills for failure recovery. Semantic manipulation skills are trained using ACT on 50 spatially generalized demonstration trajectories, while navigation and action-level skills rely on predefined rules. We design 100 different long-horizon tasks consisting of different number of sub-tasks, involving frequent navigation-manipulation alternations and dual-arm coordination. Our goal is not to benchmark scene diversity but to evaluate whether the state-grounded planning and replanning mechanism can maintain consistency over extended execution horizons.
+真实世界设置。实验在 $3 \times  3\mathrm{\;m}$ 工作空间中进行，该空间划分为橱柜、餐桌和食品储藏室场景（图 3）。这种划分仅用于说明，因为未执行环境映射。我们将框架部署在 Agilex Cobot Magic 平台上，该平台配备四个 Agilex Piper 机械臂和一个 Tracer 移动底盘。为了实现多视角观测，机器人使用了四台摄像机：三台 Orbbec Dabai 摄像机（两台腕部安装，一台头顶安装）用于操作，一台 Intel RealSense D435i 用于操作和导航。技能-状态图包含 16 个语义级技能（6 个抓取、6 个放置、4 个导航）和 10 个用于故障恢复的动作级技能。语义操作技能使用 ACT 在 50 条空间泛化的演示轨迹上进行训练，而导航和动作级技能则依赖于预定义规则。我们设计了 100 个不同的长程任务，包含不同数量的子任务，涉及频繁的导航-操作切换和双臂协作。我们的目标不是对场景多样性进行基准测试，而是评估基于状态的规划和重规划机制能否在延长的执行周期内保持一致性。
+
+
+Simulation Setup. Experiments are conducted on mshab*, an extension of the ManiSkill-Hab benchmark [41]. We evaluate across three original scenes: tidy_house (4 stages, 20 subtasks), prepare_groceries (3 stages, 12 subtasks), and set_table (2 stages, 16 subtasks). Retaining original open-source weights, low-level skills employ Soft Actor-Critic (SAC) [42] and Behavior Cloning (BC) [43] for pick and place, Proximal Policy Optimization (PPO) [44] and BC for open and close, and PPO for navigation. To better align with our experimental objectives, mshab* introduces three critical modifications: (1) integrating a VLM interface for task decomposition and skill composition, integrating a VLM interface for task decomposition and skill composition, along with modules for task generation and translating planned skills into simulation-executable APIs; (2) enabling the seamless chaining of heterogeneous skill types, relaxing the previous single-skill-type restriction; and (3) supporting dynamic failure recovery by altering the skill execution sequence directly at the step of interruption.
+仿真设置。实验在 ManiSkill-Hab 基准测试 [41] 的扩展版本 mshab* 上进行。我们评估了三个原始场景：tidy_house（4 个阶段，20 个子任务）、prepare_groceries（3 个阶段，12 个子任务）和 set_table（2 个阶段，16 个子任务）。在保留原始开源权重的基础上，底层技能采用软演员-评论家算法 (SAC) [42] 和行为克隆 (BC) [43] 进行抓取与放置，采用近端策略优化 (PPO) [44] 和 BC 进行开关操作，并采用 PPO 进行导航。为更好地契合我们的实验目标，mshab* 引入了三项关键改进：(1) 集成了用于任务分解与技能组合的 VLM 接口，以及用于任务生成和将规划技能转换为仿真可执行 API 的模块；(2) 实现了异构技能类型的无缝链接，放宽了此前单一技能类型的限制；(3) 支持通过在中断步骤直接改变技能执行序列来实现动态故障恢复。
+
+
+Baseline Models. We compare MoMaStage with representative baselines in both simulation and real-world settings. Ground Truth (GT) Sequencing executes a human-authored optimal skill sequence without replanning or retry, serving as an execution upper bound and isolating physical execution from high-level VLM planning. DeCo* is an adapted version of the recent DeCo framework [19], modified to support our mobile manipulation setting and evaluated in both domains. We adopt DeCo as the primary planning baseline because it represents a recent VLM-driven skill decomposition approach without relying on heavy 3D scene representations. In contrast, methods such as VoxPoser [36] and SayPlan [9] depend on explicit spatial maps or benchmark-specific infrastructures, making direct comparison under our lightweight, map-free mobile manipulation setup less appropriate. In real-world experiments, we additionally include End-to-End ${ACT}$ ,a non-modular learning baseline trained on 50 expert demonstrations of the full long-horizon task.
+基准模型。我们在仿真和真实世界环境中将 MoMaStage 与代表性基准进行了对比。Ground Truth (GT) Sequencing 执行人工编写的最优技能序列，不进行重规划或重试，作为执行上限，并将物理执行与高层 VLM 规划隔离开来。DeCo* 是近期 DeCo 框架 [19] 的适配版本，经修改以支持我们的移动操作设置，并在两个领域中进行了评估。我们采用 DeCo 作为主要规划基准，因为它代表了一种无需依赖繁重 3D 场景表示的近期 VLM 驱动技能分解方法。相比之下，VoxPoser [36] 和 SayPlan [9] 等方法依赖显式空间地图或特定基准设施，因此在我们的轻量级、无地图移动操作设置下进行直接比较不太合适。在真实世界实验中，我们额外加入了端到端 ${ACT}$，这是一个非模块化学习基准，通过 50 次完整长程任务的专家演示进行训练。
+
+
+TABLE I: Performance Results (Mean $\pm$ Standard Deviation)
+表 I：性能结果（平均值 $\pm$ 标准差）
+
+
+<table><tr><td rowspan="2">Methods</td><td colspan="3">Tidy_House</td><td colspan="3">Prepare_Groceries</td><td colspan="3">Set_Table</td></tr><tr><td>BC</td><td>RL</td><td>RL_Per_Obj</td><td>BC</td><td>RL</td><td>RL_Per_Obj</td><td>BC</td><td>RL</td><td>RL_Per_Obj</td></tr><tr><td>DeCo*</td><td>44.00±3.74</td><td>46.67±4.50</td><td>37.00±4.55</td><td>35.00±3.56</td><td>26.67±3.68</td><td>25.67±0.94</td><td>23.67±2.49</td><td>20.33±1.70</td><td>22.00±2.16</td></tr><tr><td>MoMaStage</td><td>80.67±2.87</td><td>85.67±3.09</td><td>79.67±4.11</td><td>90.33±2.05</td><td>85.67±4.11</td><td>91.67±2.62</td><td>93.67±1.25</td><td>87.00±5.10</td><td>91.00±2.16</td></tr></table>
+<table><tbody><tr><td rowspan="2">方法</td><td colspan="3">整理房间</td><td colspan="3">准备杂货</td><td colspan="3">摆放餐桌</td></tr><tr><td>BC</td><td>RL</td><td>RL_Per_Obj</td><td>BC</td><td>RL</td><td>RL_Per_Obj</td><td>BC</td><td>RL</td><td>RL_Per_Obj</td></tr><tr><td>DeCo*</td><td>44.00±3.74</td><td>46.67±4.50</td><td>37.00±4.55</td><td>35.00±3.56</td><td>26.67±3.68</td><td>25.67±0.94</td><td>23.67±2.49</td><td>20.33±1.70</td><td>22.00±2.16</td></tr><tr><td>MoMaStage</td><td>80.67±2.87</td><td>85.67±3.09</td><td>79.67±4.11</td><td>90.33±2.05</td><td>85.67±4.11</td><td>91.67±2.62</td><td>93.67±1.25</td><td>87.00±5.10</td><td>91.00±2.16</td></tr></tbody></table>
+
+
+TABLE II: Consolidated Long-Horizon Subtask Success Rates (%)
+表 II：长程子任务综合成功率（%）
+
+
+<table><tr><td rowspan="2">Skill-State Graph Type</td><td rowspan="2">Methods</td><td colspan="5">Tidy_House</td><td colspan="3">Prepare_Groceries</td><td colspan="2">Set_Table</td></tr><tr><td>Phase 1 (Step 4)</td><td>Phase 2 (Step 8)</td><td>Phase 3 <br> (Step 12)</td><td>Phase 4 <br> (Step 16)</td><td>Phase 5 <br> (Step 20)</td><td>Phase 1 (Step 4)</td><td>Phase 2 <br> (Step 8)</td><td>Phase 3 (Step 12)</td><td>Phase 1 (Step 8)</td><td>Phase 2 (Step 16)</td></tr><tr><td rowspan="3">RL_ALL (SAC+PPO)</td><td>GT</td><td>34.7 ±2.1</td><td>10.0 ±0.8</td><td>2.3 ±0.5</td><td>0.3 ±0.5</td><td>0.3 ±0.5</td><td>19.7 ±2.5</td><td>3.3 ±0.5</td><td>0.0 ±0.0</td><td>22.0 ±1.6</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>DeCo*</td><td>13.7 ±2.1</td><td>0.7 ±0.5</td><td>0.0 ±0.0</td><td>0.0 ±0.0</td><td>0.0 ±0.0</td><td>${6.3} \pm  {1.3}$</td><td>0.0±0.0</td><td>0.0±0.0</td><td>4.0 ±1.4</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>MoMaStage</td><td>27.0 ±1.4</td><td>12.3 ±1.9</td><td>4.0 ±0.0</td><td>1.7 ±0.9</td><td>1.0 $\pm  {0.0}$</td><td>17.7 ±2.5</td><td>3.7 ±1.7</td><td>0.0±0.0</td><td>19.0 ±0.0</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td rowspan="3">IL_ALL + RL_ALL <br> (BC+PPO)</td><td>GT</td><td>38.7 ±2.9</td><td>9.0 ±0.0</td><td>3.0 ±0.8</td><td>0.3 ±0.5</td><td>0.0 ±0.0</td><td>14.0 ±1.6</td><td>${1.0} \pm  {0.8}$</td><td>0.0 ±0.0</td><td>17.3 ±1.7</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>DeCo*</td><td>18.3 ±0.5</td><td>4.3 ±1.2</td><td>0.3 ±0.5</td><td>0.0 ±0.0</td><td>0.0 ±0.0</td><td>3.0 ±0.8</td><td>0.0 ±0.0</td><td>0.0 ±0.0</td><td>2.7 ±0.5</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>MoMaStage</td><td>33.3 ±2.6</td><td>7.0 ±1.4</td><td>2.3 ±0.9</td><td>1.0 ±0.8</td><td>0.7 ±0.5</td><td>11.3 ±3.4</td><td>1.0 ±0.8</td><td>0.7 ±0.5</td><td>23.0 ±1.4</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td rowspan="3">RL_Per_Obj <br> (SAC+PPO)</td><td>GT</td><td>41.3 ±2.9</td><td>15.0 ±2.2</td><td>3.6 ±0.9</td><td>0.7 ±0.9</td><td>0.7 ±0.9</td><td>27.0 ±0.8</td><td>2.3 ±1.3</td><td>0.7 ±0.9</td><td>25.3 ±2.1</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>DeCo*</td><td>11.7 ±0.5</td><td>4.0 ±0.8</td><td>0.3 ±0.5</td><td>0.0 ±0.0</td><td>0.0 ±0.0</td><td>6.7 ±0.9</td><td>0.3 ±0.5</td><td>0.3 ±0.5</td><td>7.0 ±1.4</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>MoMaStage</td><td>31.7 ±2.6</td><td>10.0 ±2.2</td><td>4.7 ±0.5</td><td>1.0 ±0.8</td><td>1.0 ±0.8</td><td>20.0 ±1.6</td><td>2.3 ±0.5</td><td>1.3 ±0.5</td><td>27.3 ±3.8</td><td>${0.0} \pm  {0.0}$</td></tr></table>
+<table><tbody><tr><td rowspan="2">技能-状态图类型</td><td rowspan="2">方法</td><td colspan="5">整理房屋</td><td colspan="3">准备杂货</td><td colspan="2">布置餐桌</td></tr><tr><td>阶段 1 (第 4 步)</td><td>阶段 2 (第 8 步)</td><td>阶段 3 <br/> (第 12 步)</td><td>阶段 4 <br/> (第 16 步)</td><td>阶段 5 <br/> (第 20 步)</td><td>阶段 1 (第 4 步)</td><td>阶段 2 <br/> (第 8 步)</td><td>阶段 3 (第 12 步)</td><td>阶段 1 (第 8 步)</td><td>阶段 2 (第 16 步)</td></tr><tr><td rowspan="3">RL_ALL (SAC+PPO)</td><td>GT</td><td>34.7 ±2.1</td><td>10.0 ±0.8</td><td>2.3 ±0.5</td><td>0.3 ±0.5</td><td>0.3 ±0.5</td><td>19.7 ±2.5</td><td>3.3 ±0.5</td><td>0.0 ±0.0</td><td>22.0 ±1.6</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>DeCo*</td><td>13.7 ±2.1</td><td>0.7 ±0.5</td><td>0.0 ±0.0</td><td>0.0 ±0.0</td><td>0.0 ±0.0</td><td>${6.3} \pm  {1.3}$</td><td>0.0±0.0</td><td>0.0±0.0</td><td>4.0 ±1.4</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>MoMaStage</td><td>27.0 ±1.4</td><td>12.3 ±1.9</td><td>4.0 ±0.0</td><td>1.7 ±0.9</td><td>1.0 $\pm  {0.0}$</td><td>17.7 ±2.5</td><td>3.7 ±1.7</td><td>0.0±0.0</td><td>19.0 ±0.0</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td rowspan="3">IL_ALL + RL_ALL <br/> (BC+PPO)</td><td>GT</td><td>38.7 ±2.9</td><td>9.0 ±0.0</td><td>3.0 ±0.8</td><td>0.3 ±0.5</td><td>0.0 ±0.0</td><td>14.0 ±1.6</td><td>${1.0} \pm  {0.8}$</td><td>0.0 ±0.0</td><td>17.3 ±1.7</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>DeCo*</td><td>18.3 ±0.5</td><td>4.3 ±1.2</td><td>0.3 ±0.5</td><td>0.0 ±0.0</td><td>0.0 ±0.0</td><td>3.0 ±0.8</td><td>0.0 ±0.0</td><td>0.0 ±0.0</td><td>2.7 ±0.5</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>MoMaStage</td><td>33.3 ±2.6</td><td>7.0 ±1.4</td><td>2.3 ±0.9</td><td>1.0 ±0.8</td><td>0.7 ±0.5</td><td>11.3 ±3.4</td><td>1.0 ±0.8</td><td>0.7 ±0.5</td><td>23.0 ±1.4</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td rowspan="3">RL_Per_Obj <br/> (SAC+PPO)</td><td>GT</td><td>41.3 ±2.9</td><td>15.0 ±2.2</td><td>3.6 ±0.9</td><td>0.7 ±0.9</td><td>0.7 ±0.9</td><td>27.0 ±0.8</td><td>2.3 ±1.3</td><td>0.7 ±0.9</td><td>25.3 ±2.1</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>DeCo*</td><td>11.7 ±0.5</td><td>4.0 ±0.8</td><td>0.3 ±0.5</td><td>0.0 ±0.0</td><td>0.0 ±0.0</td><td>6.7 ±0.9</td><td>0.3 ±0.5</td><td>0.3 ±0.5</td><td>7.0 ±1.4</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>MoMaStage</td><td>31.7 ±2.6</td><td>10.0 ±2.2</td><td>4.7 ±0.5</td><td>1.0 ±0.8</td><td>1.0 ±0.8</td><td>20.0 ±1.6</td><td>2.3 ±0.5</td><td>1.3 ±0.5</td><td>27.3 ±3.8</td><td>${0.0} \pm  {0.0}$</td></tr></tbody></table>
+
+
+## B. Real-World Evaluation
+## B. 真实世界评估
+
+
+Due to space limitations, we report 10 tasks with the longest horizon (17 sub-tasks) in the main paper, which represents the most challenging long-horizon scenario involving cross-scene navigation and dual-arm manipulation. Results for tasks with shorter horizons are provided in the supplementary material.
+受限于篇幅，我们在正文中报告了10个最长任务序列（17个子任务）的评估结果，这代表了涉及跨场景导航和双臂操作的最具挑战性的长程场景。较短任务序列的结果详见补充材料。
+
+
+Figure 4(a) tracks success rates across subtasks, where initial planning failures immediately terminate episodes to highlight long-horizon compounding challenges. Baselines struggle severely: End-to-End ACT fails instantly (0% success) due to covariate shift in imitation learning without modular decomposition. DeCo* initiates only 10% of trials due to poor reasoning, dropping to 0% by subtask 7 lacking state verification and recovery strategies. Even Ground Truth Sequencing, despite perfect initial planning, steadily degrades to 0% by step 16 because its open-loop execution cannot recover from physical anomalies like grasping slips.
+图4(a)追踪了各子任务的成功率，其中初始规划失败会立即终止实验，以凸显长程任务中误差累积的挑战。基线方法表现极差：端到端ACT由于缺乏模块化分解，在模仿学习中存在协变量偏移，导致立即失败（成功率为0%）。DeCo*因推理能力不足，仅有10%的试验能启动，且由于缺乏状态验证和恢复策略，到第7个子任务时成功率降至0%。即使是Ground Truth Sequencing（真值序列法），尽管初始规划完美，但由于其开环执行无法从抓取打滑等物理异常中恢复，成功率也会随步骤增加稳步降至0%。
+
+
+In stark contrast, MoMaStage achieves perfect initial planning and a 60% cumulative final success rate. Execution state tracking across the 10 trajectories in Figure 4(b) reveals this high survival rate stems from active closed-loop error correction rather than flawless execution. When encountering physical anomalies, the replanning module detects errors and synthesizes localized recovery actions, failing only in severe unrecoverable states like objects dropping out of the reachable workspace. Furthermore, Figure 4(c) qualitatively visualizes a successful trajectory, detailing the step-by-step execution and highlighting a crucial adaptive replanning moment at subtask 7 that seamlessly recovers from an unexpected failure to complete the long-horizon task.
+相比之下，MoMaStage实现了完美的初始规划，并达到了60%的最终累积成功率。图4(b)中10条轨迹的执行状态追踪显示，这种高存活率源于主动的闭环纠错，而非执行过程毫无瑕疵。当遇到物理异常时，重规划模块会检测错误并合成局部恢复动作，仅在物体掉出可达工作空间等严重的不可恢复状态下才会失败。此外，图4(c)定性展示了一条成功轨迹，详细说明了执行步骤，并突出了第7个子任务中关键的自适应重规划时刻，该时刻无缝修复了意外故障，从而完成了长程任务。
+
+
+## C. Simulation Benchmarking
+## C. 仿真基准测试
+
+
+To evaluate our framework under diverse policy constraints, large-scale simulation experiments using Gemini 2.5 Flash as the reasoning engine are conducted across three complex scenes: tidy_house, prepare_groceries, and set_table. Pre-trained Behavior Cloning (BC) and Reinforcement Learning (RL) policies drive physical execution. To ensure statistical robustness, we comprehensively evaluate three methods (GT, DeCo*, and MoMaStage) across all three scenes and their corresponding three Skill-State Graph configurations. For each specific setup, we execute 100 episodes across 3 independent trial groups to compute the mean and standard deviation, culminating in a rigorous total of 8,100 simulated trajectories.
+为了在多种策略约束下评估我们的框架，我们使用Gemini 2.5 Flash作为推理引擎，在tidy_house、prepare_groceries和set_table三个复杂场景中进行了大规模仿真实验。预训练的行为克隆（BC）和强化学习（RL）策略用于驱动物理执行。为确保统计稳健性，我们全面评估了三种方法（GT、DeCo*和MoMaStage）在所有三个场景及其对应的三种技能-状态图配置下的表现。针对每种特定设置，我们在3个独立试验组中执行100个回合以计算均值和标准差，最终完成了总计8,100条仿真轨迹的严格测试。
+
+
+1) Planning Robustness Across Environments: Table 1 details planning success rates. While the DeCo* baseline heavily struggles with multi-step reasoning-severely degrading in demanding tasks like set_table—our framework maintains exceptional reliability (79%-94%). Explicitly grounding the Vision-Language Model within the Skill-State Graph effectively eliminates logical hallucinations, generating valid sequences regardless of the underlying low-level policy.
+1) 环境规划稳健性：表1详细列出了规划成功率。虽然DeCo*基线在多步推理方面表现吃力，在set_table等高难度任务中严重退化，但我们的框架保持了卓越的可靠性（79%-94%）。将视觉语言模型显式地锚定在技能-状态图中，有效地消除了逻辑幻觉，无论底层策略如何，都能生成有效的序列。
+
+
+2) Long-Horizon Execution Attrition and Bottlenecks: Despite robust planning, extended physical execution remains challenging. Table II tracks execution success at each sequential sub-phase across three Skill-State Graph configurations: RL_ALL, IL_ALL + RL_ALL, and RL_Per_Obj, perfectly aligning with the predefined policy settings in the mshab benchmark.
+2) 长程执行损耗与瓶颈：尽管规划稳健，但长程物理执行依然充满挑战。表II追踪了三种技能-状态图配置（RL_ALL、IL_ALL + RL_ALL和RL_Per_Obj）下每个连续子阶段的执行成功率，这些配置与mshab基准测试中的预设策略完全一致。
+
+
+Success rates drop significantly over 20-step horizons for all methods due to compounding errors. Notably, Mo-MaStage initially trails ground-truth (GT) sequencing, as early-stage performance is heavily bounded by initial planning success. However, open-loop GT degrades rapidly amidst physical anomalies, whereas MoMaStage's closed-loop replanning effectively recovers from execution failures, surpassing GT in mid-to-late phases.
+由于误差累积，所有方法在20步长程任务中的成功率均显著下降。值得注意的是，MoMaStage在初期落后于真值（GT）序列法，因为早期表现很大程度上受限于初始规划成功率。然而，开环GT在物理异常面前迅速退化，而MoMaStage的闭环重规划能有效从执行故障中恢复，在中后期阶段超越了GT。
+
+
+Comparing Skill-State Graphs reveals a design trade-off: RL_Per_Obj features robust, object-specific skills that increase cognitive burden, initially lowering planning success. Yet, its superior physical execution robustness compensates over time, outperforming generalized but physically brittle skill sets. This underscores the necessity of balancing skill vocabulary size with individual skill capabilities.
+对比技能-状态图揭示了一种设计权衡：RL_Per_Obj具有稳健的、针对特定对象的技能，这增加了认知负担，初期降低了规划成功率。然而，其卓越的物理执行稳健性随时间推移弥补了这一劣势，表现优于通用但物理脆弱的技能集。这强调了平衡技能词汇量与个体技能能力的重要性。
+
+
+3) Physical Limitations and Sim-to-Real Discrepancy: Even optimal GT sequencing approaches a 0% success rate, proving the primary bottleneck is not semantic reasoning, but simulated low-level physical errors. Although the reasoning engine detects anomalies and proposes semantic recoveries, the simulated policies repeatedly fail to execute them. Contrasting this with our successful real-world replanning highlights limitations in standard simulation benchmarks, validating our algorithmic planning robustness while emphasizing the need for physically compliant low-level skills.
+3) 物理局限性与虚实差异：即使是最优的GT序列法成功率也趋近于0%，证明主要瓶颈不在于语义推理，而在于仿真中的底层物理误差。尽管推理引擎能检测异常并提出语义恢复方案，但仿真策略在执行这些方案时反复失败。将此与我们成功的真实世界重规划对比，凸显了标准仿真基准的局限性，既验证了我们算法规划的稳健性，也强调了对物理兼容的底层技能的需求。
+
+
+## D. Ablation Study and Failure Analysis
+## D. 消融实验与故障分析
+
+
+TABLE III: Planning Performance and Computational Cost Comparison. Metrics are reported as Mean $\pm$ Standard Deviation across all trials.
+表III：规划性能与计算成本对比。指标报告为所有试验的均值 $\pm$ 标准差。
+
+
+<table><tr><td>Methods</td><td>Succ. (%) ↑</td><td>Time (s) $\downarrow$</td><td>Tokens $\downarrow$</td><td>Think. Tok. $\downarrow$</td></tr><tr><td>DeCo*</td><td>0.0±0.0</td><td>21.4 ±5.7</td><td>5814 ± 436</td><td>3853 ±581</td></tr><tr><td>MoMaStage*</td><td>100.0 $\pm  {0.0}$</td><td>24.6 ±4.2</td><td>9106 ±678</td><td>2927 ±421</td></tr><tr><td>MoMaStage</td><td>100.0 $\pm  {0.0}$</td><td>16.0 ±1.1</td><td>6633 ±218</td><td>2485 ±230</td></tr></table>
+<table><tbody><tr><td>方法</td><td>成功率 (%) ↑</td><td>时间 (s) $\downarrow$</td><td>Token 数 $\downarrow$</td><td>思考 Token 数 $\downarrow$</td></tr><tr><td>DeCo*</td><td>0.0±0.0</td><td>21.4 ±5.7</td><td>5814 ± 436</td><td>3853 ±581</td></tr><tr><td>MoMaStage*</td><td>100.0 $\pm  {0.0}$</td><td>24.6 ±4.2</td><td>9106 ±678</td><td>2927 ±421</td></tr><tr><td>MoMaStage</td><td>100.0 $\pm  {0.0}$</td><td>16.0 ±1.1</td><td>6633 ±218</td><td>2485 ±230</td></tr></tbody></table>
+
+
+TABLE IV: Failure Analysis
+表 IV：故障分析
+
+
+<table><tr><td>Scene</td><td>Graph</td><td>FLE(%)</td><td>TLE(%)</td><td>PTF(%)</td></tr><tr><td rowspan="3">Tidy_House</td><td>BC</td><td>83.7 ±2.5</td><td>16.3 ±2.5</td><td>0.0±0.0</td></tr><tr><td>RL</td><td>81.0 ±3.0</td><td>19.0 ±3.0</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>RL_Per_Obj</td><td>80.0 ±5.0</td><td>20.0 ±5.0</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td rowspan="3">Prepare_Groceries</td><td>BC</td><td>52.0 ±5.6</td><td>48.0 ±5.6</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>RL</td><td>59.3 ±4.5</td><td>40.7 ±4.5</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>RL_Per_Obj</td><td>52.3 ±5.0</td><td>47.7 ±5.0</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td rowspan="3">Set_Table</td><td>BC</td><td>72.7 ±3.5</td><td>27.3 ±3.5</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>RL</td><td>70.7 ±1.5</td><td>29.3 ±1.5</td><td>0.0 ±0.0</td></tr><tr><td>RL_Per_Obj</td><td>70.7 ±4.7</td><td>29.3 ±4.7</td><td>0.0±0.0</td></tr></table>
+<table><tbody><tr><td>场景</td><td>图</td><td>FLE(%)</td><td>TLE(%)</td><td>PTF(%)</td></tr><tr><td rowspan="3">整理房屋</td><td>行为克隆</td><td>83.7 ±2.5</td><td>16.3 ±2.5</td><td>0.0±0.0</td></tr><tr><td>强化学习</td><td>81.0 ±3.0</td><td>19.0 ±3.0</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>单物体强化学习</td><td>80.0 ±5.0</td><td>20.0 ±5.0</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td rowspan="3">准备杂货</td><td>行为克隆</td><td>52.0 ±5.6</td><td>48.0 ±5.6</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>强化学习</td><td>59.3 ±4.5</td><td>40.7 ±4.5</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>单物体强化学习</td><td>52.3 ±5.0</td><td>47.7 ±5.0</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td rowspan="3">布置餐桌</td><td>行为克隆</td><td>72.7 ±3.5</td><td>27.3 ±3.5</td><td>${0.0} \pm  {0.0}$</td></tr><tr><td>强化学习</td><td>70.7 ±1.5</td><td>29.3 ±1.5</td><td>0.0 ±0.0</td></tr><tr><td>单物体强化学习</td><td>70.7 ±4.7</td><td>29.3 ±4.7</td><td>0.0±0.0</td></tr></tbody></table>
+
+
+To evaluate planning efficiency using Gemini 2.5 Flash, Table III summarizes performance across four metrics. The baseline DeCo* completely fails (0% success) yet consumes excessive resources (averaging 3853 thinking tokens), indicating that without explicit topological constraints, the Vision-Language Model (VLM) wastes computational effort navigating invalid logical pathways.
+为评估使用 Gemini 2.5 Flash 的规划效率，表 III 总结了四项指标的表现。基准模型 DeCo* 完全失败（成功率为 0%）且消耗了过多资源（平均 3853 个思维 token），这表明若缺乏明确的拓扑约束，视觉语言模型（VLM）会将计算资源浪费在无效的逻辑路径上。
+
+
+Conversely, both MoMaStage variants achieve 100% planning success. However, MoMaStage* supplies the VLM with the entire, unpruned Skill-State Graph, introducing redundant complexity. By explicitly extracting a focused Skill Graph based on state-driven constraints, the standard MoMaStage architecture drastically improves efficiency over MoMaStage*, reducing inference time (24.6s to 16.0s), total tokens (9106 to 6633), and thinking tokens (2927 to 2485). This proves that guiding VLM reasoning via a structurally refined subgraph-rather than a monolithic state space-significantly alleviates cognitive load, maintaining perfect reliability while minimizing latency and API costs.
+相比之下，两种 MoMaStage 变体均实现了 100% 的规划成功率。然而，MoMaStage* 向 VLM 提供了未经剪枝的完整技能-状态图，引入了冗余的复杂性。通过基于状态驱动的约束显式提取精简的技能图，标准 MoMaStage 架构较 MoMaStage* 显著提升了效率，减少了推理时间（从 24.6 秒降至 16.0 秒）、总 token 数（从 9106 降至 6633）以及思维 token 数（从 2927 降至 2485）。这证明通过结构化精简的子图而非单一状态空间来引导 VLM 推理，能有效减轻认知负荷，在保持完美可靠性的同时最小化延迟与 API 成本。
+
+
+As detailed in Table 1, benchmarking generalization across diverse scenes and policies further highlights this advantage. While DeCo* struggles with multi-step reasoning, plateauing between 20% and 47% and degrading in complex tasks like set_table, MoMaStage maintains robust success rates across all configurations. Grounding VLM planning within the Skill-State Graph bridges semantic reasoning and embodied execution for dependable long-horizon completion.
+如表 1 所示，在不同场景和策略下对泛化能力的基准测试进一步凸显了这一优势。DeCo* 在多步推理上表现吃力，成功率停滞在 20% 至 47% 之间，且在 set_table 等复杂任务中性能下降，而 MoMaStage 在所有配置下均保持了稳健的成功率。将 VLM 规划锚定在技能-状态图中，架起了语义推理与具身执行之间的桥梁，确保了长程任务的可靠完成。
+
+
+To isolate high-level reasoning from low-level physical limitations, Table IV categorizes execution failures into three terminal modes: Force Limit Exceeded (FLE), Time Limit Exceeded (TLE), and Preceding Task Failed (PTF).
+为将高层推理与底层物理限制区分开来，表 IV 将执行失败归纳为三种终止模式：力限制超限（FLE）、时间限制超限（TLE）以及前序任务失败（PTF）。
+
+
+Crucially, the majority of execution failures are FLE, stemming directly from simulation anomalies like mesh clipping and physics engine calculation bugs during intense manipulation. Originating from fundamentally flawed simulated physical states rather than semantic errors, these are logically unrecoverable by the high-level policy.
+关键在于，大多数执行失败均为 FLE，直接源于复杂操作过程中网格碰撞和物理引擎计算错误等仿真异常。由于这些问题源于仿真物理状态的根本性缺陷而非语义错误，高层策略在逻辑上无法对其进行恢复。
+
+
+The remaining failures are TLE, occurring when a skill surpasses its time bound. Log analyses reveal this typically happens when objects drop or policies encounter Out-of-Distribution (OOD) states. For example, if an object slips during navigation without localized recovery primitives, the policy enters an infinite loop attempting to reach an unmanipulable target, causing a timeout.
+其余失败为 TLE，即技能执行超过了时间限制。日志分析显示，这通常发生在物体掉落或策略遇到分布外（OOD）状态时。例如，若物体在导航过程中滑落且缺乏局部恢复原语，策略会陷入试图到达不可操作目标的无限循环，从而导致超时。
+
+
+Finally, PTF remains consistently at 0.0% across all configurations, proving the system never inadvertently undoes completed subtasks. This strict monotonic progression validates the efficacy of our rigorous state verification and closed-loop topological grounding.
+最后，PTF 在所有配置中始终保持为 0.0%，证明系统从未意外撤销已完成的子任务。这种严格的单调进展验证了我们严谨的状态验证与闭环拓扑锚定机制的有效性。
+
+
+## V. CONCLUSION
+## V. 结论
+
+
+In this work, we present MoMaStage, a map-free, vision-language-driven framework for long-horizon indoor mobile manipulation. By introducing a state-grounded Skill-State Graph and a graph-constrained closed-loop execution mechanism, MoMaStage improves the logical validity and execution consistency of long-horizon skill chains for robust, real-time adaptation. Extensive real-world and simulated evaluations demonstrate that MoMaStage greatly reduces token costs, achieves substantially higher initial planning success, and significantly improves overall execution reliability, suggesting that explicitly modeling embodiment-state transitions is an effective way to bridge high-level semantic reasoning and long-horizon robot execution. Finally, as high-level reasoning is no longer the primary bottleneck, future work will focus on enhancing the physical dexterity of foundational action-level skills to bridge the gap between logical planning and robust physical embodiment.
+本文提出了 MoMaStage，这是一个用于长程室内移动操作的、无需地图且由视觉语言驱动的框架。通过引入状态锚定的技能-状态图和图约束闭环执行机制，MoMaStage 提升了长程技能链的逻辑有效性与执行一致性，实现了稳健的实时自适应。广泛的真实世界与仿真评估表明，MoMaStage 大幅降低了 token 成本，实现了更高的初始规划成功率，并显著提升了整体执行可靠性。这表明显式建模具身状态转换是连接高层语义推理与长程机器人执行的有效途径。最后，由于高层推理已不再是主要瓶颈，未来工作将聚焦于增强基础动作级技能的物理灵巧性，以弥合逻辑规划与稳健物理具身之间的鸿沟。
+
+
+## REFERENCES
+## 参考文献
+
+
+[1] S. Yenamandra, A. Ramachandran, K. Yadav, A. Wang, M. Khanna, T. Gervet, T.-Y. Yang, V. Jain, A. W. Clegg, J. Turner, et al., "Homerobot: Open-vocabulary mobile manipulation," arXiv preprint arXiv:2306.11565, 2023.
+[1] S. Yenamandra, A. Ramachandran, K. Yadav, A. Wang, M. Khanna, T. Gervet, T.-Y. Yang, V. Jain, A. W. Clegg, J. Turner, 等, "Homerobot: Open-vocabulary mobile manipulation," arXiv 预印本 arXiv:2306.11565, 2023.
+
+
+[2] J. Chen, H. Liang, L. Du, W. Wang, M. Hu, Y. Mu, W. Wang, J. Dai, P. Luo, W. Shao, et al., "Owmm-agent: Open world mobile manipulation with multi-modal agentic data synthesis," arXiv preprint arXiv:2506.04217, 2025.
+[2] J. Chen, H. Liang, L. Du, W. Wang, M. Hu, Y. Mu, W. Wang, J. Dai, P. Luo, W. Shao, 等, "Owmm-agent: Open world mobile manipulation with multi-modal agentic data synthesis," arXiv 预印本 arXiv:2506.04217, 2025.
+
+
+[3] T. Z. Zhao, V. Kumar, S. Levine, and C. Finn, "Learning fine-grained bimanual manipulation with low-cost hardware," arXiv preprint arXiv:2304.13705, 2023.
+[3] T. Z. Zhao, V. Kumar, S. Levine, 和 C. Finn, "Learning fine-grained bimanual manipulation with low-cost hardware," arXiv 预印本 arXiv:2304.13705, 2023.
+
+
+[4] C. Chi, Z. Xu, S. Feng, E. Cousineau, Y. Du, B. Burchfiel, R. Tedrake, and S. Song, "Diffusion policy: Visuomotor policy learning via action diffusion," The International Journal of Robotics Research, vol. 44, no. 10-11, pp. 1684-1704, 2025.
+[4] C. Chi, Z. Xu, S. Feng, E. Cousineau, Y. Du, B. Burchfiel, R. Tedrake, 和 S. Song, "Diffusion policy: Visuomotor policy learning via action diffusion," The International Journal of Robotics Research, 卷 44, 期 10-11, 页 1684-1704, 2025.
+
+
+[5] Y. Ze, G. Zhang, K. Zhang, C. Hu, M. Wang, and H. Xu, "3d diffusion policy: Generalizable visuomotor policy learning via simple 3d representations," arXiv preprint arXiv:2403.03954, 2024.
+[5] Y. Ze, G. Zhang, K. Zhang, C. Hu, M. Wang, and H. Xu, "3D扩散策略：通过简单3D表示实现可泛化的视觉运动策略学习," arXiv预印本 arXiv:2403.03954, 2024.
+
+
+[6] A. Brohan, N. Brown, J. Carbajal, Y. Chebotar, J. Dabis, C. Finn, K. Gopalakrishnan, K. Hausman, A. Herzog, J. Hsu, et al., "Rt-1: Robotics transformer for real-world control at scale," arXiv preprint arXiv:2212.06817, 2022.
+[6] A. Brohan, N. Brown, J. Carbajal, Y. Chebotar, J. Dabis, C. Finn, K. Gopalakrishnan, K. Hausman, A. Herzog, J. Hsu, 等, "RT-1：用于大规模现实世界控制的机器人Transformer," arXiv预印本 arXiv:2212.06817, 2022.
+
+
+[7] O. M. Team, D. Ghosh, H. Walke, K. Pertsch, K. Black, O. Mees, S. Dasari, J. Hejna, T. Kreiman, C. Xu, et al., "Octo: An open-source generalist robot policy," arXiv preprint arXiv:2405.12213, 2024.
+[7] O. M. Team, D. Ghosh, H. Walke, K. Pertsch, K. Black, O. Mees, S. Dasari, J. Hejna, T. Kreiman, C. Xu, 等, "Octo：一种开源通用机器人策略," arXiv预印本 arXiv:2405.12213, 2024.
+
+
+[8] C. R. Garrett, R. Chitnis, R. Holladay, B. Kim, T. Silver, L. P. Kael-bling, and T. Lozano-Pérez, "Integrated task and motion planning," Annual review of control, robotics, and autonomous systems, vol. 4, no. 1, pp. 265-293, 2021.
+[8] C. R. Garrett, R. Chitnis, R. Holladay, B. Kim, T. Silver, L. P. Kael-bling, and T. Lozano-Pérez, "集成任务与运动规划," 控制、机器人与自主系统年度评论, 第4卷, 第1期, 第265-293页, 2021.
+
+
+[9] K. Rana, J. Haviland, S. Garg, J. Abou-Chakra, I. Reid, and N. Suenderhauf, "Sayplan: Grounding large language models using 3d scene graphs for scalable robot task planning," arXiv preprint arXiv:2307.06135, 2023.
+[9] K. Rana, J. Haviland, S. Garg, J. Abou-Chakra, I. Reid, and N. Suenderhauf, "SayPlan：利用3D场景图实现可扩展机器人任务规划的大语言模型落地," arXiv预印本 arXiv:2307.06135, 2023.
+
+
+[10] D. Ekpo, M. Levy, S. Suri, C. Huynh, and A. Shrivastava, "Verigraph: Scene graphs for execution verifiable robot planning," arXiv preprint arXiv:2411.10446, 2024.
+[10] D. Ekpo, M. Levy, S. Suri, C. Huynh, and A. Shrivastava, "VeriGraph：用于执行可验证机器人规划的场景图," arXiv预印本 arXiv:2411.10446, 2024.
+
+
+[11] H. Ye, Y. Xiao, C. Lu, and P. Cai, "Uniplan: Vision-language task planning for mobile manipulation with unified pddl formulation," arXiv preprint arXiv:2602.08537, 2026.
+[11] H. Ye, Y. Xiao, C. Lu, and P. Cai, "UniPlan：基于统一PDDL公式的移动操作视觉语言任务规划," arXiv预印本 arXiv:2602.08537, 2026.
+
+
+[12] A. Brohan, N. Brown, J. Carbajal, Y. Chebotar, X. Chen, K. Choro-manski, T. Ding, D. Driess, A. Dubey, C. Finn, et al., "Rt-2: Vision-language-action models transfer web knowledge to robotic control, 2023," URL https://arxiv.org/abs/2307.15818, vol. 1, p. 2, 2024.
+[12] A. Brohan, N. Brown, J. Carbajal, Y. Chebotar, X. Chen, K. Choro-manski, T. Ding, D. Driess, A. Dubey, C. Finn, 等, "RT-2：将网络知识迁移至机器人控制的视觉-语言-动作模型, 2023," URL https://arxiv.org/abs/2307.15818, 第1卷, 第2页, 2024.
+
+
+[13] D. Driess, F. Xia, M. S. Sajjadi, C. Lynch, A. Chowdhery, B. Ichter, A. Wahid, J. Tompson, Q. Vuong, T. Yu, et al., "Palm-e: An embodied multimodal language model," arXiv preprint arXiv:2303.03378, 2023.
+[13] D. Driess, F. Xia, M. S. Sajjadi, C. Lynch, A. Chowdhery, B. Ichter, A. Wahid, J. Tompson, Q. Vuong, T. Yu, 等, "PaLM-E：一种具身多模态语言模型," arXiv预印本 arXiv:2303.03378, 2023.
+
+
+[14] M. J. Kim, K. Pertsch, S. Karamcheti, T. Xiao, A. Balakrishna, S. Nair, R. Rafailov, E. Foster, G. Lam, P. Sanketi, et al., "Open-vla: An open-source vision-language-action model," arXiv preprint arXiv:2406.09246, 2024.
+[14] M. J. Kim, K. Pertsch, S. Karamcheti, T. Xiao, A. Balakrishna, S. Nair, R. Rafailov, E. Foster, G. Lam, P. Sanketi, 等, "Open-VLA：一种开源视觉-语言-动作模型," arXiv预印本 arXiv:2406.09246, 2024.
+
+
+[15] M. Ahn, A. Brohan, N. Brown, Y. Chebotar, O. Cortes, B. David, C. Finn, C. Fu, K. Gopalakrishnan, K. Hausman, et al., "Do as i can, not as i say: Grounding language in robotic affordances," arXiv preprint arXiv:2204.01691, 2022.
+[15] M. Ahn, A. Brohan, N. Brown, Y. Chebotar, O. Cortes, B. David, C. Finn, C. Fu, K. Gopalakrishnan, K. Hausman, 等, "言出必行：将语言落地于机器人可供性," arXiv预印本 arXiv:2204.01691, 2022.
+
+
+[16] W. Huang, F. Xia, T. Xiao, H. Chan, J. Liang, P. Florence, A. Zeng, J. Tompson, I. Mordatch, Y. Chebotar, et al., "Inner monologue: Embodied reasoning through planning with language models," arXiv preprint arXiv:2207.05608, 2022.
+[16] W. Huang, F. Xia, T. Xiao, H. Chan, J. Liang, P. Florence, A. Zeng, J. Tompson, I. Mordatch, Y. Chebotar, 等, "内心独白：通过语言模型规划实现具身推理," arXiv预印本 arXiv:2207.05608, 2022.
+
+
+[17] B. Liu, Y. Jiang, X. Zhang, Q. Liu, S. Zhang, J. Biswas, and P. Stone, "Llm+ p: Empowering large language models with optimal planning proficiency," arXiv preprint arXiv:2304.11477, 2023.
+[17] B. Liu, Y. Jiang, X. Zhang, Q. Liu, S. Zhang, J. Biswas, and P. Stone, "Llm+ p: 通过最优规划能力赋能大语言模型," arXiv 预印本 arXiv:2304.11477, 2023.
+
+
+[18] M. Skreta, Z. Zhou, J. L. Yuan, K. Darvish, A. Aspuru-Guzik, and A. Garg, "Replan: Robotic replanning with perception and language models," arXiv preprint arXiv:2401.04157, 2024.
+[18] M. Skreta, Z. Zhou, J. L. Yuan, K. Darvish, A. Aspuru-Guzik, and A. Garg, "Replan: 基于感知与语言模型的机器人重规划," arXiv 预印本 arXiv:2401.04157, 2024.
+
+
+[19] Z. Chen, J. Yin, Y. Chen, J. Huo, P. Tian, J. Shi, Y. Hou, Y. Li, and Y. Gao, "Deco: Task decomposition and skill composition for zero-shot generalization in long-horizon 3d manipulation," IEEE Robotics and Automation Letters, 2026.
+[19] Z. Chen, J. Yin, Y. Chen, J. Huo, P. Tian, J. Shi, Y. Hou, Y. Li, and Y. Gao, "Deco: 用于长程 3D 操作零样本泛化的任务分解与技能组合," IEEE 机器人与自动化快报, 2026.
+
+
+[20] B. Han, J. Kim, and J. Jang, "A dual process vla: Efficient robotic manipulation leveraging vlm," arXiv preprint arXiv:2410.15549, 2024.
+[20] B. Han, J. Kim, and J. Jang, "双过程 VLA：利用 VLM 实现高效机器人操作," arXiv 预印本 arXiv:2410.15549, 2024.
+
+
+[21] J. Duan, W. Pumacay, N. Kumar, Y. R. Wang, S. Tian, W. Yuan, R. Krishna, D. Fox, A. Mandlekar, and Y. Guo, "Aha: A vision-language-model for detecting and reasoning over failures in robotic manipulation," arXiv preprint arXiv:2410.00371, 2024.
+[21] J. Duan, W. Pumacay, N. Kumar, Y. R. Wang, S. Tian, W. Yuan, R. Krishna, D. Fox, A. Mandlekar, and Y. Guo, "Aha: 用于检测并推理机器人操作故障的视觉语言模型," arXiv 预印本 arXiv:2410.00371, 2024.
+
+
+[22] E. Zhou, Q. Su, C. Chi, Z. Zhang, Z. Wang, T. Huang, L. Sheng, and H. Wang, "Code-as-monitor: Constraint-aware visual programming for reactive and proactive robotic failure detection," in Proceedings of the Computer Vision and Pattern Recognition Conference, 2025, pp. 6919- 6929.
+[22] E. Zhou, Q. Su, C. Chi, Z. Zhang, Z. Wang, T. Huang, L. Sheng, and H. Wang, "代码即监控：用于反应式与主动式机器人故障检测的约束感知视觉编程," 载于计算机视觉与模式识别会议论文集, 2025, pp. 6919- 6929.
+
+
+[23] S. Srivastava, C. Li, M. Lingelbach, R. Martín-Martín, F. Xia, K. E. Vainio, Z. Lian, C. Gokmen, S. Buch, K. Liu, et al., "Behavior: Benchmark for everyday household activities in virtual, interactive, and ecological environments," in Conference on robot learning. PMLR, 2022, pp. 477-490.
+[23] S. Srivastava, C. Li, M. Lingelbach, R. Martín-Martín, F. Xia, K. E. Vainio, Z. Lian, C. Gokmen, S. Buch, K. Liu, et al., "Behavior: 虚拟、交互式及生态环境下的日常家居活动基准," 载于机器人学习会议. PMLR, 2022, pp. 477-490.
+
+
+[24] Z. Fu, T. Z. Zhao, and C. Finn, "Mobile aloha: Learning bimanual mobile manipulation with low-cost whole-body teleoperation," arXiv preprint arXiv:2401.02117, 2024.
+[24] Z. Fu, T. Z. Zhao, and C. Finn, "Mobile Aloha: 学习基于低成本全身遥操作的双臂移动操作," arXiv 预印本 arXiv:2401.02117, 2024.
+
+
+[25] P. Liu, Y. Orru, J. Vakil, C. Paxton, N. M. M. Shafiullah, and L. Pinto, "Ok-robot: What really matters in integrating open-knowledge models for robotics," arXiv preprint arXiv:2401.12202, 2024.
+[25] P. Liu, Y. Orru, J. Vakil, C. Paxton, N. M. M. Shafiullah, and L. Pinto, "Ok-robot: 将开放知识模型集成至机器人技术中的关键要素," arXiv 预印本 arXiv:2401.12202, 2024.
+
+
+[26] Y. Zhu et al., "Vima: General robot manipulation with multimodal prompts," in International Conference on Learning Representations (ICLR), 2023.
+[26] Y. Zhu et al., "Vima: 基于多模态提示的通用机器人操作," 载于国际学习表征会议 (ICLR), 2023.
+
+
+[27] H. Bharadhwaj, J. Vakil, M. Sharma, A. Gupta, S. Tulsiani, and V. Kumar, "Roboagent: Generalization and efficiency in robot manipulation via semantic augmentations and action chunking," in 2024 IEEE International Conference on Robotics and Automation (ICRA). IEEE, 2024, pp. 4788-4795.
+[27] H. Bharadhwaj, J. Vakil, M. Sharma, A. Gupta, S. Tulsiani, and V. Kumar, "Roboagent: 通过语义增强与动作分块实现机器人操作的泛化与高效," 载于 2024 IEEE 国际机器人与自动化会议 (ICRA). IEEE, 2024, pp. 4788-4795.
+
+
+[28] P. Florence, C. Lynch, A. Zeng, O. A. Ramirez, A. Wahid, L. Downs, A. Wong, J. Lee, I. Mordatch, and J. Tompson, "Implicit behavioral cloning," in Conference on robot learning. PMLR, 2022, pp. 158- 168.
+[28] P. Florence, C. Lynch, A. Zeng, O. A. Ramirez, A. Wahid, L. Downs, A. Wong, J. Lee, I. Mordatch, and J. Tompson, "隐式行为克隆," 载于机器人学习会议. PMLR, 2022, pp. 158- 168.
+
+
+[29] N. M. Shafiullah, Z. Cui, A. A. Altanzaya, and L. Pinto, "Behavior transformers: Cloning $k$ modes with one stone," Advances in neural information processing systems, vol. 35, pp. 22955-22968, 2022.
+[29] N. M. Shafiullah, Z. Cui, A. A. Altanzaya, and L. Pinto, "行为 Transformer：一石二鸟克隆 $k$ 模式," 神经信息处理系统进展, 卷 35, pp. 22955-22968, 2022.
+
+
+[30] C. Chi, Z. Xu, C. Pan, E. Cousineau, B. Burchfiel, S. Feng, R. Tedrake, and S. Song, "Universal manipulation interface: In-the-wild robot teaching without in-the-wild robots," arXiv preprint arXiv:2402.10329, 2024.
+[30] C. Chi, Z. Xu, C. Pan, E. Cousineau, B. Burchfiel, S. Feng, R. Tedrake, and S. Song, "通用操作接口：无需野外机器人的野外机器人示教," arXiv 预印本 arXiv:2402.10329, 2024.
+
+
+[31] K. Pertsch, Y. Lee, and J. Lim, "Accelerating reinforcement learning with learned skill priors," in Conference on robot learning. PMLR, 2021, pp. 188-204.
+[31] K. Pertsch, Y. Lee, and J. Lim, "通过学习到的技能先验加速强化学习," 载于 机器人学习会议 (Conference on Robot Learning). PMLR, 2021, pp. 188-204.
+
+
+[32] W. Yu, N. Gileadi, C. Fu, S. Kirmani, K.-H. Lee, M. G. Arenas, H.- T. L. Chiang, T. Erez, L. Hasenclever, J. Humplik, et al., "Language to rewards for robotic skill synthesis," arXiv preprint arXiv:2306.08647, 2023.
+[32] W. Yu, N. Gileadi, C. Fu, S. Kirmani, K.-H. Lee, M. G. Arenas, H.- T. L. Chiang, T. Erez, L. Hasenclever, J. Humplik, 等, "用于机器人技能合成的语言奖励," arXiv 预印本 arXiv:2306.08647, 2023.
+
+
+[33] Y. J. Ma, W. Liang, G. Wang, D.-A. Huang, O. Bastani, D. Ja-yaraman, Y. Zhu, L. Fan, and A. Anandkumar, "Eureka: Human-level reward design via coding large language models," arXiv preprint arXiv:2310.12931, 2023.
+[33] Y. J. Ma, W. Liang, G. Wang, D.-A. Huang, O. Bastani, D. Ja-yaraman, Y. Zhu, L. Fan, and A. Anandkumar, "Eureka: 通过编码大语言模型实现人类水平的奖励设计," arXiv 预印本 arXiv:2310.12931, 2023.
+
+
+[34] J. Liang, W. Huang, F. Xia, P. Xu, K. Hausman, B. Ichter, P. Florence, and A. Zeng, "Code as policies: Language model programs for embodied control," in 2023 IEEE International conference on robotics and automation (ICRA). IEEE, 2023, pp. 9493-9500.
+[34] J. Liang, W. Huang, F. Xia, P. Xu, K. Hausman, B. Ichter, P. Florence, and A. Zeng, "代码即策略：用于具身控制的语言模型程序," 载于 2023 IEEE 国际机器人与自动化会议 (ICRA). IEEE, 2023, pp. 9493-9500.
+
+
+[35] I. Singh, V. Blukis, A. Mousavian, A. Goyal, D. Xu, J. Tremblay, D. Fox, J. Thomason, and A. Garg, "Progprompt: Generating situated robot task plans using large language models," arXiv preprint arXiv:2209.11302, 2022.
+[35] I. Singh, V. Blukis, A. Mousavian, A. Goyal, D. Xu, J. Tremblay, D. Fox, J. Thomason, and A. Garg, "Progprompt: 使用大语言模型生成情境化机器人任务规划," arXiv 预印本 arXiv:2209.11302, 2022.
+
+
+[36] W. Huang, C. Wang, R. Zhang, Y. Li, J. Wu, and L. Fei-Fei, "Voxposer: Composable 3d value maps for robotic manipulation with language models," arXiv preprint arXiv:2307.05973, 2023.
+[36] W. Huang, C. Wang, R. Zhang, Y. Li, J. Wu, and L. Fei-Fei, "Voxposer: 用于机器人操作的语言模型可组合 3D 值地图," arXiv 预印本 arXiv:2307.05973, 2023.
+
+
+[37] S. Yao, J. Zhao, D. Yu, N. Du, I. Shafran, K. R. Narasimhan, and Y. Cao, "React: Synergizing reasoning and acting in language models," in The eleventh international conference on learning representations, 2022.
+[37] S. Yao, J. Zhao, D. Yu, N. Du, I. Shafran, K. R. Narasimhan, and Y. Cao, "React: 在语言模型中协同推理与行动," 载于 第十一届国际学习表征会议, 2022.
+
+
+[38] Z. Ni, X. Deng, C. Tai, X. Zhu, Q. Xie, W. Huang, X. Wu, and L. Zeng, "Grid: Scene-graph-based instruction-driven robotic task planning," in 2024 IEEE/RSJ Inetrnational Conference on Intelligent Robots and Systems (IROS). IEEE, 2024, pp. 13765-13772.
+[38] Z. Ni, X. Deng, C. Tai, X. Zhu, Q. Xie, W. Huang, X. Wu, and L. Zeng, "Grid: 基于场景图的指令驱动机器人任务规划," 载于 2024 IEEE/RSJ 国际智能机器人与系统会议 (IROS). IEEE, 2024, pp. 13765-13772.
+
+
+[39] N. Shinn, F. Cassano, A. Gopinath, K. Narasimhan, and S. Yao, "Reflexion: Language agents with verbal reinforcement learning," Advances in neural information processing systems, vol. 36, pp. 8634- 8652, 2023.
+[39] N. Shinn, F. Cassano, A. Gopinath, K. Narasimhan, and S. Yao, "Reflexion: 具有语言强化学习的语言智能体," 神经信息处理系统进展, 卷 36, pp. 8634- 8652, 2023.
+
+
+[40] A. Z. Ren, A. Dixit, A. Bodrova, S. Singh, S. Tu, N. Brown, P. Xu, L. Takayama, F. Xia, J. Varley, et al., "Robots that ask for help: Uncertainty alignment for large language model planners," arXiv preprint arXiv:2307.01928, 2023.
+[40] A. Z. Ren, A. Dixit, A. Bodrova, S. Singh, S. Tu, N. Brown, P. Xu, L. Takayama, F. Xia, J. Varley, 等, "寻求帮助的机器人：大语言模型规划器的不确定性对齐," arXiv 预印本 arXiv:2307.01928, 2023.
+
+
+[41] A. Shukla, S. Tao, and H. Su, "Maniskill-hab: A benchmark for low-level manipulation in home rearrangement tasks," arXiv preprint arXiv:2412.13211, 2024.
+[41] A. Shukla, S. Tao, and H. Su, "Maniskill-hab: 家庭重排任务中低级操作的基准测试," arXiv 预印本 arXiv:2412.13211, 2024.
+
+
+[42] T. Haarnoja, A. Zhou, P. Abbeel, and S. Levine, "Soft actor-critic: Off-policy maximum entropy deep reinforcement learning with a stochastic actor," in International conference on machine learning. Pmlr, 2018, pp. 1861-1870.
+[42] T. Haarnoja, A. Zhou, P. Abbeel, and S. Levine, "Soft actor-critic: 具有随机执行器的离策略最大熵深度强化学习," 载于 国际机器学习会议. Pmlr, 2018, pp. 1861-1870.
+
+
+[43] M. Bain and C. Sammut, "A framework for behavioural cloning." in Machine intelligence 15, 1995, pp. 103-129.
+[43] M. Bain and C. Sammut, "行为克隆框架," 载于 机器智能 15, 1995, pp. 103-129.
+
+
+[44] J. Schulman, F. Wolski, P. Dhariwal, A. Radford, and O. Klimov, "Proximal policy optimization algorithms," arXiv preprint arXiv:1707.06347, 2017.
+[44] J. Schulman, F. Wolski, P. Dhariwal, A. Radford, and O. Klimov, "近端策略优化算法," arXiv 预印本 arXiv:1707.06347, 2017.

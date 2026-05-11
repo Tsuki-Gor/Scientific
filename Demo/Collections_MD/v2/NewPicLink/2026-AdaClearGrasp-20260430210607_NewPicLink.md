@@ -1,0 +1,848 @@
+# AdaClearGrasp: Learning Adaptive Clearing for Zero-Shot Robust Dexterous Grasping in Densely Cluttered Environments
+# AdaClearGrasp：面向高密度杂乱环境中零样本鲁棒灵巧抓取的自适应清理学习
+
+
+Zixuan Chen ${}^{1 * }$ , Wenquan Zhang ${}^{1 * }$ , Jing Fang ${}^{2}$ , Ruiming Zeng ${}^{1}$ , Zhixuan Xu ${}^{3}$ , Yiwen Hou ${}^{3}$ , Xinke Wang ${}^{1}$ , Jieqi Shi ${}^{1}$ , Jing Huo ${}^{1}$ , Yang Gao ${}^{1}$
+Zixuan Chen ${}^{1 * }$ , Wenquan Zhang ${}^{1 * }$ , Jing Fang ${}^{2}$ , Ruiming Zeng ${}^{1}$ , Zhixuan Xu ${}^{3}$ , Yiwen Hou ${}^{3}$ , Xinke Wang ${}^{1}$ , Jieqi Shi ${}^{1}$ , Jing Huo ${}^{1}$ , Yang Gao ${}^{1}$
+
+
+Abstract- In densely cluttered environments, physical interference, visual occlusions, and unstable contacts often cause direct dexterous grasping to fail, while aggressive singulation strategies may compromise safety. Enabling robots to adaptively decide whether to clear surrounding objects or directly grasp the target is therefore crucial for robust manipulation. We propose AdaClearGrasp, a closed-loop decision-execution framework for adaptive clearing and zero-shot dexterous grasping in densely cluttered environments. The framework formulates manipulation as a controllable high-level decision process that determines whether to directly grasp the target or first clear surrounding objects. A pretrained vision-language model (VLM) interprets visual observations and language task descriptions to reason about grasp interference and generate a high-level planning skeleton, which invokes structured atomic skills through a unified action interface. For dexterous grasping, we train a reinforcement learning policy with a relative hand-object distance representation, enabling zero-shot generalization across diverse object geometries and physical properties. During execution, visual feedback monitors outcomes and triggers replanning upon failures, forming a closed-loop correction mechanism. To evaluate language-conditioned dexterous grasping in clutter, we introduce Clutter-Bench, the first simulation benchmark with graded clutter complexity. It includes seven target objects across three clutter levels, yielding 210 task scenarios. We further perform sim-to-real experiments on three objects under three clutter levels (18 scenarios). Results demonstrate that AdaClearGrasp significantly improves grasp success rates in densely cluttered environments. For more videos and code, please visit our project website: https://chenzixuan99.github.io/adaclear-grasp.github.io/
+摘要——在高密度杂乱环境中，物理干扰、视觉遮挡和不稳定的接触往往导致直接灵巧抓取失败，而激进的单体化策略可能会损害安全性。因此，使机器人能够自适应地决定是清理周围物体还是直接抓取目标，对于鲁棒操作至关重要。我们提出了 AdaClearGrasp，这是一个用于高密度杂乱环境中自适应清理和零样本灵巧抓取的闭环决策执行框架。该框架将操作建模为一个可控的高层决策过程，用于确定是直接抓取目标还是先清理周围物体。预训练的视觉语言模型（VLM）通过解读视觉观测和语言任务描述来推理抓取干扰，并生成高层规划骨架，通过统一的动作接口调用结构化的原子技能。在灵巧抓取方面，我们训练了一种基于手-物相对距离表示的强化学习策略，实现了跨不同物体几何形状和物理属性的零样本泛化。在执行过程中，视觉反馈会监控结果并在失败时触发重规划，从而形成闭环校正机制。为了评估杂乱环境下的语言条件灵巧抓取，我们引入了 Clutter-Bench，这是首个具有分级杂乱复杂度的仿真基准。它包含三个杂乱等级下的七个目标物体，共计 210 个任务场景。我们进一步在三个杂乱等级下的三个物体上进行了仿真到现实（sim-to-real）的实验（18 个场景）。结果表明，AdaClearGrasp 显著提高了高密度杂乱环境下的抓取成功率。如需更多视频和代码，请访问我们的项目网站：https://chenzixuan99.github.io/adaclear-grasp.github.io/
+
+
+## I. INTRODUCTION
+## I. 引言
+
+
+Deploying robotic manipulation systems in real-world environments requires robust dexterous grasping in densely cluttered scenes [1], [2], [3]. For instance, in kitchen organization tasks, a robot may need to retrieve a target object from tightly packed cups, plates, and utensils. In such environments, target objects are often surrounded by other items, causing physical interference, visual occlusions, and unstable contacts that make direct grasping unreliable. Prior work shows that effective manipulation in clutter often requires interacting with surrounding objects, such as pushing, singulating, or rearranging them, to expose the target [4], [5], [6], [7]. While removing nearby objects can mitigate these issues, excessive clearing may introduce unnecessary interactions and increase the risk of damaging surrounding items. Therefore, robust dexterous manipulation in clutter requires not only precise low-level control but also high-level decision-making to determine when and how to perform clearing before grasping.
+在现实环境中部署机器人操作系统，需要在高密度杂乱场景中实现鲁棒的灵巧抓取 [1], [2], [3]。例如，在厨房整理任务中，机器人可能需要从紧密堆放的杯子、盘子和餐具中取出目标物体。在此类环境中，目标物体往往被其他物品包围，导致物理干扰、视觉遮挡和不稳定接触，使得直接抓取变得不可靠。现有研究表明，在杂乱环境中进行有效操作，通常需要与周围物体进行交互（如推、单体化或重新排列），以露出目标 [4], [5], [6], [7]。虽然移除附近的物体可以缓解这些问题，但过度的清理可能会引入不必要的交互，并增加损坏周围物品的风险。因此，杂乱环境下的鲁棒灵巧操作不仅需要精确的底层控制，还需要高层决策来确定何时以及如何进行清理，然后再进行抓取。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_05_13_cd7527.jpg"/>
+
+
+
+Fig. 1. We propose AdaClearGrasp, a closed-loop system that leverages VLM-based reasoning to perform adaptive clearing for robust dexterous grasping of target objects in densely cluttered scenes.
+图 1. 我们提出了 AdaClearGrasp，这是一个闭环系统，利用基于 VLM 的推理进行自适应清理，从而在高密度杂乱场景中实现目标物体的鲁棒灵巧抓取。
+
+
+Most existing dexterous grasping methods assume relatively isolated targets or rely on end-to-end reinforcement learning (RL) policies that map perception directly to control. Recent work has explored unified representations for dexterous grasping and cross-embodiment manipulation [8], [9]. ClutterDexGrasp [10] further extends RL to cluttered scenes using a teacher-student framework with clutter-density curricula, enabling implicit behaviors such as obstacle nudging. While effective for general grasping, these methods largely treat manipulation as a low-level control problem and rely on emergent strategies that struggle in dense clutter where long-horizon reasoning and adaptive interactions are required. In addition, pure RL approaches are often sample-inefficient and sensitive to scene variations.
+大多数现有的灵巧抓取方法假设目标相对孤立，或者依赖于将感知直接映射到控制的端到端强化学习（RL）策略。近期研究探索了用于灵巧抓取和跨具身操作的统一表示 [8], [9]。ClutterDexGrasp [10] 进一步利用带有杂乱密度课程的教师-学生框架将 RL 扩展到杂乱场景，实现了诸如障碍物轻推等隐式行为。尽管这些方法对一般抓取有效，但它们主要将操作视为底层控制问题，并依赖于在需要长程推理和自适应交互的高密度杂乱场景中表现不佳的涌现策略。此外，纯 RL 方法通常样本效率较低，且对场景变化敏感。
+
+
+Recent advances in vision-language models (VLMs) have demonstrated strong capabilities in semantic understanding and high-level reasoning for robotic manipulation [11], [12], [13], [14], [15], [16]. VLMs have also been applied to guide low-level dexterous control. For example, [17] provides coarse task-level guidance, while [18] generates executable actions and replans after failures. However, these approaches have limitations. The former handles only a single object and uses open-loop execution, while the latter offers limited feedback and is not designed for densely cluttered scenes. In such scenarios, deciding whether and how to clear surrounding objects is a multi-constraint problem involving visibility, kinematic reachability, and interaction safety, which must be tightly coupled with low-level control. Open-loop reasoning or simple task-level replanning often fails to satisfy these constraints reliably.
+视觉语言模型（VLM）的最新进展在机器人操作的语义理解和高层推理方面展现出强大能力 [11], [12], [13], [14], [15], [16]。VLM 也已被应用于指导底层灵巧控制。例如，[17] 提供了粗粒度的任务级指导，而 [18] 则生成可执行动作并在失败后进行重规划。然而，这些方法存在局限性。前者仅处理单个物体且采用开环执行，而后者反馈有限，且并非为高密度杂乱场景设计。在此类场景中，决定是否以及如何清理周围物体是一个涉及可见性、运动学可达性和交互安全性的多约束问题，必须与底层控制紧密耦合。开环推理或简单的任务级重规划往往难以可靠地满足这些约束。
+
+
+---
+
+
+
+*Equal Contribution
+*同等贡献
+
+
+${}^{1}$ Nanjing University, ${}^{2}$ Nanjing University of Posts and Telecommunications, ${}^{3}$ National University of Singapore
+${}^{1}$ 南京大学，${}^{2}$ 南京邮电大学，${}^{3}$ 新加坡国立大学
+
+
+---
+
+
+
+Therefore, a practical system in densely cluttered environments must continuously incorporate environmental feedback and adapt strategies during execution to ensure robust performance. To this end, we propose AdaClearGrasp, a closed-loop framework that integrates hierarchical VLM reasoning with dexterous manipulation policies to enable adaptive clearing for zero-shot robust grasping. As shown in Fig. 1 AdaClearGrasp uses a VLM-based planner to reason about graspability and occlusion by jointly analyzing visual observations and language instructions, determining whether surrounding objects obstruct the target grasp and whether clearing is required. When interference is detected, the planner generates high-level action sequences that invoke parameterized atomic clearing skills to rearrange nearby objects. Once the target becomes accessible, the system executes a RL-based dexterous grasping policy, GeoGrasp. The policy leverages geometric relations between the hand and object, represented by nearest-neighbor vectors from hand links to the object point cloud. This geometry-aware representation enables robust dynamic grasping and facilitates zero-shot generalization to unseen object geometries and physical properties. During execution, AdaClearGrasp maintains a closed-loop mechanism that monitors progress through visual feedback and triggers replanning or recovery upon failures. Through structured action interfaces and failure feedback, high-level decisions are continuously corrected, improving robustness under real-world contact uncertainties. This integration of semantic reasoning and dexterous control enables reliable long-horizon manipulation in cluttered environments.
+因此，高密度杂乱环境下的实用系统必须在执行过程中持续整合环境反馈并调整策略，以确保鲁棒性。为此，我们提出了 AdaClearGrasp，这是一个将分层 VLM 推理与灵巧操作策略相结合的闭环框架，旨在实现零样本鲁棒抓取的自适应清理。如图 1 所示，AdaClearGrasp 利用基于 VLM 的规划器，通过联合分析视觉观测和语言指令来推理抓取可行性与遮挡情况，从而确定周围物体是否阻碍了目标抓取以及是否需要清理。当检测到干扰时，规划器会生成高层动作序列，调用参数化的原子清理技能来重排周边物体。一旦目标变得可触及，系统便执行基于强化学习（RL）的灵巧抓取策略 GeoGrasp。该策略利用手部与物体之间的几何关系，即通过从手部连杆到物体点云的最近邻向量来表示。这种几何感知表示实现了鲁棒的动态抓取，并促进了对未见物体几何形状和物理属性的零样本泛化。在执行过程中，AdaClearGrasp 维持一种闭环机制，通过视觉反馈监控进度，并在失败时触发重规划或恢复。通过结构化的动作接口和失败反馈，高层决策得以持续修正，从而提高了在现实世界接触不确定性下的鲁棒性。这种语义推理与灵巧控制的结合，实现了杂乱环境下可靠的长程操作。
+
+
+To systematically evaluate language-conditioned dexterous grasping in clutter, we introduce Clutter-Bench, a graded benchmark built on ManiSkill3 [19]. The benchmark includes seven target object categories from simple geometric shapes to complex household items and defines three difficulty levels based on the number of obstacles (2, 4, and 6 objects). By providing natural language task specifications and reproducible scene configurations, Clutter-Bench establishes a standardized protocol for evaluating methods under increasingly challenging clutter conditions.
+为了系统地评估杂乱环境下的语言条件灵巧抓取，我们引入了 Clutter-Bench，这是一个基于 ManiSkill3 [19] 构建的分级基准测试。该基准包含从简单几何形状到复杂家居用品的七类目标物体，并根据障碍物数量（2、4 和 6 个物体）定义了三个难度等级。通过提供自然语言任务规范和可复现的场景配置，Clutter-Bench 为评估不同杂乱程度下的方法建立了一套标准化协议。
+
+
+In summary, our contributions are threefold:
+总之，我们的贡献有三点：
+
+
+- We propose AdaClearGrasp, a closed-loop framework that models clutter clearing as adaptive high-level planning. It integrates VLM-based semantic reasoning with structured skill invocation and failure feedback, translating high-level decisions into executable atomic actions for robust zero-shot target grasping in clutter.
+- 我们提出了 AdaClearGrasp，这是一个将杂乱清理建模为自适应高层规划的闭环框架。它将基于 VLM 的语义推理与结构化技能调用及失败反馈相结合，将高层决策转化为可执行的原子动作，从而在杂乱环境中实现鲁棒的零样本目标抓取。
+
+
+- We introduce GeoGrasp, an object-agnostic RL-based dexterous grasping policy based on relative hand-object representations. This geometry-aware formulation reduces scene overfitting and enables zero-shot grasping across objects with diverse shapes.
+- 我们引入了 GeoGrasp，这是一种基于手-物相对表示的、与物体无关的强化学习灵巧抓取策略。这种几何感知公式减少了场景过拟合，并实现了跨不同形状物体的零样本抓取。
+
+
+- We present Clutter-Bench, a standardized simulation benchmark with graded difficulty for evaluating language-conditioned target grasping in clutter. Experiments show that AdaClearGrasp achieves state-of-the-art performance in simulation and zero-shot sim-to-real transfer on real hardware.
+- 我们提出了 Clutter-Bench，这是一个具有分级难度的标准化仿真基准，用于评估杂乱环境下的语言条件目标抓取。实验表明，AdaClearGrasp 在仿真中达到了最先进的性能，并实现了在真实硬件上的零样本仿真到现实（sim-to-real）迁移。
+
+
+## II. RELATED WORK
+## II. 相关工作
+
+
+## A. Dexterous Grasping
+## A. 灵巧抓取
+
+
+Dexterous grasping has evolved from analytical force-closure models to learning-based approaches that generalize across diverse object geometries [20], [21]. Methods such as UniDexGrasp [22] and DexGraspNet [23] leverage large-scale datasets and reinforcement learning (RL) to learn robust grasping policies, while D(R,O)-Grasp [9] introduces a unified representation of robot-object interactions for cross-embodiment grasp generation. More recent work further improves RL robustness with geometry-aware representations. For example, [24] and RobustDexGrasp [25] incorporate distance-based features between hand links and graspable object regions, achieving strong sim-to-real transfer via a teacher-student framework. Despite these advances, dexterous grasping in densely cluttered environments remains difficult due to complex object interactions and occlusions. Existing approaches largely treat manipulation as a low-level control problem and rely on emergent behaviors to handle clutter, without explicitly reasoning about scene structure. In contrast, AdaClearGrasp combines geometry-aware RL with high-level reasoning to determine when and how surrounding objects should be cleared before grasping, enabling more robust dexterous manipulation in cluttered environments.
+灵巧抓取已从解析式力封闭模型演变为能够泛化至多种物体几何形状的基于学习的方法 [20], [21]。诸如 UniDexGrasp [22] 和 DexGraspNet [23] 等方法利用大规模数据集和强化学习（RL）来学习鲁棒的抓取策略，而 D(R,O)-Grasp [9] 则引入了一种用于跨形态抓取生成的机器人-物体交互统一表示。近期工作进一步通过几何感知表示提升了强化学习的鲁棒性。例如，[24] 和 RobustDexGrasp [25] 结合了手部连杆与可抓取物体区域之间的距离特征，通过教师-学生框架实现了强大的仿真到现实迁移。尽管取得了这些进展，但由于复杂的物体交互和遮挡，高密度杂乱环境下的灵巧抓取依然困难。现有方法大多将操作视为底层控制问题，并依赖涌现行为来处理杂乱，而没有显式地对场景结构进行推理。相比之下，AdaClearGrasp 将几何感知强化学习与高层推理相结合，以确定在抓取前何时以及如何清理周围物体，从而在杂乱环境中实现了更鲁棒的灵巧操作。
+
+
+## B. Manipulation in Cluttered Environments
+## B. 杂乱环境下的操作
+
+
+Manipulating objects in dense clutter is challenging due to physical interference, visual occlusions, and unstable contacts. Early methods typically rely on open-loop grasp pose generation and planning [26], [27], [28], offering limited adaptability in dynamic clutter. More recent approaches extend dexterous grasping to handle complex hand-object interactions in cluttered scenes, with reinforcement learning methods such as DexSingRasp [7] and ClutterDexGrasp [10] showing promising results. However, these methods mainly focus on low-level control and emergent behaviors to resolve interference, lacking explicit semantic reasoning for object clearance or scene understanding. In contrast, AdaClear-Grasp leverages vision-language models (VLMs) to introduce higher-level semantic reasoning, enabling the system to decide when and how to clear surrounding objects. By integrating VLM reasoning with atomic dexterous manipulation skills, AdaClearGrasp provides a more adaptive and efficient approach to manipulation in cluttered environments.
+在密集杂乱的环境中操作物体极具挑战性，原因在于物理干扰、视觉遮挡和不稳定的接触。早期方法通常依赖开环抓取位姿生成与规划 [26], [27], [28]，在动态杂乱环境中的适应性有限。近期研究将灵巧抓取扩展至处理杂乱场景中复杂的手-物交互，其中强化学习方法如 DexSingRasp [7] 和 ClutterDexGrasp [10] 已展现出良好的效果。然而，这些方法主要侧重于底层控制和通过涌现行为来解决干扰，缺乏针对物体清理或场景理解的显式语义推理。相比之下，AdaClearGrasp 利用视觉语言模型 (VLM) 引入了更高层级的语义推理，使系统能够决定何时以及如何清理周围物体。通过将 VLM 推理与原子级灵巧操作技能相结合，AdaClearGrasp 为杂乱环境下的操作提供了一种更具适应性和效率的方法。
+
+
+## C. Vision-Language Models for Robotic Manipulation
+## C. 用于机器人操作的视觉语言模型
+
+
+Recent work has explored the use of vision-language models (VLMs) for robotic manipulation and planning. Early research demonstrates that VLMs can translate high-level instructions into executable actions or spatial reasoning representations [14], [29]. Building on these foundations, recent frameworks have extended VLM reasoning to more complex tasks, such as dexterous manipulation, by integrating perception, language, and control through vision-language-action policies [18], [17], [30]. While these methods have advanced the field, many still rely on open-loop execution and struggle in cluttered environments with occlusions and unexpected interactions. AdaClearGrasp addresses these limitations by coupling VLM reasoning with atomic skills via a Model Context Protocol (MCP) [31], enabling closed-loop and robust execution with visual feedback and recovery-driven replanning in cluttered environments.
+近期研究探索了视觉语言模型 (VLM) 在机器人操作与规划中的应用。早期研究表明，VLM 可以将高层指令转化为可执行动作或空间推理表示 [14], [29]。在此基础上，近期框架通过视觉-语言-动作策略将感知、语言和控制集成，将 VLM 推理扩展至灵巧操作等更复杂的任务 [18], [17], [30]。尽管这些方法推动了该领域的发展，但许多方法仍依赖开环执行，在存在遮挡和意外交互的杂乱环境中表现不佳。AdaClearGrasp 通过模型上下文协议 (MCP) [31] 将 VLM 推理与原子技能耦合，解决了上述局限性，实现了在杂乱环境下的闭环鲁棒执行，并具备视觉反馈和基于恢复的重规划能力。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_05_13_f983d2.jpg"/>
+
+
+
+Fig. 2. Overview of AdaClearGrasp. The system adopts a hierarchical architecture in which a VLM-based Semantic Planner (left) reasons about the scene and generates high-level action plans. These plans are translated into atomic skills via the Model Context Protocol (MCP) Service (middle). The Skill Library contains heuristic clearing primitives, recovery mechanisms, and a grasping skill (the pretrained geometry-aware RL policy GeoGrasp). The system operates in a closed loop (right), continuously monitoring execution feedback to trigger replanning or recovery when necessary.
+图 2. AdaClearGrasp 概览。该系统采用分层架构，其中基于 VLM 的语义规划器（左）对场景进行推理并生成高层动作计划。这些计划通过模型上下文协议 (MCP) 服务（中）转化为原子技能。技能库包含启发式清理原语、恢复机制以及抓取技能（预训练的几何感知 RL 策略 GeoGrasp）。系统以闭环方式运行（右），持续监控执行反馈，并在必要时触发重规划或恢复。
+
+
+## III. METHOD
+## III. 方法
+
+
+We propose AdaClearGrasp, a hierarchical framework for robust dexterous grasping in densely cluttered environments. As illustrated in Fig. 2, the system operates in a closed loop: (1) a Vision-Language Model (VLM) planner analyzes the scene and generates a high-level action plan; (2) the plan is translated into parameterized atomic skills through the Model Context Protocol (MCP); (3) a skill library consisting of heuristic clearing primitives, recovery primitives, and the RL-based GeoGrasp policy executes the interactions; and (4) visual feedback triggers replanning when failures occur.
+我们提出了 AdaClearGrasp，这是一个用于密集杂乱环境下鲁棒灵巧抓取的分层框架。如图 2 所示，系统以闭环方式运行：(1) 视觉语言模型 (VLM) 规划器分析场景并生成高层动作计划；(2) 该计划通过模型上下文协议 (MCP) 转化为参数化的原子技能；(3) 由启发式清理原语、恢复原语和基于 RL 的 GeoGrasp 策略组成的技能库执行交互；(4) 视觉反馈在发生故障时触发重规划。
+
+
+## A. Problem Formulation
+## A. 问题定义
+
+
+We formulate target grasping in clutter as a Hierarchical Partially Observable Markov Decision Process (POMDP), defined by $\left( {S,A,T,R,O,\gamma }\right)$ ,with decision making at two levels. At step $t$ ,the VLM planner receives an observation ${o}_{t} \in  O$ consisting of the current image ${I}_{t}$ ,the language goal $L$ ,and execution feedback ${f}_{t - 1}$ . It outputs a high-level semantic action ${a}_{\text{ high }} \in  {A}_{\text{ high }}$ to simplify the scene or accomplish the task, where the high-level action space is defined as ${A}_{\text{ high }} = {A}_{\text{ clear }} \cup  {A}_{\text{ grasp }}$ . Here, ${A}_{\text{ clear }} = \; \{$ push $\left( {s,d}\right) ,$ pull $\left( {s,d}\right) ,$ move_to $\left( {obj}\right) ,\ldots \}$ represents parameterized clearing primitives,and ${A}_{\text{ grasp }} = \{$ grasp() $\}$ denotes the action to grasp the target object.
+我们将杂乱环境下的目标抓取定义为分层部分可观测马尔可夫决策过程 (POMDP)，由 $\left( {S,A,T,R,O,\gamma }\right)$ 定义，并在两个层级上进行决策。在步骤 $t$ 中，VLM 规划器接收观测值 ${o}_{t} \in  O$，其中包括当前图像 ${I}_{t}$、语言目标 $L$ 以及执行反馈 ${f}_{t - 1}$。它输出一个高层语义动作 ${a}_{\text{ high }} \in  {A}_{\text{ high }}$ 以简化场景或完成任务，其中高层动作空间定义为 ${A}_{\text{ high }} = {A}_{\text{ clear }} \cup  {A}_{\text{ grasp }}$。在此，${A}_{\text{ clear }} = \; \{$ push $\left( {s,d}\right) ,$ pull $\left( {s,d}\right) ,$ move_to $\left( {obj}\right) ,\ldots \}$ 代表参数化的清理原语，而 ${A}_{\text{ grasp }} = \{$ grasp() $\}$ 表示抓取目标物体的动作。
+
+
+Once a high-level action ${a}_{\text{ high }}$ is selected,a corresponding low-level policy ${\pi }_{\text{ low }}\left( {{a}_{\text{ low }} \mid  {s}_{t},{a}_{\text{ high }}}\right)$ is executed. For clearing actions $\left( {{a}_{\text{ high }} \in  {A}_{\text{ clear }}}\right) ,{\pi }_{\text{ low }}$ acts as a geometric motion planner that generates deterministic trajectories. For grasping actions $\left( {{a}_{\text{ high }} \in  {A}_{\text{ grasp }}}\right) ,{\pi }_{\text{ low }}$ invokes the learned RL policy GeoGrasp, which outputs continuous control commands ${a}_{\text{ low }} \in  {\mathbb{R}}^{{N}_{\text{ dof }}}$ to execute a stable grasp.
+一旦选定高层动作 ${a}_{\text{ high }}$，就会执行相应的底层策略 ${\pi }_{\text{ low }}\left( {{a}_{\text{ low }} \mid  {s}_{t},{a}_{\text{ high }}}\right)$。对于清理动作，$\left( {{a}_{\text{ high }} \in  {A}_{\text{ clear }}}\right) ,{\pi }_{\text{ low }}$ 作为几何运动规划器生成确定性轨迹。对于抓取动作，$\left( {{a}_{\text{ high }} \in  {A}_{\text{ grasp }}}\right) ,{\pi }_{\text{ low }}$ 调用学习到的强化学习策略 GeoGrasp，该策略输出连续控制指令 ${a}_{\text{ low }} \in  {\mathbb{R}}^{{N}_{\text{ dof }}}$ 以执行稳定抓取。
+
+
+The overall objective is to generate a sequence of high-level actions ${a}_{\text{ high }}^{\left( 1\right) },{a}_{\text{ high }}^{\left( 2\right) },\ldots ,{a}_{\text{ high }}^{\left( T\right) }$ that grasp and lift the target object within a horizon ${T}_{\max }$ . Achieving this requires the planner to reason about occlusions and select appropriate clearing actions before the final grasp.
+总体目标是在视界 ${T}_{\max }$ 内生成一系列高层动作 ${a}_{\text{ high }}^{\left( 1\right) },{a}_{\text{ high }}^{\left( 2\right) },\ldots ,{a}_{\text{ high }}^{\left( T\right) }$，以抓取并提起目标物体。实现这一目标需要规划器推理遮挡情况，并在最终抓取前选择合适的清理动作。
+
+
+## B. VLM-based Semantic Planning
+## B. 基于 VLM 的语义规划
+
+
+The high-level reasoning module utilizes a pretrained VLM, Qwen3-VL-32B-Instruct [32], to interpret visual observations, user instructions, and execution feedback. To ensure reliable decision making, we impose structured safety constraints on the planner, including a closed observation space, bounded action parameters (i.e., a restricted action space), and verifiable execution feedback.
+高层推理模块利用预训练的 VLM 模型 Qwen3-VL-32B-Instruct [32] 来解读视觉观测、用户指令和执行反馈。为确保决策可靠，我们对规划器施加了结构化的安全约束，包括封闭的观测空间、有界的动作参数（即受限的动作空间）以及可验证的执行反馈。
+
+
+- Observation Space: The VLM receives an RGB image of the current scene together with a textual list of detected objects, providing both visual and symbolic context for reasoning.
+- 观测空间：VLM 接收当前场景的 RGB 图像以及检测到的物体文本列表，为推理提供视觉和符号上下文。
+
+
+- Action Space: The model outputs a structured JSON object containing the action name (e.g., push, pull, grasp), args (parameters such as side="left"), and a reason field for interpretability.
+- 动作空间：模型输出一个结构化的 JSON 对象，包含动作名称（如 push、pull、grasp）、参数（如 side="left"）以及用于可解释性的原因字段。
+
+
+- Feedback Mechanism: The prompt includes execution feedback from the previous step (e.g., "stuck detected" or "target not reached"), allowing the VLM to adapt its strategy dynamically, such as switching from push to pull if the previous action fails.
+- 反馈机制：提示词中包含来自上一步的执行反馈（例如“检测到卡住”或“未到达目标”），使 VLM 能够动态调整策略，例如在前一步失败时从推（push）切换为拉（pull）。
+
+
+## C. Model Context Protocol (MCP) Server
+## C. 模型上下文协议 (MCP) 服务器
+
+
+To bridge the semantic gap between high-level VLM reasoning and low-level robot control, we structure AdaClear-Grasp around the Model Context Protocol (MCP), which exposes robot capabilities as callable "tools" for the VLM. This allows the planner to invoke manipulation skills through a unified interface. Under this design, manipulation primitives (e.g., grasp, push, clear) are encapsulated as model-agnostic tool interfaces rather than model-specific function calls, decoupling high-level decision making from hardware-specific implementations and enabling modular skill expansion. At runtime, when the VLM generates a tool invocation (e.g., tool_use: push(side="left")), the MCP server parses the request and dispatches it to the corresponding skill executor in the exec/skills module for motion planning and control execution. By organizing skills through MCP, AdaClearGrasp supports replacing the VLM, extending the skill library, or migrating to new hardware platforms without modifying the high-level reasoning logic, moving the system closer to a reusable manipulation framework rather than a tightly coupled single-model pipeline.
+为了弥合高层 VLM 推理与底层机器人控制之间的语义鸿沟，我们将 AdaClear-Grasp 构建在模型上下文协议 (MCP) 之上，将机器人能力作为可调用的“工具”暴露给 VLM。这使得规划器能够通过统一接口调用操作技能。在此设计下，操作原语（如 grasp、push、clear）被封装为与模型无关的工具接口，而非特定于模型的函数调用，从而将高层决策与硬件特定的实现解耦，并支持模块化的技能扩展。运行时，当 VLM 生成工具调用（例如 tool_use: push(side="left")）时，MCP 服务器会解析请求并将其分发给 exec/skills 模块中相应的技能执行器进行运动规划和控制执行。通过 MCP 组织技能，AdaClearGrasp 支持在不修改高层推理逻辑的情况下更换 VLM、扩展技能库或迁移至新硬件平台，使系统更接近于可复用的操作框架，而非紧耦合的单一模型流水线。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_05_13_116828.jpg"/>
+
+
+
+Fig. 3. A visualization example of each target object in Clutter-Bench and its corresponding three difficulty levels.
+图 3. Clutter-Bench 中每个目标物体及其对应三个难度等级的可视化示例。
+
+
+## D. Atomic Skill Library
+## D. 原子技能库
+
+
+Our framework provides a set of parameterized primitives for obstacle clearing, system recovery, and robust grasping.
+我们的框架提供了一套用于障碍物清理、系统恢复和稳健抓取的参数化原语。
+
+
+1) Clearing and Recovery Primitives: We implement deterministic skills based on geometric motion planning to manipulate obstacles and recover from failures.
+1) 清理与恢复原语：我们实现了基于几何运动规划的确定性技能，用于操纵障碍物并从故障中恢复。
+
+
+- Push & Pull: These primitives create space by approaching an object from a specified side (left, center, right) relative to its centroid. The end-effector orientation is aligned with the motion direction (e.g., $+ \pi /6$ yaw offset for left) to improve stability.
+- 推与拉：这些原语通过从物体质心的指定侧面（左、中、右）接近物体来创造空间。末端执行器的朝向与运动方向对齐（例如，左侧偏移 $+ \pi /6$ 的偏航角）以提高稳定性。
+
+
+- Move & Lift/Lower: Cartesian motions such as move_to(xy) and lift(z) enable precise repositioning of the end-effector during clearing operations.
+- 移动与升降：诸如 move_to(xy) 和 lift(z) 之类的笛卡尔运动，能够在清理操作期间实现末端执行器的精确重定位。
+
+
+- Recovery (InitArm/InitHand): These primitives reset the arm and hand to safe home configurations when singularities or persistent collisions are detected.
+- 恢复 (InitArm/InitHand)：当检测到奇异点或持续碰撞时，这些原语将机械臂和手部重置为安全的初始配置。
+
+
+2) GeoGrasp: RL-based Dexterous Grasping Policy: For target acquisition, we introduce GeoGrasp, a dexterous RL policy built on a 59-dimensional geometry-aware observation space that captures local hand-object relations. Rather than pursuing increasingly complex object representations, Ge-oGrasp focuses on category-agnostic geometric interactions between the hand and object. By grounding the policy in local directional geometry instead of appearance cues, the representation becomes largely insensitive to texture, material properties, and moderate dynamics discrepancies, reducing the sim-to-real gap. This design encourages the policy to reason about geometric reachability and contact structure, leading to stronger zero-shot generalization and more stable real-world transfer.
+2) GeoGrasp：基于强化学习的灵巧抓取策略：为了实现目标获取，我们引入了 GeoGrasp，这是一种基于 59 维几何感知观测空间的灵巧强化学习策略，能够捕捉局部手-物关系。GeoGrasp 不追求日益复杂的物体表征，而是专注于手与物体之间与类别无关的几何交互。通过将策略建立在局部方向几何而非外观线索之上，该表征对纹理、材料属性和中等程度的动力学差异具有高度不敏感性，从而缩小了仿真到现实的差距。这种设计促使策略推理几何可达性和接触结构，从而实现更强的零样本泛化能力和更稳定的现实世界迁移。
+
+
+a) Observation Space: The key design is a geometry-aware observation space $\left( {S \in  {\mathbb{R}}^{59}}\right)$ that encodes local hand-object relationships without object category identifiers. It consists of: (1) Hand-Object Relations $\left( {{O}_{\text{ geom }} \in  {\mathbb{R}}^{54}}\right)$ : unit-normalized nearest-neighbor vectors from 18 hand keypoints to the object point cloud; (2) Target State $\left( {{O}_{\text{ target }} \in  {\mathbb{R}}^{1}}\right)$ : the target height (Z-coordinate); and (3) End-Effector State $\left( {{O}_{tcp} \in  {\mathbb{R}}^{4}}\right)$ : TCP height and orientation (RPY),providing proprioceptive feedback on the hand pose.
+a) 观测空间：核心设计是一个几何感知观测空间 $\left( {S \in  {\mathbb{R}}^{59}}\right)$，它在不使用物体类别标识符的情况下编码局部手-物关系。它包括：(1) 手-物关系 $\left( {{O}_{\text{ geom }} \in  {\mathbb{R}}^{54}}\right)$：从 18 个手部关键点到物体点云的单位归一化最近邻向量；(2) 目标状态 $\left( {{O}_{\text{ target }} \in  {\mathbb{R}}^{1}}\right)$：目标高度（Z 坐标）；以及 (3) 末端执行器状态 $\left( {{O}_{tcp} \in  {\mathbb{R}}^{4}}\right)$：TCP 高度和姿态（RPY），提供关于手部姿态的本体感觉反馈。
+
+
+b) Reward Function: We design a dense reward to guide the policy through reaching, grasping, and lifting. The total reward ${R}_{t}$ at time step $t$ is defined as
+b) 奖励函数：我们设计了一个稠密奖励来引导策略完成到达、抓取和抬升过程。时间步 $t$ 的总奖励 ${R}_{t}$ 定义为
+
+
+$$
+{R}_{t} = {R}_{\text{ lift }} + {R}_{\text{ success }} + {R}_{\text{ contact }} + {R}_{nn} - {C}_{\text{ action }}, \tag{1}
+$$
+
+
+
+where ${R}_{lift} = {w}_{lift}\left( {{h}_{obj}^{\left( t\right) } - {h}_{obj}^{\left( 0\right) }}\right)$ encourages vertical displacement from the initial object height,with ${h}_{obj}^{\left( t\right) }$ and ${h}_{obj}^{\left( 0\right) }$ denoting the Z-coordinate of the object's center of mass at time $t$ and step 0. ${R}_{\text{ success }} = {w}_{\text{ success }}\mathbb{I}\left( {{h}_{obj}^{\left( t\right) } > {0.15}\mathrm{\;m}}\right)$ provides a sparse lifting bonus. ${R}_{\text{ contact }} = {w}_{\text{ contact }}{N}_{\text{ contact }}$ encourages stable grasping,where ${N}_{\text{ contact }}$ is the number of finger links in contact with the object (contact force $> {0.5}\mathrm{\;N}).{R}_{nn} = {w}_{nn}\left( {{D}_{nn}^{\left( t - 1\right) } - {D}_{nn}^{\left( t\right) }}\right)$ is a shaping reward based on the decrease in nearest-neighbor distance,where ${D}_{nn}^{\left( t\right) } = \; \mathop{\sum }\limits_{{k = 1}}^{K}\mathop{\min }\limits_{{p \in  {P}_{obj}}}{\begin{Vmatrix}{x}_{k} - p\end{Vmatrix}}_{2}$ denotes the total distance from $K = {18}$ hand keypoints $\left\{  {x}_{k}\right\}$ to the object point cloud ${P}_{obj}$ . ${C}_{\text{ action }} = {w}_{\text{ action }}{\begin{Vmatrix}{a}_{t}\end{Vmatrix}}_{2}$ penalizes large actions to discourage jerky motions. The weights are ${w}_{\text{ lift }} = {50.0},{w}_{\text{ success }} = {200.0}$ , ${w}_{\text{ contact }} = {10.0},{w}_{nn} = {10.0}$ ,and ${w}_{\text{ action }} = {0.03}$ . Rewards are clipped to $\left\lbrack  {-{100},{100}}\right\rbrack$ for training stability.
+其中 ${R}_{lift} = {w}_{lift}\left( {{h}_{obj}^{\left( t\right) } - {h}_{obj}^{\left( 0\right) }}\right)$ 鼓励相对于初始物体高度的垂直位移，${h}_{obj}^{\left( t\right) }$ 和 ${h}_{obj}^{\left( 0\right) }$ 分别表示物体质心在时间 $t$ 和第 0 步时的 Z 坐标。${R}_{\text{ success }} = {w}_{\text{ success }}\mathbb{I}\left( {{h}_{obj}^{\left( t\right) } > {0.15}\mathrm{\;m}}\right)$ 提供稀疏的抬升奖励。${R}_{\text{ contact }} = {w}_{\text{ contact }}{N}_{\text{ contact }}$ 鼓励稳定抓取，其中 ${N}_{\text{ contact }}$ 是与物体接触的手指连杆数量（接触力 $> {0.5}\mathrm{\;N}).{R}_{nn} = {w}_{nn}\left( {{D}_{nn}^{\left( t - 1\right) } - {D}_{nn}^{\left( t\right) }}\right)$ 是一种基于最近邻距离减小的塑形奖励，其中 ${D}_{nn}^{\left( t\right) } = \; \mathop{\sum }\limits_{{k = 1}}^{K}\mathop{\min }\limits_{{p \in  {P}_{obj}}}{\begin{Vmatrix}{x}_{k} - p\end{Vmatrix}}_{2}$ 表示从 $K = {18}$ 个手部关键点 $\left\{  {x}_{k}\right\}$ 到物体点云 ${P}_{obj}$ 的总距离。${C}_{\text{ action }} = {w}_{\text{ action }}{\begin{Vmatrix}{a}_{t}\end{Vmatrix}}_{2}$ 对大幅度动作进行惩罚，以抑制剧烈运动。权重分别为 ${w}_{\text{ lift }} = {50.0},{w}_{\text{ success }} = {200.0}$、${w}_{\text{ contact }} = {10.0},{w}_{nn} = {10.0}$ 和 ${w}_{\text{ action }} = {0.03}$。奖励被截断在 $\left\lbrack  {-{100},{100}}\right\rbrack$ 以保证训练稳定性。
+
+
+c) Training and Deployment: The policy (MLP) is trained using PPO [33] with 400 parallel environments $(\gamma  =$ 0.96, batch size = 800). During deployment, an IK solver sets the hand to a pre-grasp pose, after which GeoGrasp executes the final grasp. The policy is trained on three objects (Cube, Cup, and Apple) in a clutter-free environment. Despite this limited set, GeoGrasp generalizes effectively to unseen geometries. In particular, it successfully grasps the remaining four unseen object categories in Clutter-Bench zero-shot and transfers directly to real robotic hardware without fine-tuning, demonstrating the robustness of the geometry-aware formulation.
+c) 训练与部署：策略（MLP）使用 PPO [33] 进行训练，包含 400 个并行环境 $(\gamma  =$ 0.96，批大小为 800）。在部署阶段，IK 求解器将手部设置为预抓取姿态，随后由 GeoGrasp 执行最终抓取。该策略在无杂乱环境下的三种物体（立方体、杯子和苹果）上进行训练。尽管训练集有限，GeoGrasp 仍能有效泛化至未见过的几何形状。特别是，它在 Clutter-Bench 中零样本成功抓取了其余四类未见过的物体，并直接迁移至真实机器人硬件而无需微调，证明了该几何感知公式的鲁棒性。
+
+
+## E. Closed-loop Execution
+## E. 闭环执行
+
+
+In each operational cycle, the VLM monitors the state through visual feedback. If the target is obstructed, the planner selects a clearing skill (e.g., pull the occluding object) to remove the blockage. Once the path is clear, it invokes the grasp skill (pre-trained GeoGrasp model) to retrieve the target. The system also includes a failure recovery mechanism. If a skill fails (e.g., gripper slip, being stuck, or pathfinding failure), execution feedback is returned to the VLM. The planner then generates a new strategy, such as repositioning the arm with move_to, trying another clearing direction, or resetting the manipulator with initarm. This cycle continues until the target is grasped and lifted or the maximum step limit is reached.
+在每个操作周期中，VLM 通过视觉反馈监测状态。如果目标被遮挡，规划器会选择一种清理技能（例如，拉开遮挡物）以移除障碍。一旦路径畅通，它便调用抓取技能（预训练的 GeoGrasp 模型）来获取目标。该系统还包含故障恢复机制。如果某项技能失败（例如，夹爪打滑、被卡住或路径规划失败），执行反馈将返回给 VLM。随后，规划器会生成新的策略，例如使用 move_to 重新定位机械臂、尝试其他清理方向，或使用 initarm 重置机械手。此循环持续进行，直到目标被抓取并提起，或达到最大步数限制。
+
+
+## F. Clutter-Bench
+## F. Clutter-Bench
+
+
+To systematically evaluate goal-conditioned dexterous grasping in densely cluttered environments, we introduce Clutter-Bench, a benchmark built on ManiSkill3. Existing benchmarks often lack standardized clutter configurations or isolate grasping from high-level reasoning and scene interaction, making it difficult to evaluate integrated capabilities such as reasoning, clearing, and manipulation. Clutter-Bench addresses this gap through a graded and fully reproducible evaluation protocol.
+为了系统地评估密集杂乱环境下的目标导向灵巧抓取，我们引入了基于 ManiSkill3 构建的基准测试 Clutter-Bench。现有的基准测试往往缺乏标准化的杂乱配置，或将抓取与高层推理及场景交互割裂开来，导致难以评估推理、清理和操作等集成能力。Clutter-Bench 通过分级且完全可复现的评估协议解决了这一问题。
+
+
+As illustrated in Fig. 3 Clutter-Bench covers diverse object geometries and clutter densities: (1) Object Diversity: The benchmark includes seven target objects from the YCB dataset, covering a broad range of shapes and physical properties. Ordered by increasing grasping difficulty in our experiments, they are: cube (box-shaped), can (cylindrical), pear (irregular), apple (spherical), mug (hollow with handle), lego (complex geometry), and ball (small spherical, challenging due to rolling dynamics). (2) Graded Difficulty Tiers: Three difficulty levels are defined by the number of obstacles: Level-1 (2 obstacles), Level-2 (4 obstacles), and Level-3 (6 obstacles). For each object-difficulty pair, we pre-generate 10 scene configurations. Object positions are sampled within a ${20} \times  {20}{\mathrm{\;{cm}}}^{2}$ region around the target,with orientations uniformly drawn from $\left\lbrack  {{0}^{ \circ  },{360}^{ \circ  }}\right)$ . All configurations are stored as JSON files specifying target and obstacle poses $\left( {x,y,\theta }\right)$ ,ensuring identical evaluation layouts across methods and eliminating randomness in scene initialization. Obstacles are sampled from common household items and placed nearby to induce occlusion.
+如图 3 所示，Clutter-Bench 涵盖了多样的物体几何形状和杂乱密度：(1) 物体多样性：该基准包含来自 YCB 数据集的七个目标物体，涵盖了广泛的形状和物理属性。按实验中抓取难度递增排序，它们分别是：立方体（盒状）、罐子（圆柱形）、梨（不规则）、苹果（球形）、马克杯（带柄中空）、乐高（复杂几何形状）和球（小型球形，因滚动动力学而具有挑战性）。(2) 分级难度：根据障碍物数量定义了三个难度等级：Level-1（2 个障碍物）、Level-2（4 个障碍物）和 Level-3（6 个障碍物）。对于每一对“物体-难度”组合，我们预生成 10 种场景配置。物体位置在目标周围的 ${20} \times  {20}{\mathrm{\;{cm}}}^{2}$ 区域内采样，方向则从 $\left\lbrack  {{0}^{ \circ  },{360}^{ \circ  }}\right)$ 中均匀抽取。所有配置均存储为指定目标和障碍物位姿的 JSON 文件 $\left( {x,y,\theta }\right)$，确保了不同方法间评估布局的一致性，并消除了场景初始化中的随机性。障碍物从常见的家居用品中采样并放置在附近，以产生遮挡。
+
+
+## IV. EXPERIMENTS
+## IV. 实验
+
+
+In this section, we evaluate AdaClearGrasp in both simulation and the real world to answer four key research questions:
+在本节中，我们在仿真和现实世界中评估了 AdaClearGrasp，以回答四个关键研究问题：
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_05_13_ec8d54.jpg"/>
+
+
+
+Fig. 4. Real-world Implementation Details. (Upper) Real-world experimental setup with xArm7, XHand, and the external camera Gemini 336L. (Lower) Visualization of 6D pose estimation using FoundationPose, which provides input to the VLM planner.
+图 4. 现实世界实现细节。(上) 包含 xArm7、XHand 和外置相机 Gemini 336L 的现实世界实验装置。(下) 使用 FoundationPose 进行 6D 位姿估计的可视化，该估计为 VLM 规划器提供输入。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_05_13_1b6b4b.jpg"/>
+
+
+
+Fig. 5. Real-world experiments on 18 diverse scenarios.
+图 5. 在 18 种不同场景下的现实世界实验。
+
+
+- RQ1: Can AdaClearGrasp achieve robust zero-shot dexterous grasping across varying difficulty levels in cluttered simulation environments?
+- RQ1：AdaClearGrasp 能否在杂乱的仿真环境中，针对不同难度等级实现鲁棒的零样本灵巧抓取？
+
+
+- RQ2: How do the adaptive clearing strategy and closed-loop feedback mechanism contribute to task success?
+- RQ2：自适应清理策略和闭环反馈机制对任务成功有何贡献？
+
+
+- RQ3: How effectively does the GeoGrasp policy, trained on a single object, generalize to diverse unseen object geometries in a zero-shot manner?
+- RQ3：在单一物体上训练的 GeoGrasp 策略，在零样本情况下对各种未见过的物体几何形状的泛化效果如何？
+
+
+- RQ4: Can AdaClearGrasp perform Sim-to-Real transfer for dense clutter grasping tasks in the physical world without fine-tuning?
+- RQ4：AdaClearGrasp 能否在无需微调的情况下，将密集杂乱抓取任务从仿真迁移至物理世界？
+
+
+## A. Experimental Setup
+## A. 实验设置
+
+
+We conduct experiments in both a high-fidelity physics simulator and on a real-world robotic platform.
+我们在高保真物理模拟器和现实世界的机器人平台上进行了实验。
+
+
+a) Simulation Setup: Our simulation environment is built on ManiSkill3, with an xArm7 robot equipped with a dexterous XHand. A front-mounted RGB-D camera provides 128 × 128 observations. In Clutter-Bench, we randomly place 2, 4, or 6 obstacles from 7 YCB categories (Sec. III-F) within a ${20}\mathrm{\;{cm}} \times  {20}\mathrm{\;{cm}}$ region around the target.
+a) 仿真设置：我们的仿真环境基于 ManiSkill3 构建，使用配备灵巧手 XHand 的 xArm7 机器人。前置 RGB-D 相机提供 128 × 128 的观测数据。在 Clutter-Bench 中，我们在目标周围的 ${20}\mathrm{\;{cm}} \times  {20}\mathrm{\;{cm}}$ 区域内随机放置来自 7 个 YCB 类别（第 III-F 节）的 2、4 或 6 个障碍物。
+
+
+We compare AdaClearGrasp with three baselines: (1) VLM Scaffolding [17]: A framework that uses VLM-predicted keypoints and 3D trajectories to guide fine-grained manipulation. Designed primarily for single-object interaction, it lacks explicit obstacle-handling mechanisms, highlighting the robustness of our approach in dense clutter. (2) GeoGrasp (No VLM): Directly executes the GeoGrasp policy without any clearing actions, evaluating the importance of VLM-guided clearing for creating feasible grasp paths. (3) AdaClearGrasp (w/o Replan): An ablated version that follows the initial plan without replanning upon failure, isolating the contribution of the closed-loop feedback mechanism.
+我们将 AdaClearGrasp 与三个基线进行了比较：(1) VLM Scaffolding [17]：一个利用 VLM 预测的关键点和 3D 轨迹来引导精细操作的框架。它主要针对单物体交互设计，缺乏明确的障碍物处理机制，这凸显了我们方法在密集杂乱环境下的鲁棒性。(2) GeoGrasp (无 VLM)：直接执行 GeoGrasp 策略而不进行任何清理动作，旨在评估 VLM 引导的清理对于创建可行抓取路径的重要性。(3) AdaClearGrasp (无重规划)：一个消融版本，在失败时不进行重规划，仅遵循初始计划，从而分离出闭环反馈机制的贡献。
+
+
+TABLE I
+表 I
+
+
+SUCCESS RATES COMPARISON ON CLUTTER-BENCH. WE EVALUATE THE ZERO-SHOT PERFORMANCE OF ADACLEARGRASP AGAINST THE VLM SCAFFOLDING BASELINE ACROSS THREE INCREASING DIFFICULTY TIERS (LEVEL-1 TO LEVEL-3). THE RESULTS ARE AVERAGED OVER 10 INDEPENDENT TRIALS FOR EACH TARGET OBJECT AND CLUTTER CONFIGURATION.
+CLUTTER-BENCH 上的成功率对比。我们评估了 AdaClearGrasp 在三个递增难度等级（Level-1 至 Level-3）下对比 VLM Scaffolding 基线的零样本性能。结果为每个目标物体和杂乱配置在 10 次独立试验中的平均值。
+
+
+<table><tr><td rowspan="2">Target Object</td><td colspan="2">Level-1</td><td colspan="2">Level-2</td><td colspan="2">Level-3</td></tr><tr><td>VLM Scaffolding</td><td>AdaClearGrasp</td><td>VLM Scaffolding</td><td>AdaClearGrasp</td><td>VLM Scaffolding</td><td>AdaClearGrasp</td></tr><tr><td>Cube</td><td>0.2</td><td>0.8</td><td>0.0</td><td>0.9</td><td>0.0</td><td>1.0</td></tr><tr><td>Can</td><td>0.1</td><td>0.9</td><td>0.0</td><td>1.0</td><td>0.0</td><td>0.9</td></tr><tr><td>Pear</td><td>0.0</td><td>1.0</td><td>0.0</td><td>1.0</td><td>0.0</td><td>0.7</td></tr><tr><td>Apple</td><td>0.1</td><td>1.0</td><td>0.0</td><td>0.8</td><td>0.0</td><td>0.9</td></tr><tr><td>Mug</td><td>0.0</td><td>0.8</td><td>0.0</td><td>0.8</td><td>0.0</td><td>0.9</td></tr><tr><td>Lego</td><td>0.0</td><td>1.0</td><td>0.0</td><td>0.7</td><td>0.0</td><td>0.5</td></tr><tr><td>Ball</td><td>0.0</td><td>0.7</td><td>0.0</td><td>0.7</td><td>0.0</td><td>0.4</td></tr><tr><td>Average</td><td>0.06</td><td>0.89</td><td>0.00</td><td>0.84</td><td>0.00</td><td>0.76</td></tr></table>
+<table><tbody><tr><td rowspan="2">目标物体</td><td colspan="2">一级</td><td colspan="2">二级</td><td colspan="2">三级</td></tr><tr><td>VLM 辅助</td><td>AdaClearGrasp</td><td>VLM 辅助</td><td>AdaClearGrasp</td><td>VLM 辅助</td><td>AdaClearGrasp</td></tr><tr><td>立方体</td><td>0.2</td><td>0.8</td><td>0.0</td><td>0.9</td><td>0.0</td><td>1.0</td></tr><tr><td>罐子</td><td>0.1</td><td>0.9</td><td>0.0</td><td>1.0</td><td>0.0</td><td>0.9</td></tr><tr><td>梨</td><td>0.0</td><td>1.0</td><td>0.0</td><td>1.0</td><td>0.0</td><td>0.7</td></tr><tr><td>苹果</td><td>0.1</td><td>1.0</td><td>0.0</td><td>0.8</td><td>0.0</td><td>0.9</td></tr><tr><td>马克杯</td><td>0.0</td><td>0.8</td><td>0.0</td><td>0.8</td><td>0.0</td><td>0.9</td></tr><tr><td>乐高</td><td>0.0</td><td>1.0</td><td>0.0</td><td>0.7</td><td>0.0</td><td>0.5</td></tr><tr><td>球</td><td>0.0</td><td>0.7</td><td>0.0</td><td>0.7</td><td>0.0</td><td>0.4</td></tr><tr><td>平均值</td><td>0.06</td><td>0.89</td><td>0.00</td><td>0.84</td><td>0.00</td><td>0.76</td></tr></tbody></table>
+
+
+For implementation, the VLM planner uses Qwen3-VL- 32B-Instruct [32]. The GeoGrasp policy (a 3-layer MLP with hidden sizes $\left\lbrack  {{256},{256},{256}}\right\rbrack$ ) is trained with PPO for 6 million steps using 400 parallel environments $(\gamma  = {0.96}$ ,batch size=800). All experiments are conducted on an NVIDIA RTX 5080 GPU and an Intel Core i9-14900K CPU.
+在实现方面，VLM规划器使用Qwen3-VL-32B-Instruct [32]。GeoGrasp策略（一个隐藏层大小为$\left\lbrack  {{256},{256},{256}}\right\rbrack$的3层MLP）使用PPO算法，在400个并行环境$(\gamma  = {0.96}$中训练了600万步，批大小为800。所有实验均在NVIDIA RTX 5080 GPU和Intel Core i9-14900K CPU上进行。
+
+
+b) Real-world Setup: To evaluate the Sim-to-Real transfer capability of AdaClearGrasp, we replicate the simulation setup on a physical platform shown in Fig. 4. The system consists of an xArm7 manipulator equipped with an XHand. For perception, we employ FoundationPose [34] to estimate the 6D poses of all objects in the scene. The estimated poses, together with the RGB image, are provided to Qwen3-VL-32B-Instruct for high-level semantic planning. The low-level grasping skill uses the GeoGrasp policy transferred directly from simulation without fine-tuning, leveraging its geometry-aware formulation to mitigate the reality gap. To ensure a rigorous evaluation, we construct a real-world benchmark that mirrors the Clutter-Bench protocol. As shown in Fig. 5 it includes 18 scenarios covering three representative target objects (Apple, Orange Cube, and Cup) across three clutter levels (2, 4, and 6 obstacles). These scenarios incorporate diverse obstacles to challenge system robustness in real-world environments.
+b) 真实世界设置：为评估AdaClearGrasp的仿真到现实（Sim-to-Real）迁移能力，我们在图4所示的物理平台上复现了仿真设置。该系统由配备XHand的xArm7机械臂组成。在感知方面，我们采用FoundationPose [34]来估计场景中所有物体的6D位姿。估计的位姿连同RGB图像一起提供给Qwen3-VL-32B-Instruct进行高层语义规划。底层抓取技能使用直接从仿真迁移而来的GeoGrasp策略，无需微调，利用其感知几何的公式来缓解现实差距。为确保评估严谨，我们构建了一个反映Clutter-Bench协议的真实世界基准。如图5所示，它包含18个场景，涵盖了三种代表性目标物体（苹果、橙色立方体和杯子）以及三个杂乱程度（2、4和6个障碍物）。这些场景结合了多种障碍物，以挑战系统在真实环境中的鲁棒性。
+
+
+c) Metric: We evaluate performance using the Success Rate (SR), defined as the percentage of trials in which the target object is successfully grasped and lifted to a height of at least ${15}\mathrm{\;{cm}}$ ,without dropping,for 2 seconds. A trial is considered a failure if the robot fails to grasp the target within 40 planning steps or if the target or obstacles are knocked out of the workspace.
+c) 指标：我们使用成功率（SR）来评估性能，定义为目标物体被成功抓取并提升至至少${15}\mathrm{\;{cm}}$高度，且保持2秒不掉落的试验百分比。如果机器人在40个规划步内未能抓取目标，或者目标/障碍物被撞出工作空间，则视为试验失败。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_05_13_135bda.jpg"/>
+
+
+
+Fig. 6. Ablation study on adaptive clearing and closed-loop feedback.
+图6. 关于自适应清理和闭环反馈的消融研究。
+
+
+## B. Zero-shot Performance on Clutter-Bench (RQ1)
+## B. Clutter-Bench上的零样本性能 (RQ1)
+
+
+We evaluate the zero-shot dexterous grasping capability of AdaClearGrasp against the VLM Scaffolding baseline across the three difficulty tiers of Clutter-Bench. Table 1 reports the quantitative success rates. Additional simulation demonstrations are available in the supplementary video.
+我们评估了AdaClearGrasp在Clutter-Bench三个难度等级下对比VLM Scaffolding基线的零样本灵巧抓取能力。表1报告了定量成功率。更多仿真演示可在补充视频中查看。
+
+
+Robustness in Dense Clutter. The results demonstrate the strong capability of AdaClearGrasp in highly cluttered environments. While the baseline achieves only a 6% success rate in the sparse Level-2 setting, its performance drops to 0% at Level-4 and Level-6 as clutter density increases. This failure arises because the baseline models manipulation as a sequence of collision-free waypoints, which rarely exist in dense scenes due to severe occlusions. In contrast, Ada-ClearGrasp maintains success rates of $\mathbf{{89}\% ,{84}\% }$ ,and $\mathbf{{76}\% }$ across the three levels. These results highlight the importance of the adaptive clearing strategy for enabling grasping when the workspace is heavily constrained by surrounding objects.
+密集杂乱环境下的鲁棒性。结果表明AdaClearGrasp在高度杂乱的环境中具有强大的能力。虽然基线方法在稀疏的Level-2设置中仅达到6%的成功率，但随着杂乱密度的增加，其在Level-4和Level-6时的性能降至0%。这种失败源于基线将操作建模为一系列无碰撞路径点，而由于严重的遮挡，这些路径点在密集场景中几乎不存在。相比之下，Ada-ClearGrasp在三个等级中分别保持了$\mathbf{{89}\% ,{84}\% }$和$\mathbf{{76}\% }$的成功率。这些结果凸显了自适应清理策略对于在工作空间受周围物体严重限制时实现抓取的重要性。
+
+
+Handling Diverse Physical Properties. AdaClearGrasp demonstrates consistent performance across objects with diverse physical characteristics. For stable geometries like cubes and cans, the method achieves near-perfect success rates $\left( { \geq  {90}\% }\right)$ . Even for objects with challenging dynamics-such as rolling balls or irregular legos-the system maintains success rates of 40-70%. This suggests that the adaptive clearing strategy effectively isolates the target without excessive disturbance, creating a safe workspace for subsequent precision grasp.
+处理多样的物理属性。AdaClearGrasp在具有不同物理特征的物体上表现出一致的性能。对于立方体和罐子等稳定几何形状，该方法达到了接近完美的成功率$\left( { \geq  {90}\% }\right)$。即使对于具有挑战性动力学的物体（如滚动球或不规则乐高积木），系统仍保持了40-70%的成功率。这表明自适应清理策略在不产生过度干扰的情况下有效地隔离了目标，为后续的精确抓取创造了安全的工作空间。
+
+
+<img src="https://raw.githubusercontent.com/Tsuki-Gor/Pic_Bed_Ob/main/Mixed/M2026/05/2026_05_11__23_05_13_2db220.jpg"/>
+
+
+
+Fig. 7. The grasp success rates of our GeoGrasp policy on 7 object categories (3 seen, 4 unseen) in clutter-free environments.
+图7. 我们的GeoGrasp策略在无杂乱环境中对7类物体（3类已见，4类未见）的抓取成功率。
+
+
+## C. Ablation Study (RQ2)
+## C. 消融研究 (RQ2)
+
+
+To analyze the contributions of the adaptive clearing strategy and the closed-loop feedback mechanism in Ada-ClearGrasp, we evaluate ablated variants across all difficulty levels. Fig. 6 summarizes the results.
+为了分析Ada-ClearGrasp中自适应清理策略和闭环反馈机制的贡献，我们在所有难度等级上评估了消融变体。图6总结了结果。
+
+
+Effectiveness of Adaptive Clearing. Comparing the full method with the GeoGrasp (No VLM) baseline highlights the importance of obstacle clearing. In the sparse Level-1 setting, direct grasping achieves a 77% success rate, but performance drops to 40% (Level-2) and 27% (Level-3) as clutter increases. This suggests that in dense scenes the target is often physically inaccessible without rearranging surrounding objects. In contrast, the VLM-guided adaptive clearing strategy creates feasible grasp affordances, maintaining high success rates even under heavy clutter.
+自适应清理的有效性。将完整方法与GeoGrasp（无VLM）基线进行比较，凸显了障碍物清理的重要性。在稀疏的Level-1设置中，直接抓取达到了77%的成功率，但随着杂乱程度增加，性能降至40%（Level-2）和27%（Level-3）。这表明在密集场景中，如果不重新排列周围物体，目标往往在物理上是不可触及的。相比之下，VLM引导的自适应清理策略创造了可行的抓取启示，即使在严重杂乱的情况下也能保持高成功率。
+
+
+Importance of Closed-loop Feedback. The comparison between the full method and the w/o Replan variant demonstrates the importance of closed-loop execution. Although the initial clearing plan performs reasonably well in Level- 1 (83%), the absence of replanning leads to substantial degradation in more complex scenes, dropping to 41% at Level-3. By enabling dynamic replanning for up to five attempts after execution failures, the full system significantly outperforms the open-loop variant (e.g., +35% at Level-3). This mechanism improves robustness to execution errors and environmental uncertainty, allowing recovery from failed grasps or incomplete clearing actions.
+闭环反馈的重要性。完整方法与无重规划（w/o Replan）变体的对比证明了闭环执行的重要性。尽管初始清理计划在Level-1表现尚可（83%），但缺乏重规划会导致在更复杂场景中性能大幅下降，在Level-3降至41%。通过在执行失败后启用最多五次的动态重规划，完整系统显著优于开环变体（例如在Level-3提升了35%）。该机制提高了对执行误差和环境不确定性的鲁棒性，能够从抓取失败或清理动作不完整中恢复。
+
+
+## D. Generalization Analysis of GeoGrasp (RQ3)
+## D. GeoGrasp的泛化性分析（RQ3）
+
+
+To evaluate the intrinsic generalization capability of our GeoGrasp policy, we conduct isolated grasping experiments in a clutter-free environment. As shown in Fig. 7, we assess performance across 7 object categories: 3 seen during training and 4 novel, unseen objects. To rigorously test grasping robustness, we randomly sample initial object positions within a ${20} \times  {20}$ disturbance area and vary orientations uniformly over $\left\lbrack  {{0}^{ \circ  },{360}^{ \circ  }}\right)$ . Qualitative visualizations of the GeoGrasp policy can be found in the supplementary video.
+为评估GeoGrasp策略的内在泛化能力，我们在无杂乱环境中进行了独立抓取实验。如图7所示，我们评估了7个物体类别的性能：3个训练时可见物体和4个全新的未见物体。为严格测试抓取鲁棒性，我们在${20} \times  {20}$的扰动区域内随机采样初始物体位置，并在$\left\lbrack  {{0}^{ \circ  },{360}^{ \circ  }}\right)$范围内均匀改变方向。GeoGrasp策略的定性可视化结果可在补充视频中查看。
+
+
+Performance on Seen Objects. The policy excels on the training set, achieving high success rates for the Cube (86.1%), Cup (88.9%), and perfect performance on the Apple (100.0%). This confirms that GeoGrasp learns robust grasping strategies for objects with varying shapes (box, cylinder, sphere) and sizes.
+可见物体的性能。该策略在训练集上表现出色，在立方体（86.1%）和杯子（88.9%）上取得了高成功率，并在苹果（100.0%）上实现了完美表现。这证实了GeoGrasp能够针对不同形状（盒状、圆柱状、球状）和尺寸的物体学习到鲁棒的抓取策略。
+
+
+TABLE II
+表 II
+
+
+REAL-WORLD SIM-TO-REAL TRANSFER RESULTS.
+真实世界仿真到现实（Sim-to-Real）的迁移结果。
+
+
+<table><tr><td rowspan="2">Target Object</td><td colspan="3">Clutter Level (Obstacles)</td><td rowspan="2">Avg.</td></tr><tr><td>2</td><td>4</td><td>6</td></tr><tr><td>Apple</td><td>9/10</td><td>7/10</td><td>5/10</td><td>70%</td></tr><tr><td>Orange Cube</td><td>10/10</td><td>8/10</td><td>6/10</td><td>80%</td></tr><tr><td>Cup</td><td>8/10</td><td>6/10</td><td>4/10</td><td>60%</td></tr><tr><td>Total Success</td><td>27/30</td><td>21/30</td><td>15/30</td><td rowspan="2">70%</td></tr><tr><td>Success Rate</td><td>90%</td><td>70%</td><td>50%</td></tr></table>
+<table><tbody><tr><td rowspan="2">目标物体</td><td colspan="3">杂乱程度（障碍物）</td><td rowspan="2">平均值</td></tr><tr><td>2</td><td>4</td><td>6</td></tr><tr><td>苹果</td><td>9/10</td><td>7/10</td><td>5/10</td><td>70%</td></tr><tr><td>橙色方块</td><td>10/10</td><td>8/10</td><td>6/10</td><td>80%</td></tr><tr><td>杯子</td><td>8/10</td><td>6/10</td><td>4/10</td><td>60%</td></tr><tr><td>总成功数</td><td>27/30</td><td>21/30</td><td>15/30</td><td rowspan="2">70%</td></tr><tr><td>成功率</td><td>90%</td><td>70%</td><td>50%</td></tr></tbody></table>
+
+
+Generalization to Unseen Geometries. The policy shows strong generalization to novel geometries. It performs well on the Can (83.3%) and Pear (72.2%), suggesting that learned geometric features (e.g., local curvature, antipodal points) generalize across semantically different but geometrically related objects. Even for challenging cases like the rolling Ball (61.1%) and non-convex LEGO (47.2%), GeoGrasp achieves reasonable success without fine-tuning. This validates the effectiveness of our geometry-centric observation space in capturing universal geometric cues necessary for stable grasping beyond the training distribution.
+对未知几何形状的泛化。该策略展现出对新颖几何形状的强大泛化能力。它在罐子（83.3%）和梨（72.2%）上表现良好，表明学习到的几何特征（如局部曲率、对跖点）能够在语义不同但几何相关的物体间泛化。即使对于滚动球（61.1%）和非凸乐高（47.2%）等具有挑战性的案例，GeoGrasp 也能在无需微调的情况下实现合理的成功率。这验证了我们以几何为中心的观测空间在捕捉训练分布之外的稳定抓取所需通用几何线索的有效性。
+
+
+## E. Real-world Sim-to-Real Transfer (RQ4)
+## E. 真实世界仿真到现实的迁移 (RQ4)
+
+
+To answer RQ4, we systematically evaluate AdaClear-Grasp in the physical world across 90 trials. As shown in Fig. 5 our test matrix covers 3 target objects, each tested at 3 clutter levels with 2 distinct scene configurations per level, repeated for 5 trials per scene. Table II summarizes the results. More real-world demos are available on the anonymous project website and in the supplementary video.
+为回答 RQ4，我们在物理世界中对 AdaClear-Grasp 进行了 90 次试验的系统评估。如图 5 所示，我们的测试矩阵涵盖 3 个目标物体，每个物体在 3 个杂乱程度下进行测试，每个程度包含 2 种不同的场景配置，每种场景重复 5 次试验。表 II 总结了结果。更多真实世界演示可在匿名项目网站及补充视频中查看。
+
+
+Successful Zero-shot Transfer. Despite the significant reality gap—including sensor noise from FoundationPose, unmodeled friction, and physical contact dynamics—our system achieves a respectable overall success rate of 70.0% (63/90). This confirms the effectiveness of our simulation-based training pipeline and the robustness of the GeoGrasp policy, which transfers directly to the real robot without fine-tuning. Among the targets, the Orange Cube performed best (80.0% SR), likely due to its stable flat surfaces.
+成功的零样本迁移。尽管存在显著的现实差距——包括来自 FoundationPose 的传感器噪声、未建模的摩擦力以及物理接触动力学——我们的系统仍实现了 70.0% (63/90) 的可观总体成功率。这证实了我们基于仿真的训练流程的有效性以及 GeoGrasp 策略的鲁棒性，该策略可直接迁移至真实机器人而无需微调。在目标物体中，橙色立方体表现最好（成功率 80.0%），这很可能归功于其稳定的平坦表面。
+
+
+Impact of Clutter Density. Performance shows a clear trend across clutter levels. In the sparse Level-2 setting, AdaClearGrasp achieves a high success rate of 90.0%. As the environment becomes more cluttered, performance drops to 70.0% (Level-4) and 50.0% (Level-6). This degradation is primarily due to the increased complexity of the physical configuration space. At Level-6, narrow margins for error, combined with pose estimation jitters or slight slippage during clearing, lead to collisions or failed grasps.
+杂乱密度的影响。性能在不同杂乱程度下呈现出明显的趋势。在稀疏的 2 级设置中，AdaClearGrasp 实现了 90.0% 的高成功率。随着环境变得更加杂乱，性能分别下降至 70.0%（4 级）和 50.0%（6 级）。这种性能下降主要是由于物理配置空间的复杂性增加所致。在 6 级时，较小的容错空间，加上位姿估计抖动或清理过程中的轻微滑动，导致了碰撞或抓取失败。
+
+
+Failure Analysis. Failures in dense scenes were mainly due to real-world uncertainties. For example, in several Level-6 trials, the Cup was knocked over while clearing adjacent obstacles due to unpredictable contact forces. Nonetheless, the system successfully retrieved the target in half of the most extreme scenarios, demonstrating the viability of AdaClearGrasp for handling real-world dense clutter.
+失败分析。密集场景中的失败主要归因于现实世界的不确定性。例如，在几次 6 级试验中，由于不可预测的接触力，杯子在清理相邻障碍物时被撞倒。尽管如此，系统在半数最极端的情况下仍成功取回了目标，证明了 AdaClearGrasp 处理现实世界密集杂乱环境的可行性。
+
+
+## V. CONCLUSION
+## V. 结论
+
+
+We present AdaClearGrasp, a closed-loop hierarchical framework for learning adaptive clearing for zero-shot robust grasping in densely cluttered environments. A Vision-Language Model (VLM) reasons over scene semantics and instruction to select among obstacle clearing, direct grasping, and recovery skills, enabling adaptive behavior while balancing safety and efficiency. At the execution level, we introduce GeoGrasp, a geometry-aware reinforcement learning policy that enables stable dexterous grasping with strong zero-shot generalization across diverse object categories. A closed-loop feedback mechanism improves reliability by monitoring task progress and triggering replanning upon failures, allowing the system to recover and operate robustly in dense clutter. To evaluate our approach, we introduce Clutter-Bench, the first simulation benchmark with graded clutter complexity. Experiments across 210 simulated scenarios and 18 real-world trials show that AdaClear-Grasp consistently outperforms baselines and achieves state-of-the-art success rates in densely cluttered environments. Future work will focus on enhancing the low-level dexterous grasping policy to support cross-embodiment transfer across diverse robotic hands and morphologies.
+我们提出了 AdaClearGrasp，这是一个用于在密集杂乱环境中进行零样本鲁棒抓取的闭环分层学习框架，具备自适应清理功能。视觉语言模型 (VLM) 通过推理场景语义和指令，在障碍物清理、直接抓取和恢复技能之间进行选择，从而在平衡安全性和效率的同时实现自适应行为。在执行层面，我们引入了 GeoGrasp，这是一种几何感知强化学习策略，能够实现稳定的灵巧抓取，并在不同物体类别间具有强大的零样本泛化能力。闭环反馈机制通过监控任务进度并在失败时触发重新规划来提高可靠性，使系统能够在密集杂乱环境中恢复并稳健运行。为评估我们的方法，我们引入了 Clutter-Bench，这是首个具有分级杂乱复杂度的仿真基准。在 210 个仿真场景和 18 次真实世界试验中的实验表明，AdaClear-Grasp 始终优于基准方法，并在密集杂乱环境中实现了最先进的成功率。未来的工作将侧重于增强底层灵巧抓取策略，以支持跨不同机器人手部和形态的跨具身迁移。
+
+
+## REFERENCES
+## 参考文献
+
+
+[1] A. I. Weinberg, A. Shirizly, O. Azulay, and A. Sintov, "Survey of learning approaches for robotic in-hand manipulation," arXiv preprint arXiv:2401.07915, 2024.
+[1] A. I. Weinberg, A. Shirizly, O. Azulay, and A. Sintov, "Survey of learning approaches for robotic in-hand manipulation," arXiv preprint arXiv:2401.07915, 2024.
+
+
+[2] T. Chen, J. Xu, and P. Agrawal, "A system for general in-hand object re-orientation," in Conference on robot learning. PMLR, 2022, pp. 297-307.
+[2] T. Chen, J. Xu, and P. Agrawal, "A system for general in-hand object re-orientation," in Conference on robot learning. PMLR, 2022, pp. 297-307.
+
+
+[3] S. Yuan, L. Shao, C. L. Yako, A. Gruebele, and J. K. Salisbury, "Design and control of roller grasper v2 for in-hand manipulation," in 2020 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS). IEEE, 2020, pp. 9151-9158.
+[3] S. Yuan, L. Shao, C. L. Yako, A. Gruebele, and J. K. Salisbury, "Design and control of roller grasper v2 for in-hand manipulation," in 2020 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS). IEEE, 2020, pp. 9151-9158.
+
+
+[4] M. R. Dogar and S. S. Srinivasa, "A planning framework for nonprehensile manipulation under clutter and uncertainty," in Robotics: Science and Systems (RSS), 2012.
+[4] M. R. Dogar and S. S. Srinivasa, "A planning framework for nonprehensile manipulation under clutter and uncertainty," in Robotics: Science and Systems (RSS), 2012.
+
+
+[5] A. Zeng, S. Song, S. Welker, J. Lee, A. Rodriguez, and T. Funkhouser, "Learning synergies between pushing and grasping with self-supervised deep reinforcement learning," in IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS). IEEE, 2018, pp. 4238-4245.
+[5] A. Zeng, S. Song, S. Welker, J. Lee, A. Rodriguez, and T. Funkhouser, "Learning synergies between pushing and grasping with self-supervised deep reinforcement learning," in IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS). IEEE, 2018, pp. 4238-4245.
+
+
+[6] D. Morrison, P. Corke, and J. Leitner, "Closing the loop for robotic grasping: A real-time, generative grasp synthesis approach," in Robotics: Science and Systems (RSS), 2018.
+[6] D. Morrison, P. Corke, and J. Leitner, "Closing the loop for robotic grasping: A real-time, generative grasp synthesis approach," in Robotics: Science and Systems (RSS), 2018.
+
+
+[7] L. Xu, Z. Liu, Z. Gui, J. Guo, Z. Jiang, T. Zhang, Z. Xu, C. Gao, and L. Shao, "Dexsingrasp: Learning a unified policy for dexterous object singulation and grasping in densely cluttered environments," IEEE Robotics and Automation Letters, vol. 11, no. 2, pp. 1346-1353, 2025.
+[7] L. Xu, Z. Liu, Z. Gui, J. Guo, Z. Jiang, T. Zhang, Z. Xu, C. Gao, and L. Shao, "Dexsingrasp: Learning a unified policy for dexterous object singulation and grasping in densely cluttered environments," IEEE Robotics and Automation Letters, vol. 11, no. 2, pp. 1346-1353, 2025.
+
+
+[8] OpenAI, I. Akkaya, M. Andrychowicz, M. Chociej, M. Litwin, B. McGrew, A. Petron, A. Paino, M. Plappert, G. Powell et al., "Learning dexterous in-hand manipulation," The International Journal of Robotics Research, vol. 39, no. 1, pp. 3-20, 2020.
+[8] OpenAI, I. Akkaya, M. Andrychowicz, M. Chociej, M. Litwin, B. McGrew, A. Petron, A. Paino, M. Plappert, G. Powell et al., "Learning dexterous in-hand manipulation," The International Journal of Robotics Research, vol. 39, no. 1, pp. 3-20, 2020.
+
+
+[9] Z. Wei, Z. Xu, J. Guo, Y. Hou, C. Gao, Z. Cai, J. Luo, and L. Shao," $\mathcal{D}\left( {R,O}\right)$ -Grasp: A unified representation of robot and object interaction for cross-embodiment dexterous grasping," arXiv preprint arXiv:2410.01702, 2024.
+[9] Z. Wei, Z. Xu, J. Guo, Y. Hou, C. Gao, Z. Cai, J. Luo, and L. Shao," $\mathcal{D}\left( {R,O}\right)$ -Grasp: A unified representation of robot and object interaction for cross-embodiment dexterous grasping," arXiv preprint arXiv:2410.01702, 2024.
+
+
+[10] Z. Chen, Q. Yan, Y. Chen, T. Wu, J. Zhang, Z. Ding, J. Li, Y. Yang, and H. Dong, "Clutterdexgrasp: A sim-to-real system for general dexterous grasping in cluttered scenes," arXiv preprint arXiv:2506.14317, 2025.
+[10] Z. Chen, Q. Yan, Y. Chen, T. Wu, J. Zhang, Z. Ding, J. Li, Y. Yang, and H. Dong, "Clutterdexgrasp: A sim-to-real system for general dexterous grasping in cluttered scenes," arXiv preprint arXiv:2506.14317, 2025.
+
+
+[11] Z. Chen, J. Yin, Y. Chen, J. Huo, P. Tian, J. Shi, Y. Hou, Y. Li, and Y. Gao, "Deco: Task decomposition and skill composition for zero-shot generalization in long-horizon 3d manipulation," IEEE Robotics and Automation Letters, 2026.
+[11] Z. Chen, J. Yin, Y. Chen, J. Huo, P. Tian, J. Shi, Y. Hou, Y. Li, and Y. Gao, "Deco: Task decomposition and skill composition for zero-shot generalization in long-horizon 3d manipulation," IEEE Robotics and Automation Letters, 2026.
+
+
+[12] Y. Chen, Z. Chen, J. Yin, J. Huo, P. Tian, J. Shi, and Y. Gao, "Gravmad: Grounded spatial value maps guided action diffusion for generalized 3d manipulation," in The Thirteenth International Conference on Learning Representations.
+[12] Y. Chen, Z. Chen, J. Yin, J. Huo, P. Tian, J. Shi, and Y. Gao, "Gravmad: Grounded spatial value maps guided action diffusion for generalized 3d manipulation," in The Thirteenth International Conference on Learning Representations.
+
+
+[13] C. Lynch, A. Wahid, J. Tompson, T. Ding, J. Betker, T. Baruch, T. Armstrong, and P. Florence, "Language-conditioned imitation learning over unstructured data," in Robotics: Science and Systems (RSS), 2020.
+[13] C. Lynch, A. Wahid, J. Tompson, T. Ding, J. Betker, T. Baruch, T. Armstrong, and P. Florence, "Language-conditioned imitation learning over unstructured data," in Robotics: Science and Systems (RSS), 2020.
+
+
+[14] M. Ahn, A. Brohan, N. Brown, Y. Chebotar, O. Cortes, B. David, C. Finn, C. Fu, K. Gopalakrishnan, K. Hausman et al., "Do as i can, not as i say: Grounding language in robotic affordances," arXiv preprint arXiv:2204.01691, 2022.
+[14] M. Ahn, A. Brohan, N. Brown, Y. Chebotar, O. Cortes, B. David, C. Finn, C. Fu, K. Gopalakrishnan, K. Hausman et al., "Do as i can, not as i say: Grounding language in robotic affordances," arXiv preprint arXiv:2204.01691, 2022.
+
+
+[15] D. Driess, F. Xia, M. S. M. Sajjadi, C. Lynch, A. Chowdhery, B. Ichter, A. Wahid, J. Tompson, Q. Vuong, T. Yu et al., "Palm-e: An embodied multimodal language model," arXiv preprint arXiv:2303.03378, 2023.
+[15] D. Driess, F. Xia, M. S. M. Sajjadi, C. Lynch, A. Chowdhery, B. Ichter, A. Wahid, J. Tompson, Q. Vuong, T. Yu et al., "Palm-e: An embodied multimodal language model," arXiv preprint arXiv:2303.03378, 2023.
+
+
+[16] A. Brohan, N. Brown, J. Carbajal, Y. Chebotar, X. Chen, K. Choro-manski, T. Ding, D. Driess, A. Dubey, C. Finn et al., "Rt-2: Vision-language-action models transfer web knowledge to robotic control," arXiv preprint arXiv:2307.15818, 2023.
+[16] A. Brohan, N. Brown, J. Carbajal, Y. Chebotar, X. Chen, K. Choro-manski, T. Ding, D. Driess, A. Dubey, C. Finn et al., "Rt-2: Vision-language-action models transfer web knowledge to robotic control," arXiv preprint arXiv:2307.15818, 2023.
+
+
+[17] V. de Bakker, J. Hejna, T. G. W. Lum, O. Celik, A. Taranovic, D. Blessing, G. Neumann, J. Bohg, and D. Sadigh, "Scaffolding dexterous manipulation with vision-language models," arXiv preprint arXiv:2506.19212, 2025.
+[17] V. de Bakker, J. Hejna, T. G. W. Lum, O. Celik, A. Taranovic, D. Blessing, G. Neumann, J. Bohg, 和 D. Sadigh，“利用视觉语言模型辅助灵巧操作”，arXiv 预印本 arXiv:2506.19212，2025年。
+
+
+[18] H. Liu, S. Guo, P. Mai, J. Cao, H. Li, and J. Ma, "Robodexvlm: Visual language model-enabled task planning and motion control for dexterous robot manipulation," arXiv preprint arXiv:2503.01616, 2025.
+[18] H. Liu, S. Guo, P. Mai, J. Cao, H. Li, 和 J. Ma，“Robodexvlm：支持视觉语言模型的灵巧机器人操作任务规划与运动控制”，arXiv 预印本 arXiv:2503.01616，2025年。
+
+
+[19] T. Mu, Z. Ling, F. Xiang, D. Yang, X. Li, S. Tao, Z. Huang, Z. Jia, and H. Su, "Maniskill: Generalizable manipulation skill benchmark with large-scale demonstrations," arXiv preprint arXiv:2107.14483, 2021.
+[19] T. Mu, Z. Ling, F. Xiang, D. Yang, X. Li, S. Tao, Z. Huang, Z. Jia, 和 H. Su，“Maniskill：基于大规模演示的通用操作技能基准”，arXiv 预印本 arXiv:2107.14483，2021年。
+
+
+[20] G.-H. Xu, Y.-L. Wei, D. Zheng, X.-M. Wu, and W.-S. Zheng, "Dexterous grasp transformer," in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 2024, pp. 17933-17 942.
+[20] G.-H. Xu, Y.-L. Wei, D. Zheng, X.-M. Wu, 和 W.-S. Zheng，“灵巧抓取 Transformer”，载于 IEEE/CVF 计算机视觉与模式识别会议论文集，2024年，第 17933-17942 页。
+
+
+[21] J. Lu, H. Kang, H. Li, B. Liu, Y. Yang, Q. Huang, and G. Hua, "Ugg: Unified generative grasping," in European Conference on Computer Vision, 2024, pp. 414-433.
+[21] J. Lu, H. Kang, H. Li, B. Liu, Y. Yang, Q. Huang, 和 G. Hua，“Ugg：统一生成式抓取”，载于欧洲计算机视觉会议论文集，2024年，第 414-433 页。
+
+
+[22] Y. Xu, W. Wan, J. Zhang, H. Liu, Z. Shan, H. Shen, R. Wang, H. Geng, Y. Weng, J. Chen et al., "Unidexgrasp: Universal robotic dexterous grasping via learning diverse proposal generation and goal-conditioned policy," in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 2023, pp. 4737-4746.
+[22] Y. Xu, W. Wan, J. Zhang, H. Liu, Z. Shan, H. Shen, R. Wang, H. Geng, Y. Weng, J. Chen 等，“Unidexgrasp：通过学习多样化方案生成与目标条件策略实现通用机器人灵巧抓取”，载于 IEEE/CVF 计算机视觉与模式识别会议论文集，2023年，第 4737-4746 页。
+
+
+[23] R. Wang, J. Zhang, J. Chen, Y. Xu, P. Li, T. Liu, and H. Wang, "Dexgraspnet: A large-scale robotic dexterous grasp dataset for general objects based on simulation," arXiv preprint arXiv:2210.02697, 2022.
+[23] R. Wang, J. Zhang, J. Chen, Y. Xu, P. Li, T. Liu, 和 H. Wang，“Dexgraspnet：基于仿真的通用物体大规模机器人灵巧抓取数据集”，arXiv 预印本 arXiv:2210.02697，2022年。
+
+
+[24] H. Zhang, S. Christen, Z. Fan, O. Hilliges, and J. Song, "Graspxl: Generating grasping motions for diverse objects at scale," in European Conference on Computer Vision, 2024, pp. 386-403.
+[24] H. Zhang, S. Christen, Z. Fan, O. Hilliges, 和 J. Song，“Graspxl：大规模生成多样化物体的抓取动作”，载于欧洲计算机视觉会议论文集，2024年，第 386-403 页。
+
+
+[25] H. Zhang, L. Huang, S. Christen, J. Song et al., "Robust dexterous grasping of general objects," in Conference on Robot Learning. PMLR, 2025, pp. 3035-3050.
+[25] H. Zhang, L. Huang, S. Christen, J. Song 等，“通用物体的鲁棒灵巧抓取”，载于机器人学习会议论文集。PMLR，2025年，第 3035-3050 页。
+
+
+[26] W. Wei, D. Li, P. Wang, Y. Li, W. Li, Y. Luo, and J. Zhong, "Dvgg: Deep variational grasp generation for dextrous manipulation," IEEE Robotics and Automation Letters, vol. 7, no. 2, pp. 1659-1666, 2022.
+[26] W. Wei, D. Li, P. Wang, Y. Li, W. Li, Y. Luo, 和 J. Zhong，“Dvgg：用于灵巧操作的深度变分抓取生成”，《IEEE 机器人与自动化快报》，第 7 卷，第 2 期，第 1659-1666 页，2022年。
+
+
+[27] J. Zhang, H. Liu, D. Li, X. Yu, H. Geng, Y. Ding, J. Chen, and H. Wang, "Dexgraspnet 2.0: Learning generative dexterous grasping in large-scale synthetic cluttered scenes," in 8th Annual Conference on Robot Learning, 2024.
+[27] J. Zhang, H. Liu, D. Li, X. Yu, H. Geng, Y. Ding, J. Chen, 和 H. Wang，“Dexgraspnet 2.0：在大规模合成杂乱场景中学习生成式灵巧抓取”，载于第 8 届机器人学习年度会议，2024年。
+
+
+[28] H.-S. Fang, H. Yan, Z. Tang, H. Fang, C. Wang, and C. Lu, "Any-dexgrasp: Learning general dexterous grasping for any hands with human-level learning efficiency," in 7th Robot Learning Workshop: Towards Robots with Human-Level Abilities.
+[28] H.-S. Fang, H. Yan, Z. Tang, H. Fang, C. Wang, 和 C. Lu，“Any-dexgrasp：学习适用于任何手型的通用灵巧抓取，具备人类水平的学习效率”，载于第 7 届机器人学习研讨会：迈向具备人类水平能力的机器人。
+
+
+[29] W. Huang, C. Wang, R. Zhang, Y. Li, J. Wu, and L. Fei-Fei, "Voxposer: Composable 3d value maps for robotic manipulation with language models," arXiv preprint arXiv:2307.05973, 2023.
+[29] W. Huang, C. Wang, R. Zhang, Y. Li, J. Wu, 和 L. Fei-Fei，“Voxposer：用于机器人操作的组合式 3D 值地图与语言模型”，arXiv 预印本 arXiv:2307.05973，2023年。
+
+
+[30] Y. Zhong, X. Huang, R. Li, C. Zhang, Z. Chen, T. Guan, F. Zeng, K. N. Lui, Y. Ye, Y. Liang et al., "Dexgraspvla: A vision-language-action framework towards general dexterous grasping," arXiv preprint arXiv:2502.20900, 2025.
+[30] Y. Zhong, X. Huang, R. Li, C. Zhang, Z. Chen, T. Guan, F. Zeng, K. N. Lui, Y. Ye, Y. Liang 等, "Dexgraspvla: A vision-language-action framework towards general dexterous grasping," arXiv preprint arXiv:2502.20900, 2025.
+
+
+[31] X. Hou, Y. Zhao, S. Wang, and H. Wang, "Model context protocol (mcp): Landscape, security threats, and future research directions," ACM Transactions on Software Engineering and Methodology, 2025.
+[31] X. Hou, Y. Zhao, S. Wang, 和 H. Wang, "Model context protocol (mcp): Landscape, security threats, and future research directions," ACM Transactions on Software Engineering and Methodology, 2025.
+
+
+[32] S. Bai, Y. Cai, R. Chen, K. Chen, X. Chen, Z. Cheng, L. Deng, W. Ding, C. Gao, C. Ge et al., "Qwen3-vl technical report," arXiv preprint arXiv:2511.21631, 2025.
+[32] S. Bai, Y. Cai, R. Chen, K. Chen, X. Chen, Z. Cheng, L. Deng, W. Ding, C. Gao, C. Ge 等, "Qwen3-vl technical report," arXiv preprint arXiv:2511.21631, 2025.
+
+
+[33] J. Schulman, F. Wolski, P. Dhariwal, A. Radford, and O. Klimov, "Proximal policy optimization algorithms," arXiv preprint arXiv:1707.06347, 2017.
+[33] J. Schulman, F. Wolski, P. Dhariwal, A. Radford, 和 O. Klimov, "Proximal policy optimization algorithms," arXiv preprint arXiv:1707.06347, 2017.
+
+
+[34] B. Wen, W. Yang, J. Kautz, and S. Birchfield, "Foundationpose: Unified 6d pose estimation and tracking of novel objects," in Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2024, pp. 17868-17879.
+[34] B. Wen, W. Yang, J. Kautz, 和 S. Birchfield, "Foundationpose: Unified 6d pose estimation and tracking of novel objects," in Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2024, pp. 17868-17879.
+
+
+## VI. APPENDIX
+## VI. 附录
+
+
+## A. GeoGrasp Implementation Details
+## A. GeoGrasp 实现细节
+
+
+While the main text outlines the core principles of Ge-oGrasp, we provide here the specific implementation details necessary for reproduction, focusing on keypoint definitions, action space scaling, and domain randomization parameters used to bridge the sim-to-real gap.
+尽管正文概述了 GeoGrasp 的核心原理，但我们在此提供复现所需的具体实现细节，重点介绍关键点定义、动作空间缩放以及用于弥合仿真与现实差距的域随机化参数。
+
+
+1) Keypoint Definition for Geometric Observation: The 54-dimensional geometric observation ${O}_{\text{ geom }}$ relies on 18 specific keypoints on the XHand. These keypoints are strategically distributed to cover the palm and phalanges, which are critical for both power and precision grasps.
+1) 几何观测的关键点定义：54 维几何观测 ${O}_{\text{ geom }}$ 依赖于 XHand 上的 18 个特定关键点。这些关键点经过策略性分布，覆盖了手掌和指节，这对强力抓取和精密抓取至关重要。
+
+
+- Palm (6 points): Distributed across the palm surface to detect proximity for power grasps.
+- 手掌（6 个点）：分布在手掌表面，用于检测强力抓取的接近度。
+
+
+- Fingers (12 points): 3 keypoints per finger (Thumb, Index, Middle, Ring), located at the center of the proximal, medial, and distal links.
+- 手指（12 个点）：每根手指（拇指、食指、中指、无名指）各 3 个关键点，位于近节、中节和远节指骨的中心。
+
+
+For each keypoint ${x}_{k}$ ,we compute the nearest vector ${v}_{k} = \; {p}^{ * } - {x}_{k}$ to the object point cloud ${P}_{obj}$ . The point cloud ${P}_{obj}$ consists of $N = {1024}$ points sampled uniformly from the mesh surface. In simulation, we use ground-truth sampling; in real-world deployment, this is approximated by transforming the canonical object mesh using the pose estimated by FoundationPose.
+对于每个关键点 ${x}_{k}$，我们计算其到物体点云 ${P}_{obj}$ 的最近向量 ${v}_{k} = \; {p}^{ * } - {x}_{k}$。点云 ${P}_{obj}$ 由从网格表面均匀采样的 $N = {1024}$ 个点组成。在仿真中，我们使用真值采样；在现实部署中，通过使用 FoundationPose 估计的位姿对规范物体网格进行变换来近似实现。
+
+
+2) Action Space and Control: The policy outputs a 19- dimensional continuous action vector ${a}_{t} \in  {\left\lbrack  -1,1\right\rbrack  }^{19}$ ,which is mapped to joint position targets for the PD controller. To ensure smooth and safe motion, we apply scaling to the raw network outputs:
+2) 动作空间与控制：策略输出一个 19 维连续动作向量 ${a}_{t} \in  {\left\lbrack  -1,1\right\rbrack  }^{19}$，该向量被映射为 PD 控制器的关节位置目标。为确保运动平稳安全，我们对原始网络输出进行了缩放：
+
+
+- xArm Control (7 dims): Controlling the 7-DOF arm joints. The raw output is scaled by a factor of 0.05 rad/step.
+- xArm 控制（7 维）：控制 7 自由度机械臂关节。原始输出缩放因子为 0.05 弧度/步。
+
+
+- XHand Control (12 dims): Controlling the 12-DOF hand joints. The raw output is scaled by 0.05 rad/step.
+- XHand 控制（12 维）：控制 12 自由度手部关节。原始输出缩放因子为 0.05 弧度/步。
+
+
+We employ a relative control scheme where the target joint position is updated as ${q}_{\text{ target }}^{\left( t\right) } = {q}_{\text{ current }}^{\left( t\right) } +$ scale $\cdot  {a}_{t}$ .
+我们采用相对控制方案，其中目标关节位置更新为 ${q}_{\text{ target }}^{\left( t\right) } = {q}_{\text{ current }}^{\left( t\right) } +$ scale $\cdot  {a}_{t}$。
+
+
+3) Domain Randomization: To enhance the robustness of the policy for Sim-to-Real transfer, we apply extensive domain randomization during training:
+3) 域随机化：为增强策略在仿真到现实（Sim-to-Real）迁移中的鲁棒性，我们在训练过程中应用了广泛的域随机化：
+
+
+- Physical Properties: Friction coefficients are randomized uniformly in $\left\lbrack  {{0.5},{2.0}}\right\rbrack$ ,and object mass is randomized by $\pm  {20}\%$ .
+- 物理属性：摩擦系数在 $\left\lbrack  {{0.5},{2.0}}\right\rbrack$ 范围内均匀随机化，物体质量随机化幅度为 $\pm  {20}\%$ 。
+
+
+- Observation Noise: Gaussian noise $\left( {\sigma  = {0.005}\mathrm{\;m}}\right)$ is added to the object point cloud positions to simulate perception jitter.
+- 观测噪声：向物体点云位置添加高斯噪声 $\left( {\sigma  = {0.005}\mathrm{\;m}}\right)$ 以模拟感知抖动。
+
+
+- Initialization: The robot's initial joint positions are perturbed by $\pm  {0.05}\mathrm{{rad}}$ to prevent the policy from overfitting to a fixed starting pose.
+- 初始化：机器人初始关节位置扰动范围为 $\pm  {0.05}\mathrm{{rad}}$ ，以防止策略过拟合于固定的起始姿态。
+
+
+4) PPO Hyperparameters: We use the Stable Baselines3 implementation of PPO with the hyperparameters listed in Table III
+4) PPO 超参数：我们使用 Stable Baselines3 实现的 PPO，具体超参数见表 III。
+
+
+### B.VLM Planner Implementation Details
+### B. VLM 规划器实现细节
+
+
+We provide the complete prompt structure and tool definitions used to interface the VLM planner with the low-level control system via the Model Context Protocol (MCP).
+我们提供了用于通过模型上下文协议（MCP）将 VLM 规划器与底层控制系统对接的完整提示词结构及工具定义。
+
+
+TABLE III
+表 III
+
+
+PPO HYPERPARAMETERS FOR GEOGRASP TRAINING
+GEOGRASP 训练的 PPO 超参数
+
+
+<table><tr><td>Parameter</td><td>Value</td></tr><tr><td>Optimizer</td><td>Adam</td></tr><tr><td>Learning Rate</td><td>$3 \times  {10}^{-4}$</td></tr><tr><td>Num. Environments</td><td>400</td></tr><tr><td>Rollout Steps per Env</td><td>5</td></tr><tr><td>Batch Size</td><td>800</td></tr><tr><td>Epochs per Rollout</td><td>5</td></tr><tr><td>Discount Factor $\left( \gamma \right)$</td><td>0.96</td></tr><tr><td>GAE Lambda $\left( \lambda \right)$</td><td>0.95</td></tr><tr><td>Clip Range</td><td>0.2</td></tr><tr><td>Entropy Coefficient</td><td>0.0</td></tr><tr><td>Value Function Coeff</td><td>0.5</td></tr><tr><td>Max Gradient Norm</td><td>0.5</td></tr></table>
+<table><tbody><tr><td>参数</td><td>数值</td></tr><tr><td>优化器</td><td>Adam</td></tr><tr><td>学习率</td><td>$3 \times  {10}^{-4}$</td></tr><tr><td>环境数量</td><td>400</td></tr><tr><td>每个环境的展开步数</td><td>5</td></tr><tr><td>批次大小</td><td>800</td></tr><tr><td>每次展开的迭代次数</td><td>5</td></tr><tr><td>折扣因子 $\left( \gamma \right)$</td><td>0.96</td></tr><tr><td>GAE Lambda $\left( \lambda \right)$</td><td>0.95</td></tr><tr><td>裁剪范围</td><td>0.2</td></tr><tr><td>熵系数</td><td>0.0</td></tr><tr><td>价值函数系数</td><td>0.5</td></tr><tr><td>最大梯度范数</td><td>0.5</td></tr></tbody></table>
+
+
+1) VLM Prompt Structure: The prompt fed to Qwen3-VL consists of three components:
+1) VLM提示词结构：输入给Qwen3-VL的提示词由三部分组成：
+
+
+1) System Prompt: Defines the agent's role, the available toolset, and the strict JSON output format.
+1) 系统提示词：定义智能体角色、可用工具集以及严格的JSON输出格式。
+
+
+2) Task Description: Provides the semantic context, including the target object name and a list of detected objects in the scene.
+2) 任务描述：提供语义上下文，包括目标物体名称及场景中检测到的物体列表。
+
+
+3) Dynamic Context: Contains the current visual observation (RGB image) and the execution feedback from the previous step.
+3) 动态上下文：包含当前的视觉观测（RGB图像）以及上一步的执行反馈。
+
+
+Fig. 8 illustrates the structured template. We use a "Chain-of-Thought" style instruction ("reason" field) to encourage the VLM to articulate its planning logic before emitting the action.
+图8展示了该结构化模板。我们使用“思维链”式指令（“reason”字段），鼓励VLM在输出动作前阐明其规划逻辑。
+
+
+2) MCP Tool Definitions: Table IV details the parameterized skills exposed to the VLM. Each tool maps to a deterministic or learning-based policy in the low-level controller.
+2) MCP工具定义：表IV详细列出了向VLM开放的参数化技能。每个工具对应底层控制器中的确定性策略或基于学习的策略。
+
+
+3) Execution Feedback Handling: The system feeds back structured execution results to the VLM to close the loop. If an action fails (e.g., "collision_detected" or "gripper_slip"), the VLM receives a JSON report containing the error type and a descriptive message, allowing it to adapt its strategy in the subsequent planning step.
+3) 执行反馈处理：系统将结构化的执行结果反馈给VLM以形成闭环。若动作失败（例如“检测到碰撞”或“夹爪打滑”），VLM会收到一份包含错误类型和描述性信息的JSON报告，使其能在后续规划步骤中调整策略。
+
+
+## C. Clutter-Bench Details
+## C. Clutter-Bench详情
+
+
+To ensure fair and reproducible comparisons, Clutter-Bench relies on a rigorous procedural generation pipeline that creates stable, physically valid, and densely cluttered scenes. We detail the generation protocol below.
+为确保公平且可复现的对比，Clutter-Bench依赖于一套严谨的程序化生成流水线，用于创建稳定、物理有效且高度杂乱的场景。我们在下文详述生成协议。
+
+
+1) Scene Generation Protocol: For each target object, we define a base scene configuration containing the target model and a pool of 6 candidate clutter objects selected from the YCB dataset. The generation process for a specific difficulty level $N \in  \{ 2,4,6\}$ follows these steps:
+1) 场景生成协议：针对每个目标物体，我们定义一个基础场景配置，包含目标模型以及从YCB数据集中选出的6个候选杂物。特定难度等级$N \in  \{ 2,4,6\}$的生成过程遵循以下步骤：
+
+
+1) Object Selection: The target object and the first $N$ obstacles from the candidate pool are instantiated.
+1) 物体选择：实例化目标物体以及来自候选池的前$N$个障碍物。
+
+
+TABLE IV
+表IV
+
+
+ATOMIC SKILLS AND THEIR PARAMETERS EXPOSED VIA MCP
+通过MCP开放的原子技能及其参数
+
+
+<table><tr><td>Tool Name</td><td>Parameters</td><td>Description</td></tr><tr><td>push</td><td>side (left, right, center), dist</td><td>Approaches the nearest obstacle relative to the target and pushes it away to clear a path.</td></tr><tr><td>pull</td><td>side (left, right, center), dist</td><td>Hooks the nearest obstacle and pulls it closer to the robot base to remove occlusion.</td></tr><tr><td>pick</td><td>None</td><td>Invokes the GeoGrasp policy to attempt a dexterous grasp on the target object.</td></tr><tr><td>move_to</td><td>target (string)</td><td>Moves the end-effector to a pre-grasp hover position above the specified object.</td></tr><tr><td>lift</td><td>height (optional)</td><td>Lifts the end-effector vertically by a specified distance to avoid collisions during transport.</td></tr><tr><td>initarm</td><td>None</td><td>Resets the arm to a safe home configuration to recover from singularities or execution failures.</td></tr></table>
+<table><tbody><tr><td>工具名称</td><td>参数</td><td>描述</td></tr><tr><td>推 (push)</td><td>侧向 (左、右、中), 距离</td><td>靠近目标最近的障碍物并将其推开，以清理路径。</td></tr><tr><td>拉 (pull)</td><td>侧向 (左、右、中), 距离</td><td>钩住最近的障碍物并将其拉向机器人基座，以消除遮挡。</td></tr><tr><td>抓取 (pick)</td><td>无</td><td>调用 GeoGrasp 策略，尝试对目标物体进行灵巧抓取。</td></tr><tr><td>移动至 (move_to)</td><td>目标 (字符串)</td><td>将末端执行器移动至指定物体上方的预抓取悬停位置。</td></tr><tr><td>抬升 (lift)</td><td>高度 (可选)</td><td>将末端执行器垂直抬升指定距离，以避免在搬运过程中发生碰撞。</td></tr><tr><td>初始化机械臂 (initarm)</td><td>无</td><td>将机械臂重置为安全的初始构型，以从奇异点或执行故障中恢复。</td></tr></tbody></table>
+
+
+## VLM Prompt Template
+## VLM 提示词模板
+
+
+System Prompt:
+系统提示词：
+
+
+You are a careful and disciplined robot manipulation planner. Your goal is to clear obstacles and grasp the target object.
+你是一位严谨且训练有素的机器人操作规划师。你的目标是清理障碍物并抓取目标物体。
+
+
+Available Tools:
+可用工具：
+
+
+- move_to(name), push(side, dist_m), pull(side, dist_m)
+- move_to(name), push(side, dist_m), pull(side, dist_m)
+
+
+- lift() / lower(), grasp(), initarm() / inithand()
+- lift() / lower(), grasp(), initarm() / inithand()
+
+
+Output Format: Return a strictly valid JSON object:
+输出格式：返回一个严格有效的 JSON 对象：
+
+
+\{ "action": "...", "args": \{...\}, "reason": "..." \}
+\{ "action": "...", "args": \{...\}, "reason": "..." \}
+
+
+User Task (Initial):
+用户任务（初始）：
+
+
+Objective: Clear clutter around the target object to enable a successful grasp.
+目标：清理目标物体周围的杂物，以实现成功抓取。
+
+
+Scene Context: The target object is a <TARGET_NAME>.
+场景上下文：目标物体是 <TARGET_NAME>。
+
+
+Available Objects: [target, obstacle_1, obstacle_2, ...]
+可用物体：[target, obstacle_1, obstacle_2, ...]
+
+
+User Input (Step $t$ ) :
+用户输入（步骤 $t$ ）：
+
+
+Visual Observation: <IMAGE_BASE64>
+视觉观测：<IMAGE_BASE64>
+
+
+Execution Feedback (from Step $t - 1$ ) :
+执行反馈（来自步骤 $t - 1$ ）：
+
+
+\{ "action": "push", "success": false, "message": "collision detected" \}
+\{ "action": "push", "success": false, "message": "collision detected" \}
+
+
+Instruction: Analyze the image and feedback. If the previous action failed, propose an alternative strategy. Output the next action in JSON.
+指令：分析图像与反馈。若先前动作失败，请提出替代策略。以 JSON 格式输出下一步动作。
+
+
+Fig. 8. The structured prompt template used for VLM planning in AdaClearGrasp. It integrates system instructions, task context, and dynamic feedback to guide the VLM's reasoning.
+图 8. AdaClearGrasp 中用于 VLM 规划的结构化提示词模板。它整合了系统指令、任务上下文及动态反馈，以引导 VLM 进行推理。
+
+
+2) Pose Sampling: We randomly sample the 2D position $\left( {x,y}\right)$ and yaw angle $\psi$ for every object within a confined workspace:
+2) 位姿采样：我们为受限工作空间内的每个物体随机采样 2D 位置 $\left( {x,y}\right)$ 和偏航角 $\psi$：
+
+
+- $x,y \sim  \mathcal{U}\left( {-{0.10}\mathrm{\;m},{0.10}\mathrm{\;m}}\right)$ : The workspace is restricted to a ${20} \times  {20}{\mathrm{\;{cm}}}^{2}$ area to force high-density packing.
+- $x,y \sim  \mathcal{U}\left( {-{0.10}\mathrm{\;m},{0.10}\mathrm{\;m}}\right)$ ：工作空间被限制在 ${20} \times  {20}{\mathrm{\;{cm}}}^{2}$ 区域内，以强制实现高密度堆叠。
+
+
+- $\psi  \sim  \mathcal{U}\left( {-\pi ,\pi }\right)$ : Full rotation randomization.
+- $\psi  \sim  \mathcal{U}\left( {-\pi ,\pi }\right)$ ：全方位旋转随机化。
+
+
+- Constraint: A minimum initial distance of $6\mathrm{\;{cm}}$ is enforced between object centers to prevent deep interpenetration.
+- 约束：物体中心之间强制保持至少 $6\mathrm{\;{cm}}$ 的初始距离，以防止深度嵌入。
+
+
+3) Physics Stabilization: After initialization, objects are dropped from a small height $\left( {z \approx  3\mathrm{\;{mm}}}\right)$ and the simulation is stepped forward to allow physics settling.
+3) 物理稳定性：初始化后，物体从 $\left( {z \approx  3\mathrm{\;{mm}}}\right)$ 的高度落下，并推进仿真以进行物理沉降。
+
+
+- Settle Phase: We run the physics engine for 30 steps (0.5s) to let objects fall and resolve contacts.
+- 沉降阶段：运行物理引擎 30 步（0.5秒），让物体下落并处理接触。
+
+
+- Measurement Phase: We continue simulation for another 60 steps (1.0s) to monitor stability.
+- 测量阶段：继续仿真 60 步（1.0秒）以监测稳定性。
+
+
+- Rejection Criterion: If any object's displacement exceeds 1cm during the measurement phase (indicating rolling, sliding, or instability), the scene is discarded and re-sampled.
+- 拒绝准则：若测量阶段内任何物体的位移超过 1cm（表明存在滚动、滑动或不稳定），则丢弃该场景并重新采样。
+
+
+4) Serialization: Once a stable configuration is found, the precise poses of all objects are serialized into a JSON file. This guarantees that all baselines are evaluated on identical scene states.
+4) 序列化：一旦找到稳定配置，所有物体的精确位姿将被序列化为 JSON 文件。这确保了所有基准测试均在相同的场景状态下进行评估。
+
+
+2) Object Roster: Table V lists the specific YCB model IDs used for targets and their corresponding clutter obstacles. We carefully select clutter objects to ensure a mix of geometries (boxes, spheres, cylinders) and physical properties (friction, mass).
+2) 物体列表：表 V 列出了用于目标及其对应杂乱障碍物的具体 YCB 模型 ID。我们精心挑选杂乱物体，以确保几何形状（盒状、球状、圆柱状）和物理属性（摩擦力、质量）的多样性。
+
+
+3) Simulation Parameters: The benchmark is built on ManiSkill 3 (SAPIEN engine) with the following physical parameters to mimic real-world friction and contact dynamics:
+3) 仿真参数：该基准测试基于 ManiSkill 3 (SAPIEN 引擎) 构建，采用以下物理参数以模拟现实世界的摩擦力和接触动力学：
+
+
+TABLE V
+表 V
+
+
+TARGET OBJECTS AND CLUTTER POOLS IN CLUTTER-BENCH.
+CLUTTER-BENCH 中的目标物体与杂乱物体池。
+
+
+<table><tr><td>Target Name</td><td>YCB Model ID</td><td>Typical Clutter Objects</td></tr><tr><td>Apple</td><td>013_apple</td><td>Orange, Foam Brick, Mug, Pear, Ball, Cube</td></tr><tr><td>Cube</td><td>077_rubiks_cube</td><td>Can, Foam Brick, Mug, Apple, Ball, Orange</td></tr><tr><td>Can</td><td>010_potted_meat_can</td><td>Foam Brick, Mug, Apple, Ball, Orange, Pear</td></tr><tr><td>Pear</td><td>016_pear</td><td>Can, Foam Brick, Mug, Apple, Ball, Cube</td></tr><tr><td>Mug</td><td>025_mug</td><td>Can, Foam Brick, Apple, Ball, Orange, Cube</td></tr><tr><td>Lego</td><td>073-e_lego_duplo</td><td>Fish Can, Foam Brick, Mug, Apple, Ball, Orange</td></tr><tr><td>Ball</td><td>053_mini_soccer_ball</td><td>Can, Foam Brick, Mug, Apple, Pear, Cube</td></tr></table>
+<table><tbody><tr><td>目标名称</td><td>YCB 模型 ID</td><td>典型杂乱物体</td></tr><tr><td>苹果</td><td>013_apple</td><td>橙子、泡沫砖、马克杯、梨、球、立方体</td></tr><tr><td>立方体</td><td>077_rubiks_cube</td><td>罐头、泡沫砖、马克杯、苹果、球、橙子</td></tr><tr><td>罐头</td><td>010_potted_meat_can</td><td>泡沫砖、马克杯、苹果、球、橙子、梨</td></tr><tr><td>梨</td><td>016_pear</td><td>罐头、泡沫砖、马克杯、苹果、球、立方体</td></tr><tr><td>马克杯</td><td>025_mug</td><td>罐头、泡沫砖、苹果、球、橙子、立方体</td></tr><tr><td>乐高</td><td>073-e_lego_duplo</td><td>鱼罐头、泡沫砖、马克杯、苹果、球、橙子</td></tr><tr><td>球</td><td>053_mini_soccer_ball</td><td>罐头、泡沫砖、马克杯、苹果、梨、立方体</td></tr></tbody></table>
+
+
+- Target Friction: Static ${\mu }_{s} = {2.0}$ ,Dynamic ${\mu }_{d} = {2.0}$ (High friction to facilitate grasping).
+- 目标摩擦力：静摩擦 ${\mu }_{s} = {2.0}$，动摩擦 ${\mu }_{d} = {2.0}$（高摩擦力以利于抓取）。
+
+
+- Clutter Friction: Static ${\mu }_{s} = {1.0}$ ,Dynamic ${\mu }_{d} = {1.0}$ (Moderate friction to allow pushing/sliding).
+- 杂物摩擦力：静摩擦 ${\mu }_{s} = {1.0}$，动摩擦 ${\mu }_{d} = {1.0}$（中等摩擦力以允许推移/滑动）。
+
+
+- Restitution: 0.0 for all objects (inelastic collisions).
+- 恢复系数：所有物体均为 0.0（非弹性碰撞）。
+
+
+- Damping: Linear damping 0.1, Angular damping 0.1.
+- 阻尼：线性阻尼 0.1，角阻尼 0.1。
